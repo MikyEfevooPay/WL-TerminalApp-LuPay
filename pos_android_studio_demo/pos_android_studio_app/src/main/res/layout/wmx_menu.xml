@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wmx_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_layout" />
+
+    <!--<ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/prueba1__1_" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50px"
+        android:layout_marginTop="60px"
+        android:layout_marginBottom="52px"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/wirebit_logotipo2022_color" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30px"
+        android:layout_marginRight="30px"
+        android:layout_marginBottom="30px"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="#F4F4FD">
+        <!--
+        android:paddingLeft="20px"
+        android:paddingTop="20px"
+        android:paddingRight="20px"
+        android:paddingBottom="20px"
+-->
+
+
+        <GridLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:useDefaultMargins="true"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:id="@+id/btn_transfer"
+                android:layout_width="0dp"
+                android:layout_height="160px"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/wmx_menu_item_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="18px"
+                android:paddingTop="35px"
+                android:paddingRight="18px"
+                android:paddingBottom="15px">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="62px"
+                        app:srcCompat="@drawable/menu_icono_transacciones" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="@string/wmx_menu_transfer"
+                    android:textAllCaps="false"
+                    android:textColor="#464CE3"
+                    android:textSize="18px" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_meses"
+                android:layout_width="0dp"
+                android:layout_height="160px"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/wmx_menu_item_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="18px"
+                android:paddingTop="35px"
+                android:paddingRight="18px"
+                android:paddingBottom="15px">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="62px"
+                        app:srcCompat="@drawable/menu_icono_msi" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:gravity="center"
+                    android:text="@string/wmx_menu_meses"
+                    android:lineSpacingMultiplier="0.8"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="#464CE3"
+                    android:textSize="18px" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_cancelaciones"
+                android:layout_width="0dp"
+                android:layout_height="160px"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/wmx_menu_item_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="18px"
+                android:paddingTop="27.5px"
+                android:paddingRight="18px"
+                android:paddingBottom="15px">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="62px"
+                        app:srcCompat="@drawable/menu_close" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="@string/wmx_menu_cancel"
+                    android:textAllCaps="false"
+                    android:textColor="#464CE3"
+                    android:textSize="18px" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_Other"
+                android:layout_width="0dp"
+                android:layout_height="160px"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/wmx_menu_item_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="18px"
+                android:paddingTop="27.5px"
+                android:paddingRight="18px"
+                android:paddingBottom="15px">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="65px"
+                        app:srcCompat="@drawable/menu_icono_historial" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="@string/wmx_menu_Other"
+                    android:textAllCaps="false"
+                    android:textColor="#464CE3"
+                    android:textSize="18px" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/btn_Ajustes"
+                android:layout_width="0dp"
+                android:layout_height="160px"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/wmx_menu_item_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="18px"
+                android:paddingTop="27.5px"
+                android:paddingRight="18px"
+                android:paddingBottom="15px">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="62px"
+                        app:srcCompat="@drawable/menu_information_sign" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="@string/wmx_menu_Ajustes"
+                    android:textAllCaps="false"
+                    android:textColor="#464CE3"
+                    android:textSize="18px" />
+
+            </LinearLayout>
+
+
+        </GridLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

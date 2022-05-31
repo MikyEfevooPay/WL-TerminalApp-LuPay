@@ -1,0 +1,302 @@
+[
+  {
+    "noAuth": 4595747,
+    "date": "11/08/22",
+    "hour": "09:55",
+    "amount": "$3,931.79",
+    "pan": 2456,
+    "procesador": "Visa",
+    "tipo": "G",
+    "approve": 932556
+  },
+  {
+    "noAuth": 7327511,
+    "date": "07/09/22",
+    "hour": "01:40",
+    "amount": "$3,883.67",
+    "pan": 6452,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 821977
+  },
+  {
+    "noAuth": 1191289,
+    "date": "26/08/21",
+    "hour": "11:32",
+    "amount": "$1,639.92",
+    "pan": 5085,
+    "procesador": "MC",
+    "tipo": "msi",
+    "approve": 856830
+  },
+  {
+    "noAuth": 6194458,
+    "date": "18/11/22",
+    "hour": "05:09",
+    "amount": "$393.64",
+    "pan": 1282,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 439497
+  },
+  {
+    "noAuth": 4902834,
+    "date": "13/08/21",
+    "hour": "01:47",
+    "amount": "$3,339.39",
+    "pan": 7281,
+    "procesador": "Visa",
+    "tipo": "A",
+    "approve": 274135
+  },
+  {
+    "noAuth": 3339814,
+    "date": "27/05/22",
+    "hour": "09:11",
+    "amount": "$2,129.72",
+    "pan": 9347,
+    "procesador": "MC",
+    "tipo": "msi",
+    "approve": 159092
+  },
+  {
+    "noAuth": 9302383,
+    "date": "03/02/23",
+    "hour": "08:18",
+    "amount": "$1,226.60",
+    "pan": 4733,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 646882
+  },
+  {
+    "noAuth": 5836005,
+    "date": "04/09/22",
+    "hour": "05:41",
+    "amount": "$93.87",
+    "pan": 2887,
+    "procesador": "Visa",
+    "tipo": "msi",
+    "approve": 919420
+  },
+  {
+    "noAuth": 2932232,
+    "date": "11/02/22",
+    "hour": "09:28",
+    "amount": "$1,623.86",
+    "pan": 2297,
+    "procesador": "Visa",
+    "tipo": "msi",
+    "approve": 197000
+  },
+  {
+    "noAuth": 3095443,
+    "date": "17/11/21",
+    "hour": "07:54",
+    "amount": "$237.31",
+    "pan": 2259,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 171283
+  },
+  {
+    "noAuth": 7232389,
+    "date": "14/04/22",
+    "hour": "12:11",
+    "amount": "$3,375.25",
+    "pan": 2362,
+    "procesador": "Visa",
+    "tipo": "A",
+    "approve": 283712
+  },
+  {
+    "noAuth": 2747861,
+    "date": "15/04/23",
+    "hour": "02:29",
+    "amount": "$3,480.46",
+    "pan": 4448,
+    "procesador": "Visa",
+    "tipo": "msi",
+    "approve": 468464
+  },
+  {
+    "noAuth": 6262404,
+    "date": "03/07/22",
+    "hour": "10:26",
+    "amount": "$3,809.76",
+    "pan": 8635,
+    "procesador": "Visa",
+    "tipo": "A",
+    "approve": 510154
+  },
+  {
+    "noAuth": 7025553,
+    "date": "13/08/22",
+    "hour": "08:25",
+    "amount": "$1,915.17",
+    "pan": 2354,
+    "procesador": "Visa",
+    "tipo": "msi",
+    "approve": 451662
+  },
+  {
+    "noAuth": 3354574,
+    "date": "09/01/23",
+    "hour": "05:39",
+    "amount": "$239.22",
+    "pan": 9823,
+    "procesador": "Visa",
+    "tipo": "G",
+    "approve": 527603
+  },
+  {
+    "noAuth": 3200560,
+    "date": "23/03/23",
+    "hour": "03:38",
+    "amount": "$1,602.12",
+    "pan": 8736,
+    "procesador": "Visa",
+    "tipo": "msi",
+    "approve": 490454
+  },
+  {
+    "noAuth": 8816015,
+    "date": "29/06/21",
+    "hour": "12:57",
+    "amount": "$157.72",
+    "pan": 4931,
+    "procesador": "Visa",
+    "tipo": "A",
+    "approve": 809203
+  },
+  {
+    "noAuth": 6833602,
+    "date": "11/03/23",
+    "hour": "03:16",
+    "amount": "$634.62",
+    "pan": 1561,
+    "procesador": "Visa",
+    "tipo": "A",
+    "approve": 530958
+  },
+  {
+    "noAuth": 1299667,
+    "date": "24/11/22",
+    "hour": "10:39",
+    "amount": "$3,918.76",
+    "pan": 4987,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 468781
+  },
+  {
+    "noAuth": 6280928,
+    "date": "03/09/21",
+    "hour": "02:55",
+    "amount": "$2,016.98",
+    "pan": 8364,
+    "procesador": "MC",
+    "tipo": "G",
+    "approve": 644323
+  },
+  {
+    "noAuth": 9693434,
+    "date": "21/05/21",
+    "hour": "11:33",
+    "amount": "$2,111.24",
+    "pan": 3057,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 314436
+  },
+  {
+    "noAuth": 8229253,
+    "date": "02/07/22",
+    "hour": "06:49",
+    "amount": "$1,196.73",
+    "pan": 1677,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 719871
+  },
+  {
+    "noAuth": 9991418,
+    "date": "24/11/22",
+    "hour": "11:34",
+    "amount": "$2,979.25",
+    "pan": 5233,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 225410
+  },
+  {
+    "noAuth": 4317340,
+    "date": "22/03/23",
+    "hour": "11:34",
+    "amount": "$1,207.64",
+    "pan": 4075,
+    "procesador": "Visa",
+    "tipo": "G",
+    "approve": 987150
+  },
+  {
+    "noAuth": 5280082,
+    "date": "28/09/22",
+    "hour": "07:01",
+    "amount": "$3,151.50",
+    "pan": 4942,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 158702
+  },
+  {
+    "noAuth": 6845590,
+    "date": "06/10/22",
+    "hour": "08:41",
+    "amount": "$3,084.18",
+    "pan": 6884,
+    "procesador": "Visa",
+    "tipo": "A",
+    "approve": 426195
+  },
+  {
+    "noAuth": 3759034,
+    "date": "15/01/23",
+    "hour": "08:26",
+    "amount": "$389.71",
+    "pan": 2040,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 669581
+  },
+  {
+    "noAuth": 8442276,
+    "date": "11/05/23",
+    "hour": "07:30",
+    "amount": "$1,528.17",
+    "pan": 5564,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 213778
+  },
+  {
+    "noAuth": 9802677,
+    "date": "19/03/23",
+    "hour": "01:29",
+    "amount": "$1,290.36",
+    "pan": 7295,
+    "procesador": "MC",
+    "tipo": "A",
+    "approve": 128274
+  },
+  {
+    "noAuth": 1372173,
+    "date": "02/04/23",
+    "hour": "04:32",
+    "amount": "$775.01",
+    "pan": 7769,
+    "procesador": "MC",
+    "tipo": "msi",
+    "approve": 363837
+  }
+]

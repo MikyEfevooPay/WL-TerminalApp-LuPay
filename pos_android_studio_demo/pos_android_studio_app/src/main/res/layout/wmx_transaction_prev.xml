@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/wmx_bg"
+    >
+    <include layout="@layout/toolbar_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="37px"
+        android:layout_marginRight="37px"
+        android:layout_marginBottom="37px"
+        android:background="@drawable/fondo_ticket"
+        android:orientation="vertical"
+        android:paddingLeft="18px"
+        android:paddingTop="43px"
+        android:paddingRight="18px"
+        android:paddingBottom="56px">
+
+        <ImageView
+            android:id="@+id/tp_iv_trans_type"
+            android:layout_width="match_parent"
+            android:layout_height="61px"
+            android:layout_marginBottom="18px"
+            app:srcCompat="@drawable/check_cancelar" />
+
+        <TextView
+            android:id="@+id/tp_tv_trans_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans_bold"
+            android:gravity="center"
+            android:text="Aprobada Venta Normal"
+            android:textColor="#121212"
+            android:textSize="20px" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="29px"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="center"
+                android:text="Aut. No. "
+                android:textColor="#5A5A5A"
+                android:textSize="20px" />
+
+            <TextView
+                android:id="@+id/tp_tv_auth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="29px"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="center"
+                android:text="3884956"
+                android:textColor="#5A5A5A"
+                android:textSize="20px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17px"
+            android:orientation="horizontal"
+            android:paddingLeft="43px"
+            android:paddingRight="43px">
+
+            <TextView
+                android:id="@+id/tp_tv_total_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Monto:"
+                android:textColor="#5A5A5A"
+                android:textSize="20px" />
+
+            <TextView
+                android:id="@+id/tp_tv_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="right"
+                android:text="$1,532.00"
+                android:textColor="#5A5A5A"
+                android:textSize="20px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17px"
+            android:orientation="horizontal"
+            android:paddingLeft="43px"
+            android:paddingRight="43px">
+
+            <TextView
+                android:id="@+id/tp_tv_tip_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Propina:"
+                android:textColor="#5A5A5A"
+                android:textSize="20px" />
+
+            <TextView
+                android:id="@+id/tp_tv_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="right"
+                android:text="$125.00"
+                android:textColor="#5A5A5A"
+                android:textSize="20px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="45px"
+            android:orientation="horizontal"
+            android:paddingLeft="43px"
+            android:paddingRight="43px">
+
+            <TextView
+                android:id="@+id/tp_tv_total_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="Total:"
+                android:textColor="#121212"
+                android:textSize="20px" />
+
+            <TextView
+                android:id="@+id/tp_tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans_bold"
+                android:gravity="right"
+                android:text="$1,657.00"
+                android:textColor="#121212"
+                android:textSize="20px" />
+        </LinearLayout>
+
+        <ImageView
+            android:layerType="software"
+            android:contentDescription="underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dotted_line"
+            android:layout_marginBottom="36px"
+            android:layout_marginRight="16px"
+            android:layout_marginLeft="16px"
+            />
+
+
+        <TextView
+            android:id="@+id/textView27"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:text="Método de pago"
+            android:textColor="#5A5A5A"
+            android:textSize="18px"
+            android:layout_marginBottom="8px"
+            android:layout_marginLeft="7px"/>
+
+        <LinearLayout
+            android:id="@+id/tp_ll_content_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="26px"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="#F4F4FD"
+            android:orientation="horizontal"
+            android:paddingLeft="18px"
+            android:paddingTop="19px"
+            android:paddingRight="18px"
+            android:paddingBottom="19px">
+
+            <LinearLayout
+                android:layout_width="51px"
+                android:layout_height="51px"
+                android:layout_marginRight="14px"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="#FFFFFF"
+                android:orientation="horizontal"
+                android:paddingLeft="10px"
+                android:paddingRight="10px">
+
+                <ImageView
+                    android:id="@+id/tp_iv_process"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView29"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="Tarjeta Crédito"
+                        android:textColor="#121212"
+                        android:textSize="18px" />
+
+                    <TextView
+                        android:id="@+id/tp_tv_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:gravity="right"
+                        android:text="**** 9999"
+                        android:textColor="#121212"
+                        android:textSize="18px" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tp_tv_date_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans"
+                    android:text="27/04/22 16:02"
+                    android:textColor="#5A5A5A"
+                    android:textSize="16px" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans_bold"
+            android:gravity="center_horizontal"
+            android:text="Aprobación"
+            android:textColor="#121212"
+            android:textSize="20px" />
+
+        <TextView
+            android:id="@+id/tp_tv_approve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center_horizontal"
+            android:text="640463"
+            android:textColor="#5A5A5A"
+            android:textSize="20px" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

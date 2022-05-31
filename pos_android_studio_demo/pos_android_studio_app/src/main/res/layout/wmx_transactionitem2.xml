@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="17px"
+    android:background="@drawable/rounded_corner"
+
+    android:backgroundTint="#FFFFFF"
+    android:paddingLeft="21px"
+    android:paddingTop="14px"
+    android:paddingRight="21px"
+    android:paddingBottom="14px">
+
+    <LinearLayout
+        android:layout_width="201px"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Aut. No. "
+                android:textColor="#5A5A5A"
+                android:textSize="16px" />
+
+            <TextView
+                android:id="@+id/wmx_trans_aut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9px"
+                android:fontFamily="@font/dm_sans"
+                android:text="3884956"
+                android:textColor="#5A5A5A"
+                android:textSize="16px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/wmx_trans_status"
+                android:layout_width="31px"
+                android:layout_height="31px"
+                android:layout_marginRight="21px"
+                tools:srcCompat="@android:drawable/btn_star_big_on" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans"
+                    android:text="Monto"
+                    android:textColor="#121212"
+                    android:textSize="16px" />
+
+                <TextView
+                    android:id="@+id/wmx_trans_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="$000,000.00"
+                    android:includeFontPadding="false"
+
+                    android:textColor="#4AAC38"
+                    android:textSize="20px" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/wmx_trans_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="9px"
+            android:fontFamily="@font/dm_sans"
+            android:text="27/04/22"
+            android:textColor="#5A5A5A"
+            android:textSize="16px"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+            >
+
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="Tarjeta"
+                android:textColor="#121212"
+                android:textSize="16px" />
+
+            <TextView
+                android:id="@+id/wmx_trans_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans_medium"
+                android:text="**** 3245"
+                android:includeFontPadding="false"
+
+                android:textColor="#121212"
+                android:textSize="20px" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/wmx_trans_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="9px"
+            android:fontFamily="@font/dm_sans"
+            android:text="11:11"
+            android:textAlignment="viewEnd"
+            android:textColor="#5A5A5A"
+
+            android:textSize="16px" />
+
+        <LinearLayout
+            android:layout_width="40px"
+            android:layout_height="match_parent"
+            android:gravity="right|bottom"
+            android:orientation="vertical"
+
+            >
+
+            <ImageView
+                android:id="@+id/wmx_trans_process"
+                android:layout_width="match_parent"
+                android:layout_height="20px"
+                android:scaleType="fitEnd"
+                android:layout_marginBottom="4dp"
+                tools:srcCompat="@drawable/masterdcard" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

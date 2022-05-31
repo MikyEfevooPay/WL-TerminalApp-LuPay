@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ActivityStyleNoAnimation" parent="@android:style/Theme.NoTitleBar">
+        <item name="android:windowBackground">@color/app_background_color</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="AppThemeDown" parent="Theme.MaterialComponents.Light.Bridge">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarTabBarStyle">@style/MyTheme.ActionBar.TabBar</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
+        <item name="actionOverflowMenuStyle">@style/CustomOptionsMenu</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/customSpinnerStyle</item>
+        <!-- Pointer to Overflow style ***MUST*** go here or it will not work -->
+        <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
+        <item name="android:homeAsUpIndicator">@drawable/action_bar_go_back</item>
+        <item name="actionMenuTextAppearance">@style/MyMenuTextAppearance</item>
+    </style>
+
+    <style name="CustomOptionsMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/eb_col_12</item>
+    </style>
+
+
+<!-- ____________________ styles MaterialComponents ____________________-->
+
+    <style name="materialAlertDialog_a" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/shrine_pink_light</item>
+        <item name="colorOnSurface">@color/shrine_pink_900</item>
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+
+        <item name="materialAlertDialogTitlePanelStyle">@style/TitlePaneStyleCenter</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyleCenter</item>
+        <item name="materialAlertDialogTitleIconStyle">@style/TitleIconStyleCenter</item>
+<!--        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyleCenter</item>-->
+        <item name="buttonBarStyle">@style/ButtonBarStyle</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+
+    </style>
+
+    <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
+    </style>
+    <style name="ThemeOverlay.App.Button" parent="">
+        <item name="colorPrimary">@color/shrine_pink_900</item>
+    </style>
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">18px</item>
+    </style>
+
+    <style name="TitlePaneStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Panel.CenterStacked" />
+    <style name="TitleIconStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked"/>
+    <style name="TitleTextStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Text.CenterStacked">
+        <item name="android:textColor">#121212</item>
+        <item name="android:textSize">18px</item>
+        <item name="android:fontFamily">@font/dm_sans</item>
+        <item name="android:layout_marginTop">17px</item>
+    </style>
+    <style name="BodyTextStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:textColor">#c7c7c7</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ButtonBarStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_gravity">right</item>
+
+    </style>
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">false</item>
+        <item name="android:background">@drawable/rounded_corner_cancel</item>
+        <item name="android:width">350px</item>
+        <item name="background">@drawable/rounded_corner_cancel</item>
+        <item name="android:layout_marginBottom">15px</item>
+        <item name="backgroundTint">#FFBABA</item>
+        <item name="android:textColor">#E93736</item>
+    </style>
+
+
+    <style name="NeutralButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">false</item>
+        <item name="android:background">@drawable/rounded_corner_cancel</item>
+        <item name="android:width">350px</item>
+        <item name="background">@drawable/rounded_corner_cancel</item>
+        <item name="backgroundTint">#E5E5E5</item>
+        <item name="android:textColor">#121212</item>
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ____________________ styles calendar ____________________-->
+
+    <style name="estilo1" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+
+<!--        <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>-->
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen</item>
+<!--        <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>-->
+
+<!--        <item name="colorPrimary">#fff</item>-->
+<!--        <item name="colorOnPrimary">#121212</item>-->
+<!--        <item name="colorOnSecondary">#1F45FF</item>-->
+    </style>
+
+    <style name="MaterialCalendarThemeBackground" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="materialCalendarStyle">@style/Custom_MaterialCalendar.Fullscreen</item>
+        <item name="materialCalendarHeaderTitle">@style/customHeaderTitle</item>
+        <item name="materialCalendarHeaderSelection">@style/CustomHeaderSelection</item>
+
+        <item name="colorSurface">#fff</item>
+        <item name="colorOnSurface">#121212</item>
+<!--        <item name="colorPrimary">#92A8FF</item>-->
+        <item name="colorPrimary">#1F45FF</item>
+        <item name="colorOnPrimary">#fff</item>
+
+    </style>
+
+    <style name="Custom_MaterialCalendar.Fullscreen" parent="@style/Widget.MaterialComponents.MaterialCalendar">
+        <item name="android:windowFullscreen">false</item>
+        <item name="rangeFillColor">#8092A8FF</item>
+        <item name="dayStyle">@style/CustomWidget_Day</item>
+        <item name="daySelectedStyle">@style/CustomSelected</item>
+    </style>
+    <style name="customHeaderTitle" parent="@style/Widget.MaterialComponents.MaterialCalendar.HeaderTitle">
+        <item name="android:fontFamily">@font/dm_sans_medium</item>
+        <item name="android:textColor">#fff</item>
+        <item name="colorSurface">#121212</item>
+    </style>
+    <style name="CustomHeaderSelection" parent="Widget.MaterialComponents.MaterialCalendar.HeaderSelection">
+        <item name="android:fontFamily">@font/dm_sans_medium</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+    <style name="CustomWidget_Day" parent="Widget.MaterialComponents.MaterialCalendar.Day">
+        <item name="android:fontFamily">@font/dm_sans</item>
+        <item name="android:textSize">18sp</item>
+        <item name="itemTextColor">#121212</item>
+    </style>
+    <style name= "CustomSelected" parent="Widget.MaterialComponents.MaterialCalendar.Day.Selected">
+        <item name="itemFillColor">#1F45FF</item>
+        <item name="itemStrokeColor">#1F45FF</item>
+    </style>
+
+<!-- ____________________ styles calendar ____________________-->
+
+
+<!-- ____________________ styles MaterialComponents ____________________-->
+
+
+    <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@drawable/edm_detail_actionbar_tabview_style</item>
+    </style>
+
+    <style name="MyMenuTextAppearance" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Styles -->
+    <style name="OverFlow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/action_bar_more</item>
+    </style>
+
+    <!-- The beef: background color for Action Bar overflow menu -->
+    <style name="PopupMenu" parent="@style/Widget.AppCompat.Light.PopupMenu">
+        <item name="android:popupBackground">@color/eb_col_14</item>
+    </style>
+
+    <style name="customSpinnerStyle" parent="android:Widget.ListView.DropDown">
+        <item name="android:divider">@color/segment_line</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="CaptureTheme" parent="@android:style/Theme.Holo">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/action_bar</item>
+        <item name="android:indeterminateProgressStyle">@style/ActionBarProgressBar.MyStyle</item>
+        <item name="android:titleTextStyle">@style/TitleTextStyle</item>
+        <item name="android:displayOptions">showHome|homeAsUp|showTitle</item>
+        <item name="android:icon">@android:color/transparent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="MyTheme.ActionBar.TabBar" parent="android:style/Widget.Holo.Light.ActionBar.TabBar">
+        <!-- This is an ORANGE background -->
+        <item name="android:background">@color/eb_col_7</item>
+    </style>
+
+
+    <style name="ActionBarProgressBar.MyStyle" parent="@android:style/Widget.Holo.ProgressBar.Small">
+        <item name="android:minWidth">28dp</item>
+        <item name="android:maxWidth">28dp</item>
+        <item name="android:minHeight">28dp</item>
+        <item name="android:maxHeight">28dp</item>
+    </style>
+
+    <!--    <style name="ResultButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
+            <item name="android:layout_width">0.0dip</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:layout_weight">1.0</item>
+        </style>-->
+
+    <!--    <style name="ShareButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+        </style>-->
+
+    <style name="Theme.CustomDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+
+    <style name="Theme.IAPTheme" parent="@android:style/Theme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="TitleTextStyle">
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">@color/eb_col_7</item>
+    </style>
+
+    <style name="contact_profile_sub_content_style">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">@color/eb_col_11</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">4.0dip</item>
+        <item name="android:layout_marginBottom">22.0dip</item>
+    </style>
+
+    <style name="contact_us_content">
+        <item name="android:textSize">15.0sp</item>
+        <item name="android:textColor">@color/eb_col_8</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2.0dip</item>
+    </style>
+
+    <style name="contact_us_content_blue">
+        <item name="android:textSize">15.0sp</item>
+        <item name="android:textColor">@color/eb_col_14</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2.0dip</item>
+        <item name="android:layout_marginBottom">10.0dip</item>
+    </style>
+
+    <style name="contact_us_title">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/eb_col_8</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10.0dip</item>
+    </style>
+
+    <style name="event_agenda_spliter_style">
+        <item name="android:background">@color/segment_line</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">2.0dip</item>
+    </style>
+
+    <style name="event_dashboard_registration_spliter_style">
+        <item name="android:background">@color/eb_col_2</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">2.0dip</item>
+    </style>
+
+    <style name="event_dashboard_spliter_style">
+        <item name="android:background">@color/eb_col_13</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1.0dip</item>
+    </style>
+
+    <style name="event_springboard_action_text">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">@color/eb_col_17</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="event_detail_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/eb_col_11</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="default_spliter_horizontal_style">
+        <item name="android:background">@color/segment_line</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
+    <style name="default_spliter_vertical_style">
+        <item name="android:background">@color/segment_line</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="default_spliter_horizontal_highlight_style">
+        <item name="android:background">@color/eb_col_15</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
+</resources>

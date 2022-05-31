@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EFF2FF"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_layout"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="0dp">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="$"
+                android:textColor="#121212"
+                android:textSize="45px" />
+
+            <TextView
+                android:id="@+id/wmx_label_Pin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="0.00"
+                android:textColor="#121212"
+                android:textSize="45px" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_marginTop="34px"
+        android:columnCount="3"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="1"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="2"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="3"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_4"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="4"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_5"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="5"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_6"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="6"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_7"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="7"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_8"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="8"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20px">
+
+            <Button
+                android:id="@+id/btn_9"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="9"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_Dot"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="1"
+                android:textColor="#2344ED"
+
+                android:textSize="35px"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_0"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="0"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="95px"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="@string/wmx_terminal_del"
+                android:textColor="#2344ED"
+                android:textSize="35px" />
+
+        </LinearLayout>
+
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_marginBottom="37px"
+        >
+
+        <Button
+            android:id="@+id/WMX_btn_trade"
+            android:layout_width="406px"
+            android:layout_height="59px"
+            android:alpha="0.5"
+            android:background="@drawable/rounded_corner"
+            android:enabled="false"
+            android:fontFamily="@font/dm_sans_bold"
+            android:minHeight="50dip"
+            android:text="Continuar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="22px" />
+    </LinearLayout>
+
+</LinearLayout>

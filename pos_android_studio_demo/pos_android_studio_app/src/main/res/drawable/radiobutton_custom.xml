@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:state_checked="true">
+        <layer-list
+            android:width="31px"
+            android:height="31px"
+            >
+            <!-- Larger blue circle -->
+            <item
+
+                >
+                <shape
+                    android:shape="oval" >
+                    <corners
+                        android:radius="5px"/>
+
+                    <solid android:color="#F8F8FF" />
+
+                    <stroke android:width="1px"
+                        android:color="#8F92EE"
+                        />
+
+                    <padding
+                        android:bottom="4px"
+                        android:left="4px"
+                        android:right="4px"
+                        android:top="4px" />
+
+                    <size android:height="31px"
+                        android:width="31px"/>
+                </shape>
+            </item>
+
+            <item android:drawable="@drawable/checkmark_outline"
+                android:gravity="center"
+                android:width="20px"
+                android:height="20px">
+
+            </item>
+
+            <!-- Green circle in middle -->
+<!--            <item>-->
+<!--                <shape-->
+<!--                    android:shape="oval" >-->
+<!--                    <corners-->
+<!--                        android:radius="5px"/>-->
+
+<!--                    <solid android:color="#8F92EE" />-->
+
+<!--                    <padding-->
+<!--                        android:bottom="0dp"-->
+<!--                        android:left="0dp"-->
+<!--                        android:right="0dp"-->
+<!--                        android:top="0dp" />-->
+
+<!--                    <size android:height="10px"-->
+<!--                        android:width="10px"/>-->
+<!--                </shape>-->
+
+<!--            </item>-->
+        </layer-list>
+    </item>
+
+
+    <item android:state_checked="false">
+        <shape
+            android:shape="oval" >
+            <corners
+                android:radius="5px"/>
+
+            <solid android:color="#F8F8FF" />
+
+            <stroke android:width="1px"
+                android:color="#8F92EE"
+                />
+
+            <padding
+                android:bottom="0dp"
+                android:left="0dp"
+                android:right="0dp"
+                android:top="0dp" />
+
+            <size android:height="31px"
+                android:width="31px"/>
+        </shape>
+    </item>
+</selector>
