@@ -46,9 +46,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -80,6 +84,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Button WMX_btn_trade;
     private TextView tv_card_label_1,tv_card_label_2;
 
+    private String cardNofinal ="";
+    private String type_transaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +98,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         Intent intent = getIntent();
         Amount = intent.getStringExtra("Amount");
         AmountToShow = intent.getStringExtra("AmountToShow");
+        type_transaction = intent.getStringExtra("type_transaction");
+
         Status_lector = (TextView) findViewById(R.id.wmx_status_lector);
         Total_Amount = (TextView) findViewById(R.id.wmx_text_total_Amount);
         Pruebaedittext = (EditText) findViewById(R.id.pruebaedittext);
@@ -219,60 +228,60 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void call(String content) {
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://ewwq-env.eba-9cmj2nu5.us-west-2.elasticbeanstalk.com/terminales/getdata";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("Method", FinalTradeType);
-            jsonBody.put("Response", content);
-            jsonBody.put("Amount", Amount);
-
-            final String requestBody = jsonBody.toString();
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    WMX_Card.super.showAlert("ERROR", error.toString());
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    if (response != null) {
-                        responseString = String.valueOf(response.statusCode);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
+//        try {
+//            RequestQueue requestQueue = Volley.newRequestQueue(this);
+//            String URL = "http://wwwisoapp1-env.eba-ydmd8b8z.us-west-2.elasticbeanstalk.com/terminales/getdata";
+//            JSONObject jsonBody = new JSONObject();
+//            jsonBody.put("Method", FinalTradeType);
+//            jsonBody.put("Response", content);
+//            jsonBody.put("Amount", Amount);
+//
+//            final String requestBody = jsonBody.toString();
+//
+//            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+//                }
+//            }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+//                    WMX_Card.super.showAlert("ERROR", error.toString());
+//                }
+//            }) {
+//                @Override
+//                public String getBodyContentType() {
+//                    return "application/json; charset=utf-8";
+//                }
+//
+//                @Override
+//                public byte[] getBody() throws AuthFailureError {
+//                    try {
+//                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+//                    } catch (UnsupportedEncodingException uee) {
+//                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+//                        return null;
+//                    }
+//                }
+//
+//                @Override
+//                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+//                    String responseString = "";
+//                    if (response != null) {
+//                        responseString = String.valueOf(response.statusCode);
+//                        // can get more details such as response.headers
+//                    }
+//                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+//                }
+//            };
+//
+//            requestQueue.add(stringRequest);
+//        } catch (JSONException e) {
+//
+//            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+//
+//        }
     }
 
     private KeyboardUtil keyboardUtil;
@@ -285,10 +294,52 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         tv_card_label_2.setText("");
         trading.setVisibility(View.GONE);
     }
+
     private void ChangeViewToTicket (){
+        Intent thisIntent = getIntent();
+        String v_total = thisIntent.getStringExtra("total");
+
         intent = new Intent(this, WMX_final_ticket_transaction.class);
-        startActivity(intent);
+
+        TRACE.d("date   "+getTime());
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+        Date date = new Date();
+
+        intent.putExtra("type_transaction",type_transaction);
+        intent.putExtra("v_total",Total_Amount.getText().toString());
+        intent.putExtra("v_time",dateFormat.format(date).toString());
+        intent.putExtra("v_card","**** 9999");
+
+        if(type_transaction.equals("msi")){
+            String v_months = thisIntent.getStringExtra("months");
+            String v_months_total = thisIntent.getStringExtra("months_total");
+            intent.putExtra("v_months",v_months.toString());
+            intent.putExtra("v_months_total",v_months_total.toString());
+
+        }else{
+            String v_subtotal = thisIntent.getStringExtra("subtotal");
+            String v_tip = thisIntent.getStringExtra("tips");
+
+            intent.putExtra("v_tip",v_tip.toString());
+            intent.putExtra("v_subtotal",v_subtotal.toString());
+        }
+
+       startActivity(intent);
     }
+
+    private String getTime(){
+        //YYMMDDHHmmss
+        //DateTimeFormat dtf = DateTimeFormatter.SimpleDateFormat("YY/MM/DD HH:mm:ss");
+        //LocalTime localDate = LocalTime.now();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
+        Date date = new Date();
+
+
+        return dateFormat.format(date).toString();
+    }
+
     /** CLASS **/
 
     class MyPosListener extends CQPOSService {
@@ -642,7 +693,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 }
 
                 TRACE.d(TRACE.NEW_LINE + "content in NNFC request(?)" +content);
-                //call(content);
+                call(content);
 
                 //sendMsg(8003);
             }
@@ -708,12 +759,15 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("onRequestOnlineProcess" + tlv);
             Status_lector.setText(R.string.request_data_to_server);
 
+            //pos.getIccCardNo(getTime());
 
             //dialog = new Dialog(mContext);
             //dialog.setContentView(R.layout.alert_dialog);
             //dialog.setTitle(R.string.request_data_to_server);
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
+
+
 
             if (isPinCanceled) {
                 Status_lector.setText(R.string.replied_failed);
@@ -726,7 +780,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("result", "success");
                 startActivity(intent);*/
                 //ChangeViewToTicket();
-                //call(tlv);
+                call(tlv);
+                pos.anlysEmvIccData(tlv);
+
                 //((TextView) dialog.findViewById(R.id.messageTextView))
                 //.setText(R.string.replied_success);
             }
@@ -1054,6 +1110,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onGetCardNoResult(String cardNo) {//get card number result
             TRACE.d("onGetCardNoResult(String cardNo):" + cardNo);
+            cardNofinal = cardNo;
         }
 
         @Override

@@ -46,13 +46,14 @@
         android:padding="23px">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="119.41px"
+                android:layout_width="119px"
                 android:layout_height="22.9px"
                 android:layout_marginBottom="20px"
                 app:srcCompat="@drawable/wirebit_logotipo2022_color" />
@@ -60,7 +61,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/ticket_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12px"
@@ -70,6 +71,7 @@
             android:textSize="20px" />
 
         <LinearLayout
+            android:id="@+id/ticket_ll_subtotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15px"
@@ -87,7 +89,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/ticket_tv_subtotal_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
@@ -103,7 +105,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/ticket_tv_tip_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -113,7 +115,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/ticket_tv_tip_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
@@ -129,7 +131,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/ticket_tv_total_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -139,7 +141,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/ticket_tv_total_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
@@ -176,7 +178,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/ticket_tv_time_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
@@ -202,7 +204,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/ticket_tv_card_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
@@ -228,7 +230,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/ticket_tv_method_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
@@ -238,10 +240,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_btn_open_modal_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="33px"
-            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <TextView
@@ -264,7 +268,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30px"
-            android:layout_weight="1"
             android:gravity="bottom|center_horizontal"
 
             android:orientation="vertical">
@@ -275,7 +278,6 @@
                 android:layout_height="60px"
                 android:background="@drawable/rounded_corner"
                 android:backgroundTint="#B9E0AB"
-                android:enabled="false"
                 android:fontFamily="@font/dm_sans_bold"
                 android:minHeight="50dip"
                 android:stateListAnimator="@null"

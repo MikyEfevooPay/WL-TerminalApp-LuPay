@@ -115,12 +115,16 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
             case R.id.WMX_btn_trade:
                 intent = new Intent(this, WMX_Propinas.class);
                 intent.putExtra("Amount", (String) Amount.getText());
-                if(type_transaction.equals("msi")){
-                    intent.putExtra("type_transaction","msi");
 
-                }else if(type_transaction.equals("venta")){
-                    intent.putExtra("type_transaction","tip");
-                }
+                intent.putExtra("type_transaction",type_transaction);
+
+//                if(type_transaction.equals("msi")){
+//                    intent.putExtra("type_transaction","msi");
+//
+//                }else if(type_transaction.equals("venta")){
+//                    intent.putExtra("type_transaction","tip");
+//                }
+
                 startActivity(intent);
                 break;
             case R.id.btn_delete:

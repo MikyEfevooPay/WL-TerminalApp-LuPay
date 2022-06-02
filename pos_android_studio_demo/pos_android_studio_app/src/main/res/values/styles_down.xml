@@ -48,6 +48,7 @@
 
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
 
     </style>
 
@@ -80,6 +81,7 @@
         <item name="android:layout_gravity">right</item>
 
     </style>
+
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="textAllCaps">false</item>
         <item name="android:background">@drawable/rounded_corner_cancel</item>
@@ -101,7 +103,15 @@
     </style>
 
 
-
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">false</item>
+        <item name="android:background">@drawable/rounded_corner_cancel</item>
+        <item name="android:width">350px</item>
+        <item name="background">@drawable/rounded_corner_cancel</item>
+        <item name="android:layout_marginBottom">15px</item>
+        <item name="backgroundTint">#B9E0AB</item>
+        <item name="android:textColor">#4AAC38</item>
+    </style>
 
 
 

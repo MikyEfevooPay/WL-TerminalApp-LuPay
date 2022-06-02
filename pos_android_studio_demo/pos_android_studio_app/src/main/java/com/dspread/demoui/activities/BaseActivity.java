@@ -179,13 +179,25 @@ public abstract class BaseActivity extends AppCompatActivity  {
         toast.setView(layout);
     }
 
-    public void showAlert(String title, String... desc){
-
+    public void showAlert(String type, String title, String... desc){
         ImageView image = layout.findViewById(R.id.AlertImage);
         TextView tv_titulo = layout.findViewById(R.id.AlertTextTitulo);
         TextView tv_desc = layout.findViewById(R.id.AlertTextDesc);
+        LinearLayout ll_custom_aler = layout.findViewById(R.id.custom_alert);
+        switch (type){
+            case "success":
+                image.setImageResource(R.drawable.check_exito);
+                tv_titulo.setTextColor(0xff4AAC38);
+                ll_custom_aler.setBackgroundColor(0xffB9E0AB);
+                break;
+            case "error":
+                image.setImageResource(R.drawable.exclamation_mark);
+                tv_titulo.setTextColor(0xfffff);
+                ll_custom_aler.setBackgroundColor(0xffFF9393);
+                break;
+        }
 
-        image.setImageResource(R.drawable.exclamation_mark);
+
         tv_titulo.setText(title);
         if(desc.length>0)
             tv_desc.setText(desc[0]);

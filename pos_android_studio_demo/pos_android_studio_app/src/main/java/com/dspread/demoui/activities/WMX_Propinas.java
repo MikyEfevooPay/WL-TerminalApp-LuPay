@@ -106,7 +106,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
             total_msi= _amount / 12;
             tv_twenty.setText(gf.formatMoney(String.valueOf(total_msi),true) + " MXN");
 
-        }else if(type_transaction.equals("tip")){
+        }else if(type_transaction.equals("venta")){
             tv_caption.setText("¿Desea agregar propina?");
 
         }
@@ -114,13 +114,14 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
+
         int id =view.getId();
         if(id == R.id.Propinas_btn_continue)
             changeView();
         else
             changeCheck(id);
 
-        if(type_transaction.equals("msi")){
+        if(type_transaction.equals("msi") && id != R.id.Propinas_btn_continue){
             switch (id){
                 case R.id.rBZero:
                     v_msi="3";
@@ -135,7 +136,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
                     v_msi="12";
                     break;
             }
-        }else{
+        }else if(id != R.id.Propinas_btn_continue){
             Float percetn=0.0F ;
             switch (id){
                 case R.id.rBZero:
@@ -231,8 +232,23 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     private void changeView(){
         intent = new Intent(this, WMX_Card.class);
         intent.putExtra("AmountToShow",tv_total.getText());
+        intent.putExtra("type_transaction",type_transaction );
         String tmp = tv_total.getText().toString().replace("$","").replace(",","").replace(" MXN","");
         intent.putExtra("Amount",tmp);
+
+        intent.putExtra("total",tv_total.getText());
+
+        if(type_transaction.equals("msi")){
+            intent.putExtra("months",v_msi);
+            Float _amount = Float.parseFloat(Amount.replace(",",""));
+            Float total_msi= _amount / Float.valueOf(v_msi);
+            intent.putExtra("months_total",gf.formatMoney(String.valueOf(total_msi),true) + " MXN");
+        }else{
+            intent.putExtra("subtotal",Total_Amount.getText());
+            intent.putExtra("tips",tv_propina_final.getText());
+        }
+
+
         startActivity(intent);
     }
 
