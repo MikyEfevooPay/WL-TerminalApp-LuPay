@@ -21,7 +21,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     private Context mContext;
-    private String Amount, type_transaction, v_msi, v_total_msi;
+    private String Amount, type_transaction, v_msi="3", v_total_msi;
     private TextView Total_Amount, tv_zero, tv_ten, tv_fifteen, tv_twenty, tv_total, tv_propina_final, tv_propina_percent, tv_caption;
     private RadioButton zero, ten, fifteen, twenty, other;
     private GlobalFunctions gf ;

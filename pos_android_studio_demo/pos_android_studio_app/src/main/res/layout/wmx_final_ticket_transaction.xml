@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#2344ED"
     android:orientation="vertical"
     android:paddingLeft="18px"
-    android:paddingTop="33px"
+    android:paddingTop="26px"
     android:paddingRight="18px"
-    android:paddingBottom="33px"
-    android:background="#2344ED"
-    >
+    android:paddingBottom="26px">
+
     <include layout="@layout/toolbar_layout" />
 
     <LinearLayout
@@ -21,8 +21,8 @@
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/giv_card_status"
-            android:layout_width="60px"
-            android:layout_height="60px"
+            android:layout_width="80px"
+            android:layout_height="80px"
             android:src="@drawable/palomita" />
 
         <TextView

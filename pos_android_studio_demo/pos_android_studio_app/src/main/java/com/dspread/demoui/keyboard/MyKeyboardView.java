@@ -9,6 +9,7 @@ import android.inputmethodservice.KeyboardView;
 import android.text.Editable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -302,7 +303,7 @@ public class MyKeyboardView extends KeyboardView {
                 String label;
 
 
-                if (code >= 0) {//number value
+                if (code > 0) {//number value
                     pKeyLis.get(i).label = ayRandomKey[index] + "";
                     pKeyLis.get(i).codes[0] = 48 + ayRandomKey[index];
                     String locationStr = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(ayRandomKey[index]))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
@@ -314,6 +315,8 @@ public class MyKeyboardView extends KeyboardView {
                         label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(13));
                     }else if(code == -4){
                         label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(15));
+                    }else if(code == 0){
+                        label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(-1));
                     }else{
                         label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(14));
                     }

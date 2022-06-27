@@ -111,6 +111,11 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     }
 
     @Override
+    public void onBackPressed() {
+
+    }
+
+    @Override
     public void onClick(View view) {
 
         switch (view.getId()){

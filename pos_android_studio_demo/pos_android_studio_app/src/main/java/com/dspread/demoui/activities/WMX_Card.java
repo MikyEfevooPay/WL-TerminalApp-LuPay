@@ -201,6 +201,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         pos.setConext(this);
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
+//        pos.getQposId();
 
     }
 
@@ -228,60 +229,60 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void call(String content) {
-//        try {
-//            RequestQueue requestQueue = Volley.newRequestQueue(this);
-//            String URL = "http://wwwisoapp1-env.eba-ydmd8b8z.us-west-2.elasticbeanstalk.com/terminales/getdata";
-//            JSONObject jsonBody = new JSONObject();
-//            jsonBody.put("Method", FinalTradeType);
-//            jsonBody.put("Response", content);
-//            jsonBody.put("Amount", Amount);
-//
-//            final String requestBody = jsonBody.toString();
-//
-//            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-//                @Override
-//                public void onResponse(String response) {
-//                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-//                    WMX_Card.super.showAlert("ERROR", error.toString());
-//                }
-//            }) {
-//                @Override
-//                public String getBodyContentType() {
-//                    return "application/json; charset=utf-8";
-//                }
-//
-//                @Override
-//                public byte[] getBody() throws AuthFailureError {
-//                    try {
-//                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-//                    } catch (UnsupportedEncodingException uee) {
-//                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-//                        return null;
-//                    }
-//                }
-//
-//                @Override
-//                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-//                    String responseString = "";
-//                    if (response != null) {
-//                        responseString = String.valueOf(response.statusCode);
-//                        // can get more details such as response.headers
-//                    }
-//                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-//                }
-//            };
-//
-//            requestQueue.add(stringRequest);
-//        } catch (JSONException e) {
-//
-//            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-//
-//        }
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = "http://wwwisoapp1-env.eba-ydmd8b8z.us-west-2.elasticbeanstalk.com/terminales/getdata";
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("Method", FinalTradeType);
+            jsonBody.put("Response", content);
+            jsonBody.put("Amount", Amount);
+
+            final String requestBody = jsonBody.toString();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+                    WMX_Card.super.showAlert("ERROR", error.toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    if (response != null) {
+                        responseString = String.valueOf(response.statusCode);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+
+            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+
+        }
     }
 
     private KeyboardUtil keyboardUtil;
@@ -299,7 +300,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         Intent thisIntent = getIntent();
         String v_total = thisIntent.getStringExtra("total");
 
-        intent = new Intent(this, WMX_final_ticket_transaction.class);
+        intent = new Intent(this, WMX_final_ticket_transaction.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         TRACE.d("date   "+getTime());
 
@@ -347,7 +348,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("onRequestQposConnected()");
 //            Toast.makeText(mContext, "onRequestQposConnected", Toast.LENGTH_LONG).show();
             //dismissDialog();
-
             //statusEditText.setText(getString(R.string.device_plugged));
             trading.setEnabled(true);
             //btnDisconnect.setEnabled(true);
@@ -370,93 +370,93 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("enter amount  -- end");
 
             /**dismissDialog();
-            dialog = new Dialog(mContext);
-            dialog.setContentView(R.layout.amount_dialog);
-            dialog.setTitle(getString(R.string.set_amount));
+             dialog = new Dialog(mContext);
+             dialog.setContentView(R.layout.amount_dialog);
+             dialog.setTitle(getString(R.string.set_amount));
 
-            String[] transactionTypes = new String[]{"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
-                    "TRANSFER", "ADMIN", "CASHDEPOSIT",
-                    "PAYMENT", "PBOCLOG||ECQ_INQUIRE_LOG", "SALE",
-                    "PREAUTH", "ECQ_DESIGNATED_LOAD", "ECQ_UNDESIGNATED_LOAD",
-                    "ECQ_CASH_LOAD", "ECQ_CASH_LOAD_VOID", "CHANGE_PIN", "REFOUND", "SALES_NEW"};
-            ((Spinner) dialog.findViewById(R.id.transactionTypeSpinner)).setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item,
-                    transactionTypes));
+             String[] transactionTypes = new String[]{"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
+             "TRANSFER", "ADMIN", "CASHDEPOSIT",
+             "PAYMENT", "PBOCLOG||ECQ_INQUIRE_LOG", "SALE",
+             "PREAUTH", "ECQ_DESIGNATED_LOAD", "ECQ_UNDESIGNATED_LOAD",
+             "ECQ_CASH_LOAD", "ECQ_CASH_LOAD_VOID", "CHANGE_PIN", "REFOUND", "SALES_NEW"};
+             ((Spinner) dialog.findViewById(R.id.transactionTypeSpinner)).setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item,
+             transactionTypes));
 
-            dialog.findViewById(R.id.setButton).setOnClickListener(new View.OnClickListener() {
-
-
-                @Override
-                public void onClick(View v) {
-
-                    String amount = ((EditText) (dialog.findViewById(R.id.amountEditText))).getText().toString();
-                    String cashbackAmount = ((EditText) (dialog.findViewById(R.id.cashbackAmountEditText))).getText().toString();
-                    String transactionTypeString = (String) ((Spinner) dialog.findViewById(R.id.transactionTypeSpinner)).getSelectedItem();
-
-                    TransactionType transactionType = null;
-                    if (transactionTypeString.equals("GOODS")) {
-                        transactionType = QPOSService.TransactionType.GOODS;
-                    } else if (transactionTypeString.equals("SERVICES")) {
-                        transactionType = QPOSService.TransactionType.SERVICES;
-                    } else if (transactionTypeString.equals("CASH")) {
-                        transactionType = QPOSService.TransactionType.CASH;
-                    } else if (transactionTypeString.equals("CASHBACK")) {
-                        transactionType = QPOSService.TransactionType.CASHBACK;
-                    } else if (transactionTypeString.equals("INQUIRY")) {
-                        transactionType = QPOSService.TransactionType.INQUIRY;
-                    } else if (transactionTypeString.equals("TRANSFER")) {
-                        transactionType = QPOSService.TransactionType.TRANSFER;
-                    } else if (transactionTypeString.equals("ADMIN")) {
-                        transactionType = QPOSService.TransactionType.ADMIN;
-                    } else if (transactionTypeString.equals("CASHDEPOSIT")) {
-                        transactionType = QPOSService.TransactionType.CASHDEPOSIT;
-                    } else if (transactionTypeString.equals("PAYMENT")) {
-                        transactionType = QPOSService.TransactionType.PAYMENT;
-                    } else if (transactionTypeString.equals("PBOCLOG||ECQ_INQUIRE_LOG")) {
-                        transactionType = QPOSService.TransactionType.PBOCLOG;
-                    } else if (transactionTypeString.equals("SALE")) {
-                        transactionType = QPOSService.TransactionType.SALE;
-                    } else if (transactionTypeString.equals("PREAUTH")) {
-                        transactionType = QPOSService.TransactionType.PREAUTH;
-                    } else if (transactionTypeString.equals("ECQ_DESIGNATED_LOAD")) {
-                        transactionType = QPOSService.TransactionType.ECQ_DESIGNATED_LOAD;
-                    } else if (transactionTypeString.equals("ECQ_UNDESIGNATED_LOAD")) {
-                        transactionType = QPOSService.TransactionType.ECQ_UNDESIGNATED_LOAD;
-                    } else if (transactionTypeString.equals("ECQ_CASH_LOAD")) {
-                        transactionType = QPOSService.TransactionType.ECQ_CASH_LOAD;
-                    } else if (transactionTypeString.equals("ECQ_CASH_LOAD_VOID")) {
-                        transactionType = QPOSService.TransactionType.ECQ_CASH_LOAD_VOID;
-                    } else if (transactionTypeString.equals("CHANGE_PIN")) {
-                        transactionType = QPOSService.TransactionType.UPDATE_PIN;
-                    } else if (transactionTypeString.equals("REFOUND")) {
-                        transactionType = QPOSService.TransactionType.REFUND;
-                    } else if (transactionTypeString.equals("SALES_NEW")) {
-                        transactionType = QPOSService.TransactionType.SALES_NEW;
-                    }
+             dialog.findViewById(R.id.setButton).setOnClickListener(new View.OnClickListener() {
 
 
-                    OtherActivity.this.amount = amount;
-                    OtherActivity.this.cashbackAmount = cashbackAmount;
+            @Override
+            public void onClick(View v) {
 
-                    pos.setAmount(amount, cashbackAmount, "156", transactionType);
+            String amount = ((EditText) (dialog.findViewById(R.id.amountEditText))).getText().toString();
+            String cashbackAmount = ((EditText) (dialog.findViewById(R.id.cashbackAmountEditText))).getText().toString();
+            String transactionTypeString = (String) ((Spinner) dialog.findViewById(R.id.transactionTypeSpinner)).getSelectedItem();
 
-                    TRACE.d("enter amount  -- end");
-                    dismissDialog();
-                }
+            TransactionType transactionType = null;
+            if (transactionTypeString.equals("GOODS")) {
+            transactionType = QPOSService.TransactionType.GOODS;
+            } else if (transactionTypeString.equals("SERVICES")) {
+            transactionType = QPOSService.TransactionType.SERVICES;
+            } else if (transactionTypeString.equals("CASH")) {
+            transactionType = QPOSService.TransactionType.CASH;
+            } else if (transactionTypeString.equals("CASHBACK")) {
+            transactionType = QPOSService.TransactionType.CASHBACK;
+            } else if (transactionTypeString.equals("INQUIRY")) {
+            transactionType = QPOSService.TransactionType.INQUIRY;
+            } else if (transactionTypeString.equals("TRANSFER")) {
+            transactionType = QPOSService.TransactionType.TRANSFER;
+            } else if (transactionTypeString.equals("ADMIN")) {
+            transactionType = QPOSService.TransactionType.ADMIN;
+            } else if (transactionTypeString.equals("CASHDEPOSIT")) {
+            transactionType = QPOSService.TransactionType.CASHDEPOSIT;
+            } else if (transactionTypeString.equals("PAYMENT")) {
+            transactionType = QPOSService.TransactionType.PAYMENT;
+            } else if (transactionTypeString.equals("PBOCLOG||ECQ_INQUIRE_LOG")) {
+            transactionType = QPOSService.TransactionType.PBOCLOG;
+            } else if (transactionTypeString.equals("SALE")) {
+            transactionType = QPOSService.TransactionType.SALE;
+            } else if (transactionTypeString.equals("PREAUTH")) {
+            transactionType = QPOSService.TransactionType.PREAUTH;
+            } else if (transactionTypeString.equals("ECQ_DESIGNATED_LOAD")) {
+            transactionType = QPOSService.TransactionType.ECQ_DESIGNATED_LOAD;
+            } else if (transactionTypeString.equals("ECQ_UNDESIGNATED_LOAD")) {
+            transactionType = QPOSService.TransactionType.ECQ_UNDESIGNATED_LOAD;
+            } else if (transactionTypeString.equals("ECQ_CASH_LOAD")) {
+            transactionType = QPOSService.TransactionType.ECQ_CASH_LOAD;
+            } else if (transactionTypeString.equals("ECQ_CASH_LOAD_VOID")) {
+            transactionType = QPOSService.TransactionType.ECQ_CASH_LOAD_VOID;
+            } else if (transactionTypeString.equals("CHANGE_PIN")) {
+            transactionType = QPOSService.TransactionType.UPDATE_PIN;
+            } else if (transactionTypeString.equals("REFOUND")) {
+            transactionType = QPOSService.TransactionType.REFUND;
+            } else if (transactionTypeString.equals("SALES_NEW")) {
+            transactionType = QPOSService.TransactionType.SALES_NEW;
+            }
 
-            });
 
-            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            OtherActivity.this.amount = amount;
+            OtherActivity.this.cashbackAmount = cashbackAmount;
 
-                @Override
-                public void onClick(View v) {
-                    pos.cancelSetAmount();
-                    dialog.dismiss();
-                }
+            pos.setAmount(amount, cashbackAmount, "156", transactionType);
+
+            TRACE.d("enter amount  -- end");
+            dismissDialog();
+            }
 
             });
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-//            pos.setAmount("200", cashbackAmount, "156", QPOSService.TransactionType.GOODS);
+
+             dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+            pos.cancelSetAmount();
+            dialog.dismiss();
+            }
+
+            });
+             dialog.setCanceledOnTouchOutside(false);
+             dialog.show();
+             //            pos.setAmount("200", cashbackAmount, "156", QPOSService.TransactionType.GOODS);
              **/
         }
 
@@ -767,8 +767,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
 
-
-
             if (isPinCanceled) {
                 Status_lector.setText(R.string.replied_failed);
 
@@ -781,8 +779,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);*/
                 //ChangeViewToTicket();
                 call(tlv);
-                pos.anlysEmvIccData(tlv);
-
+//                pos.anlysEmvIccData(tlv);
+//                pos.anlysEmvTLVData(tlv);
                 //((TextView) dialog.findViewById(R.id.messageTextView))
                 //.setText(R.string.replied_success);
             }
@@ -795,7 +793,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             if (isPinCanceled) {
                 pos.sendOnlineProcessResult(null);
             } else {
-									//String str = "5A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F009505088004E0009A031406179C01009F02060000000000019F03060000000000009F0702AB009F080200209F0902008C9F0D05D86004A8009F0E0500109800009F0F05D86804F8009F101307010103A02000010A010000000000CE0BCE899F1A0201569F1E0838333230314943439F21031826509F2608881E2E4151E527899F2701809F3303E0F8C89F34030203009F3501229F3602008E9F37042120A7189F4104000000015A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F00";
+                //String str = "5A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F009505088004E0009A031406179C01009F02060000000000019F03060000000000009F0702AB009F080200209F0902008C9F0D05D86004A8009F0E0500109800009F0F05D86804F8009F101307010103A02000010A010000000000CE0BCE899F1A0201569F1E0838333230314943439F21031826509F2608881E2E4151E527899F2701809F3303E0F8C89F34030203009F3501229F3602008E9F37042120A7189F4104000000015A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F00";
 //									str = "9F26088930C9018CAEBCD69F2701809F101307010103A02802010A0100000000007EF350299F370415B4E5829F360202179505000004E0009A031504169C01009F02060000000010005F2A02015682027C009F1A0201569F03060000000000009F330360D8C89F34030203009F3501229F1E0838333230314943438408A0000003330101019F090200209F410400000001";
                 String str = "8A023030";//Currently the default value,
                 // should be assigned to the server to return data,
@@ -810,7 +808,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestBatchData(String tlv) {
             TRACE.d(getString(R.string.end_transaction));
             String content = getString(R.string.batch_data);
-            TRACE.d("onRequ\"onRequestBatchData(String tlv):\"estBatchData(String tlv):" + tlv);
+            TRACE.d("\"onRequestBatchData(String tlv):\":" + tlv);
             content += tlv;
             Status_lector.setText(content);
 
@@ -837,8 +835,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 TRACE.d("TransactionResult.APPROVED");
                 String message = getString(R.string.transaction_approved) + "\n" + getString(R.string.amount) + ": $" + Amount + "\n";
                 /**if (!cashbackAmount.equals("")) {
-                    message += getString(R.string.cashback_amount) + ": INR" + cashbackAmount;
-                }**/
+                 message += getString(R.string.cashback_amount) + ": INR" + cashbackAmount;
+                 }**/
                 //messageTextView.setText(message);
                 Status_lector.setText(message);
                 ChangeViewToTicket();
@@ -885,18 +883,18 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
             /**
 
-            dialog.findViewById(R.id.confirmButton).setOnClickListener(new View.OnClickListener() {
+             dialog.findViewById(R.id.confirmButton).setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    dismissDialog();
-                }
+            @Override
+            public void onClick(View v) {
+            dismissDialog();
+            }
             });
 
-            dialog.show();
-            amount = "";
-            cashbackAmount = "";
-            **/
+             dialog.show();
+             amount = "";
+             cashbackAmount = "";
+             **/
         }
 
         @Override
@@ -910,52 +908,52 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
 
             /**
-            dialog = new Dialog(mContext);
-            dialog.setContentView(R.layout.wmx_pin_keyboard);
+             dialog = new Dialog(mContext);
+             dialog.setContentView(R.layout.wmx_pin_keyboard);
 
 
 
 
 
-            dialog.findViewById(R.id.confirmButton).setOnClickListener(new View.OnClickListener() {
+             dialog.findViewById(R.id.confirmButton).setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    String pin = ((EditText) dialog.findViewById(R.id.pinEditText)).getText().toString();
-                    if (pin.length() >= 4 && pin.length() <= 12) {
-                        if (pin.equals("000000")) {
-                            pos.sendEncryptPin("5516422217375116");
+            @Override
+            public void onClick(View v) {
+            String pin = ((EditText) dialog.findViewById(R.id.pinEditText)).getText().toString();
+            if (pin.length() >= 4 && pin.length() <= 12) {
+            if (pin.equals("000000")) {
+            pos.sendEncryptPin("5516422217375116");
 
-                        } else {
-                            pos.sendPin(pin);
-                        }
-                        //dismissDialog();
-                    }
-                }
+            } else {
+            pos.sendPin(pin);
+            }
+            //dismissDialog();
+            }
+            }
             });
 
-            dialog.findViewById(R.id.bypassButton).setOnClickListener(new View.OnClickListener() {
+             dialog.findViewById(R.id.bypassButton).setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-//					pos.bypassPin();
-                    pos.sendPin("");
+            @Override
+            public void onClick(View v) {
+            //					pos.bypassPin();
+            pos.sendPin("");
 
-                    //dismissDialog();
-                }
+            //dismissDialog();
+            }
             });
 
-            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+             dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    isPinCanceled = true;
-                    pos.cancelPin();
-                    //dismissDialog();
-                }
+            @Override
+            public void onClick(View v) {
+            isPinCanceled = true;
+            pos.cancelPin();
+            //dismissDialog();
+            }
             });
 
-            dialog.show();**/
+             dialog.show();**/
 
         }
 
@@ -985,7 +983,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 if(keyboardUtil != null) {
                     keyboardUtil.hide();
                     TRACE.d("FINAL INOUT PIN " );
-
                 }
             }else{
                 for(int i = 0 ; i <num ; i ++){
@@ -1682,7 +1679,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String enCardKeyData = arg0.get("enDataCardKey");
                 String enKcvCardKeyData = arg0.get("enKcvDataCardKey");
                 //statusEditText.setText("rsaFileName:" + rsaFileName + "\nenPinKeyData:" + enPinKeyData + "\nenKcvPinKeyData:" +
-                 //       enKcvPinKeyData + "\nenCardKeyData:" + enCardKeyData + "\nenKcvCardKeyData:" + enKcvCardKeyData);
+                //       enKcvPinKeyData + "\nenCardKeyData:" + enCardKeyData + "\nenKcvCardKeyData:" + enKcvCardKeyData);
             } else {
                 TRACE.d("onQposGenerateSessionKeysResult  get key failed,pls try again!");
 
