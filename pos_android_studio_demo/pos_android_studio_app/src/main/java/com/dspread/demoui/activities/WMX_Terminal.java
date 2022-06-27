@@ -30,7 +30,6 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        super.setCustomToolbarColor("#EFF2FF");
         setTitle(getString(R.string.wmx_title_welcome));
         intent = getIntent();
         type_transaction = intent.getStringExtra("type_transaction");

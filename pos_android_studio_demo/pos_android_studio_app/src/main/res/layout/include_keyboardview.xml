@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical|fill_vertical"
-    android:background="#EFF2FF"
+    android:background="@color/ep_fondo"
     android:orientation="vertical">
 
     <LinearLayout
@@ -116,7 +116,7 @@
                 android:background="@color/transparent"
                 android:focusable="true"
                 android:keyBackground="@drawable/round_button"
-                android:keyTextColor="#2344ED"
+                android:keyTextColor="@color/ep_color_black"
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
                 android:shadowRadius="0.0" />

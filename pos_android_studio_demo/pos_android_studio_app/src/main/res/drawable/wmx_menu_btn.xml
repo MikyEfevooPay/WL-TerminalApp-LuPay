@@ -5,7 +5,7 @@
     <corners
         android:radius="15px"/>
 
-    <solid android:color="#2344ED" />
+    <solid android:color="@color/ep_btn_menu_fondo" />
 
     <padding
         android:bottom="0dp"
@@ -13,4 +13,5 @@
         android:right="0dp"
         android:top="0dp" />
 
+    <stroke android:width="1px" android:color="@color/ep_btn_menu_texto"/>
 </shape>

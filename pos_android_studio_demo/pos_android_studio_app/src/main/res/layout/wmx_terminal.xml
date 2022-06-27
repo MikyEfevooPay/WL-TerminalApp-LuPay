@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EFF2FF"
+    android:background="@color/ep_fondo"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar_layout"/>
@@ -67,7 +67,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="1"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -87,7 +87,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="2"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -107,7 +107,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="3"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -127,7 +127,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="4"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -147,7 +147,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="5"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -167,7 +167,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="6"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -187,7 +187,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="7"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -207,7 +207,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="8"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -227,7 +227,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="9"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -246,7 +246,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="1"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
 
                 android:textSize="35px"
                 android:visibility="invisible" />
@@ -267,7 +267,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="0"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -286,7 +286,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:stateListAnimator="@null"
                 android:text="@string/wmx_terminal_del"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_btn_padTerminal_texto"
                 android:textSize="35px" />
 
         </LinearLayout>
@@ -308,12 +308,13 @@
             android:layout_height="59px"
             android:alpha="0.5"
             android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/ep_btn_continuar_fondo"
             android:enabled="false"
             android:fontFamily="@font/dm_sans_bold"
             android:minHeight="50dip"
             android:text="Continuar"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"
+            android:textColor="@color/ep_btn_continuar_texto"
             android:textSize="22px" />
     </LinearLayout>
 

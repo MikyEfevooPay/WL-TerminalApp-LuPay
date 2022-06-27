@@ -26,7 +26,6 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        super.setCustomToolbarColor("#EFF2FF");
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
         mContext=this;
@@ -70,7 +69,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_tv_total_label = findViewById(R.id.cp_tv_total_label);
 
          if (status.equals("G")){
-            cp_iv_trans_type.setImageResource(R.drawable.check_cancelar);
+            cp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             cp_tv_trans_type.setText("Aprobada Venta Normal");
         }else{
             cp_tv_trans_type.setText("Aprobada Venta a Meses");
@@ -101,7 +100,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
 
                 new MaterialAlertDialogBuilder(mContext, R.style.ThemeOverlay_App_MaterialAlertDialog)
                         .setTitle("¿Quieres cancelar la Transacción?")
-                        .setIcon(R.drawable.cancelar_transaccion_icon)
+                        .setIcon(R.drawable.efevoo_i_grupo_41699)
                         .setPositiveButton("Confirmar",(dialog, lis) -> {
                             sendCancelFinal();
                         })
@@ -122,7 +121,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     }
 
     private void sendCancelFinal(){
-        cp_iv_trans_type.setImageResource(R.drawable.cancelar_transaccion_icon);
+        cp_iv_trans_type.setImageResource(R.drawable.efevoo_i_grupo_41699);
 
         cp_tv_trans_type.setTextColor(0xFFCC1818);
         cp_tv_trans_type.setText("Cancelada Venta Normal");

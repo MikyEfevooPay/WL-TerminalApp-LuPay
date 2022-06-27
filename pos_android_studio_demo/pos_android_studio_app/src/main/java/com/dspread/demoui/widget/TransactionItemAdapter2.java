@@ -51,10 +51,10 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
             myViewHolder.iv_process.setImageResource(R.drawable.visa);
         }
         if(_transactions.get(i).get_status().equals("A")){
-            myViewHolder.iv_status.setImageResource(R.drawable.cancelar_transaccion_icon);
+            myViewHolder.iv_status.setImageResource(R.drawable.efevoo_i_grupo_41699);
             myViewHolder.tv_amount2.setTextColor(ContextCompat.getColor(context,R.color.wmx_cancelation_text));
         }else{
-            myViewHolder.iv_status.setImageResource(R.drawable.check_cancelar);
+            myViewHolder.iv_status.setImageResource(R.drawable.efevoo_i_check_exito);
             myViewHolder.tv_amount2.setTextColor(ContextCompat.getColor(context,R.color.wmx_success_text));
         }
 

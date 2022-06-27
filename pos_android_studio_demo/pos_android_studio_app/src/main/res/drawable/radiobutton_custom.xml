@@ -16,10 +16,10 @@
                     <corners
                         android:radius="5px"/>
 
-                    <solid android:color="#F8F8FF" />
+                    <solid android:color="@color/ep_rb_bg" />
 
                     <stroke android:width="1px"
-                        android:color="#8F92EE"
+                        android:color="@color/ep_rb_stroke"
                         />
 
                     <padding
@@ -70,10 +70,10 @@
             <corners
                 android:radius="5px"/>
 
-            <solid android:color="#F8F8FF" />
+            <solid android:color="@color/ep_rb_bg" />
 
             <stroke android:width="1px"
-                android:color="#8F92EE"
+                android:color="@color/ep_rb_stroke"
                 />
 
             <padding

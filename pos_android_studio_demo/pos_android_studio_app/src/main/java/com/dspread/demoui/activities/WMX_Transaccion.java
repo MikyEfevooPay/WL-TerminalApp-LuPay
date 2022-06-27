@@ -47,7 +47,6 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        super.setCustomToolbarColor("#EFF2FF");
         super.switch_title_logo("Historial");
         super.show_calendar();
 

@@ -28,7 +28,6 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        super.setCustomToolbarColor("#EFF2FF");
         super.switch_title_logo("Cancelaciones");
 
         readJson();

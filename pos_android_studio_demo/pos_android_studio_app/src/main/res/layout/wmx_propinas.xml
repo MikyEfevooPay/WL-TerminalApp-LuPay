@@ -5,7 +5,7 @@
     android:id="@+id/linFhater"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wmx_bg"
+    android:background="@color/ep_fondo"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar_layout" />
@@ -18,7 +18,7 @@
         android:layout_marginRight="30px"
         android:layout_marginBottom="30px"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/whitetran"
+        android:backgroundTint="#fff"
         android:paddingLeft="20px"
         android:paddingTop="20px"
         android:paddingRight="20px"
@@ -285,7 +285,7 @@
                         android:gravity="center"
                         android:text="Propina"
                         android:textAlignment="center"
-                        android:textColor="#FF9C2A"
+                        android:textColor="@color/ep_color_black"
                         android:textSize="22px" />
 
                     <TextView
@@ -296,7 +296,7 @@
                         android:gravity="center"
                         android:text=" (0%)"
                         android:textAlignment="center"
-                        android:textColor="#FF9C2A"
+                        android:textColor="@color/ep_color_black"
                         android:textSize="22px" />
 
                     <TextView
@@ -307,7 +307,7 @@
                         android:fontFamily="@font/dm_sans_medium"
                         android:gravity="center|right"
                         android:text="$0.00 MXN"
-                        android:textColor="#FF9C2A"
+                        android:textColor="@color/ep_color_black"
                         android:textSize="22px" />
 
                 </LinearLayout>
@@ -327,7 +327,7 @@
                         android:gravity="center"
                         android:text="Total"
                         android:textAlignment="center"
-                        android:textColor="#2344ED"
+                        android:textColor="@color/ep_color_blue"
                         android:textSize="27px" />
 
                     <TextView
@@ -338,7 +338,7 @@
                         android:fontFamily="@font/dm_sans_bold"
                         android:gravity="center|right"
                         android:text="$0.00 MXN"
-                        android:textColor="#2344ED"
+                        android:textColor="@color/ep_color_blue"
                         android:textSize="27px" />
 
                 </LinearLayout>
@@ -364,6 +364,7 @@
             android:layout_width="406px"
             android:layout_height="59px"
             android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/ep_btn_continuar_fondo"
             android:fontFamily="@font/dm_sans_bold"
             android:minHeight="50dip"
             android:text="Continue"

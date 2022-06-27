@@ -93,7 +93,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         super.setInvisiblemargin(true);
         super.setWhiteLogo();
-        super.setCustomToolbarColor("#2344ED");
+        super.setCustomToolbarColor("#002344ED");
         setTitle(getString(R.string.wmx_title_welcome));
         Intent intent = getIntent();
         Amount = intent.getStringExtra("Amount");

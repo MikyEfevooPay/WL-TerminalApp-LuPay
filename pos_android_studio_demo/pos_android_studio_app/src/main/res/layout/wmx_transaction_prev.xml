@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="61px"
             android:layout_marginBottom="18px"
-            app:srcCompat="@drawable/check_cancelar" />
+            app:srcCompat="@drawable/efevoo_i_check_exito" />
 
         <TextView
             android:id="@+id/tp_tv_trans_type"
@@ -187,7 +187,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="26px"
             android:background="@drawable/rounded_corner"
-            android:backgroundTint="#F4F4FD"
+            android:backgroundTint="@color/ep_fondo_transaction_item"
             android:orientation="horizontal"
             android:paddingLeft="18px"
             android:paddingTop="19px"

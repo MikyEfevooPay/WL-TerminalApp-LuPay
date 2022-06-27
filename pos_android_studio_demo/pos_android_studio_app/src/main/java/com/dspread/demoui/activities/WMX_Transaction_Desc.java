@@ -21,7 +21,6 @@ public class WMX_Transaction_Desc extends BaseActivity{
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        super.setCustomToolbarColor("#EFF2FF");
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
 
@@ -64,7 +63,7 @@ public class WMX_Transaction_Desc extends BaseActivity{
         tp_tv_total_label = findViewById(R.id.tp_tv_total_label);
 
         if(status.equals("A")){
-            tp_iv_trans_type.setImageResource(R.drawable.cancelar_transaccion_icon);
+            tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_grupo_41699);
             tp_tv_trans_type.setText("Cancelada Venta Normal");
             tp_tv_trans_type.setTextColor(0xFFCC1818);
             tp_tv_date_time.setTextColor(0xFF121212);
@@ -78,7 +77,7 @@ public class WMX_Transaction_Desc extends BaseActivity{
             tp_ll_content_card.setBackground(layoutDrawable);
 
         }else if (status.equals("G")){
-            tp_iv_trans_type.setImageResource(R.drawable.check_cancelar);
+            tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             tp_tv_trans_type.setText("Aprobada Venta Normal");
         }else{
             tp_tv_trans_type.setText("Aprobada Venta a Meses");

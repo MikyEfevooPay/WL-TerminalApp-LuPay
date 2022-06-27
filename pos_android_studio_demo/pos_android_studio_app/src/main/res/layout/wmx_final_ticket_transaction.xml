@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2344ED"
+    android:background="@color/ep_fondo_ticket"
     android:orientation="vertical"
     android:paddingLeft="18px"
     android:paddingTop="26px"
@@ -23,7 +23,7 @@
             android:id="@+id/giv_card_status"
             android:layout_width="80px"
             android:layout_height="80px"
-            android:src="@drawable/palomita" />
+            android:src="@drawable/efevoo_i_check_resumen_de_pago" />
 
         <TextView
             android:id="@+id/textView16"
@@ -53,10 +53,9 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="119px"
-                android:layout_height="22.9px"
-                android:layout_marginBottom="20px"
-                app:srcCompat="@drawable/wirebit_logotipo2022_color" />
+                android:layout_width="78px"
+                android:layout_height="43px"
+                app:srcCompat="@drawable/logo_efevoopay_coloresai" />
 
         </LinearLayout>
 
@@ -255,7 +254,7 @@
                 android:layout_marginRight="8px"
                 android:fontFamily="@font/dm_sans_medium"
                 android:text="Mandar ticket por mail"
-                android:textColor="#2344ED"
+                android:textColor="@color/ep_color_blue"
                 android:textSize="20px" />
 
             <ImageView

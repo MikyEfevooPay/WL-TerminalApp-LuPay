@@ -124,9 +124,9 @@ public abstract class BaseActivity extends AppCompatActivity  {
     }
 
     public void setDefaultToolbarColor() {
-        setToolbarBgColor(ContextCompat.getColor(this, R.color.wmx_bg));
+        setToolbarBgColor(ContextCompat.getColor(this, R.color.ep_fondo));
         //setToolbarTextColor(ContextCompat.getColor(this,R.color.wmx_purble));
-        setToolbarIconColor(ContextCompat.getColor(this,R.color.wmx_purble));
+        setToolbarIconColor(ContextCompat.getColor(this,R.color.ep_icon_back));
         setStatusBarColor(ContextCompat.getColor(this, R.color.eb_col_11));
         setTitle("Wirebit MX");
     }
@@ -146,8 +146,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
                 setToolbarIconColor(getResources().getColor(R.color.custom_light_color));
             }
             setStatusBarColor(customColor);
-            setToolbarIconColor(ContextCompat.getColor(this,R.color.wmx_basic_icons));
-
+            setToolbarIconColor(ContextCompat.getColor(this,R.color.ep_icon_back));
         }
     }
 
@@ -213,7 +212,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
     }
 
     public void setWhiteLogo(){
-        logo_image.setImageResource(R.drawable.wirebit_logotipo2022_b_color);
+        logo_image.setImageResource(R.drawable.logo_efevoopay_blanco);
         /*
             if(whitelogo.length >0 && whitelogo[0] == true){
 

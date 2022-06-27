@@ -43,9 +43,9 @@
         <ImageView
             android:id="@+id/toolbar_logo"
             android:layout_width="120px"
-            android:layout_height="match_parent"
+            android:layout_height="51px"
             android:layout_gravity="center"
-            android:src="@drawable/wirebit_logotipo2022_color" />
+            android:src="@drawable/logo_efevoopay_coloresai" />
     </LinearLayout>
 
 
@@ -65,7 +65,7 @@
             android:id="@+id/iv_calendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/calendario" />
+            android:src="@drawable/efevoo_i_grupo_37" />
     </LinearLayout>
 
 </androidx.appcompat.widget.Toolbar>

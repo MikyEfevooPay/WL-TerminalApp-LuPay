@@ -189,4 +189,45 @@
     <color name="shrine_pink_100">#4AAC38</color>
     <color name="shrine_pink_light">#fff</color>
     <color name="shrine_pink_900">#DE000000</color>
+
+    <!--  Efevoo Pay colors  -->
+        <!--  fondo  -->
+    <color name="ep_fondo_gradient_start_morado">#613DE2</color>
+    <color name="ep_fondo_gradient_end_verde">#00DE9A</color>
+    <color name="ep_fondo_transaction_item">#DFEAFE</color>
+
+    <color name="ep_fondo">#F4F4F4</color>
+    <color name="ep_fondo_resumen">#FFFFFF</color>
+    <color name="ep_fondo_ticket">#3378FA</color>
+    <color name="ep_fondo_alerta_red">#FF9393</color>
+<!--    <color name="ep_fondo_azul_opacidad">#CC3378FA</color>-->
+    <color name="ep_fondo_degradado_morado">#613DE2</color>
+    <color name="ep_fondo_degradado_verde">#00DE9A</color>
+
+    <!--  botones  -->
+    <color name="ep_btn_cancelar_fondo">#FFBABA</color>
+    <color name="ep_btn_cancelar_texto">#CC1818</color>
+    <color name="ep_btn_menu_fondo">#E6ECF8</color>
+    <color name="ep_btn_menu_texto">#3378FA</color>
+    <color name="ep_btn_continuar_fondo">#121212</color>
+    <color name="ep_btn_continuar_texto">#FFF</color>
+    <color name="ep_btn_confirmacion_fondo">#B9E0AB</color>
+    <color name="ep_btn_confirmacion_texto">#84CE78</color>
+    <color name="ep_btn_regresar_fondo">#E5E5E5</color>
+    <color name="ep_btn_regresar_texto">#121212</color>
+    <color name="ep_btn_padTerminal_fondo">#E5E5E5</color>
+    <color name="ep_btn_padTerminal_texto">#121212</color>
+
+    <!--  Icon  -->
+    <color name="ep_icon_back">#121212</color>
+
+    <!--  Color  -->
+    <color name="ep_color_black">#121212</color>
+    <color name="ep_color_blue">#3378FA</color>
+
+    <!--  Radio button  -->
+    <color name="ep_rb_bg">#F8F8FF</color>
+    <color name="ep_rb_stroke">#6498FA</color>
+    <color name="ep_rb_check">#3378FA</color>
+
 </resources>

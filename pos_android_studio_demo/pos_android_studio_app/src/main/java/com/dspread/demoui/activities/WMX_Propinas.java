@@ -33,7 +33,6 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.setCustomToolbarColor("#EFF2FF");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle(getString(R.string.wmx_title_welcome));

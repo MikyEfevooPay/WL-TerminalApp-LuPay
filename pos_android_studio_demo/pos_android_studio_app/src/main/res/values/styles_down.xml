@@ -155,7 +155,7 @@
         <item name="colorSurface">#fff</item>
         <item name="colorOnSurface">#121212</item>
 <!--        <item name="colorPrimary">#92A8FF</item>-->
-        <item name="colorPrimary">#1F45FF</item>
+        <item name="colorPrimary">#3378FA</item>
         <item name="colorOnPrimary">#fff</item>
 
     </style>
@@ -182,8 +182,8 @@
         <item name="itemTextColor">#121212</item>
     </style>
     <style name= "CustomSelected" parent="Widget.MaterialComponents.MaterialCalendar.Day.Selected">
-        <item name="itemFillColor">#1F45FF</item>
-        <item name="itemStrokeColor">#1F45FF</item>
+        <item name="itemFillColor">#3378FA</item>
+        <item name="itemStrokeColor">#3378FA</item>
     </style>
 
 <!-- ____________________ styles calendar ____________________-->

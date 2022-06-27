@@ -10,7 +10,6 @@ public class WMX_Ajustes extends BaseActivity{
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        super.setCustomToolbarColor("#EFF2FF");
         setTitle(getString(R.string.wmx_title_welcome));
     }
     @Override
