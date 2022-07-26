@@ -213,11 +213,11 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     public void setWhiteLogo(){
         logo_image.setImageResource(R.drawable.logo_efevoopay_blanco);
-        /*
-            if(whitelogo.length >0 && whitelogo[0] == true){
+    }
 
-            }
-*/
+    public void setMarginLogo(){
+        container_logo = toolbar.findViewById(R.id.toolbar_logo_container);
+        container_logo.setPadding(0,0,0,0);
     }
 
     public void switch_title_logo(String title){
