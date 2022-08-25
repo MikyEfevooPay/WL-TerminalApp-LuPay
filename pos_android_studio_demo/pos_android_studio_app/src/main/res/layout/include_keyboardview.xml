@@ -109,7 +109,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <com.dspread.demoui.keyboard.MyKeyboardView
+            <com.efevoopay.demoui.keyboard.MyKeyboardView
                 android:id="@+id/keyboard_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

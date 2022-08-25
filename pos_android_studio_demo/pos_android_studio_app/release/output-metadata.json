@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.dspread.demoui",
+  "applicationId": "com.efevoopay.demoui",
   "variantName": "release",
   "elements": [
     {

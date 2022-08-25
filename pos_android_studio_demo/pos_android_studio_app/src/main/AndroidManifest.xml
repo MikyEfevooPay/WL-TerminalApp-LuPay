@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dspread.demoui"
+    package="com.efevoopay.demoui"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -36,15 +36,15 @@
     <uses-feature android:name="android.hardware.usb.host" />
 
     <application
-        android:name=".BaseApplication"
+        android:name="com.efevoopay.demoui.BaseApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_dspread_logo"
+        android:icon="@drawable/favicon_64x64"
         android:label="@string/app_name"
         android:theme="@style/AppThemeDown"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme,android:icon">
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.efevoopay.demoui.activities.MainActivity"
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.WMX_Menu"
+            android:name="com.efevoopay.demoui.activities.WMX_Menu"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="true">
@@ -67,61 +67,61 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.OtherActivity"
+            android:name="com.efevoopay.demoui.activities.OtherActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.BlackMarkActivity"
+            android:name="com.efevoopay.demoui.activities.BlackMarkActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.PrintActivity"
+            android:name="com.efevoopay.demoui.activities.PrintActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.PrintBarCodeActivity"
+            android:name="com.efevoopay.demoui.activities.PrintBarCodeActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.PrintCmdActivity"
+            android:name="com.efevoopay.demoui.activities.PrintCmdActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.PrintImageActivity"
+            android:name="com.efevoopay.demoui.activities.PrintImageActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.PrintQrCodeActivity"
+            android:name="com.efevoopay.demoui.activities.PrintQrCodeActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.PrintSettingActivity"
+            android:name="com.efevoopay.demoui.activities.PrintSettingActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.PrintTextActivity"
+            android:name="com.efevoopay.demoui.activities.PrintTextActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.WMX_Terminal"
+            android:name="com.efevoopay.demoui.activities.WMX_Terminal"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.WMX_Card"
+            android:name="com.efevoopay.demoui.activities.WMX_Card"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.WMX_Ajustes"
+            android:name="com.efevoopay.demoui.activities.WMX_Ajustes"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.WMX_Transaccion"
+            android:name="com.efevoopay.demoui.activities.WMX_Transaccion"
             android:theme="@style/estilo1" />
         <activity
-            android:name=".activities.WMX_Propinas"
+            android:name="com.efevoopay.demoui.activities.WMX_Propinas"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.WMX_TransactionResult"
+            android:name="com.efevoopay.demoui.activities.WMX_TransactionResult"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activities.WMX_Transaction_Desc"
+            android:name="com.efevoopay.demoui.activities.WMX_Transaction_Desc"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".activities.WMX_Historial_Cancelaciones"
+            android:name="com.efevoopay.demoui.activities.WMX_Historial_Cancelaciones"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".activities.WMX_Cancelacion_Desc"
+            android:name="com.efevoopay.demoui.activities.WMX_Cancelacion_Desc"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".activities.WMX_final_ticket_transaction"
+            android:name="com.efevoopay.demoui.activities.WMX_final_ticket_transaction"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
 
         <meta-data
