@@ -27,6 +27,8 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.blumonpay.capx.functions.RSA;
+import com.blumonpay.capx.model.RSAData;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 import com.efevoopay.demoui.R;
@@ -55,7 +57,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private String posId = "";
     private String TransportKey = "";
     private Button initialize;
-
+    private String _rsa = "";
+    private String _tk = "";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,24 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             case R.id.WMX_btn_initialize_keys:
                 TRACE.d("posID: " + posId);
                 TRACE.d("TransportKey: " + TransportKey);
+
+                try {
+                    RSA rsa = new RSA();
+
+                    RSAData rsaD = new RSAData();
+                    rsaD = rsa.generateKeys("3082010902820100D45E88EE86A0DA2C0ED64A86FFDEAB3267117A918DE81E5FD0EA7559D870C9EBE4F8778B63EF1A952ACF5B57EC057867E37E985186EB08A75FB42108CB7CE07FDE834763A8AF599C96B4956583888C8C4A6E106485173C3D1AF505BC7379622BFEFF4FBCCB18FE15028DC6B4960CE0F0E5FA8C4D1E7A4FF6CAC86B0E9C13FC7651D9A9A41355FF9140265F66D770135218168E85ED41EA82F2426EC89A2F6AA140CB7F91CDDD7D35B9C0E086214EEBA0600B888D65987CD49AD210E5A6948B2B782A76D6861FA6A79040A8C6B5C44614C8025D59F228AEC1BA951CBCB29C236B3D20276E8878BD6D7A88BB601CF8669AD660DB14262CB970298E6874A7134D7F0203010001");
+
+                    _rsa=rsaD.getRsa();
+                    _tk=rsaD.getTk();
+
+                    TRACE.d("rsaD.getTk: " + _tk);
+                    TRACE.d("rsaD.getPublicKey: " + _rsa);
+
+                }catch (Throwable t){
+                    TRACE.d("error rsa: " + t);
+                }
+
+
                 call();
                 break;
         }
@@ -94,7 +115,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             String URL = "http://wmx-iso-apps1.eba-iai89mzk.us-west-2.elasticbeanstalk.com/admin/tpv/registro";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", posId);
-            jsonBody.put("device_tk", TransportKey);
+            jsonBody.put("device_tk", _tk);
+            jsonBody.put("device_rsa", _rsa);
 
             final String requestBody = jsonBody.toString();
 
@@ -213,7 +235,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
         }
         @Override
         public void onQposIdResult(Hashtable<String, String> posIdTable) {
-//            TRACE.w("onQposIdResult():" + posIdTable.toString());
+            TRACE.w("onQposIdResult():" + posIdTable.toString());
             posId = posIdTable.get("posId") == null ? "" : posIdTable.get("posId");
             pos.generateTransportKey(20);
         }

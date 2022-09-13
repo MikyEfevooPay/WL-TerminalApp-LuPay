@@ -31,6 +31,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.blumonpay.capx.model.RSAData;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
@@ -58,6 +59,16 @@ import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
 
+import com.blumonpay.capx.functions.CypherFunctions;
+import com.blumonpay.capx.functions.RSA;
+import com.blumonpay.capx.model.DUKPTData;
+import com.blumonpay.capx.model.TransactionData;
+
+
+
+
+
+
 public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Button trading, pruebas;
     private TextView Total_Amount, Status_lector;
@@ -75,6 +86,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private LinearLayout lin;
 
     private String FinalTradeType= "";
+
+    private Hashtable<String, String> ICCTag ;
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
 
@@ -503,6 +516,15 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             else if (result == QPOSService.DoTradeResult.ICC) {
                 Status_lector.setText(getString(R.string.icc_card_inserted));
                 TRACE.d("EMV ICC Start");
+//
+//
+
+//                try{
+//                    ICCTag=pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"57");
+//                    TRACE.d("ICCTag" + ICCTag + TRACE.NEW_LINE);
+//                }catch (Throwable t){
+//
+//                }
                 pos.doEmvApp(QPOSService.EmvOption.START);
             }
             else if (result == QPOSService.DoTradeResult.NOT_ICC) {
@@ -864,7 +886,50 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                  }**/
                 //messageTextView.setText(message);
                 Status_lector.setText(message);
-                ChangeViewToTicket();
+
+                    ICCTag=pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"57");
+                    TRACE.d("ICCTag" + ICCTag + TRACE.NEW_LINE);
+
+                    TransactionData tr = new TransactionData();
+                    CypherFunctions cy = new CypherFunctions();
+
+//                    RSAData rsaD = new RSAData();
+//                    RSA rsa = new RSA();
+
+
+//                    try {
+//                        rsaD = rsa.generateKeys("3082010902820100D45E88EE86A0DA2C0ED64A86FFDEAB3267117A918DE81E5FD0EA7559D870C9EBE4F8778B63EF1A952ACF5B57EC057867E37E985186EB08A75FB42108CB7CE07FDE834763A8AF599C96B4956583888C8C4A6E106485173C3D1AF505BC7379622BFEFF4FBCCB18FE15028DC6B4960CE0F0E5FA8C4D1E7A4FF6CAC86B0E9C13FC7651D9A9A41355FF9140265F66D770135218168E85ED41EA82F2426EC89A2F6AA140CB7F91CDDD7D35B9C0E086214EEBA0600B888D65987CD49AD210E5A6948B2B782A76D6861FA6A79040A8C6B5C44614C8025D59F228AEC1BA951CBCB29C236B3D20276E8878BD6D7A88BB601CF8669AD660DB14262CB970298E6874A7134D7F0203010001");
+//                        tr_tk = rsaD.getTk();
+//                    }catch (Throwable t){
+//                        TRACE.d("Throwable RSA" + t.toString());
+//                    }
+
+
+
+                    String tr_key = "D7270B642DC710AA8B96071A527F47FE";
+                    String tr_ksn = "00000205174019600001";
+                    String tr_tk="95A204A86BE3F79512BBD077340C4E27";
+                    String track2 = "2308840200445199D2307FFFFFFFFFFFFFFFFFFFFFFFFFFF";
+                    Integer tr_counter = 2;
+
+                    tr.setKey(tr_key);
+                    tr.setKsn(tr_ksn);
+                    tr.setTk(tr_tk);
+                    tr.setTrack1("");
+                    tr.setTrack2(track2);
+                    tr.setCounter(tr_counter);
+
+                    try {
+                        DUKPTData dukpt = new DUKPTData();
+                        dukpt = cy.encryptDUKPT(tr);
+                        TRACE.d(TRACE.NEW_LINE + TRACE.NEW_LINE + "dukpt" + TRACE.NEW_LINE + dukpt.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);
+                    }catch (Throwable t){
+                        TRACE.d("Throwable" + t.toString());
+                    }
+
+
+
+                    ChangeViewToTicket();
 
             } else if (transactionResult == QPOSService.TransactionResult.TERMINATED) {
                 //clearDisplay();
@@ -906,7 +971,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 Status_lector.setText("TOKEN INVALID");
             }
 
-            /**
+            /**onRequestTransactionResult
 
              dialog.findViewById(R.id.confirmButton).setOnClickListener(new View.OnClickListener() {
 

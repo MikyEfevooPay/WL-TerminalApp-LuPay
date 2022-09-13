@@ -73,6 +73,7 @@ dependencies {
     implementation files('libs/zxing.jar')
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation files('libs/dspread_android_printer_sdk_1.1.jar')
+    implementation files('libs/capx-lib_2.0.0.1.jar')
 
     implementation 'com.google.android.material:material:1.6.0'
 
