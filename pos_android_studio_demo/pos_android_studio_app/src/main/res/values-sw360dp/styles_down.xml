@@ -29,7 +29,7 @@
     </style>
 
 
-<!-- ____________________ styles MaterialComponents ____________________-->
+    <!-- ____________________ styles MaterialComponents ____________________-->
 
     <style name="materialAlertDialog_a" parent="MaterialAlertDialog.MaterialComponents">
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
@@ -43,7 +43,7 @@
         <item name="materialAlertDialogTitlePanelStyle">@style/TitlePaneStyleCenter</item>
         <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyleCenter</item>
         <item name="materialAlertDialogTitleIconStyle">@style/TitleIconStyleCenter</item>
-<!--        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyleCenter</item>-->
+        <!--        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyleCenter</item>-->
         <item name="buttonBarStyle">@style/ButtonBarStyle</item>
 
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
@@ -63,10 +63,10 @@
     </style>
 
     <style name="TitlePaneStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Panel.CenterStacked" />
-    <style name="TitleIconStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked"/>
+    <style name="TitleIconStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked" />
     <style name="TitleTextStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Text.CenterStacked">
         <item name="android:textColor">#121212</item>
-        <item name="android:textSize">18px</item>
+        <item name="android:textSize">24px</item>
         <item name="android:fontFamily">@font/dm_sans</item>
         <item name="android:layout_marginTop">17px</item>
     </style>
@@ -144,13 +144,13 @@
 
     <style name="estilo1" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
 
-<!--        <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>-->
+        <!--        <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>-->
         <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen</item>
-<!--        <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>-->
+        <!--        <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>-->
 
-<!--        <item name="colorPrimary">#fff</item>-->
-<!--        <item name="colorOnPrimary">#121212</item>-->
-<!--        <item name="colorOnSecondary">#1F45FF</item>-->
+        <!--        <item name="colorPrimary">#fff</item>-->
+        <!--        <item name="colorOnPrimary">#121212</item>-->
+        <!--        <item name="colorOnSecondary">#1F45FF</item>-->
     </style>
 
     <style name="MaterialCalendarThemeBackground" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
@@ -160,7 +160,7 @@
 
         <item name="colorSurface">#fff</item>
         <item name="colorOnSurface">#121212</item>
-<!--        <item name="colorPrimary">#92A8FF</item>-->
+        <!--        <item name="colorPrimary">#92A8FF</item>-->
         <item name="colorPrimary">#3378FA</item>
         <item name="colorOnPrimary">#fff</item>
 
@@ -192,10 +192,10 @@
         <item name="itemStrokeColor">#3378FA</item>
     </style>
 
-<!-- ____________________ styles calendar ____________________-->
+    <!-- ____________________ styles calendar ____________________-->
 
 
-<!-- ____________________ styles MaterialComponents ____________________-->
+    <!-- ____________________ styles MaterialComponents ____________________-->
 
 
     <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabView">

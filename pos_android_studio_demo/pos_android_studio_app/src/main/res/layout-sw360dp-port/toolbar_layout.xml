@@ -1,0 +1,71 @@
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="133px"
+    android:background="?attr/colorPrimaryDark"
+    android:minHeight="@dimen/abc_action_bar_default_height_material"
+    android:visibility="visible"
+    app:contentInsetEnd="0dp"
+    app:contentInsetStart="0dp"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+    <TextView
+        android:id="@+id/txt_toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="middle"
+        android:fontFamily="@font/dm_sans_medium"
+        android:singleLine="true"
+        android:textColor="#121212"
+        android:textSize="30px"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/img_invisible_margin"
+        android:layout_width="?android:attr/actionBarSize"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|left|end"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/toolbar_logo_container"
+        android:layout_width="match_parent"
+        android:layout_height="133px"
+        android:layout_gravity="center"
+        android:layout_marginRight="?android:attr/actionBarSize"
+        android:gravity="center"
+        android:paddingRight="24px">
+
+        <ImageView
+            android:id="@+id/toolbar_logo"
+            android:layout_width="236px"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/logo_efevoopay_coloresai" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/toolbar_btn_calendar"
+        android:layout_width="82px"
+        android:layout_height="82px"
+        android:layout_gravity="right"
+        android:layout_marginRight="35px"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="#fff"
+        android:gravity="center"
+        android:padding="10px"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/efevoo_i_grupo_37" />
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>

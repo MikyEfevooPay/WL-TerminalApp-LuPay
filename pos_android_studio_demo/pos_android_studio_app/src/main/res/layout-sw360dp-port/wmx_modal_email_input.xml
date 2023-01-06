@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingLeft="37px"
+    android:paddingTop="28px"
+    android:paddingBottom="28px"
+    android:paddingRight="37px">
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24px"
+        android:fontFamily="@font/dm_sans_medium"
+        android:text="Recibe tu ticket por mail"
+        android:textColor="#0F0F0F"
+        android:textSize="30px" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dm_sans"
+        android:text="Ingresa tu correo"
+        android:textColor="#5A5A5A"
+        android:textSize="30px" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32px"
+        android:layout_marginBottom="32px"
+        android:backgroundTint="@color/ep_color_blue"
+        android:ems="10"
+        android:fontFamily="@font/dm_sans"
+
+        android:gravity="center_horizontal"
+        android:inputType="textPersonName"
+        android:textColor="#5A5A5A"
+        android:textSize="27px" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_modal_sendEmail"
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="#B9E0AB"
+        android:fontFamily="@font/dm_sans_bold"
+        android:minHeight="50dip"
+        android:stateListAnimator="@null"
+        android:text="Finalizar"
+        android:textAllCaps="false"
+        android:textColor="#4AAC38"
+        android:textSize="22px" />
+
+</LinearLayout>

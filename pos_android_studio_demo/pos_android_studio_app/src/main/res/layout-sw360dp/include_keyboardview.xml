@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical|fill_vertical"
+    android:background="@color/ep_fondo"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/lin2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:paddingTop="10dip"
+            android:paddingBottom="10dip"
+            android:text="Inserta tu PIN"
+            android:textAlignment="center"
+            android:textColor="@color/wmx_dialog_pin"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/terminal_text_Pin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:text="*"
+            android:textAlignment="center"
+            android:textColor="@color/wmx_dialog_pin"
+            android:textSize="34sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34px"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:text="Inserta tu PIN"
+            android:textAlignment="center"
+            android:textColor="#121212"
+            android:textSize="35px"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_includeKey_Pin_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16px"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="#121212"
+            android:textSize="78px"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32px"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="center"
+                android:text="Intentos disponibles: "
+                android:textAlignment="center"
+                android:textColor="#5A5A5A"
+                android:textSize="30px"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/dm_sans"
+                android:text="3"
+                android:textColor="#5A5A5A"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.efevoopay.demoui.keyboard.MyKeyboardView
+                android:id="@+id/keyboard_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:focusable="true"
+                android:keyBackground="@drawable/round_button"
+                android:keyTextColor="@color/ep_color_black"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:shadowRadius="0.0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="37px"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_pin_cancel"
+                android:layout_width="192px"
+                android:layout_height="60px"
+                android:layout_marginRight="22px"
+                android:background="@drawable/rounded_corner_cancel"
+
+                android:backgroundTint="#FFBABA"
+                android:enabled="true"
+                android:fontFamily="@font/dm_sans_bold"
+                android:minHeight="50dip"
+                android:stateListAnimator="@null"
+                android:text="Cancelar"
+                android:textAllCaps="false"
+
+                android:textColor="#FF6E6E"
+
+                android:textSize="22px" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_pin_ok"
+                android:layout_width="192px"
+                android:layout_height="60px"
+                android:background="@drawable/rounded_corner_cancel"
+                android:backgroundTint="#B9E0AB"
+
+                android:enabled="true"
+                android:fontFamily="@font/dm_sans_bold"
+                android:minHeight="50dip"
+                android:stateListAnimator="@null"
+                android:text="OK"
+                android:textAllCaps="false"
+                android:textColor="#5ABF47"
+
+                android:textSize="22px"
+
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
+

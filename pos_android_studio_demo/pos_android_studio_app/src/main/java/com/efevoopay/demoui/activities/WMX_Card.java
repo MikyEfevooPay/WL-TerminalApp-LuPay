@@ -135,6 +135,14 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         blueTootchAddress = "/dev/ttyS1";
         pos.setDeviceAddress(blueTootchAddress);
         pos.openUart();**/
+
+       /* Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ChangeViewToTicket();
+            }
+        }, 2000);*/
     }
 
     public String formatMoney(String amount){
