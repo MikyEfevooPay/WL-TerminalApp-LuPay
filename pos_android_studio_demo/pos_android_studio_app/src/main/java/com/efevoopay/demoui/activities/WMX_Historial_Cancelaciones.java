@@ -3,6 +3,7 @@ package com.efevoopay.demoui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 public class WMX_Historial_Cancelaciones extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
     RecyclerView recyclerView;
+    LinearLayout cancellation_empty_layout;
     ArrayList<Transaction> transactions = new ArrayList<>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +31,10 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.switch_title_logo("Cancelaciones");
 
-        readJson();
-
         recyclerView = findViewById(R.id.historial_cancelaciones_List);
-        CancelacionesItemAdapter transactionItemAdapter = new CancelacionesItemAdapter(this,transactions, this);
-        recyclerView.setAdapter(transactionItemAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cancellation_empty_layout = findViewById((R.id.layout_cancellation_empty));
 
+        setItems();
     }
     @Override
     public void onClick(View view) {
@@ -66,7 +65,20 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         startActivity(intent);
     }
 
-    public void readJson(){
+    public void setItems() {
+        int length = readJson();
+        if(length > 0) {
+            cancellation_empty_layout.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            CancelacionesItemAdapter transactionItemAdapter = new CancelacionesItemAdapter(this,transactions, this);
+            recyclerView.setAdapter(transactionItemAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        } else {
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    public int readJson(){
         try {
             JSONArray jsonArray = new JSONArray(JsonDataFromAsset());
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -85,11 +97,13 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
                 }
 
             }
+            return jsonArray.length();
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return 0;
     }
 
     private String JsonDataFromAsset() throws IOException{

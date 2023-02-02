@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ep_fondo_ticket"
+    android:orientation="vertical"
+    android:paddingLeft="18px"
+    android:paddingTop="26px"
+    android:paddingRight="18px"
+    android:paddingBottom="26px">
+
+    <include layout="@layout/toolbar_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24px"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/giv_card_status"
+            android:layout_width="94px"
+            android:layout_height="94px"
+            android:src="@drawable/efevoo_i_check_resumen_de_pago" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/dm_sans_medium"
+            android:text="¡Pago aprobado!"
+            android:textColor="#FFFFFF"
+            android:textSize="34px" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fondo_ticket"
+        android:orientation="vertical"
+        android:padding="23px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="184px"
+                android:layout_height="103px"
+                app:srcCompat="@drawable/logo_efevoopay_coloresai" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ticket_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12px"
+            android:fontFamily="@font/dm_sans_medium"
+            android:text="Resumen de pago"
+            android:textColor="#0F0F0F"
+            android:textSize="30px" />
+
+        <LinearLayout
+            android:id="@+id/ticket_ll_subtotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Subtotal"
+                android:textColor="#121212"
+                android:textSize="30px" />
+
+            <TextView
+                android:id="@+id/ticket_tv_subtotal_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="$4,320.00 MXN"
+                android:textColor="#5A5A5A"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ticket_tv_tip_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Propina"
+                android:textColor="#121212"
+                android:textSize="30px" />
+
+            <TextView
+                android:id="@+id/ticket_tv_tip_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="$560.00 MXN"
+                android:textColor="#5A5A5A"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ticket_tv_total_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Total"
+                android:textColor="#121212"
+                android:textSize="30px" />
+
+            <TextView
+                android:id="@+id/ticket_tv_total_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="$4,670.00 MXN"
+                android:textColor="#5A5A5A"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16px"
+            android:layout_marginRight="16px"
+            android:layout_marginBottom="23px"
+            android:backgroundTint="#A3A6FC"
+            android:contentDescription="underline"
+            android:layerType="software"
+            android:src="@drawable/dotted_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Fecha/Hora"
+                android:textColor="#121212"
+                android:textSize="30px" />
+
+            <TextView
+                android:id="@+id/ticket_tv_time_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="06/05/22 11:23"
+                android:textColor="#5A5A5A"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Tarjeta"
+                android:textColor="#121212"
+                android:textSize="30px" />
+
+            <TextView
+                android:id="@+id/ticket_tv_card_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="****9999"
+                android:textColor="#5A5A5A"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="35px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Método de pago"
+                android:textColor="#121212"
+                android:textSize="30px" />
+
+            <TextView
+                android:id="@+id/ticket_tv_method_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="Crédito"
+                android:textColor="#5A5A5A"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_btn_open_modal_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="33px"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8px"
+                android:fontFamily="@font/dm_sans_medium"
+                android:text="Mandar ticket por mail"
+                android:textColor="@color/ep_color_blue"
+                android:textSize="30px" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/flecha_ticket" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30px"
+            android:gravity="bottom|center_horizontal"
+
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_ticket_final"
+                android:layout_width="match_parent"
+                android:layout_height="92px"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="30px"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="#B9E0AB"
+                android:fontFamily="@font/dm_sans_bold"
+                android:minHeight="50dip"
+                android:stateListAnimator="@null"
+                android:text="Finalizar"
+                android:textAllCaps="false"
+                android:textColor="#4AAC38"
+                android:textSize="22px" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

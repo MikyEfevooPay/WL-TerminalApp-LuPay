@@ -52,6 +52,23 @@
 
     </style>
 
+    <style name="ThemeOverlay.App.MaterialAlertDialog_secondary" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/shrine_pink_light</item>
+        <item name="colorOnSurface">@color/shrine_pink_900</item>
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+
+        <item name="materialAlertDialogTitlePanelStyle">@style/TitlePaneStyleCenter</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyleCenter</item>
+        <item name="materialAlertDialogTitleIconStyle">@style/TitleIconStyleCenter</item>
+        <!--        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyleCenter</item>-->
+        <item name="buttonBarStyle">@style/ButtonBarStyle</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+
+    </style>
+
     <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
