@@ -13,6 +13,8 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class WMX_Cancelacion_Desc extends BaseActivity  {
@@ -21,6 +23,9 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     LinearLayout cp_ll_content_card;
     AppCompatButton cp_btn_trans_cancelar, cp_btn_trans_final;
     Context mContext;
+    private String card_provider;
+    private int transaction_type;
+    private Ticket ticket;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
         mContext=this;
+        ticket = new Ticket(mContext);
         initData(intent);
         buttonListener();
     }
@@ -61,7 +67,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_tv_total = findViewById(R.id.cp_tv_total);
         cp_tv_card = findViewById(R.id.cp_tv_card);
         cp_tv_date_time = findViewById(R.id.cp_tv_date_time);
-//        cp_tv_approve = findViewById(R.id.cp_tv_approve);
+        cp_tv_approve = findViewById(R.id.cp_tv_approve);
         cp_iv_trans_type = findViewById(R.id.cp_iv_trans_type);
         cp_iv_process = findViewById(R.id.cp_iv_process);
         cp_ll_content_card = findViewById(R.id.cp_ll_content_card);
@@ -71,15 +77,19 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
          if (status.equals("G")){
             cp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             cp_tv_trans_type.setText("Aprobada Venta Normal");
-        }else{
-            cp_tv_trans_type.setText("Aprobada Venta a Meses");
-            cp_tv_tip_label.setText("Meses:");
+             transaction_type = 1;
+        }else{cp_tv_trans_type.setText("Aprobada Venta a Meses");
+             cp_tv_tip_label
+            .setText("Meses:");
             cp_tv_tip.setText("6 MSI");
+             transaction_type = 0;
         }
 
         if (process.equals("MC")){
+            card_provider = "MASTERCARD";
             cp_iv_process.setImageResource(R.drawable.masterdcard);
         }else if(process.equals("Visa")){
+            card_provider = "VISA";
             cp_iv_process.setImageResource(R.drawable.visa);
         }
 
@@ -89,10 +99,20 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_tv_total.setText(amount);
         cp_tv_card.setText("**** "+card);
         cp_tv_date_time.setText(date+" "+time);
-//        cp_tv_approve.setText(approve);
+         cp_tv_approve.setText(approve);
     }
 
     private void buttonListener(){
+        ticket.setData(
+                cp_tv_trans_type.getText().toString(),
+                cp_tv_approve.getText().toString(), cp_tv_card.getText().toString(),
+                card_provider, cp_tv_date_time.getText().toString(),
+                cp_tv_amount.getText().toString(),
+                cp_tv_tip.getText().toString(),
+                cp_tv_total.getText().toString(),
+                "C434",
+                "A0000000031010"
+        );
         cp_btn_trans_cancelar = findViewById(R.id.cp_btn_trans_cancelar);
         cp_btn_trans_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +134,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_btn_trans_final.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
                 onBackPressed();
             }
         });

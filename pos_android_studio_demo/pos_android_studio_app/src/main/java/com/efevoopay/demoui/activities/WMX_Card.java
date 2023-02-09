@@ -95,7 +95,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Button WMX_btn_trade;
     private TextView tv_card_label_1,tv_card_label_2;
 
-    private String cardNofinal ="";
+    private String cardNofinal;
     private String type_transaction;
 
     @Override
@@ -136,7 +136,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         pos.setDeviceAddress(blueTootchAddress);
         pos.openUart();**/
 
-       /* Handler handler = new Handler();
+       /*Handler handler = new Handler();
         handler.postDelayed(() -> ChangeViewToTicket(), 2000);*/
     }
 
@@ -333,8 +333,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         intent.putExtra("type_transaction",type_transaction);
         intent.putExtra("v_total",Total_Amount.getText().toString());
-        intent.putExtra("v_time",dateFormat.format(date).toString());
-        intent.putExtra("v_card","**** 9999");
+        intent.putExtra("v_time",dateFormat.format(date));
+        intent.putExtra("v_card",cardNofinal);
 
         if(type_transaction.equals("msi")){
             String v_months = thisIntent.getStringExtra("months");

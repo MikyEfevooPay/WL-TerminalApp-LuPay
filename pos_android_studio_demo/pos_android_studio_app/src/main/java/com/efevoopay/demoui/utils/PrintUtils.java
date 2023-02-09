@@ -8,6 +8,7 @@ import com.dspread.helper.printer.PrintService;
 
 import java.text.NumberFormat;
 
+
 public class PrintUtils {
 
     public static void checkPrintStatus(byte[] readBuf, Context context) {

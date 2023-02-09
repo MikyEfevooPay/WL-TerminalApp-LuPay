@@ -1,10 +1,7 @@
 package com.efevoopay.demoui.activities;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -12,20 +9,14 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.content.ContextCompat;
-
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.action.printerservice.ActionPrinter;
-import com.action.printerservice.IPrinterCallback;
-import com.action.printerservice.PrintStyle;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Utils;
+import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.util.Locale;
 
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
 
@@ -33,6 +24,15 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private LinearLayout ll_btn_open_modal_email;
     Context mContext;
     private String  type_transaction;
+    private int transaction_type;
+    private TextView ticket_tv_title, ticket_tv_tip_label,
+    ticket_tv_tip_value,
+            ticket_tv_subtotal_value,
+            ticket_tv_total_value,
+    ticket_tv_time_value,
+    ticket_tv_card_value,
+    ticket_tv_method_value;
+    private Ticket ticket;
 
 
     @Override
@@ -45,6 +45,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         setTitle(getString(R.string.wmx_title_welcome));
 
         mContext=this;
+
+        ticket = new Ticket(this);
 
 
         btn_ticket_final =  (AppCompatButton) findViewById(R.id.btn_ticket_final);
@@ -61,13 +63,13 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
     private void initInfo(){
 
-        TextView ticket_tv_title = findViewById(R.id.ticket_tv_title),
-                ticket_tv_tip_label = findViewById(R.id.ticket_tv_tip_label),
-                ticket_tv_tip_value = findViewById(R.id.ticket_tv_tip_value),
-                ticket_tv_subtotal_value = findViewById(R.id.ticket_tv_subtotal_value),
-                ticket_tv_total_value = findViewById(R.id.ticket_tv_total_value),
-                ticket_tv_time_value = findViewById(R.id.ticket_tv_time_value),
-                ticket_tv_card_value = findViewById(R.id.ticket_tv_card_value),
+         ticket_tv_title = findViewById(R.id.ticket_tv_title);
+                ticket_tv_tip_label = findViewById(R.id.ticket_tv_tip_label);
+                ticket_tv_tip_value = findViewById(R.id.ticket_tv_tip_value);
+                ticket_tv_subtotal_value = findViewById(R.id.ticket_tv_subtotal_value);
+                ticket_tv_total_value = findViewById(R.id.ticket_tv_total_value);
+                ticket_tv_time_value = findViewById(R.id.ticket_tv_time_value);
+                ticket_tv_card_value = findViewById(R.id.ticket_tv_card_value);
                 ticket_tv_method_value = findViewById(R.id.ticket_tv_method_value);
 
         LinearLayout ticket_ll_subtotal = findViewById(R.id.ticket_ll_subtotal);
@@ -78,6 +80,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         String v_time = intent.getStringExtra("v_time");
         String v_card = intent.getStringExtra("v_card");
         String v_type_transaction = intent.getStringExtra("type_transaction");
+
+        transaction_type = v_type_transaction.equals("msi") ? 0 : 1;
 
         ticket_tv_total_value.setText(v_total);
         ticket_tv_time_value.setText(v_time);
@@ -118,127 +122,29 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
     }
 
+
+
     private void onFinish() {
-        startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-    }
-
-    private void ticket(ActionPrinter printer) throws RemoteException {
-        StringBuilder section_1 = new StringBuilder();
-        StringBuilder section_2 = new StringBuilder();
-        StringBuilder section_3 = new StringBuilder();
-        StringBuilder section_4 = new StringBuilder();
-        StringBuilder section_5 = new StringBuilder();
-        printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 22);
-        section_1.append(tp_tv_trans_type.getText().toString().toUpperCase(Locale.ROOT));
-        section_1.append("\n");
-        section_1.append(tp_tv_approve.getText().toString());
-        section_1.append("\n\n");
-        section_1.append("operadora bp sa de cv".toUpperCase(Locale.ROOT));
-        section_1.append("\n");
-        section_1.append("GOMEZ MORIN");
-        section_1.append("\n");
-        section_1.append("SAN PEDRO GARZA GARCIA,");
-        section_1.append("\n");
-        section_1.append("NUEVO LEON ");
-        section_1.append("\n");
-        section_1.append("TERMINAL");
-        section_1.append("\n");
-        section_1.append("123");
-        printer.addText(section_1.toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText("__________________________________");
-        printer.addText("********"+tp_tv_card.getText().toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        section_2.append("VISA");
-        section_2.append("\n");
-        section_2.append(tp_tv_date_time.getText().toString());
-        printer.addText(section_2.toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText("__________________________________");
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        printer.addText("");
-        section_3.append("Monto :                   "+tp_tv_amount.getText().toString());
-        section_3.append("\n");
-        section_3.append("Propina :                    "+tp_tv_tip.getText().toString());
-        section_3.append("\n");
-        section_3.append("Total :                      "+tp_tv_total.getText().toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText(section_3.toString());
-        printer.addText("__________________________________");
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        printer.addText("");
-        section_4.append("RRN :                   0000000000623");
-        section_4.append("\n");
-        section_4.append("ARQC :                   ************C434");
-        section_4.append("\n");
-        section_4.append("TC :                   ************750F");
-        section_4.append("\n");
-        section_4.append("AID :                   A0000000031010");
-        printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 18);
-        printer.addText(section_4.toString());
-        printer.addText("");
-        printer.addText("");
-        section_5.append("Por este pagare me obligo");
-        section_5.append("\n");
-        section_5.append("incondicionalmente a pagar a la orden del");
-        section_5.append("\n");
-        section_5.append("banco acreditante el importe de este");
-        section_5.append("\n");
-        section_5.append("título. Este pagare procede del contrato");
-        section_5.append("\n");
-        section_5.append("de apertura de crédito que el banco");
-        section_5.append("\n");
-        section_5.append("acreditante y el tarjetahabiente tienen celebrado.");
-
-        printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 16);
-        printer.addText(section_5.toString());
-        printer.addText("");
-    }
-
-    private void generateTicket(PRINT_TYPE type) {
-        ActionPrinter printer = ActionPrinter.getInstance(getApplicationContext());
-        try {
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.logo_ticket);
-            Bitmap bitmap = Utils.drawableToBitmap(drawable);
-            printer.addBitmap(bitmap, 100);
-            printer.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
-            printer.addText("");
-            if(type == PRINT_TYPE.CLIENT) {
-                printer.addText("*** COPIA CLIENTE ***");
-                printer.addText("");
-            }
-            ticket(printer);
-            printer.lineFeed(5);
-            printer.print(new IPrinterCallback.Default() {
-                @Override
-                public void onPrintStart() throws RemoteException {
-                    super.onPrintStart();
-
-                    //todo
-
-                    TRACE.d("onPrintStart");
-
-                }
-
-                @Override
-                public void onPrintFinish(int height) throws RemoteException {
-                    super.onPrintFinish(height);
-                    //todo
-                    TRACE.d("onPrintFinish");
-                }
-
-                @Override
-                public void onError(int error, String message) throws RemoteException {
-                    super.onError(error, message);
-                    TRACE.d("onError");
-                    //todo
-                }
-            });
-        }
-        catch (RemoteException e) {
-            TRACE.d("RemoteException"+ e.toString());
-            e.printStackTrace();
-        }
+        ticket.setData(ticket_tv_tip_label.getText().toString(),
+                ticket_tv_method_value.getText().toString(), ticket_tv_card_value.getText().toString(),
+                "VISA", ticket_tv_time_value.getText().toString(),
+                ticket_tv_total_value.getText().toString(),
+                ticket_tv_tip_value.getText().toString(),
+                ticket_tv_total_value.getText().toString(),
+                "C434",
+                "A0000000031010");
+        ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
+        new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
+                .setTitle("¿Imprimir copia del ticket al cliente?")
+                .setIcon(R.drawable.printer)
+                .setPositiveButton("Si",(dialog, lis) -> {
+                    ticket.GenerateTicket(PRINT_TYPE.CLIENT, transaction_type);
+                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                })
+                .setNeutralButton("No",(dialog, lis) -> {
+                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                })
+                .show();
     }
 
     @Override

@@ -20,4 +20,8 @@ public class GlobalFunctions {
 
         return moneyString;
     }
+
+    public String unFormatMoney(String formatMoney) {
+        return "";
+    }
 }
