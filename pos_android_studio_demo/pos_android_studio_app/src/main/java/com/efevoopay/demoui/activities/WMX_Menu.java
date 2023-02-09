@@ -14,6 +14,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     //private Button  other, ajustes, meses;
     private Intent intent;
     private LinearLayout transfer,other, ajustes, meses, cancelaciones;
+    private WMX_KSN ksn;
     @Override
 
 
@@ -25,6 +26,9 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         super.setInvisiblemargin(true);
         getSupportActionBar().hide();
         setTitle(getString(R.string.wmx_title_welcome));
+
+        ksn = new WMX_KSN();
+        ksn.onCreate();
 
         transfer=findViewById(R.id.btn_transfer);
         other= findViewById(R.id.btn_Other);
@@ -77,24 +81,29 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
             case R.id.btn_transfer:
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "venta");
+                intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;
             case R.id.btn_Other:
                 intent = new Intent(this, WMX_Transaccion.class);
+                intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;
             case R.id.btn_Ajustes:
                 intent = new Intent(this, WMX_Ajustes.class);
+                intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;
             case R.id.btn_meses:
                 //super.showAlert("Transacción rechazada","Fondos insuficientes");
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "msi");
+                intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;
             case R.id.btn_cancelaciones:
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);
+                intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;
         }

@@ -17,7 +17,7 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
     private Intent intent;
     private TextView Amount;
     private Animation bounce;
-    private String type_transaction;
+    private String type_transaction,ksn_posId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
         setTitle(getString(R.string.wmx_title_welcome));
         intent = getIntent();
         type_transaction = intent.getStringExtra("type_transaction");
+        ksn_posId = intent.getStringExtra("ksn_posId");
 
         nDot=(Button) findViewById(R.id.btn_Dot);
         n0=(Button) findViewById(R.id.btn_0);
@@ -110,7 +111,7 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("Amount", (String) Amount.getText());
 
                 intent.putExtra("type_transaction",type_transaction);
-
+                intent.putExtra("ksn_posId",ksn_posId);
 //                if(type_transaction.equals("msi")){
 //                    intent.putExtra("type_transaction","msi");
 //

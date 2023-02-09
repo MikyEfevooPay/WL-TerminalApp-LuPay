@@ -6,12 +6,18 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -31,6 +37,7 @@ import com.blumonpay.capx.functions.RSA;
 import com.blumonpay.capx.model.RSAData;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
+import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
@@ -41,6 +48,13 @@ import com.efevoopay.demoui.utils.TRACE;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,7 +65,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
-    private QPOSService pos;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
     private String blueTootchAddress = "";
     private String posId = "";
@@ -59,15 +72,34 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private Button initialize;
     private String _rsa = "";
     private String _tk = "";
-
+    private String _pk = "";
+    private TextView txt_ksn,txt_version,txtmodelo;
+    private Intent intent;
+    private String ksn_posId;
+    public String name="";
+    SharedPreferences sharpref;
+    Context eContext;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle(getString(R.string.wmx_title_welcome));
+        txt_ksn=(TextView)findViewById(R.id.txtksn);
+        txt_version=(TextView)findViewById(R.id.txtversion);
+        txtmodelo=(TextView)findViewById(R.id.txtmodelo);
         initialize = (Button) findViewById(R.id.WMX_btn_initialize_keys);
         initialize.setOnClickListener(this);
-        initSDK();
+        txt_version.setText(BuildConfig.VERSION_NAME);
+        txtmodelo.setText(Build.MODEL);
+        intent = getIntent();
+        ksn_posId = intent.getStringExtra("ksn_posId");
+        txt_ksn.setText(ksn_posId);
+        //initSDK();
+        //initUart(QPOSService.CommunicationMode.UART);
+        //pos.getQposId();
+        sharpref=getPreferences(eContext.MODE_PRIVATE);
+        String valor= sharpref.getString("tk","No hay dato");
+        Toast.makeText(getApplicationContext(),"Dato guardado: "+valor,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -84,27 +116,33 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.WMX_btn_initialize_keys:
-                TRACE.d("posID: " + posId);
+                TRACE.d("posID: " + ksn_posId);
                 TRACE.d("TransportKey: " + TransportKey);
 
                 try {
                     RSA rsa = new RSA();
 
                     RSAData rsaD = new RSAData();
-                    rsaD = rsa.generateKeys("3082010902820100D45E88EE86A0DA2C0ED64A86FFDEAB3267117A918DE81E5FD0EA7559D870C9EBE4F8778B63EF1A952ACF5B57EC057867E37E985186EB08A75FB42108CB7CE07FDE834763A8AF599C96B4956583888C8C4A6E106485173C3D1AF505BC7379622BFEFF4FBCCB18FE15028DC6B4960CE0F0E5FA8C4D1E7A4FF6CAC86B0E9C13FC7651D9A9A41355FF9140265F66D770135218168E85ED41EA82F2426EC89A2F6AA140CB7F91CDDD7D35B9C0E086214EEBA0600B888D65987CD49AD210E5A6948B2B782A76D6861FA6A79040A8C6B5C44614C8025D59F228AEC1BA951CBCB29C236B3D20276E8878BD6D7A88BB601CF8669AD660DB14262CB970298E6874A7134D7F0203010001");
+                    rsaD = rsa.generateKeys("3082010902820100CF57041EC2E7399C2BBD6CB0E8EDFC126B7837442541BCE86CC2804F9D90FE06EAE65B07014D789ED17300540D665213054E3E3A2A16D7FE1CFCC1382AF1485C542469D2AB327522444BF1A1EF1D8B79D9E9317B87D3531B364A8FCD24C0C6476E534D0D89070EEE2CBC999F00C5BEF3B935719AB459BBEE4EA86FEBEAC0F02A4F25D4007BA948E7B1E4A0456EB77107C4FCDAC79125EEE5A9D039995B6111F339DB1296A21D9F2048A8213BE29CE36DF0338D1BC04C3D42C0F6965E9694AFB05203D0BC05E6113AA6DA20DF0AB23DEA631144A8891352D866CBA9423B71890A4FD2B2112CE7BB57081581816232CD831932834EF05AA050C6FEBD434E9512ED0203010001");
 
                     _rsa=rsaD.getRsa();
+                    _pk=rsaD.getPublicKey();
                     _tk=rsaD.getTk();
 
+                    TRACE.d("rsaD.getRsa: " + _rsa);
+                    TRACE.d("rsaD.getPublicKey: " + _pk);
                     TRACE.d("rsaD.getTk: " + _tk);
-                    TRACE.d("rsaD.getPublicKey: " + _rsa);
 
+                    SharedPreferences.Editor editor=sharpref.edit();
+                    editor.putString("tk",_tk);
+                    editor.apply();
                 }catch (Throwable t){
                     TRACE.d("error rsa: " + t);
                 }
 
 
                 call();
+
                 break;
         }
     }
@@ -114,7 +152,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = "http://wmx-iso-apps1.eba-iai89mzk.us-west-2.elasticbeanstalk.com/admin/tpv/registro";
             JSONObject jsonBody = new JSONObject();
-            jsonBody.put("device_id", posId);
+            jsonBody.put("device_id", ksn_posId);
             jsonBody.put("device_tk", _tk);
             jsonBody.put("device_rsa", _rsa);
 
@@ -170,74 +208,4 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
         BLUETOOTH, AUDIO, UART, USB, OTG, BLUETOOTH_BLE
     }
 
-    private void initSDK (){
-        if(true){
-            open(QPOSService.CommunicationMode.UART);
-            posType = POS_TYPE.UART;
-            blueTootchAddress = "/dev/ttyS1";
-            pos.setDeviceAddress(blueTootchAddress);
-            pos.openUart();
-        }else{
-            open(QPOSService.CommunicationMode.AUDIO);
-            posType = POS_TYPE.AUDIO;
-            pos.openAudio();
-        }
-
-        pos.getQposId();
-
-        //pos.updateIPEKByTransportKey();
-
-    }
-
-    private void open(QPOSService.CommunicationMode mode){
-        MyPosListener listener = new MyPosListener();
-        pos = QPOSService.getInstance(mode);
-        if(pos == null){
-            //Error CommunicationMode unknow
-            return;
-        }
-        if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
-            pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
-        }
-        pos.setD20Trade(true);
-        pos.setConext(this);
-        Handler handler = new Handler(Looper.myLooper());
-        pos.initListener(handler, listener);
-
-    }
-
-    class MyPosListener extends CQPOSService {
-        public void onRequestQposConnected() {
-            TRACE.d("onRequestQposConnected()");
-            if (ActivityCompat.checkSelfPermission(WMX_Ajustes.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
-                //申请权限
-                ActivityCompat.requestPermissions(WMX_Ajustes.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-            }
-        }
-        @Override
-        public void onRequestGenerateTransportKey(Hashtable result){
-            TRACE.d("onRequestGenerateTransportKey(Hashtable<String, String> arg0):" + result.toString());
-            TransportKey =  result.get("transportKey") == null ? "" : result.get("transportKey").toString() ;
-            /*AQUI DEBE IR LO DE PROSA, TE LO TENGO QUE DEVOLVER*/
-            String groupId = "00";
-            String trackKsn = "00000093893403000001";
-            String trackipek = "A492A46AE8B005ACD6082E499B6A3696";
-            String trackipekKCV = "4836AE0000000000";
-            String pinKsn = "00000093893403000001";
-            String pinipek = "A492A46AE8B005ACD6082E499B6A3696";
-            String pinipekKCV = "4836AE0000000000";
-            String emvKsn = "00000093893403000001";
-            String emvIPEK = "A492A46AE8B005ACD6082E499B6A3696";
-            String emipekKCV = "4836AE0000000000";
-            pos.updateIPEKByTransportKey(groupId, trackKsn, trackipek, trackipekKCV, emvKsn, emvIPEK, emipekKCV,
-                    pinKsn, pinipek, pinipekKCV);
-            pos.getQposInfo();
-        }
-        @Override
-        public void onQposIdResult(Hashtable<String, String> posIdTable) {
-            TRACE.w("onQposIdResult():" + posIdTable.toString());
-            posId = posIdTable.get("posId") == null ? "" : posIdTable.get("posId");
-            pos.generateTransportKey(20);
-        }
-    }
 }

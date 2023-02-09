@@ -48,7 +48,7 @@ public class CancelacionesItemAdapter extends RecyclerView.Adapter<Cancelaciones
         myViewHolder.iv_status.setVisibility(View.GONE);
         myViewHolder.tv_amount2.setTextColor(0xFF000000);
 
-        if(_transactions.get(i).get_process().equals("MC")){
+        if(_transactions.get(i).get_redtarj().equals("MC")){
             myViewHolder.iv_process.setImageResource(R.drawable.masterdcard);
         }else{
             myViewHolder.iv_process.setImageResource(R.drawable.visa);

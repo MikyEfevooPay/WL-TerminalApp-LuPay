@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linFhater"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ep_fondo"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_layout" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1124dp"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_marginBottom="30px"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="#fff"
+            android:orientation="vertical"
+            android:paddingLeft="20px"
+            android:paddingTop="20px"
+            android:paddingRight="20px"
+            android:paddingBottom="20px">
+
+            <LinearLayout
+                android:id="@+id/lin3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Propinas_subtotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans"
+                    android:gravity="center"
+                    android:paddingTop="10dip"
+                    android:text="Subtotal"
+                    android:textAlignment="center"
+                    android:textColor="#5A5A5A"
+                    android:textSize="30px"
+
+                    />
+
+                <TextView
+                    android:id="@+id/Propinas_total_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="19.5px"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:gravity="center"
+                    android:text="$4,320.00"
+                    android:textAlignment="center"
+                    android:textColor="#121212"
+                    android:textSize="46px" />
+
+                <TextView
+                    android:id="@+id/tv_caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25px"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:gravity="center"
+                    android:text="¿Desea agregar propina?"
+                    android:textAlignment="center"
+                    android:textColor="#121212"
+                    android:textSize="33px" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1128dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="25px"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rBZero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/radiobutton_custom"
+                            android:checked="true"
+                            android:fontFamily="@font/dm_sans"
+                            android:paddingLeft="20px"
+                            android:text="Sin propina"
+                            android:textColor="#121212"
+                            android:textSize="30px" />
+
+                        <TextView
+                            android:id="@+id/zeroPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans"
+                            android:text="$0.0 MXN"
+                            android:textColor="#5A5A5A"
+                            android:textSize="30px" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="25px"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rBTen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/radiobutton_custom"
+                            android:fontFamily="@font/dm_sans"
+                            android:paddingLeft="20px"
+                            android:text="10%"
+                            android:textColor="#121212"
+                            android:textSize="30px"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tenPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans"
+                            android:text="$0.0 MXN"
+                            android:textColor="#5A5A5A"
+                            android:textSize="30px" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="25px"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rBFifteen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/radiobutton_custom"
+                            android:fontFamily="@font/dm_sans"
+                            android:paddingLeft="20px"
+                            android:text="15%"
+                            android:textColor="#121212"
+                            android:textSize="30px" />
+
+                        <TextView
+                            android:id="@+id/fifteenPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans"
+                            android:text="$0.0 MXN"
+                            android:textColor="#5A5A5A"
+                            android:textSize="30px" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="25px"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rBTwenty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/radiobutton_custom"
+                            android:fontFamily="@font/dm_sans"
+                            android:paddingLeft="20px"
+                            android:text="20%"
+                            android:textColor="#121212"
+                            android:textSize="30px" />
+
+                        <TextView
+                            android:id="@+id/twentyPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans"
+                            android:text="$0.0 MXN"
+                            android:textColor="#5A5A5A"
+                            android:textSize="30px" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_otherPercent"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="38px"
+
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rBOther"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/radiobutton_custom"
+                            android:fontFamily="@font/dm_sans"
+                            android:paddingLeft="20px"
+                            android:text="Otro"
+                            android:textColor="#121212"
+                            android:textSize="30px" />
+
+                        <!--                    <EditText-->
+                        <!--                        android:id="@+id/otherPercentet"-->
+                        <!--                        android:layout_width="130px"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:layout_weight="1"-->
+                        <!--                        android:backgroundTint="#7676F8"-->
+                        <!--                        android:enabled="false"-->
+                        <!--                        android:fontFamily="@font/dm_sans"-->
+                        <!--                        android:inputType="numberDecimal"-->
+                        <!--                        android:maxLength="4"-->
+                        <!--                        android:paddingTop="0dp"-->
+                        <!--                        android:text=""-->
+                        <!--                        android:textColor="#5A5A5A"-->
+                        <!--                        android:textSize="20px" />-->
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="136px"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0px"
+                            app:boxCollapsedPaddingTop="0px"
+                            app:boxStrokeColor="#ED1B1B"
+                            app:errorEnabled="false"
+                            app:expandedHintEnabled="false"
+                            app:helperTextEnabled="false"
+                            app:hintAnimationEnabled="false"
+                            app:hintEnabled="false"
+                            app:suffixText="%"
+
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
+
+                                android:id="@+id/otherPercentet"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="0px"
+                                android:background="@drawable/input_background"
+                                android:enabled="false"
+                                android:fallbackLineSpacing="false"
+                                android:fontFamily="@font/dm_sans"
+                                android:includeFontPadding="false"
+                                android:inputType="numberDecimal"
+                                android:lineSpacingExtra="0px"
+                                android:maxLength="4"
+
+                                android:paddingTop="0px"
+                                android:textColor="#5A5A5A"
+
+                                android:textSize="29px"
+
+                                tools:text="1093" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_tips"
+                        android:layout_width="match_parent"
+                        android:layout_height="74dp"
+                        android:layout_marginBottom="8px"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/Propinas_final_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans_medium"
+                            android:gravity="center"
+                            android:text="Propina"
+                            android:textAlignment="center"
+                            android:textColor="@color/ep_color_black"
+                            android:textSize="33px" />
+
+                        <TextView
+                            android:id="@+id/propinas_percent_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans_medium"
+                            android:gravity="center"
+                            android:text=" (0%)"
+                            android:textAlignment="center"
+                            android:textColor="@color/ep_color_black"
+                            android:textSize="33px" />
+
+                        <TextView
+                            android:id="@+id/Propinas_final_result"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/dm_sans_medium"
+                            android:gravity="center|right"
+                            android:text="$0.00 MXN"
+                            android:textColor="@color/ep_color_black"
+                            android:textSize="33px" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/Propinas_total_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans_bold"
+                            android:gravity="center"
+                            android:text="Total"
+                            android:textAlignment="center"
+                            android:textColor="@color/ep_color_blue"
+                            android:textSize="41px" />
+
+                        <TextView
+                            android:id="@+id/Propinas_total_result"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/dm_sans_bold"
+                            android:gravity="center|right"
+                            android:text="$0.00 MXN"
+                            android:textColor="@color/ep_color_blue"
+                            android:textSize="41px" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_marginBottom="37px"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/Propinas_btn_continue"
+                android:layout_width="match_parent"
+                android:layout_height="93px"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/ep_btn_continuar_fondo"
+                android:fontFamily="@font/dm_sans_bold"
+                android:minHeight="50dip"
+                android:text="Continue"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="22px" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

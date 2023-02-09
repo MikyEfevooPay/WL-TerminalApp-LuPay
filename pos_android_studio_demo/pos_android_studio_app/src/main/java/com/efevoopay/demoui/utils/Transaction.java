@@ -2,21 +2,25 @@ package com.efevoopay.demoui.utils;
 
 public class Transaction {
     String _pan,_date,_amount,_tips;
-    String _auth, _date2, _amount2,_time, _card, _process, _status, _approve;
+    String _auth, _date2, _amount2,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi, _approve;
     public Transaction(String pan, String date, String amount, String tips){
         _pan=pan;
         _date = date;
         _amount = amount;
         _tips = tips;
     }
-    public Transaction(String auth, String date2, String time, String amount2 ,String card,String process,String status, String approve){
+    public Transaction(String auth, String date2, String time, String amount2 ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi, String approve){
         _auth=auth;
         _date2=date2;
         _amount2=amount2;
         _time=time;
         _card=card;
-        _process=process;
-        _status=status;
+        _redtarj=redtarj;
+        _tipotarj=tipotarj;
+        _tipotxn=tipotxn;
+        _propina=propina;
+        _total=total;
+        _msi=msi;
         _approve=approve;
     }
 
@@ -56,13 +60,21 @@ public class Transaction {
         return _card;
     }
 
-    public String get_process() {
-        return _process;
+    public String get_redtarj() {
+        return _redtarj;
+    }
+    public String get_tipotarj() {
+        return _tipotarj;
     }
 
-    public String get_status() {
-        return _status;
+    public String get_tipotxn() {
+        return _tipotxn;
     }
+    public String get_propina() {
+        return _propina;
+    }
+    public String get_total(){return _total;}
+    public String get_msi(){return _msi;}
 
     public String get_approve() { return _approve; }
 }

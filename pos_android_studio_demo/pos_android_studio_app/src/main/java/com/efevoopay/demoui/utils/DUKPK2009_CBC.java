@@ -48,9 +48,10 @@ public class DUKPK2009_CBC {
         String datastr = datastrV;
         byte[] ipek = null;
         byte[] byte_ksn = parseHexStr2Byte(ksn);
+        clearIpek="7362834000E2683DBBEA4EC6E2132D48";
         if (clearIpek == null || clearIpek.length() == 0) {
-           //String bdk = "0123456789ABCDEFFEDCBA9876543210"; demo key
-            String bdk = "5DA6A0B3613EDD0BDA807CE9B42A6B09"; // iso key from ysus
+           String bdk = "0123456789ABCDEFFEDCBA9876543210"; //demo key
+            //String bdk = "5DA6A0B3613EDD0BDA807CE9B42A6B09"; // iso key from ysus
             byte[] byte_bdk = parseHexStr2Byte(bdk);
             ipek = GenerateIPEK(byte_ksn, byte_bdk);
 

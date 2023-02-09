@@ -16,12 +16,13 @@ import com.efevoopay.demoui.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class WMX_Cancelacion_Desc extends BaseActivity  {
-    TextView cp_tv_trans_type,cp_tv_auth,cp_tv_amount,cp_tv_tip,cp_tv_total,cp_tv_card,cp_tv_date_time,cp_tv_approve,cp_tv_tip_label,cp_tv_total_label;
+    TextView cp_tv_trans_type,cp_tv_auth,cp_tv_amount,cp_tv_tip,cp_tv_total,cp_tv_card,cp_tv_date_time,cp_tv_approve,cp_tv_tip_label,cp_tv_total_label,cp_tv_tipotarjeta;
     ImageView cp_iv_trans_type,cp_iv_process;
     LinearLayout cp_ll_content_card;
     AppCompatButton cp_btn_trans_cancelar, cp_btn_trans_final;
     Context mContext;
-
+    private Intent intent;
+    private String ksn_posId;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -44,15 +45,21 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     }
 
     private void initData(Intent intent){
-        String auth,date,time,amount,card,process,status, approve;
+        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
         amount = intent.getStringExtra("amount");
         card = intent.getStringExtra("card");
-        process = intent.getStringExtra("process");
+        redtarj = intent.getStringExtra("redtarj");
+        tipotarjeta = intent.getStringExtra("tipotarj");
         status = intent.getStringExtra("status");
+        propina=intent.getStringExtra("propina");
+        total=intent.getStringExtra("total");
+        msi=intent.getStringExtra("msi");
+
         approve = intent.getStringExtra("approve");
+        ksn_posId=intent.getStringExtra("ksn_posId");
 
         cp_tv_trans_type = findViewById(R.id.cp_tv_trans_type);
         cp_tv_auth = findViewById(R.id.cp_tv_auth);
@@ -67,26 +74,28 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_ll_content_card = findViewById(R.id.cp_ll_content_card);
         cp_tv_tip_label =findViewById(R.id.cp_tv_tip_label);
         cp_tv_total_label = findViewById(R.id.cp_tv_total_label);
+        cp_tv_tipotarjeta = findViewById(R.id.cp_tv_tipotarjeta);
 
-         if (status.equals("G")){
+         if (status.equals("VN")){
             cp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             cp_tv_trans_type.setText("Aprobada Venta Normal");
+             cp_tv_tip.setText(propina);
         }else{
             cp_tv_trans_type.setText("Aprobada Venta a Meses");
             cp_tv_tip_label.setText("Meses:");
-            cp_tv_tip.setText("6 MSI");
+            cp_tv_tip.setText(msi+" MSI");
         }
 
-        if (process.equals("MC")){
+        if (redtarj.equals("MC")){
             cp_iv_process.setImageResource(R.drawable.masterdcard);
-        }else if(process.equals("Visa")){
+        }else if(redtarj.equals("Visa")){
             cp_iv_process.setImageResource(R.drawable.visa);
         }
 
-
+        cp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         cp_tv_auth.setText(auth);
         cp_tv_amount.setText(amount);
-        cp_tv_total.setText(amount);
+        cp_tv_total.setText(total);
         cp_tv_card.setText("**** "+card);
         cp_tv_date_time.setText(date+" "+time);
 //        cp_tv_approve.setText(approve);
@@ -102,7 +111,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
                         .setTitle("¿Quieres cancelar la Transacción?")
                         .setIcon(R.drawable.efevoo_i_grupo_41699)
                         .setPositiveButton("Confirmar",(dialog, lis) -> {
-                            sendCancelFinal();
+                            //sendCancelFinal();
+                            changeView();
                         })
                         .setNeutralButton("Regresar",(dialog, lis) -> {
                             dialog.dismiss();
@@ -137,5 +147,21 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
 
         cp_btn_trans_cancelar.setVisibility(View.GONE);
         cp_btn_trans_final.setVisibility(View.VISIBLE);
+    }
+    private void changeView(){
+        intent = new Intent(this, WMX_Card.class);
+        intent.putExtra("AmountToShow",cp_tv_total.getText());
+        intent.putExtra("type_transaction","Cancelacion" );
+        intent.putExtra("cp_tv_auth",cp_tv_auth.getText());
+        intent.putExtra("ksn_posId",ksn_posId);
+        String tmp = cp_tv_total.getText().toString().replace("$","").replace(",","").replace(" ","").replace(" MXN","");
+        intent.putExtra("Amount",tmp);
+
+        intent.putExtra("total",cp_tv_total.getText());
+
+        intent.putExtra("subtotal",cp_tv_amount.getText());
+        intent.putExtra("tips",cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" MXN",""));
+
+        startActivity(intent);
     }
 }

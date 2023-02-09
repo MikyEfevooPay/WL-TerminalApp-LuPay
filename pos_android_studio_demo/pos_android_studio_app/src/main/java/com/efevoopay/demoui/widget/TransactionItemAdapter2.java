@@ -45,12 +45,12 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
         myViewHolder.tv_time.setText(_transactions.get(i).get_time());
         myViewHolder.tv_card.setText("**** "+_transactions.get(i).get_card());
 
-        if(_transactions.get(i).get_process().equals("MC")){
+        if(_transactions.get(i).get_redtarj().equals("MC")){
             myViewHolder.iv_process.setImageResource(R.drawable.masterdcard);
         }else{
             myViewHolder.iv_process.setImageResource(R.drawable.visa);
         }
-        if(_transactions.get(i).get_status().equals("A")){
+        if(_transactions.get(i).get_tipotxn().equals("CAN")){
             myViewHolder.iv_status.setImageResource(R.drawable.efevoo_i_grupo_41699);
             myViewHolder.tv_amount2.setTextColor(ContextCompat.getColor(context,R.color.wmx_cancelation_text));
         }else{

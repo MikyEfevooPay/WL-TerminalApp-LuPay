@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linFhater"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/efevoo_gradient_color"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_layout" />
+        <!--    <LinearLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="5px"-->
+        <!--        android:background="#A9FF85"-->
+        <!--        android:gravity="center_horizontal">-->
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="100px"-->
+        <!--            android:layout_height="5px"-->
+        <!--            android:background="#8591FF" />-->
+        <!--    </LinearLayout>-->
+
+        <LinearLayout
+            android:id="@+id/lin3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="50px">
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="10dip"
+                android:paddingBottom="10dip"
+                android:text="Confirmación de pago"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_caption"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="center"
+                android:text="TOTAL"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="33px" />
+
+            <TextView
+                android:id="@+id/wmx_text_total_Amount"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:textColor="#fff"
+                android:textSize="74px"
+                tools:text="Amount"
+                tools:visibility="visible" />
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/giv_card_status"
+                android:layout_width="200px"
+                android:layout_height="200px"
+                android:src="@drawable/terminal" />
+
+            <EditText
+                android:id="@+id/pruebaedittext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/transparent"
+                android:enabled="false"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="center_horizontal"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+
+            <TextView
+                android:id="@+id/tv_card_label_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:layout_marginBottom="8px"
+                android:fontFamily="@font/dm_sans_medium"
+                android:text="Esperando medio de pago"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="32px" />
+
+            <TextView
+                android:id="@+id/tv_card_label_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="Inserta tarjeta, desliza o contact less"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="32px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="43px"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="67px"
+                    android:layout_height="40px"
+                    android:layout_marginRight="10px"
+                    app:srcCompat="@drawable/masterdcard" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="73px"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/visa_white" />
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/wmx_status_lector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="20dip"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <Button
+                android:id="@+id/WMX_btn_pruebas_tmp"
+                android:layout_width="390px"
+                android:layout_height="60px"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="CLICK"
+                android:textAllCaps="false"
+                android:visibility="gone" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="37px"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/WMX_btn_trade"
+                    android:layout_width="match_parent"
+                    android:layout_height="93px"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px"
+                    android:background="@drawable/rounded_corner_cancel"
+                    android:enabled="false"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:minHeight="50dip"
+                    android:stateListAnimator="@null"
+                    android:text="X Cancelar"
+                    android:textAllCaps="false"
+
+                    android:textColor="#FF6E6E"
+                    android:textSize="22px" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

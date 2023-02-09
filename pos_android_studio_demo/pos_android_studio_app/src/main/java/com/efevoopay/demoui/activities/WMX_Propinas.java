@@ -20,7 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     private Context mContext;
-    private String Amount, type_transaction, v_msi="3", v_total_msi;
+    private String Amount, type_transaction, v_msi="3", v_total_msi,ksn_posId;
     private TextView Total_Amount, tv_zero, tv_ten, tv_fifteen, tv_twenty, tv_total, tv_propina_final, tv_propina_percent, tv_caption;
     private RadioButton zero, ten, fifteen, twenty, other;
     private GlobalFunctions gf ;
@@ -38,7 +38,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         Intent intent = getIntent();
         Amount = intent.getStringExtra("Amount");
         type_transaction = intent.getStringExtra("type_transaction");
-
+        ksn_posId=intent.getStringExtra("ksn_posId");
         mContext = this;
         gf= new GlobalFunctions(mContext);
         Total_Amount = (TextView) findViewById(R.id.Propinas_total_amount);
@@ -231,6 +231,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         intent = new Intent(this, WMX_Card.class);
         intent.putExtra("AmountToShow",tv_total.getText());
         intent.putExtra("type_transaction",type_transaction );
+        intent.putExtra("ksn_posId",ksn_posId);
         String tmp = tv_total.getText().toString().replace("$","").replace(",","").replace(" MXN","");
         intent.putExtra("Amount",tmp);
 
@@ -241,9 +242,11 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
             Float _amount = Float.parseFloat(Amount.replace(",",""));
             Float total_msi= _amount / Float.valueOf(v_msi);
             intent.putExtra("months_total",gf.formatMoney(String.valueOf(total_msi),true) + " MXN");
+            intent.putExtra("propina","0.00");
         }else{
             intent.putExtra("subtotal",Total_Amount.getText());
             intent.putExtra("tips",tv_propina_final.getText());
+            intent.putExtra("propina",tv_propina_final.getText().toString().replace("$","").replace(",","").replace(" MXN",""));
         }
 
 

@@ -223,7 +223,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView29"
+                        android:id="@+id/tp_tv_tipotarjeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -276,8 +276,42 @@
             android:text="640463"
             android:textColor="#5A5A5A"
             android:textSize="20px" />
+        <TextView
+            android:id="@+id/tp_tv_estatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center_horizontal"
+            android:text="NA"
+            android:visibility="invisible"
+            android:textColor="#5A5A5A"
+            android:textSize="20px" />
+        <LinearLayout
+            android:id="@+id/tp_ll_content_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingLeft="18px"
+            android:paddingTop="19px"
+            android:paddingRight="18px"
+            android:paddingBottom="19px">
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_ticket_print"
+                android:layout_width="300px"
+                android:layout_height="90px"
+                android:background="@drawable/efv_print_btn"
+                android:drawableLeft="@drawable/printer"
+                android:fontFamily="@font/dm_sans_bold"
+                android:gravity="center"
+                android:minHeight="50dip"
+                android:stateListAnimator="@null"
+                android:text="Print"
+                android:textAllCaps="true"
+                android:textColor="#0F1010"
+                android:textSize="25px" />
+        </LinearLayout>
     </LinearLayout>
-
 
 </LinearLayout>
