@@ -47,6 +47,22 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.switch_title_logo("Cancelaciones");
+        recyclerView = findViewById(R.id.historial_cancelaciones_List);
+        cancellation_empty_layout = findViewById((R.id.layout_cancellation_empty));
+        intent = getIntent();
+        ksn_posId = intent.getStringExtra("ksn_posId");
+
+
+//        cancellation_empty_layout = findViewById((R.id.layout_cancellation_empty));
+
+        try {
+            readJsontxn();
+            Thread.sleep(1000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        setItems();
 
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
@@ -63,6 +79,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         }
         setItems();
 
+        setItems();
     }
     @Override
     public void onClick(View view) {
@@ -100,20 +117,19 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
     }
 
     public void setItems() {
-//        int length = readJson();
-//        if(length > 0) {
-//            cancellation_empty_layout.setVisibility(View.GONE);
-            recyclerView = findViewById(R.id.historial_cancelaciones_List);
+        int length = readJson();
+        if(length > 0) {
+            cancellation_empty_layout.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             CancelacionesItemAdapter transactionItemAdapter = new CancelacionesItemAdapter(this,transactions, this);
             recyclerView.setAdapter(transactionItemAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        } else {
-//            recyclerView.setVisibility(View.GONE);
-//        }
+        } else {
+            recyclerView.setVisibility(View.GONE);
+        }
     }
 
-    /*public int readJson(){
+    public int readJson(){
         try {
             JSONArray jsonArray = new JSONArray(JsonDataFromAsset());
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -139,7 +155,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
             e.printStackTrace();
         }
         return 0;
-    }*/
+    }
 
     /*private String JsonDataFromAsset() throws IOException{
         String json =null;
@@ -219,6 +235,44 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
 
         }
 
+
+    }
+    /*private void readJsonnew(String _json){
+        try {
+            JSONArray object = new JSONArray(_json);
+            for (int i = 0; i < object.length(); i++) {
+                JSONObject object1 = object.getJSONObject(i);
+                JSONObject data =new  JSONObject(object1.getString("txn").toString());
+                TRACE.d("data" +  TRACE.NEW_LINE + data.toString());
+                if(!data.getString("tipotxn").equals("A")){
+                    Transaction _data = new Transaction(
+                            data.getString("noAuth"),
+                            data.getString("date"),
+                            data.getString("hour"),
+                            data.getString("amount"),
+                            data.getString("pan"),
+                            data.getString("redtarj"),
+                            data.getString("tipotarj"),
+                            data.getString("tipotxn"),
+                            data.getString("propina"),
+                            data.getString("total"),
+                            data.getString("msi"),
+                            data.getString("numref"));
+                    this.transactions.add(_data);
+                }
+            }
+            //TRACE.d("transaccion" +  TRACE.NEW_LINE + transactions.toArray().length);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }*/
+    public void readJsontxn(){
+        try {
+            getHistorial(ksn_posId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     }
     /*private void readJsonnew(String _json){

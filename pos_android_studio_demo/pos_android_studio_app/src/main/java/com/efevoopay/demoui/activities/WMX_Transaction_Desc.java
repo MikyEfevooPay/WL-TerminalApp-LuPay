@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
+
+import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.os.Handler;
@@ -30,18 +32,23 @@ import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.Ticket;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.Locale;
 
-enum PRINT_TYPE {
-    STORE, CLIENT
-}
 
 public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickListener{
 
     TextView tp_tv_trans_type,tp_tv_auth,tp_tv_amount,tp_tv_tip,tp_tv_total,tp_tv_card,tp_tv_date_time,tp_tv_approve,tp_tv_tip_label,tp_tv_total_label,tp_tv_tipotarjeta;
     ImageView tp_iv_trans_type,tp_iv_process;
     LinearLayout tp_ll_content_card;
+    private int transaction_type;
+    private String blueTootchAddress = "", card_provider;
+    private Ticket ticket;
     private String blueTootchAddress = "";
     Context mContext;
     private Intent intent;
@@ -52,11 +59,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Button print_button = (Button) findViewById(R.id.btn_print);
+        print_button.setOnClickListener(this);
         btn_ticket_print =  (AppCompatButton) findViewById(R.id.btn_ticket_print);
         btn_ticket_print.setOnClickListener(this);
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
-        mContext=this;
+        ticket = new Ticket(getApplicationContext());
         initData(intent);
         ActionPrinter.getInstance(getApplicationContext()).bind();
     }
@@ -73,150 +82,31 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
+        ticket.setData(tp_tv_trans_type.getText().toString(),
+                tp_tv_approve.getText().toString(), tp_tv_card.getText().toString(),
+                card_provider, tp_tv_date_time.getText().toString(),
+                tp_tv_amount.getText().toString(),
+                tp_tv_tip.getText().toString(),
+                tp_tv_total.getText().toString(),
+                "C434",
+                "A0000000031010"
+        );
         switch(view.getId()) {
-            case R.id.btn_ticket_print:
+            case R.id.btn_print:
                 new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                         .setTitle("Impresion de Ticket")
-                        //.setIcon(R.drawable.printer)
+                        .setIcon(R.drawable.printer)
                         .setPositiveButton("Comercio",(dialog, lis) -> {
-                            onPrintStore();
+                            ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
                         })
                         .setNeutralButton("Cliente",(dialog, lis) -> {
-                            onPrintClient();
+                            ticket.GenerateTicket(PRINT_TYPE.CLIENT, transaction_type);
                         })
                         .show();
                 break;
         }
     }
 
-
-    private void onPrintStore() {
-        generateTicket(PRINT_TYPE.STORE);
-    }
-
-    private void onPrintClient() {
-        generateTicket(PRINT_TYPE.CLIENT);
-    }
-
-
-    private void generateTicket(PRINT_TYPE type) {
-        ActionPrinter printer = ActionPrinter.getInstance(getApplicationContext());
-        try {
-          Drawable drawable = ContextCompat.getDrawable(this, R.drawable.logo_ticket);
-            Bitmap bitmap = Utils.drawableToBitmap(drawable);
-           printer.addBitmap(bitmap, 100);
-            printer.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
-            printer.addText("");
-            if(type == PRINT_TYPE.CLIENT) {
-                printer.addText("*** COPIA CLIENTE ***");
-                printer.addText("");
-            }
-            ticket(printer);
-            printer.lineFeed(5);
-            printer.print(new IPrinterCallback.Default() {
-                @Override
-                public void onPrintStart() throws RemoteException {
-                    super.onPrintStart();
-
-                    //todo
-
-                    TRACE.d("onPrintStart");
-
-                }
-
-                @Override
-                public void onPrintFinish(int height) throws RemoteException {
-                    super.onPrintFinish(height);
-                    //todo
-                    TRACE.d("onPrintFinish");
-                }
-
-                @Override
-                public void onError(int error, String message) throws RemoteException {
-                    super.onError(error, message);
-                    TRACE.d("onError");
-                    //todo
-                }
-            });
-        }
-        catch (RemoteException e) {
-            TRACE.d("RemoteException"+ e.toString());
-            e.printStackTrace();
-        }
-    }
-
-    private void ticket(ActionPrinter printer) throws RemoteException {
-        StringBuilder section_1 = new StringBuilder();
-        StringBuilder section_2 = new StringBuilder();
-        StringBuilder section_3 = new StringBuilder();
-        StringBuilder section_4 = new StringBuilder();
-        StringBuilder section_5 = new StringBuilder();
-        printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 22);
-        section_1.append(tp_tv_trans_type.getText().toString().toUpperCase(Locale.ROOT));
-        section_1.append("\n");
-        section_1.append(tp_tv_approve.getText().toString());
-        section_1.append("\n\n");
-        section_1.append("operadora bp sa de cv".toUpperCase(Locale.ROOT));
-        section_1.append("\n");
-        section_1.append("GOMEZ MORIN");
-        section_1.append("\n");
-        section_1.append("SAN PEDRO GARZA GARCIA,");
-        section_1.append("\n");
-        section_1.append("NUEVO LEON ");
-        section_1.append("\n");
-        section_1.append("TERMINAL");
-        section_1.append("\n");
-        section_1.append("123");
-        printer.addText(section_1.toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText("__________________________________");
-        printer.addText("********"+tp_tv_card.getText().toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        section_2.append("VISA");
-        section_2.append("\n");
-        section_2.append(tp_tv_date_time.getText().toString());
-        printer.addText(section_2.toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText("__________________________________");
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        printer.addText("");
-        section_3.append("Monto :                   "+tp_tv_amount.getText().toString());
-        section_3.append("\n");
-        section_3.append("Propina :                    "+tp_tv_tip.getText().toString());
-        section_3.append("\n");
-        section_3.append("Total :                      "+tp_tv_total.getText().toString());
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText(section_3.toString());
-        printer.addText("__________________________________");
-        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        printer.addText("");
-        section_4.append("RRN :                   0000000000623");
-        section_4.append("\n");
-        section_4.append("ARQC :                   ************C434");
-        section_4.append("\n");
-        section_4.append("TC :                   ************750F");
-        section_4.append("\n");
-        section_4.append("AID :                   A0000000031010");
-        printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 18);
-        printer.addText(section_4.toString());
-        printer.addText("");
-        printer.addText("");
-        section_5.append("Por este pagare me obligo");
-        section_5.append("\n");
-        section_5.append("incondicionalmente a pagar a la orden del");
-        section_5.append("\n");
-        section_5.append("banco acreditante el importe de este");
-        section_5.append("\n");
-        section_5.append("título. Este pagare procede del contrato");
-        section_5.append("\n");
-        section_5.append("de apertura de crédito que el banco");
-        section_5.append("\n");
-        section_5.append("acreditante y el tarjetahabiente tienen celebrado.");
-
-        printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 16);
-        printer.addText(section_5.toString());
-        printer.addText("");
-    }
 
     private void initData(Intent intent){
         String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi, approve;
@@ -261,6 +151,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             tp_tv_date_time.setTextColor(0xFF121212);
             tp_tv_total_label.setTextColor(0xFF5A5A5A);
             tp_tv_total.setTextColor(0xFF5A5A5A);
+            transaction_type = 1;
 
             Drawable layoutDrawable = tp_ll_content_card.getBackground();
             layoutDrawable = DrawableCompat.wrap(layoutDrawable);
@@ -272,15 +163,20 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             tp_tv_trans_type.setText("Aprobada Venta Normal");
             tp_tv_tip.setText(propina);
+            transaction_type = 1;
+
         }else{
             tp_tv_trans_type.setText("Aprobada Venta a Meses");
             tp_tv_tip_label.setText("Meses:");
             tp_tv_tip.setText(msi+" MSI");
+            transaction_type = 0;
         }
 
-        if (redtarj.equals("MC")){
+        if (process.equals("MC")){
+            card_provider = "MASTERCARD";
             tp_iv_process.setImageResource(R.drawable.masterdcard);
         }else if(redtarj.equals("Visa")){
+            card_provider = "VISA";
             tp_iv_process.setImageResource(R.drawable.visa);
         }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.KSN;
 import com.efevoopay.demoui.utils.TRACE;
 
 public class WMX_Menu extends BaseActivity implements View.OnClickListener {
@@ -41,6 +42,9 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         meses.setOnClickListener(this);
         cancelaciones.setOnClickListener(this);
         getinfoScreen();
+
+        ksn = new KSN();
+
     }
 
     public void getinfoScreen() {

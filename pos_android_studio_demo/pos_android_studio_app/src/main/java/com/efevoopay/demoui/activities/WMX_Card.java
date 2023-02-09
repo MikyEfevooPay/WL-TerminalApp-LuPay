@@ -101,7 +101,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Button WMX_btn_trade;
     private TextView tv_card_label_1,tv_card_label_2;
 
-    private String cardNofinal ="";
+    private String cardNofinal;
     private String type_transaction;
     public GNTBackEnd gntBackEnd = new GNTBackEnd();
     private DUKPTData _encryptblumon ;

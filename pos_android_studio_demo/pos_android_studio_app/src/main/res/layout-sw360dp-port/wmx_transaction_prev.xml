@@ -15,12 +15,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="391dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="37px"
             android:layout_marginRight="37px"
-            android:layout_marginBottom="22px"
+            android:layout_marginBottom="37px"
+            android:layout_weight="1"
             android:background="@drawable/fondo_ticket"
-
             android:orientation="vertical"
             android:paddingLeft="18px"
             android:paddingTop="43px"
@@ -28,14 +28,14 @@
             android:paddingBottom="56px">
 
             <ImageView
-                android:id="@+id/cp_iv_trans_type"
+                android:id="@+id/tp_iv_trans_type"
                 android:layout_width="match_parent"
-                android:layout_height="61px"
+                android:layout_height="90px"
                 android:layout_marginBottom="18px"
                 app:srcCompat="@drawable/efevoo_i_check_exito" />
 
             <TextView
-                android:id="@+id/cp_tv_trans_type"
+                android:id="@+id/tp_tv_trans_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_bold"
@@ -62,7 +62,7 @@
                     android:textSize="30px" />
 
                 <TextView
-                    android:id="@+id/cp_tv_auth"
+                    android:id="@+id/tp_tv_auth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="29px"
@@ -82,7 +82,7 @@
                 android:paddingRight="43px">
 
                 <TextView
-                    android:id="@+id/cp_tv_total_label"
+                    android:id="@+id/tp_tv_total_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -92,7 +92,7 @@
                     android:textSize="30px" />
 
                 <TextView
-                    android:id="@+id/cp_tv_amount"
+                    android:id="@+id/tp_tv_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -112,7 +112,7 @@
                 android:paddingRight="43px">
 
                 <TextView
-                    android:id="@+id/cp_tv_tip_label"
+                    android:id="@+id/tp_tv_tip_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -122,7 +122,7 @@
                     android:textSize="30px" />
 
                 <TextView
-                    android:id="@+id/cp_tv_tip"
+                    android:id="@+id/tp_tv_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -142,7 +142,7 @@
                 android:paddingRight="43px">
 
                 <TextView
-                    android:id="@+id/cp_tv_total_label"
+                    android:id="@+id/tp_tv_total_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -152,7 +152,7 @@
                     android:textSize="30px" />
 
                 <TextView
-                    android:id="@+id/cp_tv_total"
+                    android:id="@+id/tp_tv_total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -186,10 +186,10 @@
                 android:textSize="27px" />
 
             <LinearLayout
-                android:id="@+id/cp_ll_content_card"
+                android:id="@+id/tp_ll_content_card"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
-                android:layout_gravity="center"
+                android:layout_marginBottom="26px"
                 android:background="@drawable/rounded_corner"
                 android:backgroundTint="@color/ep_fondo_transaction_item"
                 android:orientation="horizontal"
@@ -199,8 +199,9 @@
                 android:paddingBottom="19px">
 
                 <LinearLayout
-                    android:layout_width="77px"
-                    android:layout_height="43dp"
+                    android:layout_width="78px"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="14px"
                     android:background="@drawable/rounded_corner"
                     android:backgroundTint="#FFFFFF"
@@ -209,7 +210,7 @@
                     android:paddingRight="10px">
 
                     <ImageView
-                        android:id="@+id/cp_iv_process"
+                        android:id="@+id/tp_iv_process"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:srcCompat="@tools:sample/avatars" />
@@ -217,7 +218,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="43dp"
+                    android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -237,7 +238,7 @@
                             android:textSize="27px" />
 
                         <TextView
-                            android:id="@+id/cp_tv_card"
+                            android:id="@+id/tp_tv_card"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -250,7 +251,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/cp_tv_date_time"
+                        android:id="@+id/tp_tv_date_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/dm_sans"
@@ -269,66 +270,41 @@
                 android:gravity="center_horizontal"
                 android:text="Aprobación"
                 android:textColor="#121212"
-                android:textSize="20px"
-                android:visibility="gone" />
+                android:textSize="30px" />
 
             <TextView
-                android:id="@+id/cp_tv_approve"
+                android:id="@+id/tp_tv_approve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
                 android:gravity="center_horizontal"
                 android:text="640463"
                 android:textColor="#5A5A5A"
-                android:textSize="20px"
-                android:visibility="gone" />
+                android:textSize="30px" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="199dp"
-            android:layout_gravity="bottom"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="116px"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_marginBottom="25px"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/cp_btn_trans_cancelar"
+            <Button
+                android:id="@+id/btn_print"
                 android:layout_width="match_parent"
-                android:layout_height="85px"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="20px"
-
-                android:background="@drawable/rounded_corner_cancel"
-                android:backgroundTint="#FFBABA"
-                android:enabled="true"
-                android:fontFamily="@font/dm_sans_bold"
-                android:minHeight="50dip"
-                android:stateListAnimator="@null"
-                android:text="Cancelar"
-
-                android:textAllCaps="false"
-
-                android:textColor="#FF6E6E"
-                android:textSize="22px" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/cp_btn_trans_final"
-                android:layout_width="match_parent"
-                android:layout_height="85px"
-                android:background="@drawable/rounded_corner"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:backgroundTint="@color/ep_btn_continuar_fondo"
                 android:fontFamily="@font/dm_sans_bold"
                 android:minHeight="50dip"
-                android:stateListAnimator="@null"
-                android:text="Finalizar"
+                android:text="Imprimir ticket"
                 android:textAllCaps="false"
-                android:textColor="#FFF"
-                android:textSize="22px"
-
-                android:visibility="gone"
-
-                />
+                android:textColor="@android:color/white"
+                android:textSize="30px" />
         </LinearLayout>
 
 
