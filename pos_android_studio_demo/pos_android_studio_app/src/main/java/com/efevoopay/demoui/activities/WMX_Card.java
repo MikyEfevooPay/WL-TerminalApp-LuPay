@@ -993,7 +993,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
                 ValidacionDatos(_pinpan.substring(4,12),"ICC",_entrymode.substring(6,_entrymode.length()),emvicc,pan,_track2.substring(4,_track2.length())+"FFFFFFFFFF",Integer.parseInt(_counter.substring(6,_counter.length()), 16),_tag50,_tag9F12,_tag9F21.substring(6,_tag9F21.length()));
 
-                //pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_d20.xml",WMX_Card.this)));
+                //pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_D30.xml",WMX_Card.this)));
 
             } else if (transactionResult == QPOSService.TransactionResult.TERMINATED) {
                 //clearDisplay();
@@ -1918,11 +1918,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
     public void procesofinal(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,Integer counter,String time_txn){
         _encryptblumon=gntBackEnd.EncryptBlumon(track2,counter);
-        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),_encryptblumon.getCounter(),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth);
+        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),_encryptblumon.getCounter(),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC);
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
-        call(TransExit,"http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
+        call(TransExit,"http://wmx-iso-app2.eba-rh2b4ban.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
 
     }
     private void call(String contenido,String url) {

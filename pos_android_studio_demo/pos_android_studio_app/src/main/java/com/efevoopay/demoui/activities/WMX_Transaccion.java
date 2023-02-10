@@ -253,6 +253,8 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         intent.putExtra("propina", transactions.get(position).get_propina());
         intent.putExtra("total", transactions.get(position).get_total());
         intent.putExtra("msi", transactions.get(position).get_msi());
+        intent.putExtra("aid", transactions.get(position).get_aid());
+        intent.putExtra("arqc", transactions.get(position).get_arqc());
         intent.putExtra("approve", transactions.get(position).get_approve());
         intent.putExtra("ksn_posId",ksn_posId);
 

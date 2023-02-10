@@ -45,7 +45,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     }
 
     private void initData(Intent intent){
-        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi, approve;
+        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi,aid,arqc, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
@@ -57,6 +57,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         propina=intent.getStringExtra("propina");
         total=intent.getStringExtra("total");
         msi=intent.getStringExtra("msi");
+        aid=intent.getStringExtra("aid");
+        arqc=intent.getStringExtra("arqc");
 
         approve = intent.getStringExtra("approve");
         ksn_posId=intent.getStringExtra("ksn_posId");

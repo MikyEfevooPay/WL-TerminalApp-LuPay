@@ -39,7 +39,7 @@ enum PRINT_TYPE {
 
 public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickListener{
 
-    TextView tp_tv_trans_type,tp_tv_auth,tp_tv_amount,tp_tv_tip,tp_tv_total,tp_tv_card,tp_tv_date_time,tp_tv_approve,tp_tv_tip_label,tp_tv_total_label,tp_tv_tipotarjeta;
+    TextView tp_tv_trans_type,tp_tv_auth,tp_tv_amount,tp_tv_tip,tp_tv_total,tp_tv_card,tp_tv_date_time,tp_tv_approve,tp_tv_tip_label,tp_tv_total_label,tp_tv_tipotarjeta,tp_tv_AID,tp_tv_ARQC;
     ImageView tp_iv_trans_type,tp_iv_process;
     LinearLayout tp_ll_content_card;
     private String blueTootchAddress = "";
@@ -219,7 +219,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     }
 
     private void initData(Intent intent){
-        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi, approve;
+        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi,aid,arqc, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
@@ -231,6 +231,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         propina=intent.getStringExtra("propina");
         total=intent.getStringExtra("total");
         msi=intent.getStringExtra("msi");
+        aid=intent.getStringExtra("aid");
+        arqc=intent.getStringExtra("arqc");
 
         approve = intent.getStringExtra("approve");
         ksn_posId=intent.getStringExtra("ksn_posId");
@@ -249,6 +251,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_tip_label =findViewById(R.id.tp_tv_tip_label);
         tp_tv_total_label = findViewById(R.id.tp_tv_total_label);
         tp_tv_tipotarjeta = findViewById(R.id.tp_tv_tipotarjeta);
+        tp_tv_AID=findViewById(R.id.txt_AID);
+        tp_tv_ARQC=findViewById(R.id.txt_ARQC);
 
         if(status.equals("CAN")){
             tp_tv_tip.setText(propina);
@@ -283,7 +287,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         }else if(redtarj.equals("Visa")){
             tp_iv_process.setImageResource(R.drawable.visa);
         }
-
+        tp_tv_AID.setText(aid);
+        tp_tv_ARQC.setText(arqc);
         tp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         tp_tv_auth.setText(auth);
         tp_tv_amount.setText(amount);
