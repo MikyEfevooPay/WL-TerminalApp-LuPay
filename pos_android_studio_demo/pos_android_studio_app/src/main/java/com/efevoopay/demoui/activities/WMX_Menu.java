@@ -15,7 +15,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     //private Button  other, ajustes, meses;
     private Intent intent;
     private LinearLayout transfer,other, ajustes, meses, cancelaciones;
-    private WMX_KSN ksn;
+    public static KSN ksn;
     @Override
 
 
@@ -28,8 +28,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         getSupportActionBar().hide();
         setTitle(getString(R.string.wmx_title_welcome));
 
-        ksn = new WMX_KSN();
-        ksn.onCreate();
+        ksn = new KSN();
 
         transfer=findViewById(R.id.btn_transfer);
         other= findViewById(R.id.btn_Other);
@@ -43,7 +42,6 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         cancelaciones.setOnClickListener(this);
         getinfoScreen();
 
-        ksn = new KSN();
 
     }
 

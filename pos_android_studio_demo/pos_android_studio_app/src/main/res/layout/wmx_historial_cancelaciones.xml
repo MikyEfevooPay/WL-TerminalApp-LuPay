@@ -19,7 +19,8 @@
             android:id="@+id/layout_cancellation_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,7 +66,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="37px"
             android:paddingRight="37px"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </LinearLayout>
 
 

@@ -43,13 +43,12 @@ import java.util.Locale;
 
 public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickListener{
 
-    TextView tp_tv_trans_type,tp_tv_auth,tp_tv_amount,tp_tv_tip,tp_tv_total,tp_tv_card,tp_tv_date_time,tp_tv_approve,tp_tv_tip_label,tp_tv_total_label,tp_tv_tipotarjeta;
+    TextView tp_tv_trans_type,tp_tv_auth,tp_tv_amount,tp_tv_tip,tp_tv_total,tp_tv_card,tp_tv_date_time,tp_tv_approve,tp_tv_tip_label,tp_tv_total_label,tp_tv_tipotarjeta,tp_tv_AID,tp_tv_ARQC;
     ImageView tp_iv_trans_type,tp_iv_process;
     LinearLayout tp_ll_content_card;
     private int transaction_type;
     private String blueTootchAddress = "", card_provider;
     private Ticket ticket;
-    private String blueTootchAddress = "";
     Context mContext;
     private Intent intent;
     private String ksn_posId;
@@ -61,13 +60,11 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Button print_button = (Button) findViewById(R.id.btn_print);
         print_button.setOnClickListener(this);
-        btn_ticket_print =  (AppCompatButton) findViewById(R.id.btn_ticket_print);
-        btn_ticket_print.setOnClickListener(this);
+        mContext = this;
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
         ticket = new Ticket(getApplicationContext());
         initData(intent);
-        ActionPrinter.getInstance(getApplicationContext()).bind();
     }
 
     @Override
@@ -88,8 +85,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                 tp_tv_amount.getText().toString(),
                 tp_tv_tip.getText().toString(),
                 tp_tv_total.getText().toString(),
-                "C434",
-                "A0000000031010"
+                tp_tv_ARQC.getText().toString(),
+                tp_tv_AID.getText().toString()
         );
         switch(view.getId()) {
             case R.id.btn_print:
@@ -109,7 +106,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
 
 
     private void initData(Intent intent){
-        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi, approve;
+        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi,aid,arqc, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
@@ -139,6 +136,10 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_tip_label =findViewById(R.id.tp_tv_tip_label);
         tp_tv_total_label = findViewById(R.id.tp_tv_total_label);
         tp_tv_tipotarjeta = findViewById(R.id.tp_tv_tipotarjeta);
+        tp_tv_AID=findViewById(R.id.txt_AID);
+        tp_tv_ARQC=findViewById(R.id.txt_ARQC);
+        aid=intent.getStringExtra("aid");
+        arqc=intent.getStringExtra("arqc");
 
         if(status.equals("CAN")){
             tp_tv_tip.setText(propina);
@@ -172,7 +173,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             transaction_type = 0;
         }
 
-        if (process.equals("MC")){
+        if (redtarj.equals("MC")){
             card_provider = "MASTERCARD";
             tp_iv_process.setImageResource(R.drawable.masterdcard);
         }else if(redtarj.equals("Visa")){
@@ -182,6 +183,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
 
         tp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         tp_tv_auth.setText(auth);
+        tp_tv_AID.setText(aid);
+        tp_tv_ARQC.setText(arqc);
         tp_tv_amount.setText(amount);
         tp_tv_total.setText(total);
         tp_tv_card.setText("**** "+card);

@@ -101,7 +101,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Button WMX_btn_trade;
     private TextView tv_card_label_1,tv_card_label_2;
 
-    private String cardNofinal;
+    private String cardNofinal ="";
     private String type_transaction;
     public GNTBackEnd gntBackEnd = new GNTBackEnd();
     private DUKPTData _encryptblumon ;
@@ -162,13 +162,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         initSDK();
 
         /** open(QPOSService.CommunicationMode.UART);
-        posType = POS_TYPE.UART;
-        blueTootchAddress = "/dev/ttyS1";
-        pos.setDeviceAddress(blueTootchAddress);
-        pos.openUart();**/
+         posType = POS_TYPE.UART;
+         blueTootchAddress = "/dev/ttyS1";
+         pos.setDeviceAddress(blueTootchAddress);
+         pos.openUart();**/
 
-       /* Handler handler = new Handler();
-        handler.postDelayed(() -> ChangeViewToTicket(), 2000);*/
+        Handler handler = new Handler();
+        handler.postDelayed(() -> ChangeViewToTicket(), 2000);
     }
 
     public String formatMoney(String amount){
@@ -194,7 +194,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 pos.cancelSetAmount();
                 pos.cancelTrade();
                 onBackPressed();
-            break;
+                break;
             case R.id.WMX_btn_pruebas_tmp:
                 pos.cancelSetAmount();
                 pos.cancelTrade();
@@ -385,7 +385,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             intent.putExtra("v_subtotal",v_subtotal.toString());
         }
 
-       startActivity(intent);
+        startActivity(intent);
     }
 
     private String getTime(){
@@ -885,7 +885,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
             emvicc = DUKPK2009_CBC.getDate(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB);
             TRACE.d("\nemvicc(tlv):\n" + emvicc);
-            emvicc=emvicc.substring(8,emvicc.length());
+            emvicc=emvicc.substring(8);
 
             List<TLV> ICCparse = TLVParser.parse(emvicc);
 
@@ -930,7 +930,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
                 //String str = "5A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F009505088004E0009A031406179C01009F02060000000000019F03060000000000009F0702AB009F080200209F0902008C9F0D05D86004A8009F0E0500109800009F0F05D86804F8009F101307010103A02000010A010000000000CE0BCE899F1A0201569F1E0838333230314943439F21031826509F2608881E2E4151E527899F2701809F3303E0F8C89F34030203009F3501229F3602008E9F37042120A7189F4104000000015A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F00";
                 // str = "9F26088930C9018CAEBCD69F2701809F101307010103A02802010A0100000000007EF350299F370415B4E5829F360202179505000004E0009A031504169C01009F02060000000010005F2A02015682027C009F1A0201569F03060000000000009F330360D8C89F34030203009F3501229F1E0838333230314943438408A0000003330101019F090200209F410400000001";
-                 String str = "8A023030";//Currently the default value,
+                String str = "8A023030";//Currently the default value,
                 // should be assigned to the server to return data,
                 // the data format is TLV
                 pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
@@ -1922,7 +1922,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
-        call(TransExit,"http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
+        call(TransExit,"http://wmx-iso-app2.eba-rh2b4ban.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
 
     }
     private void call(String contenido,String url) {

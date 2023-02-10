@@ -31,6 +31,8 @@ public class WMX_llamada_dukpt {
                             data.getString("propina"),
                             data.getString("total"),
                             data.getString("msi"),
+                            data.getString("aid"),
+                            data.getString("arqc"),
                             data.getString("numref"));
                     this.transactions.add(_data);
                 }

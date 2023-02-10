@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,13 +37,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     Context mContext;
     private String  type_transaction;
     private int transaction_type;
-    private TextView ticket_tv_title, ticket_tv_tip_label,
-    ticket_tv_tip_value,
-            ticket_tv_subtotal_value,
-            ticket_tv_total_value,
-    ticket_tv_time_value,
-    ticket_tv_card_value,
-    ticket_tv_method_value;
+    String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total;
     private Ticket ticket;
 
 
@@ -89,14 +84,14 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
         Intent intent = getIntent();
 
-        String v_total = intent.getStringExtra("v_total");
-        String v_time = intent.getStringExtra("v_time");
-        String v_card = intent.getStringExtra("v_card");
-        String v_type_transaction = intent.getStringExtra("type_transaction");
-        String v_redtarjeta = intent.getStringExtra("v_redtarjeta");
-        String v_tipotarjeta = intent.getStringExtra("v_tipotarjeta");
-        String v_AID = intent.getStringExtra("v_AID");
-        String v_ARQC = intent.getStringExtra("v_ARQC");
+        v_total = intent.getStringExtra("v_total");
+        v_time = intent.getStringExtra("v_time");
+        v_card = intent.getStringExtra("v_card");
+        v_type_transaction = intent.getStringExtra("type_transaction");
+        v_redtarjeta = intent.getStringExtra("v_redtarjeta");
+        v_tipotarjeta = intent.getStringExtra("v_tipotarjeta");
+        v_AID = intent.getStringExtra("v_AID");
+        v_ARQC = intent.getStringExtra("v_ARQC");
 
         transaction_type = v_type_transaction.equals("msi") ? 0 : 1;
 
@@ -108,8 +103,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         txt_ARQC.setText(v_ARQC);
 
         if (type_transaction.equals("msi")){
-            String v_months = intent.getStringExtra("v_months");
-            String v_months_total = intent.getStringExtra("v_months_total");
+            v_months = intent.getStringExtra("v_months");
+            v_months_total = intent.getStringExtra("v_months_total");
 
             ticket_tv_title.setText("Resumen de pago a MSI");
             ticket_ll_subtotal.setVisibility(View.GONE);
@@ -118,8 +113,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             ticket_tv_tip_value.setText(v_months_total);
 
         }else if(type_transaction.equals("venta")){
-            String v_tip = intent.getStringExtra("v_tip");
-            String v_subtotal = intent.getStringExtra("v_subtotal");
+            v_tip = intent.getStringExtra("v_tip");
+            v_subtotal = intent.getStringExtra("v_subtotal");
 
             ticket_tv_tip_value.setText(v_tip);
             ticket_tv_subtotal_value.setText(v_subtotal);
@@ -144,14 +139,14 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
 
     private void onFinish() {
-        ticket.setData(ticket_tv_tip_label.getText().toString(),
-                ticket_tv_method_value.getText().toString(), ticket_tv_card_value.getText().toString(),
-                "VISA", ticket_tv_time_value.getText().toString(),
-                ticket_tv_total_value.getText().toString(),
-                ticket_tv_tip_value.getText().toString(),
-                ticket_tv_total_value.getText().toString(),
-                "C434",
-                "A0000000031010");
+        ticket.setData(v_type_transaction,
+                v_tipotarjeta, v_card,
+                v_redtarjeta, v_time,
+                v_subtotal,
+                v_tip,
+                v_total,
+                v_ARQC,
+                v_AID);
         ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
         new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("¿Imprimir copia del ticket al cliente?")
@@ -191,6 +186,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         modalEmail.setView(dialogContentView);
 
         AppCompatButton btn_modal_sendEmail = (AppCompatButton) dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+        EditText txt_email = dialogContentView.findViewById(R.id.editTextTextPersonName2);
 
         AlertDialog modalEmailCreate = modalEmail.create();
 
@@ -200,6 +196,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             @Override
             public void onClick(View view) {
 
+                onSendTicket(txt_email.getText().toString());
                 modalEmailCreate.dismiss();
 
                 showAlert("success", "¡Ticket enviado con éxito!");
@@ -207,4 +204,10 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             }
         });
     }
+
+
+    private void onSendTicket(String email) {
+        TRACE.d(email);
+    }
 }
+
