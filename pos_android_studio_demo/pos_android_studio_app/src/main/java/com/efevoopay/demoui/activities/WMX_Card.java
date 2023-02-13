@@ -167,8 +167,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
          pos.setDeviceAddress(blueTootchAddress);
          pos.openUart();**/
 
-        Handler handler = new Handler();
-        handler.postDelayed(() -> ChangeViewToTicket(), 2000);
+       /* Handler handler = new Handler();
+        handler.postDelayed(() -> ChangeViewToTicket(), 2000);*/
     }
 
     public String formatMoney(String amount){
@@ -1922,7 +1922,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
-        call(TransExit,"http://wmx-iso-app2.eba-rh2b4ban.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
+        call(TransExit,"http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
 
     }
     private void call(String contenido,String url) {

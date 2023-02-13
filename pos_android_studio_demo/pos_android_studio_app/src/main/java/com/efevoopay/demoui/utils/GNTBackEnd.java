@@ -17,9 +17,9 @@ public class GNTBackEnd {
         TransactionData tr = new TransactionData();
         CypherFunctions cy = new CypherFunctions();
         DUKPTData dukpt = new DUKPTData();
-        String tr_key = "C5BFFC5E6551D64F62E3D80F6A3126F8";
-        String tr_ksn = "00000111855052200001";
-        String tr_tk = "FE2B1B3A367E54A7E21E6E24E13E3849";
+        String tr_key = "2DD9234FD73A2039FDC038A50C47DA20";
+        String tr_ksn = "00000131955892800001";
+        String tr_tk = "9E98CEDDCF9AB3BA1115F7290186E7D3";
         String track2 = _track2.toUpperCase(Locale.ROOT);
         TRACE.d(TRACE.NEW_LINE + "track2" + TRACE.NEW_LINE + track2+TRACE.NEW_LINE);
         Integer tr_counter = _counter;
@@ -42,7 +42,7 @@ public class GNTBackEnd {
         }
         return  dukpt;
     }
-    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,Integer _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11){
+    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,Integer _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11, String _AID,String _ARQC){
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("deviceid",_deviceid);
@@ -72,6 +72,8 @@ public class GNTBackEnd {
             jsonBody.put("msi", _msi);
             jsonBody.put("time_txn", _time_txn);
             jsonBody.put("p11", _p11);
+            jsonBody.put("aid", _AID);
+            jsonBody.put("arqc", _ARQC);
             jsonBody.getString("redtarj").toString();
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
