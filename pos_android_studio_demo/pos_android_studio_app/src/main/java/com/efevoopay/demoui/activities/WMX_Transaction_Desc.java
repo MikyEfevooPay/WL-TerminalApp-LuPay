@@ -118,6 +118,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         propina=intent.getStringExtra("propina");
         total=intent.getStringExtra("total");
         msi=intent.getStringExtra("msi");
+        aid=intent.getStringExtra("aid");
+        arqc=intent.getStringExtra("arqc");
 
         approve = intent.getStringExtra("approve");
         ksn_posId=intent.getStringExtra("ksn_posId");
@@ -180,7 +182,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             card_provider = "VISA";
             tp_iv_process.setImageResource(R.drawable.visa);
         }
-
+        tp_tv_AID.setText(aid);
+        tp_tv_ARQC.setText(arqc);
         tp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         tp_tv_auth.setText(auth);
         tp_tv_AID.setText(aid);
