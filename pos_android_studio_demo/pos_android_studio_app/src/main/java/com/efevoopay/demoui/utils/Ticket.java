@@ -15,6 +15,7 @@ import java.util.Locale;
 
 public class Ticket {
     private String trans_type, approve, card, card_type, date_time, amount, tip, total, ARQC, AID;
+    private final String SEPARATOR = "__________________________________";
     private android.content.Context ctx;
 
     public Ticket(android.content.Context ctx) {
@@ -36,81 +37,113 @@ public class Ticket {
         this.AID = AID;
     }
 
+    public String ticketLayout(int transaction_type, int section) {
+        StringBuilder ticket = new StringBuilder();
+
+        switch(section) {
+            case 1:
+                ticket.append(trans_type.toUpperCase(Locale.ROOT));
+                ticket.append("\n");
+                ticket.append(approve);
+                ticket.append("\n\n");
+                ticket.append("operadora bp sa de cv".toUpperCase(Locale.ROOT));
+                ticket.append("\n");
+                ticket.append("GOMEZ MORIN");
+                ticket.append("\n");
+                ticket.append("SAN PEDRO GARZA GARCIA,");
+                ticket.append("\n");
+                ticket.append("NUEVO LEON ");
+                ticket.append("\n");
+                ticket.append("TERMINAL");
+                ticket.append("\n");
+                ticket.append(WMX_Menu.ksn.posId);
+                break;
+            case 2:
+                ticket.append("********"+card);
+                break;
+            case 3:
+                ticket.append(card_type);
+                ticket.append("\n");
+                ticket.append(date_time);
+                break;
+            case 4:
+                if(transaction_type == 1) {
+                    ticket.append("Monto :                   "+amount);
+                    ticket.append("\n");
+                    ticket.append("Propina :                    "+tip);
+                    ticket.append("\n");
+                    ticket.append("Total :                      "+total);
+                } else {
+                    ticket.append("Total :                      "+total);
+                    ticket.append("\n");
+                    ticket.append(tip+"                    "+amount);
+                }
+                break;
+            case 5:
+                ticket.append("\n");
+                ticket.append("ARQC :                   ************"+ARQC);
+                ticket.append("\n");
+                ticket.append("AID :                   "+AID);
+                ticket.append("\n");
+                break;
+            case 6:
+                ticket.append("Por este pagare me obligo");
+                ticket.append("\n");
+                ticket.append("incondicionalmente a pagar a la orden del");
+                ticket.append("\n");
+                ticket.append("banco acreditante el importe de este");
+                ticket.append("\n");
+                ticket.append("título. Este pagare procede del contrato");
+                ticket.append("\n");
+                ticket.append("de apertura de crédito que el banco");
+                ticket.append("\n");
+                ticket.append("acreditante y el tarjetahabiente tienen celebrado.");
+                break;
+        }
+
+        return ticket.toString();
+    }
+
 
     private void ticket(ActionPrinter printer, int transaction_type) throws RemoteException {
-        StringBuilder section_1 = new StringBuilder();
-        StringBuilder section_2 = new StringBuilder();
-        StringBuilder section_3 = new StringBuilder();
-        StringBuilder section_4 = new StringBuilder();
-        StringBuilder section_5 = new StringBuilder();
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 22);
-        section_1.append(trans_type.toUpperCase(Locale.ROOT));
-        section_1.append("\n");
-        section_1.append(approve);
-        section_1.append("\n\n");
-        section_1.append("operadora bp sa de cv".toUpperCase(Locale.ROOT));
-        section_1.append("\n");
-        section_1.append("GOMEZ MORIN");
-        section_1.append("\n");
-        section_1.append("SAN PEDRO GARZA GARCIA,");
-        section_1.append("\n");
-        section_1.append("NUEVO LEON ");
-        section_1.append("\n");
-        section_1.append("TERMINAL");
-        section_1.append("\n");
-        section_1.append(WMX_Menu.ksn.posId);
-        printer.addText(section_1.toString());
+        printer.addText(ticketLayout(transaction_type, 1));
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText("__________________________________");
-        printer.addText("********"+card);
+        printer.addText(SEPARATOR);
+        printer.addText(ticketLayout(transaction_type, 2));
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        section_2.append(card_type);
-        section_2.append("\n");
-        section_2.append(date_time);
-        printer.addText(section_2.toString());
+        printer.addText(ticketLayout(transaction_type, 3));
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText("__________________________________");
+        printer.addText(SEPARATOR);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
         printer.addText("");
-        if(transaction_type == 1) {
-            section_3.append("Monto :                   "+amount);
-            section_3.append("\n");
-            section_3.append("Propina :                    "+tip);
-            section_3.append("\n");
-            section_3.append("Total :                      "+total);
-        } else {
-            section_3.append("Total :                      "+total);
-            section_3.append("\n");
-            section_3.append(tip+"                    "+amount);
-        }
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText(section_3.toString());
-        printer.addText("__________________________________");
+        printer.addText(ticketLayout(transaction_type, 4));
+        printer.addText(SEPARATOR);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
         printer.addText("");
-        section_4.append("\n");
-        section_4.append("ARQC :                   ************"+ARQC);
-        section_4.append("\n");
-        section_4.append("AID :                   "+AID);
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 18);
-        printer.addText(section_4.toString());
+        printer.addText(ticketLayout(transaction_type, 5));
         printer.addText("");
         printer.addText("");
-        section_5.append("Por este pagare me obligo");
-        section_5.append("\n");
-        section_5.append("incondicionalmente a pagar a la orden del");
-        section_5.append("\n");
-        section_5.append("banco acreditante el importe de este");
-        section_5.append("\n");
-        section_5.append("título. Este pagare procede del contrato");
-        section_5.append("\n");
-        section_5.append("de apertura de crédito que el banco");
-        section_5.append("\n");
-        section_5.append("acreditante y el tarjetahabiente tienen celebrado.");
-
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 16);
-        printer.addText(section_5.toString());
+        printer.addText(ticketLayout(transaction_type, 6));
         printer.addText("");
+    }
+
+    public String getTicketString(int transaction_type) {
+        StringBuilder ticket = new StringBuilder();
+        ticket.append(ticketLayout(transaction_type, 1));
+        ticket.append(SEPARATOR);
+        ticket.append(ticketLayout(transaction_type, 2));
+        ticket.append(ticketLayout(transaction_type, 3));
+        ticket.append(SEPARATOR);
+        ticket.append(ticketLayout(transaction_type, 4));
+        ticket.append(SEPARATOR);
+        ticket.append(ticketLayout(transaction_type, 5));
+        ticket.append(ticketLayout(transaction_type, 6));
+
+        return ticket.toString();
     }
 
     public void GenerateTicket(PRINT_TYPE type, int transaction_type) {

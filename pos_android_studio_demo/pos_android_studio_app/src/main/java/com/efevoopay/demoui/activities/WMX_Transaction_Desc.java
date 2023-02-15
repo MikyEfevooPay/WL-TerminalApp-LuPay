@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
@@ -16,6 +17,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -77,6 +79,19 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         return R.layout.wmx_transaction_prev;
     }
 
+    private void onFinish() {
+        new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
+                .setTitle("Impresion de Ticket")
+                .setIcon(R.drawable.printer)
+                .setPositiveButton("Comercio",(dialog, lis) -> {
+                    ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
+                })
+                .setNeutralButton("Cliente",(dialog, lis) -> {
+                    ticket.GenerateTicket(PRINT_TYPE.CLIENT, transaction_type);
+                })
+                .show();
+    }
+
     @Override
     public void onClick(View view) {
         ticket.setData(tp_tv_trans_type.getText().toString(),
@@ -88,20 +103,43 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                 tp_tv_ARQC.getText().toString(),
                 tp_tv_AID.getText().toString()
         );
-        switch(view.getId()) {
-            case R.id.btn_print:
-                new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
-                        .setTitle("Impresion de Ticket")
-                        .setIcon(R.drawable.printer)
-                        .setPositiveButton("Comercio",(dialog, lis) -> {
-                            ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
-                        })
-                        .setNeutralButton("Cliente",(dialog, lis) -> {
-                            ticket.GenerateTicket(PRINT_TYPE.CLIENT, transaction_type);
-                        })
-                        .show();
+        switch (view.getId()) {
+            case R.id.btn_ticket_final:
+                onFinish();
                 break;
+
+            case R.id.ll_btn_open_modal_email:
+                TRACE.d("click email button");
+                openModalSendEmail();
+                break;
+            default:
+
         }
+    }
+
+    private void openModalSendEmail(){
+        LayoutInflater inflater=getLayoutInflater();
+        View dialogContentView =inflater.inflate(R.layout.wmx_modal_email_input, null);
+
+        MaterialAlertDialogBuilder modalEmail = new MaterialAlertDialogBuilder(mContext, R.style.ThemeOverlay_App_MaterialAlertDialog);
+        modalEmail.setView(dialogContentView);
+
+        AppCompatButton btn_modal_sendEmail = (AppCompatButton) dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+
+        AlertDialog modalEmailCreate = modalEmail.create();
+
+        modalEmailCreate.show();
+
+        btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                modalEmailCreate.dismiss();
+
+                showAlert("success", "¡Ticket enviado con éxito!");
+                startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        });
     }
 
 
