@@ -21,6 +21,16 @@ import android.widget.TextView;
 import com.action.printerservice.ActionPrinter;
 import com.action.printerservice.IPrinterCallback;
 import com.action.printerservice.PrintStyle;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.TRACE;
@@ -28,6 +38,11 @@ import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
@@ -139,14 +154,6 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
 
     private void onFinish() {
-        ticket.setData(v_type_transaction,
-                v_tipotarjeta, v_card,
-                v_redtarjeta, v_time,
-                v_subtotal,
-                v_tip,
-                v_total,
-                v_ARQC,
-                v_AID);
         ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
         new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("¿Imprimir copia del ticket al cliente?")
@@ -163,6 +170,14 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
     @Override
     public void onClick(View view) {
+        ticket.setData(v_type_transaction,
+                v_tipotarjeta, v_card,
+                v_redtarjeta, v_time,
+                v_subtotal,
+                v_tip,
+                v_total,
+                v_ARQC,
+                v_AID);
 
         switch (view.getId()){
             case R.id.btn_ticket_final:
@@ -185,7 +200,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         MaterialAlertDialogBuilder modalEmail = new MaterialAlertDialogBuilder(mContext, R.style.ThemeOverlay_App_MaterialAlertDialog);
         modalEmail.setView(dialogContentView);
 
-        AppCompatButton btn_modal_sendEmail = (AppCompatButton) dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+        AppCompatButton btn_modal_sendEmail = dialogContentView.findViewById(R.id.btn_modal_sendEmail);
         EditText txt_email = dialogContentView.findViewById(R.id.editTextTextPersonName2);
 
         AlertDialog modalEmailCreate = modalEmail.create();
@@ -196,18 +211,85 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             @Override
             public void onClick(View view) {
 
-                onSendTicket(txt_email.getText().toString());
-                modalEmailCreate.dismiss();
+                try {
+                    setCorreo(txt_email.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    modalEmailCreate.dismiss();
+                }
 
-                showAlert("success", "¡Ticket enviado con éxito!");
                 startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
     }
 
 
-    private void onSendTicket(String email) {
-        TRACE.d(email);
+    private void setCorreo(String _correo)throws IOException {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = "https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/correo";
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("correo", _correo);
+            jsonBody.put("body", ticket.getTicketString(1));
+            final String requestBody = jsonBody.toString();
+            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    showAlert("success", "¡Ticket enviado con éxito!");
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+                    showAlert("ERROR",  error.toString());
+                    //startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                }
+            }) {
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
+                    if (response != null) {
+                        responseString = String.valueOf(parsed);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+
+            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+
+        }
+
+
     }
+
 }
 

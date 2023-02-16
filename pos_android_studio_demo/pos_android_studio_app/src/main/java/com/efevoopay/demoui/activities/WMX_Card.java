@@ -167,8 +167,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
          pos.setDeviceAddress(blueTootchAddress);
          pos.openUart();**/
 
-        Handler handler = new Handler();
-        handler.postDelayed(() -> ChangeViewToTicket(), 2000);
+       /* Handler handler = new Handler();
+        handler.postDelayed(() -> ChangeViewToTicket(), 2000);*/
     }
 
     public String formatMoney(String amount){
@@ -1928,11 +1928,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private void call(String contenido,String url) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            //String URL = "http://wmx-iso-apps1.eba-iai89mzk.us-west-2.elasticbeanstalk.com/matriz/certificacion/transaccion";
-            //           JSONObject jsonBody = new JSONObject();
-//            jsonBody.put("Method", FinalTradeType);
-//            jsonBody.put("Response", content);
-//            jsonBody.put("Amount", Amount);
             final String requestBody = contenido;
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {

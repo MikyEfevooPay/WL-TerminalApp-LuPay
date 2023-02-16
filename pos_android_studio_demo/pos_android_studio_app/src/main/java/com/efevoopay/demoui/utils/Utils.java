@@ -115,6 +115,10 @@ public class Utils {
 		
 		return 0;
 	}
+
+	public static <T> T isNull(T value, T replace) {
+		return value != null ? value : replace;
+	}
 	
 	/*
 	 * v must be great than 0

@@ -20,11 +20,22 @@ import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.action.printerservice.IPrinterCallback;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.dspread.xpos.r;
 import com.dspread.helper.printer.PrinterClass;
 import com.action.printerservice.ActionPrinter;
@@ -39,7 +50,11 @@ import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.Contract;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 
@@ -128,18 +143,91 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
 
         AlertDialog modalEmailCreate = modalEmail.create();
 
+        EditText txtcorreo = (EditText) dialogContentView.findViewById(R.id.editTextTextPersonName2);
+
         modalEmailCreate.show();
 
         btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    setCorreo(txtcorreo.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    modalEmailCreate.dismiss();
+                }
 
-                modalEmailCreate.dismiss();
-
-                showAlert("success", "¡Ticket enviado con éxito!");
                 startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
+    }
+
+
+    private void setCorreo(String _correo)throws IOException {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = "https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/correo";
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("correo", _correo);
+            jsonBody.put("body", ticket.getTicketString(1));
+            final String requestBody = jsonBody.toString();
+            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    showAlert("success", "¡Ticket enviado con éxito!");
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+                    showAlert("ERROR",  error.toString());
+                    //startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                }
+            }) {
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
+                    if (response != null) {
+                        responseString = String.valueOf(parsed);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+
+            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+
+        }
+
+
     }
 
 

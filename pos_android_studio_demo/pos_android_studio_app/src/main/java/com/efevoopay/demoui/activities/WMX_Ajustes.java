@@ -150,7 +150,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private void call() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/admin/tpv/initllave";
+            String URL = "https://efevoopayloadbalancer-ecommerce.com/admin/tpv/initllave";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
             jsonBody.put("device_tk", _tk);

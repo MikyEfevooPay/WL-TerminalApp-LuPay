@@ -11,6 +11,7 @@ import com.action.printerservice.IPrinterCallback;
 import com.action.printerservice.PrintStyle;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.activities.WMX_Menu;
+
 import java.util.Locale;
 
 public class Ticket {
@@ -145,6 +146,7 @@ public class Ticket {
 
         return ticket.toString();
     }
+
 
     public void GenerateTicket(PRINT_TYPE type, int transaction_type) {
         ActionPrinter printer = ActionPrinter.getInstance(ctx);
