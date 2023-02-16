@@ -12,19 +12,37 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.action.printerservice.ActionPrinter;
 import com.action.printerservice.IPrinterCallback;
 import com.action.printerservice.PrintStyle;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.util.Locale;
 
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
@@ -33,7 +51,16 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private LinearLayout ll_btn_open_modal_email;
     Context mContext;
     private String  type_transaction;
-
+    TextView ticket_tv_title = findViewById(R.id.ticket_tv_title),
+            ticket_tv_tip_label = findViewById(R.id.ticket_tv_tip_label),
+            ticket_tv_tip_value = findViewById(R.id.ticket_tv_tip_value),
+            ticket_tv_subtotal_value = findViewById(R.id.ticket_tv_subtotal_value),
+            ticket_tv_total_value = findViewById(R.id.ticket_tv_total_value),
+            ticket_tv_time_value = findViewById(R.id.ticket_tv_time_value),
+            ticket_tv_card_value = findViewById(R.id.ticket_tv_card_value),
+            ticket_tv_method_value = findViewById(R.id.ticket_tv_method_value),
+            txt_AID = findViewById(R.id.txt_AID),
+            txt_ARQC = findViewById(R.id.txt_ARQC);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +87,6 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     }
 
     private void initInfo(){
-
-        TextView ticket_tv_title = findViewById(R.id.ticket_tv_title),
-                ticket_tv_tip_label = findViewById(R.id.ticket_tv_tip_label),
-                ticket_tv_tip_value = findViewById(R.id.ticket_tv_tip_value),
-                ticket_tv_subtotal_value = findViewById(R.id.ticket_tv_subtotal_value),
-                ticket_tv_total_value = findViewById(R.id.ticket_tv_total_value),
-                ticket_tv_time_value = findViewById(R.id.ticket_tv_time_value),
-                ticket_tv_card_value = findViewById(R.id.ticket_tv_card_value),
-                ticket_tv_method_value = findViewById(R.id.ticket_tv_method_value),
-                txt_AID = findViewById(R.id.txt_AID),
-                txt_ARQC = findViewById(R.id.txt_ARQC);
 
         LinearLayout ticket_ll_subtotal = findViewById(R.id.ticket_ll_subtotal);
 
@@ -273,6 +289,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         modalEmail.setView(dialogContentView);
 
         AppCompatButton btn_modal_sendEmail = (AppCompatButton) dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+        EditText txtcorreo = (EditText) dialogContentView.findViewById(R.id.editTextTextPersonName2);
 
         AlertDialog modalEmailCreate = modalEmail.create();
 
@@ -283,10 +300,79 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             public void onClick(View view) {
 
                 modalEmailCreate.dismiss();
-
-                showAlert("success", "¡Ticket enviado con éxito!");
+                try {
+                    setCorreo(txtcorreo.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //showAlert("success", "¡Ticket enviado con éxito!");
                 startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
+    }
+    private void setCorreo(String _correo)throws IOException {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/correo";
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("correo", _correo);
+            jsonBody.put("body", "TICKET DE COMPRA TARJETA"+ticket_tv_card_value.getText().toString());
+            final String requestBody = jsonBody.toString();
+            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    showAlert("success", "¡Ticket enviado con éxito!");
+                    //TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    WMX_final_ticket_transaction.super.showAlert("ERROR",  error.toString());
+                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+                    //startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                }
+            }) {
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
+                    if (response != null) {
+                        responseString = String.valueOf(parsed);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+
+            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+
+        }
+
+
     }
 }

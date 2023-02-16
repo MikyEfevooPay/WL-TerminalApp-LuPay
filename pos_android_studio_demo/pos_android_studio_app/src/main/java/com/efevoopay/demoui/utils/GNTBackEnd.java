@@ -17,9 +17,13 @@ public class GNTBackEnd {
         TransactionData tr = new TransactionData();
         CypherFunctions cy = new CypherFunctions();
         DUKPTData dukpt = new DUKPTData();
-        String tr_key = "C5BFFC5E6551D64F62E3D80F6A3126F8";
+        /*String tr_key = "C5BFFC5E6551D64F62E3D80F6A3126F8";
         String tr_ksn = "00000111855052200001";
-        String tr_tk = "FE2B1B3A367E54A7E21E6E24E13E3849";
+        String tr_tk = "FE2B1B3A367E54A7E21E6E24E13E3849";*/
+        String tr_ksn = "00000141549406200001";
+        String tr_key = "F0EA461D2876C8476F8A9AC245ED6FDE";
+        String tr_tk = "3CE9F2A75EF203993CCFA854A508F590";
+
         String track2 = _track2.toUpperCase(Locale.ROOT);
         TRACE.d(TRACE.NEW_LINE + "track2" + TRACE.NEW_LINE + track2+TRACE.NEW_LINE);
         Integer tr_counter = _counter;
@@ -42,7 +46,7 @@ public class GNTBackEnd {
         }
         return  dukpt;
     }
-    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,Integer _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC){
+    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC){
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("deviceid",_deviceid);
@@ -50,7 +54,7 @@ public class GNTBackEnd {
             jsonBody.put("tipo",tipo(_type_trans));
             jsonBody.put("track2", _Track2);
             jsonBody.put("crc32", _crc32);
-            jsonBody.put("count", "0000001");
+            jsonBody.put("count", _Counter);
             jsonBody.put("ksn", _ksn);
             jsonBody.put("tamtrack2", "37");
             jsonBody.put("pinPan", _pinpan);

@@ -123,6 +123,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String _redtar="";
     private String _AID="N/A";
     private String _ARQC="N/A";
+    private String _9F41="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -408,13 +409,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             /*AQUI DEBE IR LO DE PROSA, TE LO TENGO QUE DEVOLVER*/
             String groupId = "00";
             String trackKsn = "00000081958255400001";
-            String trackipek = "10830111867971FC5EADB46E085C3043";
+            String trackipek = "C5BFFC5E6551D64F62E3D80F6A3126F8";
             String trackipekKCV = "B34512";
             String pinKsn = "00000081958255400001";
-            String pinipek = "10830111867971FC5EADB46E085C3043";
+            String pinipek = "C5BFFC5E6551D64F62E3D80F6A3126F8";
             String pinipekKCV = "B34512";
             String emvKsn = "00000081958255400001";
-            String emvIPEK = "10830111867971FC5EADB46E085C3043";
+            String emvIPEK = "C5BFFC5E6551D64F62E3D80F6A3126F8";
             String emipekKCV = "B34512";
 //            pos.updateIPEKByTransportKey(groupId, trackKsn, trackipek, trackipekKCV, emvKsn, emvIPEK, emipekKCV,
 //                    pinKsn, pinipek, pinipekKCV);
@@ -681,7 +682,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String terminalTime = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
                 //TRACE.d("onRequestTime: "+terminalTime);
                 maskedPAN=_track2MN.substring(0,8)+"XXXX"+_track2MN.substring(12,16);
-                ValidacionRequest(_track2MN.substring(0,8),"MCR","90","",maskedPAN,_track2MN,Integer.parseInt(pinKsn.substring(14,20), 16),terminalTime);
+                Integer _9f=Integer.parseInt(pinKsn.substring(14,20),16);
+                ValidacionRequest(_track2MN.substring(0,8),"MCR","90","",maskedPAN,_track2MN,_9f.toString() ,terminalTime);
                 //call(content);
                 //Status_lector.setText(content);
 //                autoDoTrade(0);
@@ -707,6 +709,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
                 _AID=TLVParser.searchTLV(NFCparse, "4F").value.toUpperCase(Locale.ROOT);
                 _ARQC=TLVParser.searchTLV(NFCparse, "9F26").value.toUpperCase(Locale.ROOT);
+                //_9F41=TLVParser.searchTLV(NFCparse, "9F41").value.toUpperCase(Locale.ROOT);
 
                 content = getString(R.string.tap_card);
                 String formatID = decodeData.get("formatID");
@@ -806,9 +809,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     content += "pinRandomNumber:" + " " + pinRandomNumber
                             + "\n";
                 }
-
+                Integer _9f=Integer.parseInt(onLineksn.substring(14,20),16);
                 maskedPAN=_track2.substring(0,8)+"XXXX"+_track2.substring(12,16);
-                ValidacionDatos(maskedPAN.substring(0,8),"NFC",_entrymode,tlvNFC,maskedPAN,_track2+"FFFFFFFFFF",Integer.parseInt(pinKsn.substring(14,20), 16),_tag50,_tag9F12,_tag9F21);
+                ValidacionDatos(maskedPAN.substring(0,8),"NFC",_entrymode,tlvNFC,maskedPAN,_track2+"FFFFFFFFFF",_9f.toString(),_tag50,_tag9F12,_tag9F21);
 
                 //TRACE.d(TRACE.NEW_LINE + "content in NNFC request(?)" +content);
                 //call(content);
@@ -891,6 +894,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
             _AID=TLVParser.searchTLV(ICCparse, "4F").value.toUpperCase(Locale.ROOT);
             _ARQC=TLVParser.searchTLV(ICCparse, "9F26").value.toUpperCase(Locale.ROOT);
+            _9F41=onLineksn;
+            //_9F41=TLVParser.searchTLV(ICCparse, "9F41").value.toUpperCase(Locale.ROOT);
 
             //pos.getIccCardNo(getTime());
 
@@ -989,9 +994,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 ICCTag=pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"9F21");
                 String _tag9F21=ICCTag.get("tlv").toString();
 
+                TRACE.d("_9f: " + _9F41);
                 String pan=_pinpan.substring(4,12)+"XXXX"+_pinpan.substring(16,_pinpan.length());
 
-                ValidacionDatos(_pinpan.substring(4,12),"ICC",_entrymode.substring(6,_entrymode.length()),emvicc,pan,_track2.substring(4,_track2.length())+"FFFFFFFFFF",Integer.parseInt(_counter.substring(6,_counter.length()), 16),_tag50,_tag9F12,_tag9F21.substring(6,_tag9F21.length()));
+                Integer F41=Integer.parseInt(_9F41.substring(14,20),16);
+                //Integer F41=Integer.parseInt(_9F41);
+
+                ValidacionDatos(_pinpan.substring(4,12),"ICC",_entrymode.substring(6,_entrymode.length()),emvicc,pan,_track2.substring(4,_track2.length())+"FFFFFFFFFF",F41.toString(),_tag50,_tag9F12,_tag9F21.substring(6,_tag9F21.length()));
 
                 //pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_D30.xml",WMX_Card.this)));
 
@@ -1878,7 +1887,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
     }
-    private void ValidacionDatos(String _bin,String entrada,String entrymode,String emv,String pan,String track2,Integer counter,String tag50,String tag9f12,String tag9F21){
+    private void ValidacionDatos(String _bin,String entrada,String entrymode,String emv,String pan,String track2,String counter,String tag50,String tag9f12,String tag9F21){
         String _redtarj,_tiptarj;
         _tiptarj=gntBackEnd.tagtipotarjeta(gntBackEnd.hexToString(tag50),gntBackEnd.hexToString(tag9f12));
         _redtarj=gntBackEnd.tagredtarjeta(gntBackEnd.hexToString(tag50),gntBackEnd.hexToString(tag9f12));
@@ -1891,7 +1900,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         }
     }
-    private void ValidacionRequest(String _bin,String entrada,String entrymode,String emv,String pan,String track2,Integer counter,String time_txn){
+    private void ValidacionRequest(String _bin,String entrada,String entrymode,String emv,String pan,String track2,String counter,String time_txn){
         requestQueue =Volley.newRequestQueue(this);
         String UrlBin="https://lookup.binlist.net/"+_bin;
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,UrlBin,null,
@@ -1916,13 +1925,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         requestQueue=Volley.newRequestQueue(mContext);
         requestQueue.add(request);
     }
-    public void procesofinal(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,Integer counter,String time_txn){
-        _encryptblumon=gntBackEnd.EncryptBlumon(track2,counter);
-        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),_encryptblumon.getCounter(),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC);
+    public void procesofinal(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,String counter,String time_txn){
+        _encryptblumon=gntBackEnd.EncryptBlumon(track2,Integer.parseInt(counter));
+        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),String.valueOf(_encryptblumon.getCounter()),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC);
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
-        call(TransExit,"http://wmx-iso-app2.eba-rh2b4ban.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
+        //call(TransExit,"http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
 
     }
     private void call(String contenido,String url) {
