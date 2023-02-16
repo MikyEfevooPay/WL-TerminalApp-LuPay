@@ -42,7 +42,7 @@ public class GNTBackEnd {
         }
         return  dukpt;
     }
-    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,Integer _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC){
+    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC){
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("deviceid",_deviceid);
@@ -50,7 +50,7 @@ public class GNTBackEnd {
             jsonBody.put("tipo",tipo(_type_trans));
             jsonBody.put("track2", _Track2);
             jsonBody.put("crc32", _crc32);
-            jsonBody.put("count", "0000001");
+            jsonBody.put("count", _Counter);
             jsonBody.put("ksn", _ksn);
             jsonBody.put("tamtrack2", "37");
             jsonBody.put("pinPan", _pinpan);

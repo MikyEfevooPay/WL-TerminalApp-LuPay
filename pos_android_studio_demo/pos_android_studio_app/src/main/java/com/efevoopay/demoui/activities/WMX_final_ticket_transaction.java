@@ -12,6 +12,7 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
 import android.widget.EditText;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.util.Locale;
 
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
@@ -51,10 +53,16 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private LinearLayout ll_btn_open_modal_email;
     Context mContext;
     private String  type_transaction;
-    private int transaction_type;
-    String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total;
-    private Ticket ticket;
-
+    TextView ticket_tv_title = findViewById(R.id.ticket_tv_title),
+            ticket_tv_tip_label = findViewById(R.id.ticket_tv_tip_label),
+            ticket_tv_tip_value = findViewById(R.id.ticket_tv_tip_value),
+            ticket_tv_subtotal_value = findViewById(R.id.ticket_tv_subtotal_value),
+            ticket_tv_total_value = findViewById(R.id.ticket_tv_total_value),
+            ticket_tv_time_value = findViewById(R.id.ticket_tv_time_value),
+            ticket_tv_card_value = findViewById(R.id.ticket_tv_card_value),
+            ticket_tv_method_value = findViewById(R.id.ticket_tv_method_value),
+            txt_AID = findViewById(R.id.txt_AID),
+            txt_ARQC = findViewById(R.id.txt_ARQC);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +91,6 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     }
 
     private void initInfo(){
-
-        TextView ticket_tv_title = findViewById(R.id.ticket_tv_title),
-                ticket_tv_tip_label = findViewById(R.id.ticket_tv_tip_label),
-                ticket_tv_tip_value = findViewById(R.id.ticket_tv_tip_value),
-                ticket_tv_subtotal_value = findViewById(R.id.ticket_tv_subtotal_value),
-                ticket_tv_total_value = findViewById(R.id.ticket_tv_total_value),
-                ticket_tv_time_value = findViewById(R.id.ticket_tv_time_value),
-                ticket_tv_card_value = findViewById(R.id.ticket_tv_card_value),
-                ticket_tv_method_value = findViewById(R.id.ticket_tv_method_value),
-                txt_AID = findViewById(R.id.txt_AID),
-                txt_ARQC = findViewById(R.id.txt_ARQC);
 
         LinearLayout ticket_ll_subtotal = findViewById(R.id.ticket_ll_subtotal);
 
@@ -291,5 +288,48 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
     }
 
+}
+
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
+                    if (response != null) {
+                        responseString = String.valueOf(parsed);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+
+            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+
+        }
+
+
+    }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3de4cf45075aee3aa725bd1e0eba87b722ec5a2e
 }
 
