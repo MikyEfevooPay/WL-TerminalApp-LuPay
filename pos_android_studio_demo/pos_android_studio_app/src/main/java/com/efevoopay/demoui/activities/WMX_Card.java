@@ -682,7 +682,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String terminalTime = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
                 //TRACE.d("onRequestTime: "+terminalTime);
                 maskedPAN=_track2MN.substring(0,8)+"XXXX"+_track2MN.substring(12,16);
-                Integer _9f=Integer.parseInt(pinKsn.substring(14,20),16);
+                Integer _9f=Integer.parseInt(pinKsn.substring(15,20),16);
                 ValidacionRequest(_track2MN.substring(0,8),"MCR","90","",maskedPAN,_track2MN,_9f.toString() ,terminalTime);
                 //call(content);
                 //Status_lector.setText(content);
@@ -1931,7 +1931,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
-        //call(TransExit,"http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
+        call(TransExit,"https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/iso/gral");
 
     }
     private void call(String contenido,String url) {

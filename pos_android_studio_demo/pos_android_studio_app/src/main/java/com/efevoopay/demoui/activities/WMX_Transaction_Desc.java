@@ -109,17 +109,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        ticket.setData(tp_tv_trans_type.getText().toString(),
-                tp_tv_approve.getText().toString(), tp_tv_card.getText().toString(),
-                card_provider, tp_tv_date_time.getText().toString(),
-                tp_tv_amount.getText().toString(),
-                tp_tv_tip.getText().toString(),
-                tp_tv_total.getText().toString(),
-                tp_tv_ARQC.getText().toString(),
-                tp_tv_AID.getText().toString()
-        );
         switch (view.getId()) {
-            case R.id.btn_ticket_final:
+            case R.id.btn_print:
                 onFinish();
                 break;
 
@@ -319,5 +310,15 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_card.setText("**** "+card);
         tp_tv_date_time.setText(date+" "+time);
         tp_tv_approve.setText(approve);
+
+        ticket.setData(tp_tv_trans_type.getText().toString(),
+                tp_tv_approve.getText().toString(), tp_tv_card.getText().toString(),
+                card_provider, tp_tv_date_time.getText().toString(),
+                tp_tv_amount.getText().toString(),
+                tp_tv_tip.getText().toString(),
+                tp_tv_total.getText().toString(),
+                tp_tv_ARQC.getText().toString(),
+                tp_tv_AID.getText().toString()
+        );
     }
 }

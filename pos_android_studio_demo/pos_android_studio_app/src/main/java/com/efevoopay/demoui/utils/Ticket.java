@@ -60,12 +60,14 @@ public class Ticket {
                 ticket.append(WMX_Menu.ksn.posId);
                 break;
             case 2:
+                ticket.append("\n");
                 ticket.append("********"+card);
                 break;
             case 3:
                 ticket.append(card_type);
                 ticket.append("\n");
                 ticket.append(date_time);
+                ticket.append("\n");
                 break;
             case 4:
                 if(transaction_type == 1) {
@@ -82,10 +84,10 @@ public class Ticket {
                 break;
             case 5:
                 ticket.append("\n");
-                ticket.append("ARQC :                   ************"+ARQC);
+                ticket.append("ARQC :             "+ARQC);
                 ticket.append("\n");
-                ticket.append("AID :                   "+AID);
-                ticket.append("\n");
+                ticket.append("AID :              "+AID);
+                ticket.append("\n\n");
                 break;
             case 6:
                 ticket.append("Por este pagare me obligo");
@@ -109,12 +111,14 @@ public class Ticket {
     private void ticket(ActionPrinter printer, int transaction_type) throws RemoteException {
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 22);
         printer.addText(ticketLayout(transaction_type, 1));
+        printer.addText("");
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
         printer.addText(SEPARATOR);
         printer.addText(ticketLayout(transaction_type, 2));
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
         printer.addText(ticketLayout(transaction_type, 3));
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
+        printer.addText("");
         printer.addText(SEPARATOR);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
         printer.addText("");
@@ -125,7 +129,6 @@ public class Ticket {
         printer.addText("");
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 18);
         printer.addText(ticketLayout(transaction_type, 5));
-        printer.addText("");
         printer.addText("");
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 16);
         printer.addText(ticketLayout(transaction_type, 6));
