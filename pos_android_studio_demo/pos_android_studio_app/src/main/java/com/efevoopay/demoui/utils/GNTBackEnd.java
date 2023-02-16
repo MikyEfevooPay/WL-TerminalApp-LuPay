@@ -17,9 +17,9 @@ public class GNTBackEnd {
         TransactionData tr = new TransactionData();
         CypherFunctions cy = new CypherFunctions();
         DUKPTData dukpt = new DUKPTData();
-        String tr_key = "2DD9234FD73A2039FDC038A50C47DA20";
-        String tr_ksn = "00000131955892800001";
-        String tr_tk = "9E98CEDDCF9AB3BA1115F7290186E7D3";
+        String tr_key = "F0EA461D2876C8476F8A9AC245ED6FDE";
+        String tr_ksn = "00000141549406200001";
+        String tr_tk = "3CE9F2A75EF203993CCFA854A508F590";
         String track2 = _track2.toUpperCase(Locale.ROOT);
         TRACE.d(TRACE.NEW_LINE + "track2" + TRACE.NEW_LINE + track2+TRACE.NEW_LINE);
         Integer tr_counter = _counter;

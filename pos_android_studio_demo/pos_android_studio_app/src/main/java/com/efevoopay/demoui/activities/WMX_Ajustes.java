@@ -150,7 +150,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private void call() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "https://efevoopayloadbalancer-ecommerce.com/admin/tpv/initllave";
+            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/admin/tpv/initllave";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
             jsonBody.put("device_tk", _tk);
@@ -166,8 +166,10 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    WMX_Ajustes.super.showAlert("ERROR", error.toString());
+                    error.printStackTrace();
+
+                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.getMessage() );
+                    WMX_Ajustes.super.showAlert("ERROR", error.getMessage());
                 }
             }) {
                 @Override
