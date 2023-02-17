@@ -56,6 +56,8 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     ImageButton btn_date;
     TextView txt_date;
     DatePicker dpFecha;
+    MaterialDatePicker dpDate;
+    Date date1, date2;
     Intent intent;
     private String ksn_posId;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
@@ -69,13 +71,16 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         btn_date = findViewById(R.id.btn_fecha);
         txt_date = findViewById(R.id.btn_date_txt);
         dpFecha = (DatePicker) findViewById(R.id.dpFecha);
+        DatePickerListener();
+        date1 = new Date();
+        date2 = new Date();
+
         history_layout_empty = findViewById(R.id.history_layout_empty);
         history_layout_items = findViewById(R.id.history_layout_items);
 
         btn_date.setOnClickListener(this);
         txt_date.setOnClickListener(this);
         txt_date.setText(getFecha());
-        DatePickerListener();
 
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
@@ -135,7 +140,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onCalendarLinstener(){
-
+        TRACE.d("change");
         Locale locale = new Locale("es", "ES");
         Locale.setDefault(locale);
         Configuration config = getBaseContext().getResources().getConfiguration();
@@ -144,47 +149,26 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
                 getBaseContext().getResources().getDisplayMetrics());
 
 
-
-        MaterialDatePicker.Builder<androidx.core.util.Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
-        builder.setTheme(R.style.MaterialCalendarThemeBackground);
-        MaterialDatePicker<Pair<Long, Long>> picker = builder.build();
-
-        picker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
-
+        dpDate.show(getSupportFragmentManager(), "date");
     };
 
 
     public void DatePickerListener() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        dpFecha.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+        dpDate = MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Seleccione fecha")
+                .setTheme(R.style.MaterialCalendarThemeBackground)
+                .build();
 
-            @Override
-            public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-
-
-                Date date1= null;
-                try {
-                    date1 = new SimpleDateFormat("dd/MM/yy").parse(dayOfMonth+"/"+(month+1)+"/"+year);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-                String strDate = dateFormat.format(date1);
-
-                txt_date.setText(strDate);
-                dpFecha.setVisibility(View.GONE);
-                //readJson();
-                try {
-                    readJsontxn();
-                    Thread.sleep(1000);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                FilterDate();
-            }
+        dpDate.addOnPositiveButtonClickListener((selection) -> {
+            Pair<Long, Long> datesMilliseconds = (Pair<Long, Long>)dpDate.getSelection();
+            DateFormat obj = new SimpleDateFormat("dd/MM/yyyy");
+            date1 = new Date(datesMilliseconds.first);
+            date2 = new Date(datesMilliseconds.second);
+            TRACE.d(obj.format(date1));
+            TRACE.d(obj.format(date2));
+            dpDate.dismiss();
+            readJsontxn();
+            FilterDate();
         });
     }
 
@@ -245,11 +229,14 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     }
     private void getHistorial(String _devicesid)throws IOException{
         try {
+            DateFormat obj = new SimpleDateFormat("dd/MM/yyyy");
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = "https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/Dukptnumtxn";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("deviceid", _devicesid);
             jsonBody.put("pantalla", "Historial");
+            jsonBody.put("fechainicio", obj.format(date1));
+            jsonBody.put("fechafinal", obj.format(date2));
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
