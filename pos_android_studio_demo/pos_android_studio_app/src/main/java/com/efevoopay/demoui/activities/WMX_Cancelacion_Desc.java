@@ -14,11 +14,12 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class WMX_Cancelacion_Desc extends BaseActivity  {
-    TextView cp_tv_trans_type,cp_tv_auth,cp_tv_amount,cp_tv_tip,cp_tv_total,cp_tv_card,cp_tv_date_time,cp_tv_approve,cp_tv_tip_label,cp_tv_total_label,cp_tv_tipotarjeta;
+    TextView cp_tv_trans_type,cp_tv_auth,cp_tv_amount,cp_tv_tip,cp_tv_total,cp_tv_card,cp_tv_date_time,cp_tv_approve,cp_tv_tip_label,cp_tv_total_label,cp_tv_tipotarjeta,cp_tv_aid,cp_tv_arqc;
     ImageView cp_iv_trans_type,cp_iv_process;
     LinearLayout cp_ll_content_card;
     AppCompatButton cp_btn_trans_cancelar, cp_btn_trans_final;
@@ -83,6 +84,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_tv_tip_label =findViewById(R.id.cp_tv_tip_label);
         cp_tv_total_label = findViewById(R.id.cp_tv_total_label);
         cp_tv_tipotarjeta = findViewById(R.id.cp_tv_tipotarjeta);
+        cp_tv_aid = findViewById(R.id.txt_AID);
+        cp_tv_arqc = findViewById(R.id.txt_ARQC);
 
          if (status.equals("VN")){
             cp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
@@ -109,7 +112,9 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_tv_total.setText(total);
         cp_tv_card.setText("**** "+card);
         cp_tv_date_time.setText(date+" "+time);
-         cp_tv_approve.setText(approve);
+        cp_tv_approve.setText(approve);
+        cp_tv_aid.setText(aid);
+        cp_tv_arqc.setText(arqc);
     }
 
     private void buttonListener(){
@@ -120,8 +125,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
                 cp_tv_amount.getText().toString(),
                 cp_tv_tip.getText().toString(),
                 cp_tv_total.getText().toString(),
-                "C434",
-                "A0000000031010"
+                cp_tv_arqc.getText().toString(),
+                cp_tv_aid.getText().toString()
         );
         cp_btn_trans_cancelar = findViewById(R.id.cp_btn_trans_cancelar);
         cp_btn_trans_cancelar.setOnClickListener(new View.OnClickListener() {

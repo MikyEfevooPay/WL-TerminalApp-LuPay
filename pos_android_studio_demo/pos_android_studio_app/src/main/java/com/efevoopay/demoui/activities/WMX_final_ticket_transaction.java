@@ -93,7 +93,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 ticket_tv_card_value = findViewById(R.id.ticket_tv_card_value),
                 ticket_tv_method_value = findViewById(R.id.ticket_tv_method_value),
                 txt_AID = findViewById(R.id.txt_AID),
-                txt_ARQC = findViewById(R.id.txt_ARQC);
+                txt_ARQC = findViewById(R.id.txt_ARQC),
+                textView16=findViewById(R.id.textView16);
 
         LinearLayout ticket_ll_subtotal = findViewById(R.id.ticket_ll_subtotal);
 
@@ -128,6 +129,14 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             ticket_tv_tip_value.setText(v_months_total);
 
         }else if(type_transaction.equals("venta")){
+            v_tip = intent.getStringExtra("v_tip");
+            v_subtotal = intent.getStringExtra("v_subtotal");
+
+            ticket_tv_tip_value.setText(v_tip);
+            ticket_tv_subtotal_value.setText(v_subtotal);
+        }else if(type_transaction.equals("Cancelacion")){
+            ticket_tv_title.setText("Resumen de cancelación");
+            textView16.setText("Cancelación aprobada");
             v_tip = intent.getStringExtra("v_tip");
             v_subtotal = intent.getStringExtra("v_subtotal");
 
