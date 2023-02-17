@@ -809,7 +809,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     content += "pinRandomNumber:" + " " + pinRandomNumber
                             + "\n";
                 }
-                Integer _9f=Integer.parseInt(onLineksn.substring(14,20),16);
+                Integer _9f=Integer.parseInt(onLineksn.substring(15,20),16);
                 maskedPAN=_track2.substring(0,8)+"XXXX"+_track2.substring(12,16);
                 ValidacionDatos(maskedPAN.substring(0,8),"NFC",_entrymode,tlvNFC,maskedPAN,_track2+"FFFFFFFFFF",_9f.toString(),_tag50,_tag9F12,_tag9F21);
 
@@ -997,7 +997,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 TRACE.d("_9f: " + _9F41);
                 String pan=_pinpan.substring(4,12)+"XXXX"+_pinpan.substring(16,_pinpan.length());
 
-                Integer F41=Integer.parseInt(_9F41.substring(14,20),16);
+                Integer F41=Integer.parseInt(_9F41.substring(15,20),16);
                 //Integer F41=Integer.parseInt(_9F41);
 
                 ValidacionDatos(_pinpan.substring(4,12),"ICC",_entrymode.substring(6,_entrymode.length()),emvicc,pan,_track2.substring(4,_track2.length())+"FFFFFFFFFF",F41.toString(),_tag50,_tag9F12,_tag9F21.substring(6,_tag9F21.length()));
