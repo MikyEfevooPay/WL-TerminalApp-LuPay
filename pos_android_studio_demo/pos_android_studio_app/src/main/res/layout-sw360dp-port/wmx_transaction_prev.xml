@@ -321,7 +321,7 @@
                 android:gravity="center_horizontal"
                 android:text="Aprobación"
                 android:textColor="#121212"
-                android:textSize="30px" />
+                android:textSize="22px" />
 
             <TextView
                 android:id="@+id/tp_tv_approve"
@@ -331,7 +331,7 @@
                 android:gravity="center_horizontal"
                 android:text="640463"
                 android:textColor="#5A5A5A"
-                android:textSize="30px" />
+                android:textSize="22px" />
 
         </LinearLayout>
 
