@@ -52,7 +52,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     Context mContext;
     private String  type_transaction;
     private int transaction_type;
-    String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total;
+    String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total, card_provider;
     private Ticket ticket;
 
 
@@ -143,6 +143,12 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             ticket_tv_tip_value.setText(v_tip);
             ticket_tv_subtotal_value.setText(v_subtotal);
         }
+
+        if (v_redtarjeta.equals("MC")){
+            card_provider = "MASTERCARD";
+        }else if(v_redtarjeta.equals("Visa")){
+            card_provider = "VISA";
+        }
     }
 
     @Override
@@ -181,7 +187,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     public void onClick(View view) {
         ticket.setData(v_type_transaction,
                 v_tipotarjeta, v_card,
-                v_redtarjeta, v_time,
+                card_provider, v_time,
                 v_subtotal,
                 v_tip,
                 v_total,

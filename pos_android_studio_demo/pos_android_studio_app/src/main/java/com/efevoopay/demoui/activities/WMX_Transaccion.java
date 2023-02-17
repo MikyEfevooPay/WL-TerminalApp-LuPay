@@ -86,19 +86,22 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         ksn_posId = intent.getStringExtra("ksn_posId");
         try {
             readJsontxn();
-            Thread.sleep(1000);
+            Thread.sleep(2000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void setItems() {
         recyclerView = findViewById(R.id.transactionList);
         TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this);
         recyclerView.setAdapter(transactionItemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void setItems() {
+    /*private void setItems() {
         if(transactions.size() > 0) {
             btn_date.setVisibility(View.VISIBLE);
             txt_date.setVisibility(View.VISIBLE);
@@ -114,7 +117,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             history_layout_items.setVisibility(View.GONE);
             history_layout_empty.setVisibility(View.VISIBLE);
         }
-    }
+    }*/
 
     @Override
     public void onToolbarLinstener() {
@@ -168,20 +171,9 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             TRACE.d(obj.format(date2));
             dpDate.dismiss();
             readJsontxn();
-            FilterDate();
         });
     }
 
-    public void FilterDate(){
-
-        Predicate<Transaction> byDate = person -> person.get_date().indexOf(txt_date.getText().toString()) == 0 ;
-        ArrayList<Transaction> result = transactions;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            result.removeIf(t-> t.get_date().indexOf(txt_date.getText().toString()) != 0);
-        }
-
-        transactions = result;
-    }
 
     public String getFecha()  {
 
@@ -287,6 +279,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             };
             transactions=jsondukpt.transactions;
             requestQueue.add(stringRequest);
+            setItems();
         } catch (JSONException e) {
 
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );

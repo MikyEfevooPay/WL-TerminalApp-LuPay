@@ -131,7 +131,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
                 @Override
                 public void onResponse(String response) {
                     jsondukpt.readJsonnew(response.toString());
-                    //TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                 }
             }, new Response.ErrorListener() {
                 @Override
