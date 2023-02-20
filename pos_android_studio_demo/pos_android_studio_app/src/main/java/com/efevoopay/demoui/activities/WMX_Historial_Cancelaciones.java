@@ -61,13 +61,9 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
             e.printStackTrace();
         }
 
-        recyclerView = findViewById(R.id.historial_cancelaciones_List);
-        recyclerView.setVisibility(View.VISIBLE);
-        CancelacionesItemAdapter transactionItemAdapter = new CancelacionesItemAdapter(this,transactions, this);
-        recyclerView.setAdapter(transactionItemAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
+
     @Override
     public void onClick(View view) {
 
@@ -113,6 +109,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
             recyclerView.setAdapter(transactionItemAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {
+            cancellation_empty_layout.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
     }
@@ -174,6 +171,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
 
             };
             transactions=jsondukpt.transactions;
+            setItems();
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
 

@@ -29,6 +29,7 @@ import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Transaction;
+import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.widget.TransactionItemAdapter2;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
@@ -95,13 +96,6 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     }
 
     private void setItems() {
-        recyclerView = findViewById(R.id.transactionList);
-        TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this);
-        recyclerView.setAdapter(transactionItemAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    /*private void setItems() {
         if(transactions.size() > 0) {
             btn_date.setVisibility(View.VISIBLE);
             txt_date.setVisibility(View.VISIBLE);
@@ -117,7 +111,8 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             history_layout_items.setVisibility(View.GONE);
             history_layout_empty.setVisibility(View.VISIBLE);
         }
-    }*/
+    }
+
 
     @Override
     public void onToolbarLinstener() {
@@ -286,7 +281,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
         }
     }
-    public void readJsontxn(){
+    public void readJsontxn() {
         try {
             getHistorial(ksn_posId);
         } catch (IOException e) {

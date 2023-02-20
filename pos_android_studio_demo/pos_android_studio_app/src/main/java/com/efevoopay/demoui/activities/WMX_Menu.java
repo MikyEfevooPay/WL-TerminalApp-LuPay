@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.KSN;
 import com.efevoopay.demoui.utils.TRACE;
+import com.efevoopay.demoui.utils.Utils;
 
 public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     //private Button  other, ajustes, meses;

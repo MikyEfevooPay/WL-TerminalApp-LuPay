@@ -1,9 +1,18 @@
 package com.efevoopay.demoui.utils;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
+
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Utils {
 	
@@ -347,6 +356,23 @@ public class Utils {
 		r[0] = b[3];
 		return r;
 	}
+
+	public static void LoadingTask(Context ctx, LoaderTask taskhandle) {
+
+		ProgressDialog nDialog = new ProgressDialog(ctx);
+		nDialog.setMessage("Cargando...");
+		nDialog.setIndeterminate(false);
+		nDialog.setCancelable(true);
+		nDialog.show();
+
+		try {
+			Thread.sleep(5000);
+			taskhandle.Task();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
 
 
