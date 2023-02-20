@@ -55,7 +55,6 @@ import com.efevoopay.demoui.utils.QPOSUtil;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.USBClass;
-import com.efevoopay.demoui.utils.DUKPK2009_CBC;
 import com.efevoopay.demoui.utils.FileUtils;
 import com.efevoopay.demoui.utils.ShowGuideView;
 import com.dspread.xpos.CQPOSService;

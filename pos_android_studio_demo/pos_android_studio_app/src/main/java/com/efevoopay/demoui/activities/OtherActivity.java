@@ -43,7 +43,6 @@ import com.efevoopay.demoui.USBClass;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
-import com.efevoopay.demoui.utils.DUKPK2009_CBC;
 import com.efevoopay.demoui.utils.FileUtils;
 import com.efevoopay.demoui.utils.QPOSUtil;
 import com.efevoopay.demoui.utils.TRACE;

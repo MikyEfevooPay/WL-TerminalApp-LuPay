@@ -1,29 +1,16 @@
 package com.efevoopay.demoui.activities;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
-import android.Manifest;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
-
 import com.android.volley.AuthFailureError;
-import com.android.volley.Network;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,34 +22,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.blumonpay.capx.functions.RSA;
 import com.blumonpay.capx.model.RSAData;
-import com.dspread.xpos.CQPOSService;
-import com.dspread.xpos.QPOSService;
 import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
-import com.efevoopay.demoui.keyboard.KeyboardUtil;
-import com.efevoopay.demoui.keyboard.MyKeyboardView;
-import com.efevoopay.demoui.utils.DUKPK2009_CBC;
 import com.efevoopay.demoui.utils.TRACE;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;

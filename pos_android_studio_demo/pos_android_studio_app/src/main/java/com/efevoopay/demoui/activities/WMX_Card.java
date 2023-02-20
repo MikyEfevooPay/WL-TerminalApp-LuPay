@@ -32,12 +32,9 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.blumonpay.capx.model.RSAData;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
-import com.efevoopay.demoui.utils.DUKPK2009_CBC;
-import com.efevoopay.demoui.utils.FileUtils;
 import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.TLV;
 import com.efevoopay.demoui.utils.TLVParser;
@@ -63,16 +60,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
+import libdukpt.DUKPK2009_CBC;
 import pl.droidsonroids.gif.GifImageView;
 
-import com.blumonpay.capx.functions.CypherFunctions;
-import com.blumonpay.capx.functions.RSA;
 import com.blumonpay.capx.model.DUKPTData;
-import com.blumonpay.capx.model.TransactionData;
-
-
-
-
 
 
 public class WMX_Card extends BaseActivity implements View.OnClickListener {
