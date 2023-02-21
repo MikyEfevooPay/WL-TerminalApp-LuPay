@@ -62,6 +62,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     Intent intent;
     private String ksn_posId;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,14 +86,21 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
-        try {
-            readJsontxn();
-            Thread.sleep(2000);
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Utils.LoadingTask(this, () -> {
+            try {
+                readJsontxn();
+                Thread.sleep(500);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void setItems() {

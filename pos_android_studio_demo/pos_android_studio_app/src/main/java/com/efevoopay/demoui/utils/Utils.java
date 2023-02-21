@@ -362,15 +362,22 @@ public class Utils {
 		ProgressDialog nDialog = new ProgressDialog(ctx);
 		nDialog.setMessage("Cargando...");
 		nDialog.setIndeterminate(false);
-		nDialog.setCancelable(true);
+		nDialog.setCancelable(false);
 		nDialog.show();
 
-		try {
-			Thread.sleep(5000);
-			taskhandle.Task();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Thread tr = new Thread(() -> {
+			try {
+				Thread.sleep(30);
+				taskhandle.Task();
+				nDialog.dismiss();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		tr.start();
+
 	}
 
 }
