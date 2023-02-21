@@ -80,5 +80,4 @@ dependencies {
     //https://frogames.es/solucion-a-error-con-el-dexfile-en-android-studionull-cannot-fit-requested-classes-in-a-single-dexfile/
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation files('libs/actionprinter.jar ')
-    implementation files('libs/DUKPK2009_CBC.jar  ')
 }
