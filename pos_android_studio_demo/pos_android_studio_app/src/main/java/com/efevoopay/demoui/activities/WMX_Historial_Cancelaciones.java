@@ -55,7 +55,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
 
         try {
             readJsontxn();
-            Thread.sleep(1000);
+            Thread.sleep(2000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

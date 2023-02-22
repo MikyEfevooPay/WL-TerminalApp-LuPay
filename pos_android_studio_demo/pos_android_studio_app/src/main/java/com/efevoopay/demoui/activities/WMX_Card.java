@@ -275,63 +275,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     }
 
-    private void call(String content) {
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://wmx-iso-apps1.eba-iai89mzk.us-west-2.elasticbeanstalk.com/matriz/certificacion/transaccion";
-            JSONObject jsonBody = new JSONObject();
-//            jsonBody.put("Method", FinalTradeType);
-//            jsonBody.put("Response", content);
-//            jsonBody.put("Amount", Amount);
-            jsonBody.put("msn", content);
-            final String requestBody = jsonBody.toString();
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    WMX_Card.super.showAlert("ERROR", error.toString());
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    if (response != null) {
-                        responseString = String.valueOf(response.statusCode);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
-    }
-
     private KeyboardUtil keyboardUtil;
 
     private List<String> keyBoardList = new ArrayList<>();
@@ -802,7 +745,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 }
                 Integer _9f=Integer.parseInt(onLineksn.substring(15,20),16);
                 maskedPAN=_track2.substring(0,8)+"XXXX"+_track2.substring(12,16);
-                ValidacionDatos(maskedPAN.substring(0,8),"NFC",_entrymode,tlvNFC,maskedPAN,_track2+"FFFFFFFFFF",_9f.toString(),_tag50,_tag9F12,_tag9F21);
+                ValidacionDatos(maskedPAN.substring(0,8),"NFC",_entrymode,tlvNFC,maskedPAN,_track2,_9f.toString(),_tag50,_tag9F12,_tag9F21);
 
                 //TRACE.d(TRACE.NEW_LINE + "content in NNFC request(?)" +content);
                 //call(content);
@@ -991,7 +934,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 Integer F41=Integer.parseInt(_9F41.substring(15,20),16);
                 //Integer F41=Integer.parseInt(_9F41);
 
-                ValidacionDatos(_pinpan.substring(4,12),"ICC",_entrymode.substring(6,_entrymode.length()),emvicc,pan,_track2.substring(4,_track2.length())+"FFFFFFFFFF",F41.toString(),_tag50,_tag9F12,_tag9F21.substring(6,_tag9F21.length()));
+                ValidacionDatos(_pinpan.substring(4,12),"ICC",_entrymode.substring(6,_entrymode.length()),emvicc,pan,_track2.substring(4,_track2.length()),F41.toString(),_tag50,_tag9F12,_tag9F21.substring(6,_tag9F21.length()));
 
                 //pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_D30.xml",WMX_Card.this)));
 
@@ -1917,8 +1860,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         requestQueue.add(request);
     }
     public void procesofinal(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,String counter,String time_txn){
-        _encryptblumon=gntBackEnd.EncryptBlumon(track2,Integer.parseInt(counter));
-        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),String.valueOf(_encryptblumon.getCounter()),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC);
+        _encryptblumon=gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2),Integer.parseInt(counter));
+        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),String.valueOf(_encryptblumon.getCounter()),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC,gntBackEnd.CountTrack2(track2));
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;

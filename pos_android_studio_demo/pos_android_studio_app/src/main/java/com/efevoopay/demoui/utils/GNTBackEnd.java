@@ -42,7 +42,7 @@ public class GNTBackEnd {
         }
         return  dukpt;
     }
-    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC){
+    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC,String _tamtrack2){
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("deviceid",_deviceid);
@@ -52,7 +52,7 @@ public class GNTBackEnd {
             jsonBody.put("crc32", _crc32);
             jsonBody.put("count", _Counter);
             jsonBody.put("ksn", _ksn);
-            jsonBody.put("tamtrack2", "37");
+            jsonBody.put("tamtrack2", _tamtrack2);
             jsonBody.put("pinPan", _pinpan);
             jsonBody.put("emv", _emv);
             jsonBody.put("d4", _d4);
@@ -168,6 +168,16 @@ public class GNTBackEnd {
         }else{
             return "Desconocido";
         }
+    }
+    public String MascaraTrack2(String track2){
+        TRACE.d("track2 original : " + track2.toString());
+        track2= String.format("%"+-48+"s",track2.toUpperCase(Locale.ROOT)).replace(" ","F");
+        TRACE.d("track2 final : " + track2.toString());
+        return track2;
+    }
+    public String CountTrack2(String track2){
+        track2=track2.toUpperCase(Locale.ROOT).replace("F","");
+        return String.valueOf(track2.length());
     }
     public static String hexToString(String hex) {
         StringBuilder sb = new StringBuilder();
