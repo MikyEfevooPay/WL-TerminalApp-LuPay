@@ -52,6 +52,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     Context mContext;
     private String  type_transaction;
     private int transaction_type;
+    private boolean isTicketPrinted;
     String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total, card_provider;
     private Ticket ticket;
 
@@ -169,7 +170,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
 
     private void onFinish() {
-        ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
+        if(!isTicketPrinted) ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
+        isTicketPrinted = true;
         new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("¿Imprimir copia del ticket al cliente?")
                 .setIcon(R.drawable.printer)
@@ -243,7 +245,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private void setCorreo(String _correo)throws IOException {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/correo";
+            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/correo";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
             jsonBody.put("body", ticket.getTicketString(1));

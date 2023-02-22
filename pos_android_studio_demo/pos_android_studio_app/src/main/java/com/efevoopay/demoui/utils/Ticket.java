@@ -67,7 +67,6 @@ public class Ticket {
                 ticket.append(card_type);
                 ticket.append("\n");
                 ticket.append(date_time);
-                ticket.append("\n");
                 break;
             case 4:
                 if(transaction_type == 1) {
@@ -87,7 +86,6 @@ public class Ticket {
                 ticket.append("ARQC :             "+ARQC);
                 ticket.append("\n");
                 ticket.append("AID :              "+AID);
-                ticket.append("\n\n");
                 break;
             case 6:
                 ticket.append("Por este pagare me obligo");
@@ -130,7 +128,9 @@ public class Ticket {
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 18);
         printer.addText(ticketLayout(transaction_type, 5));
         printer.addText("");
+        printer.addText("");
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 16);
+        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
         printer.addText(ticketLayout(transaction_type, 6));
         printer.addText("");
     }
