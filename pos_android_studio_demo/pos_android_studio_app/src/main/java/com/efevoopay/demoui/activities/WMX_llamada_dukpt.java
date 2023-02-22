@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class WMX_llamada_dukpt {
     ArrayList<Transaction> transactions = new ArrayList<>();
     public void readJsonnew(String _json){
+       if(this.transactions.size() > 0) this.transactions.clear();
         try {
             JSONArray object = new JSONArray(_json);
             for (int i = 0; i < object.length(); i++) {

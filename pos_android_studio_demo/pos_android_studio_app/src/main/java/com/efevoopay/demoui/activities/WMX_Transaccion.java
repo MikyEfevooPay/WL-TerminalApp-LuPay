@@ -221,7 +221,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         try {
             DateFormat obj = new SimpleDateFormat("dd/MM/yyyy");
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/Dukptnumtxn";
+            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/Dukptnumtxn";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("deviceid", _devicesid);
             jsonBody.put("pantalla", "Historial");
@@ -235,6 +235,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
                     jsondukpt.readJsonnew(response.toString());
                     if(spinner.isShowing()) spinner.dismiss();
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    setItems();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -279,7 +280,6 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             };
             transactions=jsondukpt.transactions;
             requestQueue.add(stringRequest);
-            setItems();
         } catch (JSONException e) {
 
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );

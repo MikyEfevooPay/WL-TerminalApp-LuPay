@@ -117,7 +117,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
     private void getHistorial(String _devicesid)throws IOException{
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/Dukptnumtxn";
+            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/Dukptnumtxn";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("deviceid", _devicesid);
             jsonBody.put("pantalla", "Cancelacion");
@@ -129,6 +129,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
                     jsondukpt.readJsonnew(response.toString());
                     if(spinner.isShowing()) spinner.dismiss();
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    setItems();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -172,7 +173,6 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
 
             };
             transactions=jsondukpt.transactions;
-            setItems();
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
 
