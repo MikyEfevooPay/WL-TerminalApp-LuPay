@@ -357,6 +357,16 @@ public class Utils {
 		return r;
 	}
 
+	public static ProgressDialog getLoaderSpinner(Context ctx) {
+		ProgressDialog nDialog = new ProgressDialog(ctx);
+		nDialog.setMessage("Cargando...");
+		nDialog.setIndeterminate(false);
+		nDialog.setCancelable(false);
+
+
+		return nDialog;
+	}
+
 	public static void LoadingTask(Context ctx, LoaderTask taskhandle) {
 
 		ProgressDialog nDialog = new ProgressDialog(ctx);
@@ -367,7 +377,7 @@ public class Utils {
 
 		Thread tr = new Thread(() -> {
 			try {
-				Thread.sleep(30);
+				Thread.sleep(0);
 				taskhandle.Task();
 				nDialog.dismiss();
 			} catch (InterruptedException e) {

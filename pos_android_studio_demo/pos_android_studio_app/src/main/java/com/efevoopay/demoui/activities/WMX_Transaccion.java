@@ -1,5 +1,6 @@
 package com.efevoopay.demoui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -60,6 +61,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     MaterialDatePicker dpDate;
     Date date1, date2;
     Intent intent;
+    ProgressDialog spinner;
     private String ksn_posId;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
 
@@ -83,6 +85,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         btn_date.setOnClickListener(this);
         txt_date.setOnClickListener(this);
         txt_date.setText(getFecha());
+        spinner = Utils.getLoaderSpinner(this);
 
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
@@ -92,15 +95,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     @Override
     public void onStart() {
         super.onStart();
-        Utils.LoadingTask(this, () -> {
-            try {
-                readJsontxn();
-                Thread.sleep(500);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        readJsontxn();
     }
 
     private void setItems() {
@@ -238,11 +233,13 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onResponse(String response) {
                     jsondukpt.readJsonnew(response.toString());
+                    if(spinner.isShowing()) spinner.dismiss();
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    if(spinner.isShowing()) spinner.dismiss();
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
                     WMX_Transaccion.super.showAlert("ERROR", error.toString());
                 }
@@ -291,6 +288,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     }
     public void readJsontxn() {
         try {
+            spinner.show();
             getHistorial(ksn_posId);
         } catch (IOException e) {
             e.printStackTrace();

@@ -82,7 +82,6 @@ public class MyKeyboardView extends KeyboardView {
             @Override
             public void onPress(int i) {
                 TRACE.d("onPress: "+i);
-
             }
 
             @Override

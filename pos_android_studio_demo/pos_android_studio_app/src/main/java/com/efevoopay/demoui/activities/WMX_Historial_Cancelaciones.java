@@ -1,5 +1,6 @@
 package com.efevoopay.demoui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Transaction;
+import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.widget.CancelacionesItemAdapter;
 
 import org.json.JSONArray;
@@ -40,6 +42,8 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
     LinearLayout cancellation_empty_layout;
     ArrayList<Transaction> transactions = new ArrayList<>();
     Intent intent;
+    ProgressDialog spinner;
+
     private String ksn_posId;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +55,10 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         cancellation_empty_layout = findViewById((R.id.layout_cancellation_empty));
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
+        spinner = Utils.getLoaderSpinner(this);
 
 
-        try {
-            readJsontxn();
-            Thread.sleep(2000);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        readJsontxn();
 
 
     }
@@ -128,12 +127,14 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
                 @Override
                 public void onResponse(String response) {
                     jsondukpt.readJsonnew(response.toString());
+                    if(spinner.isShowing()) spinner.dismiss();
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+                    if(spinner.isShowing()) spinner.dismiss();
                     WMX_Historial_Cancelaciones.super.showAlert("ERROR", error.toString());
                 }
             }) {
@@ -184,6 +185,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
 
     public void readJsontxn(){
         try {
+            spinner.show();
             getHistorial(ksn_posId);
         } catch (IOException e) {
             e.printStackTrace();

@@ -1061,9 +1061,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
                 @Override
                 public void getNumberValue(String value) {
-//                    statusEditText.setText("Pls click "+dataList.get(0));
-                    pos.pinMapSync(value,20);
-
+                    TRACE.d("init change handle event: "+value);
+                    pos.pinMapSync(value,30);
                 }
             });
             keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, dataList);
