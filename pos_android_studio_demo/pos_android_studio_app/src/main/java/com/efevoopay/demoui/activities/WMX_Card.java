@@ -599,15 +599,15 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     content += "trackRandomNumber: " + trackRandomNumber + "\n";
                     content += "pinRandomNumber:" + " " + pinRandomNumber + "\n";
                     //String realPan = null;
-                    _track2MN = DUKPK2009_CBC.getDate(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB);
+                    _track2MN = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB, null);
                     if (!TextUtils.isEmpty(trackksn) && !TextUtils.isEmpty(encTrack2)) {
-                        String clearPan = DUKPK2009_CBC.getDate(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.CBC);
+                        String clearPan = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.CBC, null);
                         content += "encTrack2:" + " " + clearPan + "\n";
                         realPan = clearPan.substring(0, maskedPAN.length());
                         content += "realPan:" + " " + realPan + "\n";
                     }
                     if (!TextUtils.isEmpty(pinKsn) && !TextUtils.isEmpty(pinBlock) && !TextUtils.isEmpty(realPan)) {
-                        String date = DUKPK2009_CBC.getDate(pinKsn, pinBlock, DUKPK2009_CBC.Enum_key.PIN, DUKPK2009_CBC.Enum_mode.CBC);
+                        String date = DUKPK2009_CBC.getDUKPT(pinKsn, pinBlock, DUKPK2009_CBC.Enum_key.PIN, DUKPK2009_CBC.Enum_mode.CBC, null);
                         String parsCarN = "0000" + realPan.substring(realPan.length() - 13, realPan.length() - 1);
                         String s = DUKPK2009_CBC.xor(parsCarN, date);
                         content += "PIN:" + " " + s + "\n";
@@ -633,7 +633,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 //C2
                 String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
-                String tlvNFC = DUKPK2009_CBC.getDate(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB);
+                String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB, null);
                 List<TLV> NFCparse = TLVParser.parse(tlvNFC);
                 String _track2 = TLVParser.searchTLV(NFCparse, "57").value;
                 String _entrymode=TLVParser.searchTLV(NFCparse, "9F39").value;
@@ -820,7 +820,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             //C2
             String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
-            emvicc = DUKPK2009_CBC.getDate(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB);
+            emvicc = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB, null);
             TRACE.d("\nemvicc(tlv):\n" + emvicc);
             emvicc=emvicc.substring(8);
 
