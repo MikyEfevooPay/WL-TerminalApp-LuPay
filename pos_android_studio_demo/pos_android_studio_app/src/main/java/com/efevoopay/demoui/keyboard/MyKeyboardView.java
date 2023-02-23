@@ -77,30 +77,7 @@ public class MyKeyboardView extends KeyboardView {
         }
         setEnabled(true);
         setPreviewEnabled(false);
-        setOnKeyboardActionListener(new KeyboardView.OnKeyboardActionListener() {
-
-            @Override
-            public void onPress(int i) {
-                TRACE.d("onPress: "+i);
-            }
-
-            @Override
-            public void onKey(int i, int[] ints) {
-                TRACE.d("onKey: "+i);
-
-            }
-
-            @Override
-            public void onRelease(int i) {
-                TRACE.d("onRelease: "+i);
-            }
-
-            @Override public void onText(CharSequence charSequence) {}
-            @Override public void swipeLeft() {}
-            @Override public void swipeRight() {}
-            @Override public void swipeDown() {}
-            @Override public void swipeUp() {}
-        });
+        setOnKeyboardActionListener(mOnKeyboardActionListener);
         setKeyBoardType(keyBoardType);
 
     }
@@ -150,16 +127,6 @@ public class MyKeyboardView extends KeyboardView {
         @Override
         public void onPress(int primaryCode) {
             TRACE.d("onPress: "+primaryCode);
-//            List<Keyboard.Key> keys = keyboardOnlyNumPwd.getKeys();
-//            for(int i = 0 ; i < keys.size(); i++){
-//                Keyboard.Key key = keys.get(i);
-////                key.
-//                new FancyShowCaseView.Builder(mActivity)
-//                        .focusOn()
-//                        .title("Focus on View")
-//                        .build()
-//                        .show();
-//            }
         }
 
         @Override
@@ -169,53 +136,7 @@ public class MyKeyboardView extends KeyboardView {
 
         @Override
         public void onKey(int primaryCode, int[] keyCodes) {
-            Editable editable = mEditText.getText();
-            String editpinText = PinText.getText().toString();
-            TRACE.d("sisisisis " + editable);
-            int start = mEditText.getSelectionStart();
-            switch (primaryCode) {
-                case Keyboard.KEYCODE_DELETE://go back
-                    if (editable != null && editable.length() > 0) {
-                        if (start > 0) {
-                            editable.delete(start - 1, start);
-                            PinText.setText(editpinText + '●');
-                            editpinText.substring(0,editable.length()-1);
-                            PinText.setText(editpinText);
-                        }
-                    }
-                    break;
-                case Keyboard.KEYCODE_SHIFT://switch uppercase or lowercase
-                    changeKey();
-                    setKeyBoardType(KEYBOARDTYPE_ABC);
-                    break;
-                case Keyboard.KEYCODE_CANCEL:// hide
-                case Keyboard.KEYCODE_DONE:// confirm
-                    mWindow.dismiss();
-                    break;
-                case 123123://switch number keyboard
-                    if (isPwd) {
-                        setKeyBoardType(KEYBOARDTYPE_Num_Pwd);
-                    } else {
-                        setKeyBoardType(KEYBOARDTYPE_Num);
-                    }
-                    break;
-                case 456456://switch letter keyboard
-                    if (isSupper)//if the current keyboard is uppercase, change to lowercase
-                    {
-                        changeKey();
-                    }
-                    setKeyBoardType(KEYBOARDTYPE_ABC);
-                    break;
-                case 789789://switch symbol keyboard
-                    setKeyBoardType(KEYBOARDTYPE_Symbol);
-                    break;
-                case 666666:// name Delimiter"·"
-                    editable.insert(start, "·");
-                    break;
-                default://input symbol
-                    editable.insert(start, Character.toString((char) primaryCode));
-                    PinText.setText(editpinText + '●');
-            }
+            TRACE.d("onKeyChange");
         }
 
         @Override

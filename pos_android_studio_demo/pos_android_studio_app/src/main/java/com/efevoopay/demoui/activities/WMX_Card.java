@@ -351,13 +351,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String emvKsn = "00000081958255400001";
             String emvIPEK = "C5BFFC5E6551D64F62E3D80F6A3126F8";
             String emipekKCV = "B34512";
-//            pos.updateIPEKByTransportKey(groupId, trackKsn, trackipek, trackipekKCV, emvKsn, emvIPEK, emipekKCV,
-//                    pinKsn, pinipek, pinipekKCV);
             TRACE.d("INYECCION()");
 
-//            Toast.makeText(mContext, "onRequestQposConnected", Toast.LENGTH_LONG).show();
-            //dismissDialog();
-            //statusEditText.setText(getString(R.string.device_plugged));
             trading.setEnabled(true);
             //btnDisconnect.setEnabled(true);
             if (ActivityCompat.checkSelfPermission(WMX_Card.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
@@ -369,7 +364,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestSetAmount() {
             TRACE.d("enter amount -- start");
             TRACE.d("onRequestSetAmount()");
-            Toast.makeText(mContext, "onRequestSetAmount", Toast.LENGTH_LONG).show();
 
             String amount = Amount;
             int cents = (int) Math.round(100*Float.parseFloat(amount));
