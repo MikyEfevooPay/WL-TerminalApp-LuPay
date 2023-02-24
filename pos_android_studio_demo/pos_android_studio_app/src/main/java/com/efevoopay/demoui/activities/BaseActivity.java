@@ -174,7 +174,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
         toast.setGravity(Gravity.FILL_HORIZONTAL,0,0);
         toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,0);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
     }
 
@@ -236,8 +236,10 @@ public abstract class BaseActivity extends AppCompatActivity  {
     public void setStatusBarColor(int color) {
         if (isAboveKITKAT()) {
             Window window = getWindow();
+            View decorView = window.getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //            window.setStatusBarColor(color);
+            window.setStatusBarColor(color);
         }
     }
 

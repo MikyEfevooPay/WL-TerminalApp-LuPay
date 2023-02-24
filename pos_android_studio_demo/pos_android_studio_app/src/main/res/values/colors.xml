@@ -44,9 +44,10 @@
     <color name="eb_col_31">#f0f0f0</color>
     <color name="eb_col_15">#999999</color>
     <color name="eb_col_17">#6b7883</color>
-    <color name="eb_col_11">#555555</color>
+    <color name="eb_col_11">#F4F4F4</color>
     <color name="eb_col_8">#333333</color>
     <color name="eb_col_34">#000000</color>
+    <color name="eb_transparent">#00FFFFFF</color>
     <color name="eb_attendee_info">#00428A</color>
     <color name="eb_attendee_title">#004C90</color>
     <color name="circle_not_check_in">#80DB98</color>
