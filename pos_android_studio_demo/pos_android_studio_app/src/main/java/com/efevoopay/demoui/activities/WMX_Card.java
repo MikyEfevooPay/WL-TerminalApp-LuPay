@@ -6,6 +6,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -159,7 +160,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
          pos.setDeviceAddress(blueTootchAddress);
          pos.openUart();**/
 
-       /* Handler handler = new Handler();
+        /*Handler handler = new Handler();
         handler.postDelayed(() -> ChangeViewToTicket(), 2000);*/
     }
 
@@ -320,8 +321,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             intent.putExtra("v_subtotal",v_subtotal.toString());
         }
 
-        startActivity(intent);
+        startActivityMiddleware(intent);
+
     }
+
+
 
     private String getTime(){
         //YYMMDDHHmmss
@@ -834,22 +838,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("\nanlysEmvIccData(tlv):\n" + decodeData.toString());
             String decodeData2 = pos.anlysEmvTLVData(tlv);
             TRACE.d("\nanlysEmvTLVData(tlv):\n" + decodeData2);
-//            call(tlv);
             if (isPinCanceled) {
                 Status_lector.setText(R.string.replied_failed);
 
-                //((TextView) dialog.findViewById(R.id.messageTextView))
-                //        .setText(R.string.replied_failed);
             } else {
                 Status_lector.setText(R.string.replied_success);
-                /*intent = new Intent(mContext,WMX_TransactionResult.class);
-                intent.putExtra("result", "success");
-                startActivity(intent);*/
-                //ChangeViewToTicket();
-//                call(tlv);
-
-                //((TextView) dialog.findViewById(R.id.messageTextView))
-                //.setText(R.string.replied_success);
             }
             try {
 //                    analyData(tlv);// analy tlv ,get the tag you need
@@ -1875,7 +1868,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         Status_lector.setText(content);
                     }else{
                         WMX_Card.super.showAlert("ERROR", "CODIGO DE RESPUESTA : "+ response.toString());
-                        startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityMiddleware(intent);
                         //Toast.makeText(getApplicationContext(),"CODIGO DE RESPUESTA",Toast.LENGTH_LONG).show();
                     }
                 }
@@ -1885,7 +1879,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
                     WMX_Card.super.showAlert("ERROR", "TRANSACCION NO PROCESADA : "+ error.toString());
                     Toast.makeText(getApplicationContext(),"TRANSACCION NO PROCESADA",Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityMiddleware(intent);
                 }
             }) {
                 @Override
@@ -1925,6 +1920,16 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
 
+        }
+    }
+
+    private void startActivityMiddleware(Intent intent) {
+        String CurrPackageName = getPackageName();
+        ComponentName name = intent.resolveActivity(getPackageManager());
+        String intentPackageName = name.getPackageName();
+        String intentClassName = name.getClassName();
+        if(intentPackageName.equals(CurrPackageName) && intentClassName.contains(CurrPackageName)) {
+            startActivity(intent);
         }
     }
 
