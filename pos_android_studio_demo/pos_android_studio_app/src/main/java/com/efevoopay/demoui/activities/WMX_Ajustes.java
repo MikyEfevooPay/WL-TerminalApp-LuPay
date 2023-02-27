@@ -25,6 +25,7 @@ import com.blumonpay.capx.model.RSAData;
 import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.TRACE;
+import com.efevoopay.demoui.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -117,7 +118,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private void call() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/admin/tpv/registro";
+            String URL = Utils.TERMINAL_API + "/admin/tpv/registro";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
             jsonBody.put("device_tk", _tk);

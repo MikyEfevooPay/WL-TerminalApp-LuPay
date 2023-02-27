@@ -245,7 +245,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private void setCorreo(String _correo)throws IOException {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/correo";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correo";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
             jsonBody.put("body", ticket.getTicketString(1));

@@ -221,7 +221,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         try {
             DateFormat obj = new SimpleDateFormat("dd/MM/yyyy");
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/Dukptnumtxn";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("deviceid", _devicesid);
             jsonBody.put("pantalla", "Historial");

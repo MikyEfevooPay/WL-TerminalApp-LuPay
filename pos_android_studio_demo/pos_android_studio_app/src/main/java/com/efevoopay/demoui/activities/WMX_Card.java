@@ -65,6 +65,7 @@ import java.util.Locale;
 import libdukpt.DUKPK2009_CBC;
 
 import com.blumonpay.capx.model.DUKPTData;
+import com.efevoopay.demoui.utils.Utils;
 
 
 public class WMX_Card extends BaseActivity implements View.OnClickListener {
@@ -1853,7 +1854,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
-        call(TransExit,"http://wmx-iso-apps1.eba-9vhqtwgu.us-west-2.elasticbeanstalk.com/matriz/certificacion/iso/gral");
+        call(TransExit, Utils.TERMINAL_API + "/matriz/certificacion/iso/gral");
 
     }
     private void call(String contenido,String url) {

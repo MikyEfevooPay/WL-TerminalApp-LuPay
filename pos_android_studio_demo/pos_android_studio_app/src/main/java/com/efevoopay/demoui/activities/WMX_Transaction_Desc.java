@@ -158,7 +158,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     private void setCorreo(String _correo)throws IOException {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "https://efevoopayloadbalancer-ecommerce.com/matriz/certificacion/correo";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correo";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
             jsonBody.put("body", ticket.getTicketString(1));

@@ -15,6 +15,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Utils {
+
+	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
 	
 	public static String bytes2Hex(byte[] data){
 		
