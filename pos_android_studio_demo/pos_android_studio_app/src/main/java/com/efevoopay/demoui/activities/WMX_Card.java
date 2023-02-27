@@ -38,6 +38,7 @@ import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
 import com.efevoopay.demoui.utils.GNTBackEnd;
+import com.efevoopay.demoui.utils.ResponseCode;
 import com.efevoopay.demoui.utils.TLV;
 import com.efevoopay.demoui.utils.TLVParser;
 import com.efevoopay.demoui.utils.TRACE;
@@ -1870,10 +1871,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         ChangeViewToTicket();
                         Status_lector.setText(content);
                     }else{
-                        WMX_Card.super.showAlert("ERROR", "CODIGO DE RESPUESTA : "+ response.toString());
+                        ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
+                        WMX_Card.super.showAlert("ERROR", details.description);
                         Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityMiddleware(intent);
-                        //Toast.makeText(getApplicationContext(),"CODIGO DE RESPUESTA",Toast.LENGTH_LONG).show();
                     }
                 }
             }, new Response.ErrorListener() {

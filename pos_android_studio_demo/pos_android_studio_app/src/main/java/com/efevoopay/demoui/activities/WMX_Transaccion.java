@@ -162,11 +162,8 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
         dpDate.addOnPositiveButtonClickListener((selection) -> {
             Pair<Long, Long> datesMilliseconds = (Pair<Long, Long>)dpDate.getSelection();
-            DateFormat obj = new SimpleDateFormat("dd/MM/yyyy");
             date1 = new Date(datesMilliseconds.first);
             date2 = new Date(datesMilliseconds.second);
-            TRACE.d(obj.format(date1));
-            TRACE.d(obj.format(date2));
             dpDate.dismiss();
             readJsontxn();
         });
@@ -181,12 +178,12 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
         Date date1= null;
         try {
-            date1 = new SimpleDateFormat("dd/MM/yy").parse(dia+"/"+mes+"/"+anio);
+            date1 = new SimpleDateFormat("yy-MM-dd").parse(anio+"-"+mes+"-"+dia);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
         String strDate = dateFormat.format(date1);
 
         return strDate;
@@ -219,7 +216,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     }
     private void getHistorial(String _devicesid)throws IOException{
         try {
-            DateFormat obj = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat obj = new SimpleDateFormat("yy-MM-dd");
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn";
             JSONObject jsonBody = new JSONObject();
