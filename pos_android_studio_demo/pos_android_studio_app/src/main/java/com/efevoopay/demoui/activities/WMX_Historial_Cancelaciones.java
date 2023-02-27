@@ -121,6 +121,8 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("deviceid", _devicesid);
             jsonBody.put("pantalla", "Cancelacion");
+            jsonBody.put("fechainicio", "");
+            jsonBody.put("fechafinal", "");
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
