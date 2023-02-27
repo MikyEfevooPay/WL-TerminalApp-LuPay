@@ -178,12 +178,12 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
         Date date1= null;
         try {
-            date1 = new SimpleDateFormat("yy-MM-dd").parse(anio+"-"+mes+"-"+dia);
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(anio+"-"+mes+"-"+dia);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = dateFormat.format(date1);
 
         return strDate;
@@ -216,7 +216,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     }
     private void getHistorial(String _devicesid)throws IOException{
         try {
-            DateFormat obj = new SimpleDateFormat("yy-MM-dd");
+            DateFormat obj = new SimpleDateFormat("yyyy-MM-dd");
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn";
             JSONObject jsonBody = new JSONObject();
