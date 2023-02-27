@@ -63,7 +63,6 @@ import java.util.List;
 import java.util.Locale;
 
 import libdukpt.DUKPK2009_CBC;
-import pl.droidsonroids.gif.GifImageView;
 
 import com.blumonpay.capx.model.DUKPTData;
 
@@ -80,6 +79,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Dialog dialog;
     private Dialog dialogPin;
     private Intent intent;
+    private LottieAnimationView LottieTerminalView, LottiePointsView;
 
     private String FinalPin = "";
     private LinearLayout lin;
@@ -90,7 +90,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
 
-    private GifImageView gif;
     private Button WMX_btn_trade;
     private TextView tv_card_label_1,tv_card_label_2;
 
@@ -150,7 +149,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         mContext = this;
 
-        gif = findViewById(R.id.giv_card_status);
+        LottieTerminalView = findViewById(R.id.terminal_animation);
+        LottiePointsView = findViewById(R.id.points_animation);
         tv_card_label_1 = findViewById(R.id.tv_card_label_1);
         tv_card_label_2 = findViewById(R.id.tv_card_label_2);
         initSDK();
@@ -282,7 +282,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private List<String> keyBoardList = new ArrayList<>();
 
     private void ChangeViewtoProccess (){
-        gif.setImageResource(R.drawable.puntos_anim);
+        LottiePointsView.setVisibility(View.VISIBLE);
+        LottieTerminalView.setVisibility(View.GONE);
         tv_card_label_1.setText("Procesando Transacción");
         tv_card_label_2.setText("");
         trading.setVisibility(View.GONE);
