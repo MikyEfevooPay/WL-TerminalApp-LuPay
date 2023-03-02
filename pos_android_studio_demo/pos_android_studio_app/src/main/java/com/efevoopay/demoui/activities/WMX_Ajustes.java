@@ -118,7 +118,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private void call() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/admin/tpv/registro";
+            String URL = Utils.TERMINAL_API + "/admin/tpv/initllave";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
             jsonBody.put("device_tk", _tk);
@@ -129,6 +129,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+                    DatosInicializacion(response.toString());
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                 }
             }, new Response.ErrorListener() {
@@ -157,8 +158,15 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
                 @Override
                 protected Response<String> parseNetworkResponse(NetworkResponse response) {
                     String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
                     if (response != null) {
-                        responseString = String.valueOf(response.statusCode);
+                        responseString = String.valueOf(parsed);
                         // can get more details such as response.headers
                     }
                     return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
@@ -170,6 +178,16 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
 
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
 
+        }
+    }
+    public void DatosInicializacion(String _json){
+        try {
+            JSONObject object = new JSONObject(_json);
+            /*VariableEncript.tk=object.getString("tk").toString();
+            VariableEncript.ipek=object.getString("ipek").toString();
+            VariableEncript.ksn=object.getString("ksn").toString();*/
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
