@@ -47,9 +47,9 @@ public class Ticket {
                 ticket.append("\n");
                 ticket.append(approve);
                 ticket.append("\n\n");
-                ticket.append("operadora bp sa de cv".toUpperCase(Locale.ROOT));
+                ticket.append("EMBOCA".toUpperCase(Locale.ROOT));
                 ticket.append("\n");
-                ticket.append("GOMEZ MORIN");
+                ticket.append("PROL LOS SOLES 200 105-PB DEL VALLE ORIENTE");
                 ticket.append("\n");
                 ticket.append("SAN PEDRO GARZA GARCIA,");
                 ticket.append("\n");

@@ -300,7 +300,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 .replace("$pay_method",Utils.isNull(card_provider, "N/A"))
                 .replace("$card",Utils.isNull(v_card, "N/A"))
                 .replace("$payment_date",Utils.isNull(v_time, "N/A"))
-                .replace("$address", "Operadora BP SA de CV, Gómez Morín San Pedro Garza García")
+                .replace("$address", "EMBOCA, PROL LOS SOLES 200 105-PB DEL VALLE ORIENTE SAN PEDRO GARZA GARCIA N.L.")
                 .replace("$kpos_id",Utils.isNull(WMX_Menu.ksn.posId, "N/A"))
                 .replace("$arqc",Utils.isNull(v_ARQC, "N/A"))
                 .replace("$aid",Utils.isNull(v_AID, "N/A"));
