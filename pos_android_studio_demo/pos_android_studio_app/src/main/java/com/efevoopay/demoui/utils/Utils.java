@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
+	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_API_TEST = "https://test-efevoopayloadbalancer-ecommerce.com";
 	
 	public static String bytes2Hex(byte[] data){

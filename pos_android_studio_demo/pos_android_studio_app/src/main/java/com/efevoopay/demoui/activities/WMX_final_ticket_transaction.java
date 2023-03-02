@@ -306,7 +306,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 .replace("$aid",Utils.isNull(v_AID, "N/A"));
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API_TEST + "/matriz/certificacion/correo";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correo";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
             jsonBody.put("body", html_template);
