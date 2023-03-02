@@ -13,10 +13,12 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 
 public class Utils {
 
 	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
+	public static final String TERMINAL_API_TEST = "https://test-efevoopayloadbalancer-ecommerce.com";
 	
 	public static String bytes2Hex(byte[] data){
 		
@@ -359,9 +361,9 @@ public class Utils {
 		return r;
 	}
 
-	public static ProgressDialog getLoaderSpinner(Context ctx) {
+	public static ProgressDialog getLoaderSpinner(Context ctx, String... title) {
 		ProgressDialog nDialog = new ProgressDialog(ctx);
-		nDialog.setMessage("Cargando...");
+		nDialog.setMessage(title.length > 0 ? title[0] : "Cargando...");
 		nDialog.setIndeterminate(false);
 		nDialog.setCancelable(false);
 
@@ -390,6 +392,17 @@ public class Utils {
 		});
 		tr.start();
 
+	}
+
+	public static boolean patternMatches(String str, String pattern) {
+		return Pattern.compile(pattern)
+				.matcher(str)
+				.matches();
+	}
+
+
+	public static boolean isValidEmail(String email) {
+		return patternMatches(email, "^.+@.+(\\.[^\\.]+)+$");
 	}
 
 }

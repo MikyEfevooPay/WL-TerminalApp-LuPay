@@ -1,10 +1,13 @@
 package com.efevoopay.demoui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,8 +17,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.action.printerservice.ActionPrinter;
@@ -41,7 +46,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
@@ -55,6 +63,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private boolean isTicketPrinted;
     String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total, card_provider;
     private Ticket ticket;
+    ProgressDialog loader;
 
 
     @Override
@@ -69,7 +78,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         mContext=this;
 
         ticket = new Ticket(this);
-
+        loader = Utils.getLoaderSpinner(this, "Enviando...");
 
         btn_ticket_final =  (AppCompatButton) findViewById(R.id.btn_ticket_final);
         btn_ticket_final.setOnClickListener(this);
@@ -218,7 +227,32 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         modalEmail.setView(dialogContentView);
 
         AppCompatButton btn_modal_sendEmail = dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+        btn_modal_sendEmail.setEnabled(false);
+        btn_modal_sendEmail.getBackground().setAlpha(128);
         EditText txt_email = dialogContentView.findViewById(R.id.editTextTextPersonName2);
+
+        txt_email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String email = s.toString();
+                boolean isValidEmail = Utils.isValidEmail(email);
+                boolean currEnableState = btn_modal_sendEmail.isEnabled();
+                if(isValidEmail != currEnableState) {
+                    btn_modal_sendEmail.setEnabled(isValidEmail);
+                    btn_modal_sendEmail.getBackground().setAlpha(isValidEmail ? 255 : 128);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         AlertDialog modalEmailCreate = modalEmail.create();
 
@@ -235,34 +269,64 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 } finally {
                     modalEmailCreate.dismiss();
                 }
-
-                startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
     }
 
 
+    private String getHTMLEmailTicketTemplate() {
+        StringBuilder strBulider = new StringBuilder();
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(getAssets().open("email_ticket_template.html")));
+            String html;
+            while((html = in.readLine()) != null) {
+                strBulider.append(html);
+            }
+            in.close();
+            return strBulider.toString();
+        } catch (IOException e) {
+            return ticket.getTicketString(1);
+        }
+    }
+
+
     private void setCorreo(String _correo)throws IOException {
+        loader.show();
+        String html_template = getHTMLEmailTicketTemplate()
+                .replace("$comercial","EMBOCA")
+                .replace("$amount", Utils.isNull(v_subtotal, "N/A"))
+                .replace("$tip", Utils.isNull( v_tip, "N/A"))
+                .replace("$total",Utils.isNull(v_total, "N/A"))
+                .replace("$pay_method",Utils.isNull(card_provider, "N/A"))
+                .replace("$card",Utils.isNull(v_card, "N/A"))
+                .replace("$payment_date",Utils.isNull(v_time, "N/A"))
+                .replace("$address", "Operadora BP SA de CV, Gómez Morín San Pedro Garza García")
+                .replace("$kpos_id",Utils.isNull(WMX_Menu.ksn.posId, "N/A"))
+                .replace("$arqc",Utils.isNull(v_ARQC, "N/A"))
+                .replace("$aid",Utils.isNull(v_AID, "N/A"));
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correo";
+            String URL = Utils.TERMINAL_API_TEST + "/matriz/certificacion/correo";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
-            jsonBody.put("body", ticket.getTicketString(1));
+            jsonBody.put("body", html_template);
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+                    loader.dismiss();
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                     showAlert("success", "¡Ticket enviado con éxito!");
+                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    loader.dismiss();
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
                     showAlert("ERROR",  error.toString());
-                    //startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
             }) {
 
