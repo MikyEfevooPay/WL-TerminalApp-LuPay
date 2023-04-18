@@ -19,6 +19,7 @@ public class Utils {
 
 	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_API_TEST = "https://test-efevoopayloadbalancer-ecommerce.com";
+	public static final String TERMINAL_BIN = "https://lookup.binlist.net/";
 	
 	public static String bytes2Hex(byte[] data){
 		

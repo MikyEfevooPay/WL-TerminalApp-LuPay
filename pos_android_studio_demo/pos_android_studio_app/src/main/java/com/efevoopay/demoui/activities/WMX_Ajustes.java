@@ -3,6 +3,7 @@ package com.efevoopay.demoui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.blumonpay.capx.functions.RSA;
 import com.blumonpay.capx.model.RSAData;
 import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.ResponseCode;
+import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 
@@ -47,6 +50,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     public String name="";
     SharedPreferences sharpref;
     Context eContext;
+    private SQLiteTpv sqLiteTpv;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -65,9 +70,10 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
         //initSDK();
         //initUart(QPOSService.CommunicationMode.UART);
         //pos.getQposId();
-        sharpref=getPreferences(eContext.MODE_PRIVATE);
+        sqLiteTpv = new SQLiteTpv(this);
+        /*sharpref=getPreferences(eContext.MODE_PRIVATE);
         String valor= sharpref.getString("tk","No hay dato");
-        Toast.makeText(getApplicationContext(),"Dato guardado: "+valor,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Dato guardado: "+valor,Toast.LENGTH_LONG).show();*/
     }
 
     @Override
@@ -101,9 +107,9 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
                     TRACE.d("rsaD.getPublicKey: " + _pk);
                     TRACE.d("rsaD.getTk: " + _tk);
 
-                    SharedPreferences.Editor editor=sharpref.edit();
+                   /* SharedPreferences.Editor editor=sharpref.edit();
                     editor.putString("tk",_tk);
-                    editor.apply();
+                    editor.apply();*/
                 }catch (Throwable t){
                     TRACE.d("error rsa: " + t);
                 }
@@ -118,7 +124,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private void call() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/admin/tpv/initllave";
+            String URL = Utils.TERMINAL_API + "/efevoo/tpv/initllave";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
             jsonBody.put("device_tk", _tk);
@@ -183,9 +189,18 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     public void DatosInicializacion(String _json){
         try {
             JSONObject object = new JSONObject(_json);
+            if(object.getString("codigo").equals("00")){
+                sqLiteTpv.TpvDelete(ksn_posId);
+                sqLiteTpv.TpvInsert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString());
             /*VariableEncript.tk=object.getString("tk").toString();
             VariableEncript.ipek=object.getString("ipek").toString();
             VariableEncript.ksn=object.getString("ksn").toString();*/
+                WMX_Ajustes.super.showAlert("success", "!Inicialización con éxito!");
+            }else{
+                ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(object.getString("codigo"));
+                WMX_Ajustes.super.showAlert("ERROR", details.description);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,8 @@ package com.efevoopay.demoui.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.LinearLayout;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.KSN;
 import com.efevoopay.demoui.utils.ResponseCode;
+import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 
@@ -17,11 +20,11 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     //private Button  other, ajustes, meses;
     private Intent intent;
     private LinearLayout transfer,other, ajustes, meses, cancelaciones;
-    public static KSN ksn;
+    public static WMX_KSN ksn;
+    private SQLiteTpv sqLiteTpv;
+    Cursor cursor;
+    private SQLiteDatabase db;
     @Override
-
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -30,7 +33,8 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         getSupportActionBar().hide();
         setTitle(getString(R.string.wmx_title_welcome));
 
-        ksn = new KSN();
+        ksn = new WMX_KSN();
+        ksn.onCreate();
 
         ResponseCode.setCodeResponses();
 
@@ -46,7 +50,9 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         cancelaciones.setOnClickListener(this);
         getinfoScreen();
 
-
+        sqLiteTpv = new SQLiteTpv(this);
+        db = sqLiteTpv.getWritableDatabase();
+        sqLiteTpv.onCreate(db);
     }
 
     public void getinfoScreen() {
@@ -83,12 +89,23 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        //sqLiteTpv.TpvDelete(ksn.posId);
+        //sqLiteTpv.TpvInsert(ksn.posId,"00000040471811000001","445AB557576C642548F7B52916D8B4F4","B2A5B99DE4314F3257F70DECE62B2C96");
+        //sqLiteTpv.TpvInsert("12100509021042600834","00000095874315400001","57F223B1B0852C1C2384D04283D576D2","3DE27BCB004EB361A6390832086B0CB9");
+        //sqLiteTpv.TpvInsert("13100106222080200038","00000208656788600001","4BB7A675B598FCA413D84C7FCD8B4EE8","4D74392EFA5B7C8CCCD29539CBEA7954");
+        cursor=sqLiteTpv.TpvConsult(ksn.posId);
         switch (view.getId()){
             case R.id.btn_transfer:
+                if (cursor.getCount()>0){
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "venta");
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
+                }else{
+                    WMX_Menu.super.showAlert("ERROR","TPV NO INICIALIZADA: "+ksn.posId);
+                    //TRACE.d("cursor: "+ TRACE.NEW_LINE+ cursor.getCount());
+
+                }
                 break;
             case R.id.btn_Other:
                 intent = new Intent(this, WMX_Transaccion.class);
@@ -101,11 +118,14 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_meses:
-                //super.showAlert("Transacción rechazada","Fondos insuficientes");
-                intent = new Intent(this, WMX_Terminal.class);
-                intent.putExtra("type_transaction", "msi");
-                intent.putExtra("ksn_posId", ksn.posId);
-                startActivity(intent);
+                if (cursor.getCount()>0){
+                    intent = new Intent(this, WMX_Terminal.class);
+                    intent.putExtra("type_transaction", "msi");
+                    intent.putExtra("ksn_posId", ksn.posId);
+                    startActivity(intent);
+                }else{
+                    WMX_Menu.super.showAlert("ERROR","TPV NO INICIALIZADA: "+ksn.posId);
+                }
                 break;
             case R.id.btn_cancelaciones:
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);

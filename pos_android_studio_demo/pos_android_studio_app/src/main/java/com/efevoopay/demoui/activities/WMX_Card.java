@@ -9,6 +9,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -37,8 +39,10 @@ import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
+import com.efevoopay.demoui.utils.FileUtils;
 import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.ResponseCode;
+import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TLV;
 import com.efevoopay.demoui.utils.TLVParser;
 import com.efevoopay.demoui.utils.TRACE;
@@ -52,6 +56,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,6 +123,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String _AID="N/A";
     private String _ARQC="N/A";
     private String _9F41="";
+    private SQLiteTpv sqLiteTpv;
+    Cursor cursor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +145,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }else if(type_transaction.equals("Cancelacion")){
             _noAuth=intent.getStringExtra("cp_tv_auth");
         }
+
         Status_lector = (TextView) findViewById(R.id.wmx_status_lector);
         Total_Amount = (TextView) findViewById(R.id.wmx_text_total_Amount);
         Pruebaedittext = (EditText) findViewById(R.id.pruebaedittext);
@@ -155,6 +163,12 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         LottiePointsView = findViewById(R.id.points_animation);
         tv_card_label_1 = findViewById(R.id.tv_card_label_1);
         tv_card_label_2 = findViewById(R.id.tv_card_label_2);
+
+        sqLiteTpv = new SQLiteTpv(this);
+        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
+        sqLiteTpv.onCreate(db);
+        cursor=sqLiteTpv.TpvConsult(ksn_posId);
+
         initSDK();
 
         /** open(QPOSService.CommunicationMode.UART);
@@ -211,7 +225,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         Status_lector.setText(R.string.starting);
         if (posType == POS_TYPE.UART) {
             pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-            pos.doTrade(20);
+            pos.doTrade(60);
         }
     }
 
@@ -299,7 +313,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         TRACE.d("date   "+getTime());
 
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm");
         Date date = new Date();
 
         intent.putExtra("type_transaction",type_transaction);
@@ -376,7 +390,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String amount = Amount;
             int cents = (int) Math.round(100*Float.parseFloat(amount));
 
-            pos.setAmount(String.valueOf(cents), "0", "484", TransactionType.PAYMENT);
+            pos.setAmount(String.valueOf(cents), "0", "484", TransactionType.GOODS);
 
             TRACE.d("enter amount  -- end");
 
@@ -616,7 +630,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     }
                 }
                 String terminalTime = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
-                //TRACE.d("onRequestTime: "+terminalTime);
+                //TRACE.d("_track2MN: "+_track2MN);
                 maskedPAN=_track2MN.substring(0,8)+"XXXX"+_track2MN.substring(12,16);
                 Integer _9f=Integer.parseInt(pinKsn.substring(15,20),16);
                 ValidacionRequest(_track2MN.substring(0,8),"MCR","90","",maskedPAN,_track2MN,_9f.toString() ,terminalTime);
@@ -831,7 +845,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             _AID=TLVParser.searchTLV(ICCparse, "4F").value.toUpperCase(Locale.ROOT);
             _ARQC=TLVParser.searchTLV(ICCparse, "9F26").value.toUpperCase(Locale.ROOT);
             _9F41=onLineksn;
-            //_9F41=TLVParser.searchTLV(ICCparse, "9F41").value.toUpperCase(Locale.ROOT);
 
             //pos.getIccCardNo(getTime());
 
@@ -842,6 +855,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("\nanlysEmvIccData(tlv):\n" + decodeData.toString());
             String decodeData2 = pos.anlysEmvTLVData(tlv);
             TRACE.d("\nanlysEmvTLVData(tlv):\n" + decodeData2);
+
             if (isPinCanceled) {
                 Status_lector.setText(R.string.replied_failed);
 
@@ -994,7 +1008,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             dialogPin.setContentView(R.layout.wmx_pin_keyboard);
 
 
-
             /**
              dialog = new Dialog(mContext);
              dialog.setContentView(R.layout.wmx_pin_keyboard);
@@ -1077,6 +1090,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 }
                 keyboardUtil.setPinText(num);
                 Pruebaedittext.setText(s);//"Pin ：
+
             }
         }
 
@@ -1826,7 +1840,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
     private void ValidacionRequest(String _bin,String entrada,String entrymode,String emv,String pan,String track2,String counter,String time_txn){
         requestQueue =Volley.newRequestQueue(this);
-        String UrlBin="https://lookup.binlist.net/"+_bin;
+        String UrlBin=Utils.TERMINAL_BIN+_bin;
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,UrlBin,null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -1850,7 +1864,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         requestQueue.add(request);
     }
     public void procesofinal(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,String counter,String time_txn){
-        _encryptblumon=gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2),Integer.parseInt(counter));
+        _encryptblumon=gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2),Integer.parseInt(counter),cursor);
         TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),String.valueOf(_encryptblumon.getCounter()),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC,gntBackEnd.CountTrack2(track2));
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
@@ -1880,7 +1894,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+                    TRACE.d("** ResponseVolleyError  " +  TRACE.NEW_LINE + error.toString() );
                     WMX_Card.super.showAlert("ERROR", "TRANSACCION NO PROCESADA : "+ error.toString());
                     Toast.makeText(getApplicationContext(),"TRANSACCION NO PROCESADA",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1922,7 +1936,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             requestQueue.add(stringRequest);
         } catch (Exception e) {
 
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+            TRACE.d("** Exception ERROR " +  TRACE.NEW_LINE + e.toString() );
 
         }
     }

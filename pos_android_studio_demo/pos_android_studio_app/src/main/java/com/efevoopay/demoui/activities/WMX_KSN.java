@@ -12,7 +12,7 @@ import java.util.Hashtable;
 
 public class WMX_KSN {
     private QPOSService pos;
-    String posId;
+    public String posId;
     Context eContext;
     protected void onCreate() {
         initUart(QPOSService.CommunicationMode.UART);

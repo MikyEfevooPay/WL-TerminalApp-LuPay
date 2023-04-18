@@ -1,8 +1,12 @@
 package com.efevoopay.demoui.utils;
 
+import android.database.Cursor;
+import android.os.Build;
+
 import com.blumonpay.capx.functions.CypherFunctions;
 import com.blumonpay.capx.model.DUKPTData;
 import com.blumonpay.capx.model.TransactionData;
+import com.efevoopay.demoui.activities.WMX_Ajustes;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,13 +17,16 @@ public class GNTBackEnd {
     public String _redtarj="";
     public String _tiptarj="";
     public String _card="";
-    public DUKPTData EncryptBlumon(String _track2, Integer _counter) {
+    public DUKPTData EncryptBlumon(String _track2, Integer _counter, Cursor cursor) {
         TransactionData tr = new TransactionData();
         CypherFunctions cy = new CypherFunctions();
         DUKPTData dukpt = new DUKPTData();
-        String tr_key = "F0EA461D2876C8476F8A9AC245ED6FDE";
-        String tr_ksn = "00000141549406200001";
-        String tr_tk = "3CE9F2A75EF203993CCFA854A508F590";
+        //String tr_key = "46D09D3C810F1E70826A3F1A59DF1A59";
+        //String tr_ksn = "00000160559893800001";
+        //String tr_tk = "B6F0F69E1E6AF2088B80910762FD9EC9";
+        String tr_key = cursor.getString(4);
+        String tr_ksn = cursor.getString(2);
+        String tr_tk = cursor.getString(3);
         String track2 = _track2.toUpperCase(Locale.ROOT);
         TRACE.d(TRACE.NEW_LINE + "track2" + TRACE.NEW_LINE + track2+TRACE.NEW_LINE);
         Integer tr_counter = _counter;
@@ -45,6 +52,7 @@ public class GNTBackEnd {
     public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC,String _tamtrack2){
         JSONObject jsonBody = new JSONObject();
         try {
+            jsonBody.put("tpv", Build.MODEL+"Android smart POS");
             jsonBody.put("deviceid",_deviceid);
             jsonBody.put("entrada", _entrada);
             jsonBody.put("tipo",tipo(_type_trans));

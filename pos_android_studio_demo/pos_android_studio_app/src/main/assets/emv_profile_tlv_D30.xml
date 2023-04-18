@@ -3,7 +3,7 @@
 	<5F2A>0484</5F2A><!--Transaction Currency Code-->
 	<5F36>02</5F36><!--Tranasction Currency Exponent-->
 	<9F01>001234567890</9F01><!--Acquirer Identifier-->
-	<9F15>1234</9F15><!--Merchant Category Code-->
+	<9F15>5399</9F15><!--Merchant Category Code-->
 	<9F16>424354455354313233343536373839</9F16><!--Merchant Identifier-->
 	<9F1A>0484</9F1A><!--Terminal Country Code-->
 	<9F1C>4E4C2D4750373330</9F1C><!--Terminal Identification-->
@@ -16,7 +16,7 @@
 	<9F53>52</9F53><!--Mastercard Merchant category code-->
 	<9F8117>01</9F8117><!--Contact Boolean indicating whether the PSE-->
 	<9F8118>00</9F8118><!--Contact reselect pse-->
-	<9F8143>01</9F8143><!--Contact floor limit checking-->
+	<9F8143>00</9F8143><!--Contact floor limit checking-->
 	<9F8145>01</9F8145><!--Contact Velocity Checking-->
 	<9F8147>00</9F8147><!--Contact Transaction force online-->
 	<9F8303>01</9F8303><!--Support AID Choosing-->

@@ -142,6 +142,9 @@ public class ResponseCode {
         CodeTable.put("V7", new CodeDetails("ARQC failure capture *"));
         CodeTable.put("V8", new CodeDetails("CVR capture *"));
         CodeTable.put("V9", new CodeDetails("TVR capture *"));
+        CodeTable.put("70", new CodeDetails("Error Descifrando Track2"));
+        CodeTable.put("72", new CodeDetails("Error Inicializando LLaves"));
+        CodeTable.put("73", new CodeDetails("Error en CRC"));
     }
 
     public static HashMap<String, CodeDetails> getCodeResponses() { return CodeTable; }
