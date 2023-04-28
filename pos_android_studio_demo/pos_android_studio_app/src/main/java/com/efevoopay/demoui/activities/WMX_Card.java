@@ -142,7 +142,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         _Propina=intent.getStringExtra("propina");
         if(type_transaction.equals("msi")){
             msi=Integer.parseInt(intent.getStringExtra("months"));
-        }else if(type_transaction.equals("Cancelacion")){
+        }else if(type_transaction.equals("Cancelacion")||type_transaction.equals("devolucion")||type_transaction.equals("ajuste")||type_transaction.equals("reverso")||type_transaction.equals("destino")||type_transaction.equals("reautorizacion")||type_transaction.equals("checkout")||type_transaction.equals("cierrepreventa")){
             _noAuth=intent.getStringExtra("cp_tv_auth");
         }
 

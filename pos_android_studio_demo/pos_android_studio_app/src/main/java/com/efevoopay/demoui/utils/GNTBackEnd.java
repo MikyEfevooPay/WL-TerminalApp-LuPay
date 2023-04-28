@@ -64,9 +64,9 @@ public class GNTBackEnd {
             jsonBody.put("pinPan", _pinpan);
             jsonBody.put("emv", _emv);
             jsonBody.put("d4", _d4);
-            jsonBody.put("d18", "");
-            jsonBody.put("d22", _entrymode+"1");
-            jsonBody.put("d95", "");
+            jsonBody.put("d18", d18(_type_trans));
+            jsonBody.put("d22", d22(_type_trans,_entrymode+"1"));
+            jsonBody.put("d95", amounts(_type_trans,_d4));
             jsonBody.put("d121", "");
             jsonBody.put("q6", msi(_msi));
             jsonBody.put("redtarj", redtarjeta(_redtarjeta,_pan.substring(0,1)));
@@ -82,7 +82,7 @@ public class GNTBackEnd {
             jsonBody.put("p11", _p11);
             jsonBody.put("aid", _AID);
             jsonBody.put("arqc", _ARQC);
-            jsonBody.getString("redtarj").toString();
+            jsonBody.put("drafcapture", drafcapture(_type_trans));
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
             _card=jsonBody.getString("pinPan").toString();
@@ -93,9 +93,57 @@ public class GNTBackEnd {
             return e.toString();
         }
     }
+    public  String d18(String type_trans){
+        if(type_trans.equals("checkout")||type_trans.equals("reautorizacion")||type_trans.equals("checkin")){
+            return "7011";
+        }else if(type_trans.equals("preventa")||type_trans.equals("cierrepreventa")){
+            return "5812";
+        }else{
+            return "";
+        }
+    }
+    public  String d22(String type_trans,String _d22){
+        if(type_trans.equals("reautorizacion")){
+            return "011";
+        }else{
+            return _d22;
+        }
+    }
+    public  String drafcapture(String type_trans){
+        if(type_trans.equals("preventa")||type_trans.equals("reautorizacion")||type_trans.equals("checkin")){
+            return "0";
+        }else{
+            return "1";
+        }
+    }
+    public  String amounts(String type_trans,String d4){
+        if(type_trans.equals("ajuste")){
+            return d4;
+        }else{
+            return "";
+        }
+    }
     public  String tipo(String type_trans){
         if(type_trans.equals("Cancelacion")){
             return "CAN";
+        }else if(type_trans.equals("devolucion")){
+            return "DEV";
+        }else if(type_trans.equals("ajuste")){
+            return "AJU";
+        }else if(type_trans.equals("reverso")){
+            return "REV";
+        }else if(type_trans.equals("destino")){
+            return "DES";
+        }else if(type_trans.equals("checkin")){
+            return "CHE";
+        }else if(type_trans.equals("reautorizacion")){
+            return "REA";
+        }else if(type_trans.equals("checkout")){
+            return "OUT";
+        }else if(type_trans.equals("preventa")){
+            return "PRE";
+        }else if(type_trans.equals("cierrepreventa")){
+            return "CIE";
         }else{
             return "VEN";
         }
@@ -112,15 +160,32 @@ public class GNTBackEnd {
     public String tipotxn(String type_trans){
         if (type_trans.equals("venta")){
             return "VN";
-        }
-        else if(type_trans.equals("msi")) {
+        }else if(type_trans.equals("msi")) {
             return "MSI";
+        }else if(type_trans.equals("devolucion")) {
+            return "DEV";
+        }else if(type_trans.equals("ajuste")) {
+            return "AJU";
+        }else if(type_trans.equals("reverso")){
+            return "REV";
+        }else if(type_trans.equals("destino")){
+            return "DES";
+        }else if(type_trans.equals("checkin")){
+            return "CHE";
+        }else if(type_trans.equals("reautorizacion")){
+            return "REA";
+        }else if(type_trans.equals("checkout")){
+            return "OUT";
+        }else if(type_trans.equals("preventa")){
+            return "PRE";
+        }else if(type_trans.equals("cierrepreventa")){
+            return "CIE";
         }else{
             return "CAN";
         }
     }
     public String propina(String type_trans,String propina){
-        if(type_trans.equals("msi")||type_trans.equals("Cancelacion")) {
+        if(type_trans.equals("msi")||type_trans.equals("Cancelacion")||type_trans.equals("devolucion")||type_trans.equals("ajuste")||type_trans.equals("reverso")||type_trans.equals("destino")||type_trans.equals("checkin")||type_trans.equals("reautorizacion")||type_trans.equals("checkout")||type_trans.equals("preventa")||type_trans.equals("cierrepreventa")) {
             return "0.00";
         }else{
             return propina;
