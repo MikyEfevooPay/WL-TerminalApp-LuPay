@@ -5,6 +5,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
@@ -34,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
@@ -104,7 +106,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String type_transaction;
     public GNTBackEnd gntBackEnd = new GNTBackEnd();
     private DUKPTData _encryptblumon ;
-    RequestQueue requestQueue;
+    //RequestQueue requestQueue;
     private String _Propina="";
     private String TransExit= "";
     private String content="";
@@ -124,7 +126,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String _ARQC="N/A";
     private String _9F41="";
     private SQLiteTpv sqLiteTpv;
+    private Integer counter = 0;
     Cursor cursor;
+    ProgressDialog spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -639,7 +643,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 //                autoDoTrade(0);
 
             }
-            else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
+            else if (result == QPOSService.DoTradeResult.NFC_ONLINE) {
                 //nfcLog = decodeData.get("nfcLog");
                 Status_lector.setText(result.toString());
                 TRACE.d("EMV NFC Start");
@@ -973,6 +977,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             } else if (transactionResult == QPOSService.TransactionResult.FALLBACK) {
                 Status_lector.setText("trans fallback");
             } else if (transactionResult == QPOSService.TransactionResult.NFC_TERMINATED) {
+                TRACE.d("TransactionResult.NFC_TERMINATED");
                 //clearDisplay();
                 Status_lector.setText("NFC Terminated");
             } else if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
@@ -1839,7 +1844,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
     }
     private void ValidacionRequest(String _bin,String entrada,String entrymode,String emv,String pan,String track2,String counter,String time_txn){
-        requestQueue =Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
         String UrlBin=Utils.TERMINAL_BIN+_bin;
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,UrlBin,null,
                 new Response.Listener<JSONObject>() {
@@ -1856,16 +1861,17 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        TRACE.d("UrlBin : VolleyError");
                         procesofinal(entrada,entrymode,emv,"","",pan,track2,counter,time_txn);
                     }
                 }
         );
-        requestQueue=Volley.newRequestQueue(mContext);
+        //requestQueue=Volley.newRequestQueue(mContext);
         requestQueue.add(request);
     }
     public void procesofinal(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,String counter,String time_txn){
         _encryptblumon=gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2),Integer.parseInt(counter),cursor);
-        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),String.valueOf(_encryptblumon.getCounter()),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC,gntBackEnd.CountTrack2(track2));
+        TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),String.valueOf(_encryptblumon.getCounter()),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC,gntBackEnd.CountTrack2(track2),cursor);
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
@@ -1884,7 +1890,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     if(response.equals("00")){
                         ChangeViewToTicket();
                         Status_lector.setText(content);
-                    }else{
+                    }else if(response.equals("")){
+                        esperarYCerrar(ksn_posId,_ARQC);
+                    }
+                    else{
                         ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
                         WMX_Card.super.showAlert("ERROR", details.description);
                         Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1894,8 +1903,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
                     TRACE.d("** ResponseVolleyError  " +  TRACE.NEW_LINE + error.toString() );
                     WMX_Card.super.showAlert("ERROR", "TRANSACCION NO PROCESADA : "+ error.toString());
+
                     Toast.makeText(getApplicationContext(),"TRANSACCION NO PROCESADA",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityMiddleware(intent);
@@ -1925,6 +1936,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     } catch (UnsupportedEncodingException var4) {
                         parsed = new String(response.data);
                     }
+
                     if (response != null) {
                         responseString = String.valueOf(parsed);
                         // can get more details such as response.headers
@@ -1935,12 +1947,91 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
             requestQueue.add(stringRequest);
         } catch (Exception e) {
-
             TRACE.d("** Exception ERROR " +  TRACE.NEW_LINE + e.toString() );
-
         }
     }
+    public void esperarYCerrar(String deviceid,String arqc) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                ValidacionTxn(ksn_posId,_ARQC);
+            }
+        }, 4000);
+    }
+    private void ValidacionTxn(String deviceid,String arqc){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String Urltxn=Utils.TERMINAL_API+"/efevoo/tpv/transaccion";
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("deviceid", deviceid);
+            jsonBody.put("arqc", arqc);
+            final String requestBody = jsonBody.toString();
+            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Urltxn, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    if(response.equals("00")){
+                        ChangeViewToTicket();
+                        Status_lector.setText(content);
+                    }else{
+                        ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
+                        WMX_Card.super.showAlert("ERROR", details.description);
+                        Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityMiddleware(intent);
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            TRACE.d("** ResponseVolleyValidacionTxn  " +  TRACE.NEW_LINE + error.toString() );
+                            WMX_Card.super.showAlert("ERROR", "VALIDAR TRANSACCION EN HISTORIAL: "+ error.toString());
+                            Toast.makeText(getApplicationContext(),"VALIDAR TRANSACCION EN HISTORIAL",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivityMiddleware(intent);
+                        }
+                    })
+            {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
 
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
+                    if (response != null) {
+                        responseString = String.valueOf(parsed);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     private void startActivityMiddleware(Intent intent) {
         String CurrPackageName = getPackageName();
         ComponentName name = intent.resolveActivity(getPackageManager());

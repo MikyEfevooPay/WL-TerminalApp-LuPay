@@ -107,35 +107,99 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
                     TRACE.d("rsaD.getPublicKey: " + _pk);
                     TRACE.d("rsaD.getTk: " + _tk);
 
-                   /* SharedPreferences.Editor editor=sharpref.edit();
-                    editor.putString("tk",_tk);
-                    editor.apply();*/
                 }catch (Throwable t){
                     TRACE.d("error rsa: " + t);
                 }
-
-
-                call();
-
+                tpvConfig();
                 break;
         }
     }
-
-    private void call() {
+    private void tpvConfig() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/efevoo/tpv/initllave";
+            String URL = Utils.TPVCONFIG + "/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
-            jsonBody.put("device_id", ksn_posId);
-            jsonBody.put("device_tk", _tk);
-            jsonBody.put("device_rsa", _rsa);
+            jsonBody.put("snTerminal", ksn_posId);
 
             final String requestBody = jsonBody.toString();
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    DatosInicializacion(response.toString());
+                    initllave(response.toString());
+                    TRACE.d("ResponseResult: " +  TRACE.NEW_LINE + response.toString() );
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+
+                    TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
+                    WMX_Ajustes.super.showAlert("ERROR", error.getMessage());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
+                    if (response != null) {
+                        responseString = String.valueOf(parsed);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
+        }
+    }
+
+    private void initllave(String _tpv) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = Utils.TERMINAL_API + "/efevoo/tpv/initllave";
+            JSONObject objtpv = new JSONObject(_tpv);
+            String p43=objtpv.getString("p43").toString();
+            String p48=objtpv.getString("p48").toString();
+            String p120=objtpv.getString("p120").toString();
+            String address=objtpv.getString("address").toString();
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("device_id", ksn_posId);
+            jsonBody.put("device_tk", _tk);
+            jsonBody.put("device_rsa", _rsa);
+            jsonBody.put("device_p43", p43);
+            jsonBody.put("device_p48", p48);
+            jsonBody.put("device_p120", p120);
+            jsonBody.put("device_address", address);
+
+            final String requestBody = jsonBody.toString();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    DatosInicializacion(response.toString(),p43,p48,p120,address);
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                 }
             }, new Response.ErrorListener() {
@@ -181,17 +245,16 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
 
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
-
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
         }
     }
-    public void DatosInicializacion(String _json){
+    public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address){
         try {
             JSONObject object = new JSONObject(_json);
+
             if(object.getString("codigo").equals("00")){
                 sqLiteTpv.TpvDelete(ksn_posId);
-                sqLiteTpv.TpvInsert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString());
+                sqLiteTpv.TpvInsert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address);
             /*VariableEncript.tk=object.getString("tk").toString();
             VariableEncript.ipek=object.getString("ipek").toString();
             VariableEncript.ksn=object.getString("ksn").toString();*/

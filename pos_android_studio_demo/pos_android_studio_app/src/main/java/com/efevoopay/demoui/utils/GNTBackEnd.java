@@ -49,7 +49,7 @@ public class GNTBackEnd {
         }
         return  dukpt;
     }
-    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC,String _tamtrack2){
+    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC,String _tamtrack2, Cursor cursor){
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("tpv", Build.MODEL+"Android smart POS");
@@ -83,6 +83,9 @@ public class GNTBackEnd {
             jsonBody.put("aid", _AID);
             jsonBody.put("arqc", _ARQC);
             jsonBody.put("drafcapture", drafcapture(_type_trans));
+            jsonBody.put("p43", cursor.getString(5));
+            jsonBody.put("p48", cursor.getString(6));
+            jsonBody.put("p120", cursor.getString(7));
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
             _card=jsonBody.getString("pinPan").toString();

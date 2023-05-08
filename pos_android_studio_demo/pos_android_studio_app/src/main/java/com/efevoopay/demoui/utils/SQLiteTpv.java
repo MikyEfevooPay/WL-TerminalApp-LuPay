@@ -14,12 +14,20 @@ public class SQLiteTpv extends SQLiteOpenHelper {
     public static final String COLUMNA_ksn = "device_ksn";
     public static final String COLUMNA_tk = "device_tk";
     public static final String COLUMNA_key = "device_key";
+    public static final String COLUMNA_p43 = "device_p43";
+    public static final String COLUMNA_p48 = "device_p48";
+    public static final String COLUMNA_p120 = "device_p120";
+    public static final String COLUMNA_address = "device_address";
     private static final String SQL_CREAR = "CREATE TABLE IF NOT EXISTS "
             + NOMBRE_TABLA_DEVICE + "(" + COLUMNA_ID
             + " integer primary key autoincrement, " + COLUMNA_name
             + " text not null,"+ COLUMNA_ksn
             + " text not null,"+ COLUMNA_tk
             + " text not null,"+ COLUMNA_key
+            + " text not null,"+ COLUMNA_p43
+            + " text not null,"+ COLUMNA_p48
+            + " text not null,"+ COLUMNA_p120
+            + " text not null,"+ COLUMNA_address
             + " text not null);";
 
     public SQLiteTpv(Context context) {
@@ -38,7 +46,7 @@ public class SQLiteTpv extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-    public void TpvInsert(String _name,String _ksn,String _tk,String _key){
+    public void TpvInsert(String _name,String _ksn,String _tk,String _key,String _p43,String _p48, String _p120,String _address){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -47,6 +55,10 @@ public class SQLiteTpv extends SQLiteOpenHelper {
         values.put(COLUMNA_ksn, _ksn);
         values.put(COLUMNA_tk, _tk);
         values.put(COLUMNA_key, _key);
+        values.put(COLUMNA_p43, _p43);
+        values.put(COLUMNA_p48, _p48);
+        values.put(COLUMNA_p120, _p120);
+        values.put(COLUMNA_address, _address);
 
         db.insert(NOMBRE_TABLA_DEVICE, null,values);
         db.close();
@@ -54,7 +66,7 @@ public class SQLiteTpv extends SQLiteOpenHelper {
     public Cursor TpvConsult(String _posId){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {COLUMNA_ID,COLUMNA_name, COLUMNA_ksn,COLUMNA_tk,COLUMNA_key};
+        String[] projection = {COLUMNA_ID,COLUMNA_name, COLUMNA_ksn,COLUMNA_tk,COLUMNA_key,COLUMNA_p43,COLUMNA_p48,COLUMNA_p120,COLUMNA_address};
 
         Cursor cursor =
                 db.query(NOMBRE_TABLA_DEVICE,
