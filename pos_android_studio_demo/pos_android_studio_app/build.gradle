@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('app.keystore')
-            storePassword 'dspread'
-            keyPassword 'dspread'
-            keyAlias 'gundam_wing'
+            storeFile file('appkey.jks')
+            storePassword 'gntcapital'
+            keyPassword 'gntcapital'
+            keyAlias 'efevopay'
         }
         config {
             keyAlias 'key0'
