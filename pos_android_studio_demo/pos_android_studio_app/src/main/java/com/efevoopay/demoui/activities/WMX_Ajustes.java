@@ -132,10 +132,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-
                     TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
-                    WMX_Ajustes.super.showAlert("ERROR", error.getMessage());
+                    WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
                 }
             }) {
                 @Override
@@ -185,6 +183,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             String p48=objtpv.getString("p48").toString();
             String p120=objtpv.getString("p120").toString();
             String address=objtpv.getString("address").toString();
+            String comercio=objtpv.getString("comercio").toString();
+            String msi=objtpv.getString("msi").toString();
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
             jsonBody.put("device_tk", _tk);
@@ -199,16 +199,15 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    DatosInicializacion(response.toString(),p43,p48,p120,address);
+                    DatosInicializacion(response.toString(),p43,p48,p120,address,comercio,msi);
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.getMessage() );
-                    WMX_Ajustes.super.showAlert("ERROR", error.getMessage());
+                    WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
                 }
             }) {
                 @Override
@@ -248,20 +247,20 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
         }
     }
-    public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address){
+    public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi){
         try {
             JSONObject object = new JSONObject(_json);
 
             if(object.getString("codigo").equals("00")){
                 sqLiteTpv.TpvDelete(ksn_posId);
-                sqLiteTpv.TpvInsert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address);
+                sqLiteTpv.TpvInsert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi);
             /*VariableEncript.tk=object.getString("tk").toString();
             VariableEncript.ipek=object.getString("ipek").toString();
             VariableEncript.ksn=object.getString("ksn").toString();*/
-                WMX_Ajustes.super.showAlert("success", "!Inicialización con éxito!");
+                WMX_Ajustes.super.showAlert("success", "¡Inicialización con éxito!");
             }else{
                 ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(object.getString("codigo"));
-                WMX_Ajustes.super.showAlert("ERROR", details.description);
+                WMX_Ajustes.super.showAlert("informative", details.description);
             }
 
         } catch (JSONException e) {

@@ -191,8 +191,13 @@ public abstract class BaseActivity extends AppCompatActivity  {
                 break;
             case "error":
                 image.setImageResource(R.drawable.exclamation_mark);
-                tv_titulo.setTextColor(0xfffff);
+                tv_titulo.setTextColor(Color.parseColor("#FFFFFF"));
                 ll_custom_aler.setBackgroundColor(0xffFF9393);
+                break;
+            case "informative":
+                image.setImageResource(R.drawable.efevoo_i_info);
+                tv_titulo.setTextColor(Color.parseColor("#FFFFFF"));
+                ll_custom_aler.setBackgroundColor(Color.parseColor("#5DADE2"));
                 break;
         }
 

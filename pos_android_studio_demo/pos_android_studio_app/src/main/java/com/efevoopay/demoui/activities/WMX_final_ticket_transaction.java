@@ -292,24 +292,24 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
     private void setCorreo(String _correo)throws IOException {
         loader.show();
-        String html_template = getHTMLEmailTicketTemplate()
-                .replace("$comercial","EMBOCA")
-                .replace("$amount", Utils.isNull(v_subtotal, "N/A"))
-                .replace("$tip", Utils.isNull( v_tip, "N/A"))
-                .replace("$total",Utils.isNull(v_total, "N/A"))
-                .replace("$pay_method",Utils.isNull(card_provider, "N/A"))
-                .replace("$card",Utils.isNull(v_card, "N/A"))
-                .replace("$payment_date",Utils.isNull(v_time, "N/A"))
-                .replace("$address", "EMBOCA, PROL LOS SOLES 200 105-PB DEL VALLE ORIENTE SAN PEDRO GARZA GARCIA N.L.")
-                .replace("$kpos_id",Utils.isNull(WMX_Menu.ksn.posId, "N/A"))
-                .replace("$arqc",Utils.isNull(v_ARQC, "N/A"))
-                .replace("$aid",Utils.isNull(v_AID, "N/A"));
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correo";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
-            jsonBody.put("body", html_template);
+            jsonBody.put("subject","Ticket de compra");
+            jsonBody.put("comercio", Utils.isNull(WMX_Menu.cursor.getString(9), "N/A"));
+            jsonBody.put("amount", Utils.isNull(v_subtotal, "N/A"));
+            jsonBody.put("tip", Utils.isNull( v_tip, "N/A"));
+            jsonBody.put("total", Utils.isNull(v_total, "N/A"));
+            jsonBody.put("pay_method", Utils.isNull(card_provider, "N/A"));
+            jsonBody.put("card", Utils.isNull(v_card, "N/A"));
+            jsonBody.put("payment_date", Utils.isNull(v_time, "N/A"));
+            jsonBody.put("address", Utils.isNull(WMX_Menu.cursor.getString(8), "N/A"));
+            jsonBody.put("kpos_id", Utils.isNull(WMX_Menu.ksn.posId, "N/A"));
+            jsonBody.put("arqc", Utils.isNull(v_ARQC, "N/A"));
+            jsonBody.put("aid", Utils.isNull(v_AID, "N/A"));
+
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

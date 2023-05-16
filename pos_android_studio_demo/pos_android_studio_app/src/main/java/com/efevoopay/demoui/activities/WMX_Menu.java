@@ -22,7 +22,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     private LinearLayout transfer,other, ajustes, meses, cancelaciones;
     public static WMX_KSN ksn;
     private SQLiteTpv sqLiteTpv;
-    Cursor cursor;
+    public static Cursor cursor;
     private SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 }else{
-                    WMX_Menu.super.showAlert("ERROR","TPV NO INICIALIZADA: "+ksn.posId);
+                    WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
                     //TRACE.d("cursor: "+ TRACE.NEW_LINE+ cursor.getCount());
 
                 }
@@ -119,12 +119,17 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.btn_meses:
                 if (cursor.getCount()>0){
-                    intent = new Intent(this, WMX_Terminal.class);
-                    intent.putExtra("type_transaction", "msi");
-                    intent.putExtra("ksn_posId", ksn.posId);
-                    startActivity(intent);
+                    if(cursor.getString(10).equals("1")){
+                        intent = new Intent(this, WMX_Terminal.class);
+                        intent.putExtra("type_transaction", "msi");
+                        intent.putExtra("ksn_posId", ksn.posId);
+                        startActivity(intent);
+                    }else{
+                        WMX_Menu.super.showAlert("informative","OPCIÓN NO HABILITADA");
+                    }
+
                 }else{
-                    WMX_Menu.super.showAlert("ERROR","TPV NO INICIALIZADA: "+ksn.posId);
+                    WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
                 }
                 break;
             case R.id.btn_cancelaciones:

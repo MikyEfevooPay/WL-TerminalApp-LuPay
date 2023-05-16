@@ -12,6 +12,10 @@ import com.action.printerservice.PrintStyle;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.activities.WMX_Menu;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class Ticket {
@@ -43,17 +47,25 @@ public class Ticket {
 
         switch(section) {
             case 1:
+                String[] _list = address(WMX_Menu.cursor.getString(8));
                 ticket.append(trans_type.toUpperCase(Locale.ROOT));
                 ticket.append("\n");
-                ticket.append(approve);
+                ticket.append(tildetarjeta(approve));
                 ticket.append("\n\n");
-                ticket.append("EMBOCA".toUpperCase(Locale.ROOT));
+                ticket.append(Utils.isNull(WMX_Menu.cursor.getString(9), "N/A").toUpperCase(Locale.ROOT));
                 ticket.append("\n");
-                ticket.append("PROL LOS SOLES 200 105-PB DEL VALLE ORIENTE");
+                ticket.append(_list[0].toString().trim()+" "+_list[1].toString().trim()+" "+_list[2].toString().trim());
                 ticket.append("\n");
-                ticket.append("SAN PEDRO GARZA GARCIA,");
+                ticket.append(_list[3].toString().trim().toUpperCase(Locale.ROOT));
                 ticket.append("\n");
-                ticket.append("NUEVO LEON ");
+                ticket.append(_list[4].toString().trim().toUpperCase(Locale.ROOT));
+                ticket.append("\n");
+                ticket.append(_list[5].toString().trim().toUpperCase(Locale.ROOT));
+//                ticket.append("PROL LOS SOLES 200 105-PB DEL VALLE ORIENTE");
+//                ticket.append("\n");
+//                ticket.append("SAN PEDRO GARZA GARCIA,");
+//                ticket.append("\n");
+//                ticket.append("NUEVO LEON ");
                 ticket.append("\n");
                 ticket.append("TERMINAL");
                 ticket.append("\n");
@@ -99,6 +111,13 @@ public class Ticket {
                 ticket.append("de apertura de crédito que el banco");
                 ticket.append("\n");
                 ticket.append("acreditante y el tarjetahabiente tienen celebrado.");
+                ticket.append("\n");
+                ticket.append("\n");
+                ticket.append("\n");
+                ticket.append("\n");
+                ticket.append("\n");
+                ticket.append("\n");
+                ticket.append("\n");
                 break;
         }
 
@@ -128,10 +147,11 @@ public class Ticket {
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 18);
         printer.addText(ticketLayout(transaction_type, 5));
         printer.addText("");
-        printer.addText("");
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 16);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
         printer.addText(ticketLayout(transaction_type, 6));
+        printer.addText("");
+        printer.addText("");
         printer.addText("");
     }
 
@@ -199,6 +219,17 @@ public class Ticket {
             TRACE.d("Exception"+ e.toString());
             e.printStackTrace();
         }
+    }
+    public String tildetarjeta(String _text){
+        if(_text.equals("Credito")){
+            return "Crédito";
+        }else{
+            return "Débito";
+        }
+    }
+    public String[] address(String _address){
+        String[] _list = _address.split(", ");
+        return _list;
     }
 
 }

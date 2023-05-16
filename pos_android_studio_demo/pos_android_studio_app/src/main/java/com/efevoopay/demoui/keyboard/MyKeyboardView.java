@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Build;
 import android.text.Editable;
 import android.util.AttributeSet;
 import android.widget.EditText;
@@ -15,6 +16,8 @@ import com.efevoopay.demoui.utils.QPOSUtil;
 import com.efevoopay.demoui.utils.TRACE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -116,7 +119,7 @@ public class MyKeyboardView extends KeyboardView {
             case KEYBOARDTYPE_Only_Num_Pwd:
                 if (keyboardOnlyNumPwd == null)
                     keyboardOnlyNumPwd = new Keyboard(getContext(), R.xml.keyboard_only_number);
-                randomKey(keyboardOnlyNumPwd);
+                randomKey(keyboardOnlyNumPwd, true);
                 setKeyboard(keyboardOnlyNumPwd);
                 break;
         }
@@ -194,12 +197,18 @@ public class MyKeyboardView extends KeyboardView {
      * random number keyboard
      * code 48-57 (0-9)
      */
-    public void randomKey(Keyboard pLatinKeyboard) {
-        int[] ayRandomKey = new int[13];
+    public void randomKey(Keyboard pLatinKeyboard, boolean ...sort) {
+        Integer[] ayRandomKey = new Integer[13];
 
         for(int i = 0; i < dataList.size() ; i ++){
-            ayRandomKey[i]=Integer.valueOf(dataList.get(i),16);
+            ayRandomKey[i]=Integer.valueOf(dataList.get(i), 16);
+            TRACE.d("Key: " + ayRandomKey[i]);
         }
+
+            if (sort[0] == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                Arrays.sort(ayRandomKey, Comparator.comparingInt((a) -> a == 0 ? ayRandomKey.length - 3 : a));
+
+
 
         List<Keyboard.Key> pKeyLis = pLatinKeyboard.getKeys();
         int index = 0;

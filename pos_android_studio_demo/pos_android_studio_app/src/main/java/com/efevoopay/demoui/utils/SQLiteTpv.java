@@ -18,6 +18,8 @@ public class SQLiteTpv extends SQLiteOpenHelper {
     public static final String COLUMNA_p48 = "device_p48";
     public static final String COLUMNA_p120 = "device_p120";
     public static final String COLUMNA_address = "device_address";
+    public static final String COLUMNA_comercio="device_comercio";
+    public static final String COLUMNA_msi="device_msi";
     private static final String SQL_CREAR = "CREATE TABLE IF NOT EXISTS "
             + NOMBRE_TABLA_DEVICE + "(" + COLUMNA_ID
             + " integer primary key autoincrement, " + COLUMNA_name
@@ -28,6 +30,8 @@ public class SQLiteTpv extends SQLiteOpenHelper {
             + " text not null,"+ COLUMNA_p48
             + " text not null,"+ COLUMNA_p120
             + " text not null,"+ COLUMNA_address
+            + " text not null,"+ COLUMNA_comercio
+            + " text not null,"+ COLUMNA_msi
             + " text not null);";
 
     public SQLiteTpv(Context context) {
@@ -46,7 +50,7 @@ public class SQLiteTpv extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-    public void TpvInsert(String _name,String _ksn,String _tk,String _key,String _p43,String _p48, String _p120,String _address){
+    public void TpvInsert(String _name,String _ksn,String _tk,String _key,String _p43,String _p48, String _p120,String _address,String _comercio,String msi){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -59,6 +63,8 @@ public class SQLiteTpv extends SQLiteOpenHelper {
         values.put(COLUMNA_p48, _p48);
         values.put(COLUMNA_p120, _p120);
         values.put(COLUMNA_address, _address);
+        values.put(COLUMNA_comercio, _comercio);
+        values.put(COLUMNA_msi, msi);
 
         db.insert(NOMBRE_TABLA_DEVICE, null,values);
         db.close();
@@ -66,7 +72,7 @@ public class SQLiteTpv extends SQLiteOpenHelper {
     public Cursor TpvConsult(String _posId){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {COLUMNA_ID,COLUMNA_name, COLUMNA_ksn,COLUMNA_tk,COLUMNA_key,COLUMNA_p43,COLUMNA_p48,COLUMNA_p120,COLUMNA_address};
+        String[] projection = {COLUMNA_ID,COLUMNA_name, COLUMNA_ksn,COLUMNA_tk,COLUMNA_key,COLUMNA_p43,COLUMNA_p48,COLUMNA_p120,COLUMNA_address,COLUMNA_comercio,COLUMNA_msi};
 
         Cursor cursor =
                 db.query(NOMBRE_TABLA_DEVICE,

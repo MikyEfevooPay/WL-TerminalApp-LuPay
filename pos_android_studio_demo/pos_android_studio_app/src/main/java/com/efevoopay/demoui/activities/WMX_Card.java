@@ -182,7 +182,17 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
          pos.openUart();**/
 
        /*Handler handler = new Handler();
-        handler.postDelayed(() -> ChangeViewToTicket(), 2000);*/
+        handler.postDelayed(() -> {
+            MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
+                @Override
+                public void getNumberValue(String value) {
+                    TRACE.d("init change handle event: "+value);
+                    pos.pinMapSync(value,30);
+                }
+            });
+            keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, new ArrayList<String>());
+            keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, Pruebaedittext);
+        }, 2000);*/
     }
 
     public String formatMoney(String amount){

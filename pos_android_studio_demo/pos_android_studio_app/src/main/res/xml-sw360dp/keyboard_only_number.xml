@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:horizontalGap="96px"
-    android:keyWidth="110px"
-    android:keyHeight="110px"
-    android:verticalGap="50px"
+    android:horizontalGap="68px"
+    android:keyWidth="150px"
+    android:keyHeight="150px"
+    android:verticalGap="25px"
     >
     <Row>
         <Key
@@ -40,7 +40,7 @@
             android:keyLabel="9" />
     </Row>
     <Row android:rowEdgeFlags="bottom" >
-        <Key android:keyIcon="@drawable/round_button_background" android:codes="0"/>
+        <Key android:keyIcon="@drawable/round_button_background"  android:codes="0"/>
         <Key
             android:codes="48"
             android:keyLabel="0"
