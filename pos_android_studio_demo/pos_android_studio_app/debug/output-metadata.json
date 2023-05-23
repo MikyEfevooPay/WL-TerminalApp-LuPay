@@ -5,15 +5,15 @@
     "kind": "Directory"
   },
   "applicationId": "com.efevoopay.demoui",
-  "variantName": "release",
+  "variantName": "debug",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 124,
-      "versionName": "1.2.4",
-      "outputFile": "pos_android_studio_app-release.apk"
+      "versionCode": 10,
+      "versionName": "1.0.10",
+      "outputFile": "pos_android_studio_app-debug.apk"
     }
   ],
   "elementType": "File"

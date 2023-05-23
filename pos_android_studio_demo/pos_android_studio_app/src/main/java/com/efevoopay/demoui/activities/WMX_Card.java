@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,13 +36,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
-import com.efevoopay.demoui.utils.FileUtils;
 import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.ResponseCode;
 import com.efevoopay.demoui.utils.SQLiteTpv;
@@ -58,7 +57,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,6 +86,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Dialog dialog;
     private Dialog dialogPin;
     private Intent intent;
+    private MediaPlayer Beep;
     private LottieAnimationView LottieTerminalView, LottiePointsView;
 
     private String FinalPin = "";
@@ -126,7 +125,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String _ARQC="N/A";
     private String _9F41="";
     private SQLiteTpv sqLiteTpv;
-    private Integer counter = 0;
     Cursor cursor;
     ProgressDialog spinner;
     @Override
@@ -153,7 +151,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         Status_lector = (TextView) findViewById(R.id.wmx_status_lector);
         Total_Amount = (TextView) findViewById(R.id.wmx_text_total_Amount);
         Pruebaedittext = (EditText) findViewById(R.id.pruebaedittext);
-        lin = findViewById(R.id.linFhater);
+        lin = findViewById(R.id.lyt_card);
         Total_Amount.setText(AmountToShow);
         trading = (Button) findViewById(R.id.WMX_btn_trade);
         trading.setOnClickListener(this);
@@ -162,6 +160,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         pruebas.setOnClickListener(this);
 
         mContext = this;
+
+        Beep = MediaPlayer.create(mContext, R.raw.beep);
+        Beep.setVolume(0.05f, 0.05f);
 
         LottieTerminalView = findViewById(R.id.terminal_animation);
         LottiePointsView = findViewById(R.id.points_animation);
@@ -183,17 +184,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
        /*Handler handler = new Handler();
         handler.postDelayed(() -> {
-            MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
-                @Override
-                public void getNumberValue(String value) {
-                    TRACE.d("init change handle event: "+value);
-                    pos.pinMapSync(value,30);
-                }
-            });
-            keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, new ArrayList<String>());
-            keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, Pruebaedittext);
+
         }, 2000);*/
     }
+
 
     public String formatMoney(String amount){
         String str="";
@@ -238,7 +232,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         isPinCanceled = false;
         Status_lector.setText(R.string.starting);
         if (posType == POS_TYPE.UART) {
-            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP_UNALLOWED_LOW_TRADE);
             pos.doTrade(60);
         }
     }
@@ -284,29 +278,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     }
 
-    private void setPin(String x, TextView tv){
-
-        if(x != "del" && FinalPin.length()<4){
-            FinalPin = FinalPin + x;
-        }else if(x == "del" && FinalPin.length()>0){
-            FinalPin = FinalPin.substring(0,FinalPin.length()-1);
-        }
-
-        if(FinalPin.length()<=4){
-            if(FinalPin.length()==0)tv.setText("○ ○ ○ ○");
-            else if(FinalPin.length()==1)tv.setText("● ○ ○ ○");
-            else if(FinalPin.length()==2)tv.setText("● ● ○ ○");
-            else if(FinalPin.length()==3)tv.setText("● ● ● ○");
-            else if(FinalPin.length()==4)tv.setText("● ● ● ●");
-        }
-
-        if(FinalPin.length()==4) {
-            pos.pinMapSync(FinalPin,20);
-            dialog.dismiss();
-        }
-
-    }
-
     private KeyboardUtil keyboardUtil;
 
     private List<String> keyBoardList = new ArrayList<>();
@@ -325,7 +296,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         intent = new Intent(this, WMX_final_ticket_transaction.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        TRACE.d("date   "+getTime());
+        //TRACE.d("date   "+getTime());
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm");
         Date date = new Date();
@@ -338,6 +309,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         intent.putExtra("v_tipotarjeta",_tiptar);
         intent.putExtra("v_AID",_AID);
         intent.putExtra("v_ARQC",_ARQC);
+        intent.putExtra("ksn_posId", ksn_posId);
 
         if(type_transaction.equals("msi")){
             String v_months = thisIntent.getStringExtra("months");
@@ -657,6 +629,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 //nfcLog = decodeData.get("nfcLog");
                 Status_lector.setText(result.toString());
                 TRACE.d("EMV NFC Start");
+                Beep.start();
                 List<TLV> parse = TLVParser.parse(pos.getNFCBatchData().get("tlv"));
                 //C0
                 String onLineksn = TLVParser.searchTLV(parse, "C0").value;
@@ -797,7 +770,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         @Override
         public void onRequestTime() {
-            TRACE.d("onRequestTime");
+            //TRACE.d("onRequestTime");
 
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
@@ -842,7 +815,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         @Override
         public void onRequestOnlineProcess(final String tlv) {
-            TRACE.d("\nonRequestOnlineProcess \n" + tlv);
+            //TRACE.d("\nonRequestOnlineProcess \n" + tlv);
             Status_lector.setText(R.string.request_data_to_server);
             List<TLV> parse = TLVParser.parse(tlv);
             //C0
@@ -851,7 +824,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
             emvicc = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.ECB, null);
-            TRACE.d("\nemvicc(tlv):\n" + emvicc);
+            //TRACE.d("\nemvicc(tlv):\n" + emvicc);
             emvicc=emvicc.substring(8);
 
             List<TLV> ICCparse = TLVParser.parse(emvicc);
@@ -866,9 +839,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             //dialog.setContentView(R.layout.alert_dialog);
             //dialog.setTitle(R.string.request_data_to_server);
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-            TRACE.d("\nanlysEmvIccData(tlv):\n" + decodeData.toString());
+            //TRACE.d("\nanlysEmvIccData(tlv):\n" + decodeData.toString());
             String decodeData2 = pos.anlysEmvTLVData(tlv);
-            TRACE.d("\nanlysEmvTLVData(tlv):\n" + decodeData2);
+            //TRACE.d("\nanlysEmvTLVData(tlv):\n" + decodeData2);
 
             if (isPinCanceled) {
                 Status_lector.setText(R.string.replied_failed);
@@ -901,7 +874,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestBatchData(String tlv) {
             TRACE.d(getString(R.string.end_transaction));
             String content = getString(R.string.batch_data);
-            TRACE.d("\n\"onRequestBatchData(String tlv):\":\n" + tlv);
+            //TRACE.d("\n\"onRequestBatchData(String tlv):\":\n" + tlv);
             content += tlv;
             Status_lector.setText(content);
             //call(tlv);
@@ -910,7 +883,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         @Override
         public void onRequestTransactionResult(QPOSService.TransactionResult transactionResult) {
-            TRACE.d("onRequestTransactionResult()" + transactionResult.toString());
+            //TRACE.d("onRequestTransactionResult()" + transactionResult.toString());
             if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
                 //clearDisplay();
                 Status_lector.setText("CARD_REMOVED");
@@ -947,7 +920,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 ICCTag=pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"9F21");
                 String _tag9F21=ICCTag.get("tlv").toString();
 
-                TRACE.d("_9f: " + _9F41);
+                //TRACE.d("_9f: " + _9F41);
                 String pan=_pinpan.substring(4,12)+"XXXX"+_pinpan.substring(16,_pinpan.length());
 
                 Integer F41=Integer.parseInt(_9F41.substring(15,20),16);
@@ -1074,14 +1047,14 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
-            TRACE.d("onQposRequestPinResult()");
+            //TRACE.d("onQposRequestPinResult()");
             super.onQposRequestPinResult(dataList, offlineTime);
             keyBoardList = dataList;
             MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
                 @Override
                 public void getNumberValue(String value) {
-                    TRACE.d("init change handle event: "+value);
-                    pos.pinMapSync(value,30);
+                    TRACE.d("init change handle event: " + value);
+                    pos.pinMapSync(value, 20);
                 }
             });
             keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, dataList);
@@ -1090,7 +1063,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         @Override
         public void onReturnGetPinInputResult(int num) {
-            TRACE.d("onReturnGetPinInputResult() " + num);
+            //TRACE.d("onReturnGetPinInputResult() " + num);
 
             super.onReturnGetPinInputResult(num);
             String s = "";
@@ -1183,8 +1156,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         @Override
         public void onError(QPOSService.Error errorState) {
-            TRACE.d("onError" + errorState.toString());
-            WMX_Card.super.showAlert("ERROR", errorState.toString());
+            TRACE.d("onError:" + errorState);
+            if (errorState.toString().equals("UNKNOWN")){
+                WMX_Card.super.showAlert("informative", "Tarjeta no leída, intente de nuevo.");
+            }else{
+                WMX_Card.super.showAlert("ERROR", errorState.toString());
+            }
+
         }
 
         @Override
@@ -1847,8 +1825,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         if(_tiptarj.equals("Desconocido")||_redtarj.equals(("Desconocido"))){
             ValidacionRequest(_bin,entrada,entrymode,emv,pan,track2,counter,tag9F21);
         }else{
-            TRACE.d("_tiptarj : " + _tiptarj.toString());
-            TRACE.d("_redtarj : " + _redtarj.toString());
+            //TRACE.d("_tiptarj : " + _tiptarj.toString());
+            //TRACE.d("_redtarj : " + _redtarj.toString());
             procesofinal(entrada,entrymode,emv,_redtarj,_tiptarj,pan,track2,counter,tag9F21);
 
         }
@@ -1861,7 +1839,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            TRACE.d("UrlBin : " + response.toString());
+                            //TRACE.d("UrlBin : " + response.toString());
                             procesofinal(entrada,entrymode,emv,response.getString("scheme").toString(),response.getString("type").toString(),pan,track2,counter,time_txn);
                         } catch (JSONException  e) {
                             e.printStackTrace();
@@ -1871,7 +1849,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        TRACE.d("UrlBin : VolleyError");
+                        //TRACE.d("UrlBin : VolleyError");
                         procesofinal(entrada,entrymode,emv,"","",pan,track2,counter,time_txn);
                     }
                 }
@@ -1914,7 +1892,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    TRACE.d("** ResponseVolleyError  " +  TRACE.NEW_LINE + error.toString() );
+                    //TRACE.d("** ResponseVolleyError  " +  TRACE.NEW_LINE + error.toString() );
                     WMX_Card.super.showAlert("ERROR", "TRANSACCION NO PROCESADA : "+ error.toString());
 
                     Toast.makeText(getApplicationContext(),"TRANSACCION NO PROCESADA",Toast.LENGTH_LONG).show();
@@ -1977,11 +1955,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             jsonBody.put("deviceid", deviceid);
             jsonBody.put("arqc", arqc);
             final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
+            //TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Urltxn, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    //TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                     if(response.equals("00")){
                         ChangeViewToTicket();
                         Status_lector.setText(content);
@@ -1997,7 +1975,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             error.printStackTrace();
-                            TRACE.d("** ResponseVolleyValidacionTxn  " +  TRACE.NEW_LINE + error.toString() );
+                            //TRACE.d("** ResponseVolleyValidacionTxn  " +  TRACE.NEW_LINE + error.toString() );
                             WMX_Card.super.showAlert("ERROR", "VALIDAR TRANSACCION EN HISTORIAL: "+ error.toString());
                             Toast.makeText(getApplicationContext(),"VALIDAR TRANSACCION EN HISTORIAL",Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

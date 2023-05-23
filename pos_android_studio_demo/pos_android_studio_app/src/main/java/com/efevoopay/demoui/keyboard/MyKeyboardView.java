@@ -205,8 +205,8 @@ public class MyKeyboardView extends KeyboardView {
             TRACE.d("Key: " + ayRandomKey[i]);
         }
 
-            if (sort[0] == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                Arrays.sort(ayRandomKey, Comparator.comparingInt((a) -> a == 0 ? ayRandomKey.length - 3 : a));
+        if (sort[0] == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            Arrays.sort(ayRandomKey, Comparator.comparingInt((a) -> a == 0 ? ayRandomKey.length - 3 : a));
 
 
 
@@ -220,36 +220,36 @@ public class MyKeyboardView extends KeyboardView {
                 sy = mHeightPixels-pKeyLis.get(i).height*4-pKeyLis.get(i).x*6;//calculate interval value
             }
 
-                int code = pKeyLis.get(i).codes[0] ;
-                int y = sy + pKeyLis.get(i).y+ 95;
-                int x = pKeyLis.get(i).x;
-                int rit = x + pKeyLis.get(i).width;
-                int riby = y + pKeyLis.get(i).height;
-                String label;
+            int code = pKeyLis.get(i).codes[0] ;
+            int y = sy + pKeyLis.get(i).y+ 95;
+            int x = pKeyLis.get(i).x;
+            int rit = x + pKeyLis.get(i).width;
+            int riby = y + pKeyLis.get(i).height;
+            String label;
 
 
-                if (code > 0) {//number value
-                    pKeyLis.get(i).label = ayRandomKey[index] + "";
-                    pKeyLis.get(i).codes[0] = 48 + ayRandomKey[index];
-                    String locationStr = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(ayRandomKey[index]))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
-                            + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(rit)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(riby));
-                    s.append(locationStr);
-                    index++;
+            if (code > 0) {//number value
+                pKeyLis.get(i).label = ayRandomKey[index] + "";
+                pKeyLis.get(i).codes[0] = 48 + ayRandomKey[index];
+                String locationStr = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(ayRandomKey[index]))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
+                        + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(rit)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(riby));
+                s.append(locationStr);
+                index++;
+            }else{
+                if(code == -3){
+                    label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(13));
+                }else if(code == -4){
+                    label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(15));
+                }else if(code == 0){
+                    label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(-1));
                 }else{
-                    if(code == -3){
-                        label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(13));
-                    }else if(code == -4){
-                        label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(15));
-                    }else if(code == 0){
-                        label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(-1));
-                    }else{
-                        label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(14));
-                    }
-                    String locationStr = label + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
-                            + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(rit)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(riby));
-                    s.append(locationStr);
-
+                    label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(14));
                 }
+                String locationStr = label + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
+                        + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(rit)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(riby));
+                s.append(locationStr);
+
+            }
 
 
         }

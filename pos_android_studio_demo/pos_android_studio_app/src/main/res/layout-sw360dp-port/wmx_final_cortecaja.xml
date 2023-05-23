@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/ep_fondo"
+    >
+    <include layout="@layout/toolbar_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5px"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="Monto total"
+                android:textColor="@color/membership_green"
+                android:textSize="25px" />
+
+            <TextView
+                android:id="@+id/txt_totalamount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5px"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="$4,130.00 mxn"
+                android:textColor="@color/membership_green"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/txt_datetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5px"
+                android:fontFamily="@font/dm_sans"
+                android:text="27/04/22 15:24"
+                android:textColor="#121212"
+                android:textSize="40px" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/final_cortecaja_List"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="37px"
+            android:paddingRight="37px"
+            android:visibility="gone">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/layout_finalcortecaja_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/history_empty" />
+
+                <TextView
+                    android:id="@+id/txt_finalcortecaja_empty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="Corte de caja no disponible"
+                    android:textAlignment="center"
+                    android:textColor="#6498FA"
+                    android:textSize="30px" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="20dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/btn_finalcortecaja"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/ep_btn_continuar_fondo"
+            android:fontFamily="@font/dm_sans_bold"
+            android:minHeight="65dip"
+            android:text="Confirmar corte de caja"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="30px" />
+    </LinearLayout>
+</LinearLayout>

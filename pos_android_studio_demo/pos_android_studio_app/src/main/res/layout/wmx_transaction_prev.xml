@@ -11,22 +11,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="37px"
-        android:layout_marginRight="37px"
-        android:layout_marginBottom="37px"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30px"
+        android:layout_marginRight="30px"
+        android:paddingTop="15px"
+        android:layout_weight="1"
         android:background="@drawable/fondo_ticket"
-        android:orientation="vertical"
-        android:paddingLeft="18px"
-        android:paddingTop="43px"
-        android:paddingRight="18px"
-        android:paddingBottom="56px">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/tp_iv_trans_type"
             android:layout_width="match_parent"
             android:layout_height="61px"
-            android:layout_marginBottom="18px"
+            android:layout_marginBottom="15px"
             app:srcCompat="@drawable/efevoo_i_check_exito" />
 
         <TextView
@@ -49,7 +46,7 @@
                 android:id="@+id/textView22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="29px"
+                android:layout_marginBottom="20px"
                 android:fontFamily="@font/dm_sans"
                 android:gravity="center"
                 android:text="Aut. No. "
@@ -60,7 +57,7 @@
                 android:id="@+id/tp_tv_auth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="29px"
+                android:layout_marginBottom="20px"
                 android:fontFamily="@font/dm_sans"
                 android:gravity="center"
                 android:text="3884956"
@@ -71,7 +68,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15px"
+            android:layout_marginBottom="10px"
             android:orientation="horizontal"
             android:paddingLeft="43px"
             android:paddingRight="43px">
@@ -101,7 +98,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15px"
+            android:layout_marginBottom="10px"
             android:orientation="horizontal"
             android:paddingLeft="43px"
             android:paddingRight="43px">
@@ -131,7 +128,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="45px"
+            android:layout_marginBottom="15px"
             android:orientation="horizontal"
             android:paddingLeft="43px"
             android:paddingRight="43px">
@@ -164,7 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/dotted_line"
-            android:layout_marginBottom="36px"
+            android:layout_marginBottom="15px"
             android:layout_marginRight="16px"
             android:layout_marginLeft="16px"
             />
@@ -172,6 +169,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10px"
+            android:paddingLeft="8px"
+            android:paddingRight="8px"
             android:orientation="horizontal">
 
             <TextView
@@ -197,6 +196,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10px"
+            android:paddingLeft="8px"
+            android:paddingRight="8px"
             android:orientation="horizontal">
 
             <TextView
@@ -229,20 +230,22 @@
             android:textColor="#5A5A5A"
             android:textSize="18px"
             android:layout_marginBottom="8px"
-            android:layout_marginLeft="7px"/>
+            android:layout_marginLeft="8px"/>
 
         <LinearLayout
             android:id="@+id/tp_ll_content_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="26px"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="8px"
+            android:layout_marginRight="8px"
             android:background="@drawable/rounded_corner"
             android:backgroundTint="@color/ep_fondo_transaction_item"
             android:orientation="horizontal"
             android:paddingLeft="18px"
-            android:paddingTop="19px"
+            android:paddingTop="10px"
             android:paddingRight="18px"
-            android:paddingBottom="19px">
+            android:paddingBottom="10px">
 
             <LinearLayout
                 android:layout_width="51px"
@@ -326,42 +329,28 @@
             android:text="640463"
             android:textColor="#5A5A5A"
             android:textSize="20px" />
-        <TextView
-            android:id="@+id/tp_tv_estatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans"
-            android:gravity="center_horizontal"
-            android:text="NA"
-            android:visibility="invisible"
-            android:textColor="#5A5A5A"
-            android:textSize="20px" />
-        <LinearLayout
-            android:id="@+id/tp_ll_content_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingLeft="18px"
-            android:paddingTop="19px"
-            android:paddingRight="18px"
-            android:paddingBottom="19px">
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="20dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp"
+        android:visibility="visible">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_ticket_print"
-                android:layout_width="300px"
-                android:layout_height="90px"
-                android:background="@drawable/efv_print_btn"
-                android:drawableLeft="@drawable/printer"
-                android:fontFamily="@font/dm_sans_bold"
-                android:gravity="center"
-                android:minHeight="50dip"
-                android:stateListAnimator="@null"
-                android:text="Print"
-                android:textAllCaps="true"
-                android:textColor="#0F1010"
-                android:textSize="25px" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/btn_print"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#000000"
+            android:fontFamily="@font/dm_sans_bold"
+            android:text="Mandar ticket por mail"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="22px" />
     </LinearLayout>
 
 </LinearLayout>

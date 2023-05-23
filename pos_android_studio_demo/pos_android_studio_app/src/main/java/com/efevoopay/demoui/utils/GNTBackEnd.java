@@ -28,7 +28,7 @@ public class GNTBackEnd {
         String tr_ksn = cursor.getString(2);
         String tr_tk = cursor.getString(3);
         String track2 = _track2.toUpperCase(Locale.ROOT);
-        TRACE.d(TRACE.NEW_LINE + "track2" + TRACE.NEW_LINE + track2+TRACE.NEW_LINE);
+        //TRACE.d(TRACE.NEW_LINE + "track2" + TRACE.NEW_LINE + track2+TRACE.NEW_LINE);
         Integer tr_counter = _counter;
 
         tr.setKey(tr_key);
@@ -89,7 +89,7 @@ public class GNTBackEnd {
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
             _card=jsonBody.getString("pinPan").toString();
-            TRACE.d(TRACE.NEW_LINE +  jsonBody.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);
+            //TRACE.d(TRACE.NEW_LINE +  jsonBody.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);
             return jsonBody.toString();
         } catch (JSONException e) {
             TRACE.d("** ERROR JSON " +  TRACE.NEW_LINE + e.toString() );
@@ -196,7 +196,7 @@ public class GNTBackEnd {
     }
     public String tipotarjeta(String _tipo){
         if (_tipo.equals("credit")){
-            return "Credito";
+            return "Crédito";
         }else if (_tipo.equals("debit")) {
             return "Debito";
         }else  {
@@ -204,7 +204,7 @@ public class GNTBackEnd {
         }
     }
     public String redtarjeta(String _red,String _pan){
-        TRACE.d("original: "+_red+" original: "+_pan);
+        //TRACE.d("original: "+_red+" original: "+_pan);
         if (_red==""){
             if (Integer.parseInt(_pan)>=4 && Integer.parseInt(_pan)<5){
                 return "Visa";
@@ -212,7 +212,7 @@ public class GNTBackEnd {
                 return "MC";
             }
         }else{
-            TRACE.d("redtarjeta original: "+_red);
+            //TRACE.d("redtarjeta original: "+_red);
             if(_red.equals("visa")){
                 return _red.substring(0, 1).toUpperCase() + _red.substring(1);
             }else if(_red.equals("mastercard"))  {
@@ -224,19 +224,19 @@ public class GNTBackEnd {
         }
     }
     public String tagtipotarjeta(String tag50,String tag9f12){
-        TRACE.d("tag50 : " + tag50.toString());
-        TRACE.d("tag9f12 : " + tag9f12.toString());
+        //TRACE.d("tag50 : " + tag50.toString());
+        //TRACE.d("tag9f12 : " + tag9f12.toString());
         if (tag50.contains("DEBIT")||tag9f12.contains("DEBIT")){
             return "Debito";
         }else if (tag50.contains("CREDIT")||tag9f12.contains("CREDIT")){
-            return "Credito";
+            return "Crédito";
         }else{
             return "Desconocido";
         }
     }
     public String tagredtarjeta(String tag50,String tag9f12){
-        TRACE.d("tag50 : " + tag50.toString());
-        TRACE.d("tag9f12 : " + tag9f12.toString());
+        //TRACE.d("tag50 : " + tag50.toString());
+        //TRACE.d("tag9f12 : " + tag9f12.toString());
         if (tag50.contains("VISA")||tag9f12.contains("VISA")){
             return "Visa";
         }else if (tag50.contains("MASTER")||tag9f12.contains("MASTER")){
@@ -246,9 +246,9 @@ public class GNTBackEnd {
         }
     }
     public String MascaraTrack2(String track2){
-        TRACE.d("track2 original : " + track2.toString());
+        //TRACE.d("track2 original : " + track2.toString());
         track2= String.format("%"+-48+"s",track2.toUpperCase(Locale.ROOT)).replace(" ","F");
-        TRACE.d("track2 final : " + track2.toString());
+        //TRACE.d("track2 final : " + track2.toString());
         return track2;
     }
     public String CountTrack2(String track2){

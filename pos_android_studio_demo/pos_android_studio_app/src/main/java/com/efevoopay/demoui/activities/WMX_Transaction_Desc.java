@@ -1,14 +1,19 @@
 package com.efevoopay.demoui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
@@ -17,6 +22,8 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +49,7 @@ import com.action.printerservice.ActionPrinter;
 import com.action.printerservice.PrintStyle;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -64,12 +72,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     ImageView tp_iv_trans_type,tp_iv_process;
     LinearLayout tp_ll_content_card;
     private int transaction_type;
-    private String blueTootchAddress = "", card_provider;
+    private String card_provider;
     private Ticket ticket;
     Context mContext;
-    private Intent intent;
     private String ksn_posId;
-    AppCompatButton btn_ticket_print;
+    ProgressDialog loader;
+    private SQLiteTpv sqLiteTpv;
+    Cursor cursor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +90,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
         ticket = new Ticket(getApplicationContext());
+        loader = Utils.getLoaderSpinner(this, "Enviando...");
         initData(intent);
     }
 
@@ -96,7 +106,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
 
     private void onFinish() {
         new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
-                .setTitle("Impresion de Ticket")
+                .setTitle("Impresión de Ticket")
                 .setIcon(R.drawable.printer)
                 .setPositiveButton("Comercio",(dialog, lis) -> {
                     ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
@@ -111,11 +121,16 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_print:
-                onFinish();
+                if(Build.MODEL.equals("D30")){
+                    onFinish();
+                }else{
+                    TRACE.d("click email button");
+                    openModalSendEmail();
+                }
+
                 break;
 
             case R.id.ll_btn_open_modal_email:
-                TRACE.d("click email button");
                 openModalSendEmail();
                 break;
             default:
@@ -130,49 +145,91 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         MaterialAlertDialogBuilder modalEmail = new MaterialAlertDialogBuilder(mContext, R.style.ThemeOverlay_App_MaterialAlertDialog);
         modalEmail.setView(dialogContentView);
 
-        AppCompatButton btn_modal_sendEmail = (AppCompatButton) dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+        AppCompatButton btn_modal_sendEmail = dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+        AppCompatImageButton btn_close = dialogContentView.findViewById(R.id.btn_correo_modal_close);
+        btn_modal_sendEmail.setEnabled(false);
+        btn_modal_sendEmail.getBackground().setAlpha(128);
+        EditText txt_email = dialogContentView.findViewById(R.id.editTextTextPersonName2);
+
+        txt_email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String email = s.toString();
+                boolean isValidEmail = Utils.isValidEmail(email);
+                boolean currEnableState = btn_modal_sendEmail.isEnabled();
+                if(isValidEmail != currEnableState) {
+                    btn_modal_sendEmail.setEnabled(isValidEmail);
+                    btn_modal_sendEmail.getBackground().setAlpha(isValidEmail ? 255 : 128);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         AlertDialog modalEmailCreate = modalEmail.create();
 
-        EditText txtcorreo = (EditText) dialogContentView.findViewById(R.id.editTextTextPersonName2);
-
         modalEmailCreate.show();
+
+        btn_close.setOnClickListener((view) -> {
+            modalEmailCreate.dismiss();
+        });
 
         btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 try {
-                    setCorreo(txtcorreo.getText().toString());
+                    setCorreo(txt_email.getText().toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
                     modalEmailCreate.dismiss();
                 }
-
-                startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
     }
 
 
     private void setCorreo(String _correo)throws IOException {
+        loader.show();
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correo";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
-            jsonBody.put("body", ticket.getTicketString(1));
+            jsonBody.put("subject","Ticket de compra");
+            jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
+            jsonBody.put("amount", Utils.isNull(tp_tv_amount.getText().toString(), "N/A"));
+            jsonBody.put("tip", Utils.isNull( tp_tv_tip.getText().toString(), "N/A"));
+            jsonBody.put("total", Utils.isNull(tp_tv_total.getText().toString(), "N/A"));
+            jsonBody.put("pay_method", Utils.isNull(card_provider, "N/A"));
+            jsonBody.put("card", Utils.isNull(tp_tv_card.getText().toString(), "N/A"));
+            jsonBody.put("payment_date", Utils.isNull(tp_tv_date_time.getText().toString(), "N/A"));
+            jsonBody.put("address", Utils.isNull(cursor.getString(8), "N/A"));
+            jsonBody.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
+            jsonBody.put("arqc", Utils.isNull(tp_tv_ARQC.getText().toString(), "N/A"));
+            jsonBody.put("aid", Utils.isNull(tp_tv_AID.getText().toString(), "N/A"));
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+                    loader.dismiss();
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                     showAlert("success", "¡Ticket enviado con éxito!");
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    loader.dismiss();
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
                     showAlert("ERROR",  error.toString());
                     //startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -257,8 +314,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_tipotarjeta = findViewById(R.id.tp_tv_tipotarjeta);
         tp_tv_AID=findViewById(R.id.txt_AID);
         tp_tv_ARQC=findViewById(R.id.txt_ARQC);
-        aid=intent.getStringExtra("aid");
-        arqc=intent.getStringExtra("arqc");
+//        aid=intent.getStringExtra("aid");
+//        arqc=intent.getStringExtra("arqc");
 
         if(status.equals("CAN")){
             tp_tv_tip.setText(propina);
@@ -303,13 +360,18 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_ARQC.setText(arqc);
         tp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         tp_tv_auth.setText(auth);
-        tp_tv_AID.setText(aid);
-        tp_tv_ARQC.setText(arqc);
+//        tp_tv_AID.setText(aid);
+//        tp_tv_ARQC.setText(arqc);
         tp_tv_amount.setText(amount);
         tp_tv_total.setText(total);
         tp_tv_card.setText("**** "+card);
         tp_tv_date_time.setText(date+" "+time);
         tp_tv_approve.setText(approve);
+
+        sqLiteTpv = new SQLiteTpv(this);
+        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
+        sqLiteTpv.onCreate(db);
+        cursor=sqLiteTpv.TpvConsult(ksn_posId);
 
         ticket.setData(tp_tv_trans_type.getText().toString(),
                 tp_tv_approve.getText().toString(), tp_tv_card.getText().toString(),
@@ -318,7 +380,9 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                 tp_tv_tip.getText().toString(),
                 tp_tv_total.getText().toString(),
                 tp_tv_ARQC.getText().toString(),
-                tp_tv_AID.getText().toString()
+                tp_tv_AID.getText().toString(),
+                ksn_posId,
+                cursor
         );
     }
 }

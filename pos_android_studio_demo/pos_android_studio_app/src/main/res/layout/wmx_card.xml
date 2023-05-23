@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linFhater"
+    android:id="@+id/lyt_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/efevoo_gradient_color"
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans"
-            android:text="Inserta tarjeta, desliza o contact less"
+            android:text="Inserta tarjeta, desliza o contactless"
             android:textAlignment="center"
             android:textColor="#fff"
             android:textSize="20px" />

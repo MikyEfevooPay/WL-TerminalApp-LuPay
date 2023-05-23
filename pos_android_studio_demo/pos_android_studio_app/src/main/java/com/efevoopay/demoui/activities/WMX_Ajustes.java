@@ -90,8 +90,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.WMX_btn_initialize_keys:
-                TRACE.d("posID: " + ksn_posId);
-                TRACE.d("TransportKey: " + TransportKey);
+                //TRACE.d("posID: " + ksn_posId);
+                //TRACE.d("TransportKey: " + TransportKey);
 
                 try {
                     RSA rsa = new RSA();
@@ -103,9 +103,9 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
                     _pk=rsaD.getPublicKey();
                     _tk=rsaD.getTk();
 
-                    TRACE.d("rsaD.getRsa: " + _rsa);
-                    TRACE.d("rsaD.getPublicKey: " + _pk);
-                    TRACE.d("rsaD.getTk: " + _tk);
+                    //TRACE.d("rsaD.getRsa: " + _rsa);
+                    //TRACE.d("rsaD.getPublicKey: " + _pk);
+                    //TRACE.d("rsaD.getTk: " + _tk);
 
                 }catch (Throwable t){
                     TRACE.d("error rsa: " + t);
@@ -132,6 +132,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+
                     TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
                     WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
                 }
@@ -200,12 +202,13 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void onResponse(String response) {
                     DatosInicializacion(response.toString(),p43,p48,p120,address,comercio,msi);
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    //TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
+
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.getMessage() );
                     WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
                 }

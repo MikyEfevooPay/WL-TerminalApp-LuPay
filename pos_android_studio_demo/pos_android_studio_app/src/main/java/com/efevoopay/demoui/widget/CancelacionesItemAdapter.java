@@ -70,7 +70,7 @@ public class CancelacionesItemAdapter extends RecyclerView.Adapter<Cancelaciones
         public MyViewHolder(@NonNull View itemView, TransactionsViewInterface transactionsViewInterface) {
             super(itemView);
             tv_auth=itemView.findViewById(R.id.wmx_trans_aut);
-            tv_date2=itemView.findViewById(R.id.wmx_trans_date);
+            tv_date2=itemView.findViewById(R.id.wmx_historial_cantidad);
             tv_amount2=itemView.findViewById(R.id.wmx_trans_amount);
             tv_time=itemView.findViewById(R.id.wmx_trans_time);
             tv_card=itemView.findViewById(R.id.wmx_trans_card);

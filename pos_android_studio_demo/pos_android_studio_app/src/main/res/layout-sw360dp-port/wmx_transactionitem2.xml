@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20px">
+    android:layout_marginTop="7dp"
+    android:layout_marginBottom="7dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,7 +101,7 @@
 
 
             <TextView
-                android:id="@+id/wmx_trans_date"
+                android:id="@+id/wmx_historial_cantidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="9px"
@@ -130,7 +131,7 @@
                     android:id="@+id/wmx_trans_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_medium"
+                    android:fontFamily="@font/dm_sans_bold"
                     android:includeFontPadding="false"
                     android:text="**** 3245"
 

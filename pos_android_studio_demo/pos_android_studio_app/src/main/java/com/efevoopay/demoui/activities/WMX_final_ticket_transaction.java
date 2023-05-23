@@ -2,8 +2,11 @@ package com.efevoopay.demoui.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.text.Editable;
@@ -15,6 +18,7 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 
 import android.widget.AbsListView;
@@ -38,6 +42,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.utils.Ticket;
@@ -64,7 +69,9 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total, card_provider;
     private Ticket ticket;
     ProgressDialog loader;
-
+    private String ksn_posId;
+    private SQLiteTpv sqLiteTpv;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +94,14 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         ll_btn_open_modal_email.setOnClickListener(this);
 
         Intent intent = getIntent();
+        ksn_posId = intent.getStringExtra("ksn_posId");
         type_transaction = intent.getStringExtra("type_transaction");
+
+        sqLiteTpv = new SQLiteTpv(this);
+        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
+        sqLiteTpv.onCreate(db);
+        cursor=sqLiteTpv.TpvConsult(ksn_posId);
+
         initInfo();
 
     }
@@ -124,7 +138,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         ticket_tv_total_value.setText(v_total);
         ticket_tv_time_value.setText(v_time);
         ticket_tv_card_value.setText(v_card);
-        ticket_tv_method_value.setText(v_tipotarjeta);
+        ticket_tv_method_value.setText(ticket.tildetarjeta(v_tipotarjeta));
         txt_AID.setText(v_AID);
         txt_ARQC.setText(v_ARQC);
 
@@ -184,7 +198,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("¿Imprimir copia del ticket al cliente?")
                 .setIcon(R.drawable.printer)
-                .setPositiveButton("Si",(dialog, lis) -> {
+                .setPositiveButton("Sí",(dialog, lis) -> {
                     ticket.GenerateTicket(PRINT_TYPE.CLIENT, transaction_type);
                     startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 })
@@ -196,18 +210,16 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
     @Override
     public void onClick(View view) {
-        ticket.setData(v_type_transaction,
-                v_tipotarjeta, v_card,
-                card_provider, v_time,
-                v_subtotal,
-                v_tip,
-                v_total,
-                v_ARQC,
-                v_AID);
+
 
         switch (view.getId()){
             case R.id.btn_ticket_final:
-                onFinish();
+                if(Build.MODEL.equals("D30")){
+                    ticket.setData(v_type_transaction, v_tipotarjeta, v_card, card_provider, v_time, v_subtotal, v_tip, v_total, v_ARQC, v_AID, ksn_posId, cursor);
+                    onFinish();
+                }else{
+                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                }
                 break;
 
             case R.id.ll_btn_open_modal_email:
@@ -227,6 +239,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         modalEmail.setView(dialogContentView);
 
         AppCompatButton btn_modal_sendEmail = dialogContentView.findViewById(R.id.btn_modal_sendEmail);
+        AppCompatImageButton btn_close = dialogContentView.findViewById(R.id.btn_correo_modal_close);
         btn_modal_sendEmail.setEnabled(false);
         btn_modal_sendEmail.getBackground().setAlpha(128);
         EditText txt_email = dialogContentView.findViewById(R.id.editTextTextPersonName2);
@@ -257,6 +270,10 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         AlertDialog modalEmailCreate = modalEmail.create();
 
         modalEmailCreate.show();
+
+        btn_close.setOnClickListener((view) -> {
+            modalEmailCreate.dismiss();
+        });
 
         btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,18 +315,17 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
             jsonBody.put("subject","Ticket de compra");
-            jsonBody.put("comercio", Utils.isNull(WMX_Menu.cursor.getString(9), "N/A"));
+            jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
             jsonBody.put("amount", Utils.isNull(v_subtotal, "N/A"));
             jsonBody.put("tip", Utils.isNull( v_tip, "N/A"));
             jsonBody.put("total", Utils.isNull(v_total, "N/A"));
             jsonBody.put("pay_method", Utils.isNull(card_provider, "N/A"));
             jsonBody.put("card", Utils.isNull(v_card, "N/A"));
             jsonBody.put("payment_date", Utils.isNull(v_time, "N/A"));
-            jsonBody.put("address", Utils.isNull(WMX_Menu.cursor.getString(8), "N/A"));
-            jsonBody.put("kpos_id", Utils.isNull(WMX_Menu.ksn.posId, "N/A"));
+            jsonBody.put("address", Utils.isNull(cursor.getString(8), "N/A"));
+            jsonBody.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
             jsonBody.put("arqc", Utils.isNull(v_ARQC, "N/A"));
             jsonBody.put("aid", Utils.isNull(v_AID, "N/A"));
-
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

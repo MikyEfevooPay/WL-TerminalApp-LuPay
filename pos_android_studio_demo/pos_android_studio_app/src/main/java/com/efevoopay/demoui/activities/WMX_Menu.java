@@ -10,19 +10,17 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.KSN;
 import com.efevoopay.demoui.utils.ResponseCode;
 import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Utils;
 
 public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     //private Button  other, ajustes, meses;
     private Intent intent;
-    private LinearLayout transfer,other, ajustes, meses, cancelaciones;
-    public static WMX_KSN ksn;
+    private LinearLayout transfer,other, ajustes, meses, cancelaciones,cortecaja;
+    public WMX_KSN ksn;
     private SQLiteTpv sqLiteTpv;
-    public static Cursor cursor;
+    public Cursor cursor;
     private SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +41,13 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         ajustes= findViewById(R.id.btn_Ajustes);
         meses= findViewById(R.id.btn_meses);
         cancelaciones= findViewById(R.id.btn_cancelaciones);
+        cortecaja=findViewById(R.id.btn_cortecaja);
         transfer.setOnClickListener(this);
         other.setOnClickListener(this);
         ajustes.setOnClickListener(this);
         meses.setOnClickListener(this);
         cancelaciones.setOnClickListener(this);
+        cortecaja.setOnClickListener(this);
         getinfoScreen();
 
         sqLiteTpv = new SQLiteTpv(this);
@@ -127,13 +127,17 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     }else{
                         WMX_Menu.super.showAlert("informative","OPCIÓN NO HABILITADA");
                     }
-
                 }else{
                     WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
                 }
                 break;
             case R.id.btn_cancelaciones:
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);
+                intent.putExtra("ksn_posId", ksn.posId);
+                startActivity(intent);
+                break;
+            case R.id.btn_cortecaja:
+                intent = new Intent(this, WMX_Historial_CorteCaja.class);
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;

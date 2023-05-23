@@ -10,7 +10,7 @@ import com.efevoopay.demoui.utils.TRACE;
 
 import java.util.Hashtable;
 
-public class WMX_KSN {
+public class WMX_KSN extends CQPOSService{
     private QPOSService pos;
     public String posId;
     Context eContext;

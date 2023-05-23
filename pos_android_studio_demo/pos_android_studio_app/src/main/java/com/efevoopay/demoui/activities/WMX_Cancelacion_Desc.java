@@ -2,6 +2,8 @@ package com.efevoopay.demoui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -29,6 +32,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     private Ticket ticket;
     private Intent intent;
     private String ksn_posId;
+    private SQLiteTpv sqLiteTpv;
+    Cursor cursor;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -37,7 +42,12 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         Intent intent = getIntent();
         mContext=this;
         ticket = new Ticket(mContext);
+
         initData(intent);
+        sqLiteTpv = new SQLiteTpv(this);
+        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
+        sqLiteTpv.onCreate(db);
+        cursor=sqLiteTpv.TpvConsult(ksn_posId);
         buttonListener();
     }
 
@@ -126,7 +136,9 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
                 cp_tv_tip.getText().toString(),
                 cp_tv_total.getText().toString(),
                 cp_tv_arqc.getText().toString(),
-                cp_tv_aid.getText().toString()
+                cp_tv_aid.getText().toString(),
+                ksn_posId,
+                cursor
         );
         cp_btn_trans_cancelar = findViewById(R.id.cp_btn_trans_cancelar);
         cp_btn_trans_cancelar.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.efevoopay.demoui.utils;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.RemoteException;
@@ -10,16 +11,12 @@ import com.action.printerservice.ActionPrinter;
 import com.action.printerservice.IPrinterCallback;
 import com.action.printerservice.PrintStyle;
 import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.activities.WMX_Menu;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 public class Ticket {
-    private String trans_type, approve, card, card_type, date_time, amount, tip, total, ARQC, AID;
+    Cursor cursor;
+    private String trans_type, approve, card, card_type, date_time, amount, tip, total, ARQC, AID, ksn_posId;
     private final String SEPARATOR = "__________________________________";
     private android.content.Context ctx;
 
@@ -29,7 +26,7 @@ public class Ticket {
     }
 
 
-    public void setData(String trans_type, String approve, String card, String card_type, String date_time, String amount, String tip, String total, String ARQC, String AID) {
+    public void setData(String trans_type, String approve, String card, String card_type, String date_time, String amount, String tip, String total, String ARQC, String AID,String  ksn_posId,Cursor cursor) {
         this.trans_type = trans_type;
         this.approve = approve;
         this.card = card;
@@ -40,6 +37,8 @@ public class Ticket {
         this.total = total;
         this.ARQC = ARQC;
         this.AID = AID;
+        this.ksn_posId=ksn_posId;
+        this.cursor=cursor;
     }
 
     public String ticketLayout(int transaction_type, int section) {
@@ -47,12 +46,12 @@ public class Ticket {
 
         switch(section) {
             case 1:
-                String[] _list = address(WMX_Menu.cursor.getString(8));
+                String[] _list = address(cursor.getString(8));
                 ticket.append(trans_type.toUpperCase(Locale.ROOT));
                 ticket.append("\n");
                 ticket.append(tildetarjeta(approve));
                 ticket.append("\n\n");
-                ticket.append(Utils.isNull(WMX_Menu.cursor.getString(9), "N/A").toUpperCase(Locale.ROOT));
+                ticket.append(Utils.isNull(cursor.getString(9), "N/A").toUpperCase(Locale.ROOT));
                 ticket.append("\n");
                 ticket.append(_list[0].toString().trim()+" "+_list[1].toString().trim()+" "+_list[2].toString().trim());
                 ticket.append("\n");
@@ -69,7 +68,7 @@ public class Ticket {
                 ticket.append("\n");
                 ticket.append("TERMINAL");
                 ticket.append("\n");
-                ticket.append(WMX_Menu.ksn.posId);
+                ticket.append(ksn_posId);
                 break;
             case 2:
                 ticket.append("\n");
@@ -221,7 +220,7 @@ public class Ticket {
         }
     }
     public String tildetarjeta(String _text){
-        if(_text.equals("Credito")){
+        if(_text.contains("dito")){
             return "Crédito";
         }else{
             return "Débito";

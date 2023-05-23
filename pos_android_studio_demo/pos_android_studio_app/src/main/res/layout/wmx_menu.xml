@@ -245,7 +245,45 @@
                     android:textSize="18px" />
 
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/btn_cortecaja"
+                android:layout_width="0dp"
+                android:layout_height="160px"
+                android:layout_columnWeight="1"
+                android:background="@drawable/wmx_menu_btn"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="18px"
+                android:paddingTop="35px"
+                android:paddingRight="18px"
+                android:paddingBottom="15px"
 
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="62px"
+                        app:srcCompat="@drawable/efevoo_i_grupo_cc_d30" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="Corte de Caja"
+                    android:textAllCaps="false"
+                    android:textColor="@color/ep_btn_menu_texto"
+                    android:textSize="18px" />
+
+            </LinearLayout>
 
         </GridLayout>
     </LinearLayout>
