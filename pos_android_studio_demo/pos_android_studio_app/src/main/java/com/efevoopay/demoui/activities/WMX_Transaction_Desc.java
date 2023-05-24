@@ -374,7 +374,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         cursor=sqLiteTpv.TpvConsult(ksn_posId);
 
         ticket.setData(tp_tv_trans_type.getText().toString(),
-                tp_tv_approve.getText().toString(), tp_tv_card.getText().toString(),
+                tp_tv_tipotarjeta.getText().toString(), tp_tv_card.getText().toString(),
                 card_provider, tp_tv_date_time.getText().toString(),
                 tp_tv_amount.getText().toString(),
                 tp_tv_tip.getText().toString(),
