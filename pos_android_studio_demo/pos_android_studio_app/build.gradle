@@ -21,8 +21,8 @@ android {
         applicationId "com.efevoopay.demoui"
         minSdkVersion 17
         targetSdkVersion 31
-        versionCode 200
-        versionName '1.2.5'
+        versionCode 201
+        versionName '1.2.6'
 
         ndk {
             moduleName "serial_port"
