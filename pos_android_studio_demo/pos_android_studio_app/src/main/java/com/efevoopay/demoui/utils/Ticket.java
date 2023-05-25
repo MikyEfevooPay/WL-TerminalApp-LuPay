@@ -47,19 +47,20 @@ public class Ticket {
         switch(section) {
             case 1:
                 String[] _list = address(cursor.getString(8));
+                TRACE.d("length"+_list.length);
                 ticket.append(trans_type.toUpperCase(Locale.ROOT));
                 ticket.append("\n");
                 ticket.append(tildetarjeta(approve));
                 ticket.append("\n\n");
                 ticket.append(Utils.isNull(cursor.getString(9), "N/A").toUpperCase(Locale.ROOT));
                 ticket.append("\n");
-                ticket.append(_list[0].toString().trim()+" "+_list[1].toString().trim()+" "+_list[2].toString().trim());
+                ticket.append(Utils.isVacio(_list,0)+" "+Utils.isVacio(_list,1)+" "+Utils.isVacio(_list,2));
                 ticket.append("\n");
-                ticket.append(_list[3].toString().trim().toUpperCase(Locale.ROOT));
+                ticket.append(Utils.isVacio(_list,3));
                 ticket.append("\n");
-                ticket.append(_list[4].toString().trim().toUpperCase(Locale.ROOT));
+                ticket.append(Utils.isVacio(_list,4));
                 ticket.append("\n");
-                ticket.append(_list[5].toString().trim().toUpperCase(Locale.ROOT));
+                ticket.append(Utils.isVacio(_list,5));
 //                ticket.append("PROL LOS SOLES 200 105-PB DEL VALLE ORIENTE");
 //                ticket.append("\n");
 //                ticket.append("SAN PEDRO GARZA GARCIA,");

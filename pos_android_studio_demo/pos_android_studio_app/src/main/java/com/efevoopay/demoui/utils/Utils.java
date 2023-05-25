@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -134,7 +135,13 @@ public class Utils {
 	public static <T> T isNull(T value, T replace) {
 		return value != null ? value : replace;
 	}
-	
+	public static String isVacio(String[] value, int pos) {
+		if (value.length>0){
+			return value[pos].toString().trim().toUpperCase(Locale.ROOT);
+		}else{
+			return "";
+		}
+	}
 	/*
 	 * v must be great than 0
 	**/
