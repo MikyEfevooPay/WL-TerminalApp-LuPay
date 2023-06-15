@@ -15,8 +15,8 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
-import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -32,7 +32,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     private Ticket ticket;
     private Intent intent;
     private String ksn_posId;
-    private SQLiteTpv sqLiteTpv;
+    private DBManager dbManager;
     Cursor cursor;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +44,9 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         ticket = new Ticket(mContext);
 
         initData(intent);
-        sqLiteTpv = new SQLiteTpv(this);
-        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
-        sqLiteTpv.onCreate(db);
-        cursor=sqLiteTpv.TpvConsult(ksn_posId);
+        dbManager = new DBManager(mContext);
+        dbManager.open();
+        cursor = dbManager.fetch(ksn_posId);
         buttonListener();
     }
 

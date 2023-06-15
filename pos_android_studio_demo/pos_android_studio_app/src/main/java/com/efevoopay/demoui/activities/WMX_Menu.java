@@ -1,27 +1,33 @@
 package com.efevoopay.demoui.activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.ConfigTpv;
+import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.ResponseCode;
-import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
+import com.efevoopay.demoui.utils.Utils;
 
 public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     //private Button  other, ajustes, meses;
     private Intent intent;
     private LinearLayout transfer,other, ajustes, meses, cancelaciones,cortecaja;
     public WMX_KSN ksn;
-    private SQLiteTpv sqLiteTpv;
     public Cursor cursor;
-    private SQLiteDatabase db;
+    private ConfigTpv configTpv;
+    ProgressDialog spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,8 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
         ksn = new WMX_KSN();
         ksn.onCreate();
+
+        spinner = Utils.getLoaderSpinner(this);
 
         ResponseCode.setCodeResponses();
 
@@ -49,10 +57,14 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         cancelaciones.setOnClickListener(this);
         cortecaja.setOnClickListener(this);
         getinfoScreen();
+        configTpv = new ConfigTpv(this);
+        configTpv.dbManager.onCreate();
 
-        sqLiteTpv = new SQLiteTpv(this);
-        db = sqLiteTpv.getWritableDatabase();
-        sqLiteTpv.onCreate(db);
+        spinner.show();
+        configTpv.spinner= spinner;
+        optksn();
+        LLave();
+
     }
 
     public void getinfoScreen() {
@@ -89,11 +101,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        //sqLiteTpv.TpvDelete(ksn.posId);
-        //sqLiteTpv.TpvInsert(ksn.posId,"00000040471811000001","445AB557576C642548F7B52916D8B4F4","B2A5B99DE4314F3257F70DECE62B2C96");
-        //sqLiteTpv.TpvInsert("12100509021042600834","00000095874315400001","57F223B1B0852C1C2384D04283D576D2","3DE27BCB004EB361A6390832086B0CB9");
-        //sqLiteTpv.TpvInsert("13100106222080200038","00000208656788600001","4BB7A675B598FCA413D84C7FCD8B4EE8","4D74392EFA5B7C8CCCD29539CBEA7954");
-        cursor=sqLiteTpv.TpvConsult(ksn.posId);
+        cursor = configTpv.dbManager.fetch(ksn.posId);
         switch (view.getId()){
             case R.id.btn_transfer:
                 if (cursor.getCount()>0){
@@ -103,14 +111,16 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 }else{
                     WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
-                    //TRACE.d("cursor: "+ TRACE.NEW_LINE+ cursor.getCount());
-
                 }
                 break;
             case R.id.btn_Other:
+                if (cursor.getCount()>0){
                 intent = new Intent(this, WMX_Transaccion.class);
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
+                }else{
+                    WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
+                }
                 break;
             case R.id.btn_Ajustes:
                 intent = new Intent(this, WMX_Ajustes.class);
@@ -132,17 +142,95 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_cancelaciones:
+                if (cursor.getCount()>0){
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
+                }else{
+                    WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
+                }
                 break;
             case R.id.btn_cortecaja:
+                if (cursor.getCount()>0){
                 intent = new Intent(this, WMX_Historial_CorteCaja.class);
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
+                }else{
+                    WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
+                }
                 break;
         }
     }
+    public void optksn(){
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                // need to do tasks on the UI thread
+                handler.postDelayed(this, 1000);
+                cursor = configTpv.dbManager.fetch(ksn.posId);
+                TRACE.d( "ksn: " + ksn.posId);
+                handler.removeCallbacks(this);
+            }
+        };
+        // trigger first time
+        handler.post(runnable);
+    }
+    public void LLave(){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                DbSurce();
+                handler.removeCallbacks(this);
+            }
+        }, 1000);
 
+    }
+    public void cerrarapk(){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                finishAffinity();
+                System.exit(0);
+                handler.removeCallbacks(this);
+            }
+        }, 2000);
 
+    }
+    public void DbSurce() {
+        final boolean[] isClickable = {Boolean.FALSE};
+        final Handler handler = new Handler();
+        int[] count = {0};
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                // need to do tasks on the UI thread
+                configTpv.count=count[0];
+                if (count[0]++ < 7) {
+                    if (!configTpv.bnd[0]) {
+                        if(!configTpv.nuevainit){
+                            configTpv.tpvConfig(ksn.posId,1);
+                        }else{
+                            configTpv.tpvConfig(ksn.posId,0);
+                        }
+                        handler.postDelayed(this, 5000);
+                    }else{
+                        if(spinner.isShowing()) spinner.dismiss();
+                        handler.removeCallbacks(this);
+                    }
+                }else{
+                    WMX_Menu.super.showAlert("informative","TPV NO INICIALIZADA: "+ksn.posId);
+                    if(spinner.isShowing()) spinner.dismiss();
+                    handler.removeCallbacks(this);
+                    configTpv.dbManager.onDelete();
+                    configTpv.dbManager.onCreate();
+                    cerrarapk();
+                }
+
+            }
+        };
+        // trigger first time
+        handler.post(runnable);
+    }
 }

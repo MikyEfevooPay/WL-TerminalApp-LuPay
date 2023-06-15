@@ -41,9 +41,9 @@ import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
+import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.ResponseCode;
-import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TLV;
 import com.efevoopay.demoui.utils.TLVParser;
 import com.efevoopay.demoui.utils.TRACE;
@@ -124,9 +124,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String _AID="N/A";
     private String _ARQC="N/A";
     private String _9F41="";
-    private SQLiteTpv sqLiteTpv;
     Cursor cursor;
     ProgressDialog spinner;
+    private DBManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,13 +169,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         tv_card_label_1 = findViewById(R.id.tv_card_label_1);
         tv_card_label_2 = findViewById(R.id.tv_card_label_2);
 
-        sqLiteTpv = new SQLiteTpv(this);
-        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
-        sqLiteTpv.onCreate(db);
-        cursor=sqLiteTpv.TpvConsult(ksn_posId);
-
+        dbManager = new DBManager(mContext);
+        dbManager.open();
+        cursor = dbManager.fetch(ksn_posId);
         initSDK();
-
         /** open(QPOSService.CommunicationMode.UART);
          posType = POS_TYPE.UART;
          blueTootchAddress = "/dev/ttyS1";
@@ -232,7 +229,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         isPinCanceled = false;
         Status_lector.setText(R.string.starting);
         if (posType == POS_TYPE.UART) {
-            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP_UNALLOWED_LOW_TRADE);
+            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD);
             pos.doTrade(60);
         }
     }
@@ -270,8 +267,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
-        pos.setD20Trade(true);
-        pos.setConext(this);
+        //pos.setD20Trade(true);
+        pos.setConext(getApplicationContext());
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
 //        pos.getQposId();
@@ -326,7 +323,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         startActivityMiddleware(intent);
-
+        pos.closeUart();
     }
 
 
@@ -1886,6 +1883,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         WMX_Card.super.showAlert("ERROR", details.description);
                         Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityMiddleware(intent);
+                        pos.closeUart();
                     }
                 }
             }, new Response.ErrorListener() {
@@ -1894,10 +1892,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     error.printStackTrace();
                     //TRACE.d("** ResponseVolleyError  " +  TRACE.NEW_LINE + error.toString() );
                     WMX_Card.super.showAlert("ERROR", "TRANSACCION NO PROCESADA : "+ error.toString());
-
-                    Toast.makeText(getApplicationContext(),"TRANSACCION NO PROCESADA",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityMiddleware(intent);
+                    pos.closeUart();
                 }
             }) {
                 @Override
@@ -1968,6 +1965,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         WMX_Card.super.showAlert("ERROR", details.description);
                         Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityMiddleware(intent);
+                        pos.closeUart();
                     }
                 }
             },
@@ -1977,9 +1975,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                             error.printStackTrace();
                             //TRACE.d("** ResponseVolleyValidacionTxn  " +  TRACE.NEW_LINE + error.toString() );
                             WMX_Card.super.showAlert("ERROR", "VALIDAR TRANSACCION EN HISTORIAL: "+ error.toString());
-                            Toast.makeText(getApplicationContext(),"VALIDAR TRANSACCION EN HISTORIAL",Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityMiddleware(intent);
+                            pos.closeUart();
                         }
                     })
             {

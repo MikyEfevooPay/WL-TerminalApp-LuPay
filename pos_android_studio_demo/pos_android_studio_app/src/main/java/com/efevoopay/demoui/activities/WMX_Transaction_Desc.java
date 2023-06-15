@@ -49,7 +49,7 @@ import com.action.printerservice.ActionPrinter;
 import com.action.printerservice.PrintStyle;
 
 import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.SQLiteTpv;
+import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -72,12 +72,12 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     ImageView tp_iv_trans_type,tp_iv_process;
     LinearLayout tp_ll_content_card;
     private int transaction_type;
-    private String card_provider;
+    private String card_provider,type_transaction;
     private Ticket ticket;
     Context mContext;
     private String ksn_posId;
     ProgressDialog loader;
-    private SQLiteTpv sqLiteTpv;
+    private DBManager dbManager;
     Cursor cursor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +205,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
-            jsonBody.put("subject","Ticket de compra");
+            if(type_transaction.equals("venta")){
+                jsonBody.put("subject","Ticket de compra");
+                jsonBody.put("tipo", "V");
+            }else{
+                jsonBody.put("subject","Ticket de Cancelación");
+                jsonBody.put("tipo", "C");
+            }
             jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
             jsonBody.put("amount", Utils.isNull(tp_tv_amount.getText().toString(), "N/A"));
             jsonBody.put("tip", Utils.isNull( tp_tv_tip.getText().toString(), "N/A"));
@@ -232,7 +238,6 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                     loader.dismiss();
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
                     showAlert("ERROR",  error.toString());
-                    //startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
             }) {
 
@@ -314,14 +319,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_tipotarjeta = findViewById(R.id.tp_tv_tipotarjeta);
         tp_tv_AID=findViewById(R.id.txt_AID);
         tp_tv_ARQC=findViewById(R.id.txt_ARQC);
-//        aid=intent.getStringExtra("aid");
-//        arqc=intent.getStringExtra("arqc");
 
         if(status.equals("CAN")){
             tp_tv_tip.setText(propina);
             if (Integer.parseInt(msi)>0){
                 tp_tv_tip.setText(msi+" MSI");
             }
+            type_transaction="Cancelacion";
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_grupo_41699);
             tp_tv_trans_type.setText("Cancelada Venta Normal");
             tp_tv_trans_type.setTextColor(0xFFCC1818);
@@ -337,12 +341,14 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             tp_ll_content_card.setBackground(layoutDrawable);
 
         }else if (status.equals("VN")){
+            type_transaction="venta";
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             tp_tv_trans_type.setText("Aprobada Venta Normal");
             tp_tv_tip.setText(propina);
             transaction_type = 1;
 
         }else{
+            type_transaction="venta";
             tp_tv_trans_type.setText("Aprobada Venta a Meses");
             tp_tv_tip_label.setText("Meses:");
             tp_tv_tip.setText(msi+" MSI");
@@ -360,18 +366,15 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_ARQC.setText(arqc);
         tp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         tp_tv_auth.setText(auth);
-//        tp_tv_AID.setText(aid);
-//        tp_tv_ARQC.setText(arqc);
         tp_tv_amount.setText(amount);
         tp_tv_total.setText(total);
         tp_tv_card.setText("**** "+card);
         tp_tv_date_time.setText(date+" "+time);
         tp_tv_approve.setText(approve);
 
-        sqLiteTpv = new SQLiteTpv(this);
-        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
-        sqLiteTpv.onCreate(db);
-        cursor=sqLiteTpv.TpvConsult(ksn_posId);
+        dbManager = new DBManager(mContext);
+        dbManager.open();
+        cursor = dbManager.fetch(ksn_posId);
 
         ticket.setData(tp_tv_trans_type.getText().toString(),
                 tp_tv_tipotarjeta.getText().toString(), tp_tv_card.getText().toString(),

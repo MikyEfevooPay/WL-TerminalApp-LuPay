@@ -36,7 +36,7 @@ public class GNTBackEnd {
         tr.setTk(tr_tk);
         tr.setTrack1("");
         tr.setTrack2(track2);
-        tr.setCounter(tr_counter);
+        tr.setCounter(Integer.parseInt(cursor.getString(11)));
 
 
         TRACE.d(TRACE.NEW_LINE + TRACE.NEW_LINE + "TransactionData" + TRACE.NEW_LINE + tr.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);

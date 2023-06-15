@@ -17,10 +17,8 @@ public class WMX_KSN extends CQPOSService{
     protected void onCreate() {
         initUart(QPOSService.CommunicationMode.UART);
         pos.getQposId();
-        /*pos.doUpdateIPEKOperation(
-                "00", "00000111855052200001", "FE2B1B3A367E54A7E21E6E24E13E3849", "B2DE27F60A443944",
-                "00000111855052200001", "FE2B1B3A367E54A7E21E6E24E13E3849", "B2DE27F60A443944",
-                "00000111855052200001", "FE2B1B3A367E54A7E21E6E24E13E3849", "B2DE27F60A443944");*/
+        pos.closeUart();
+
     }
     private void initUart(QPOSService.CommunicationMode mode){
         TRACE.d("open");

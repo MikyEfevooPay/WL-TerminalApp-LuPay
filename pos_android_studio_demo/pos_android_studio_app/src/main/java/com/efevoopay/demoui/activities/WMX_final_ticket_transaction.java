@@ -41,8 +41,8 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
-import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.utils.Ticket;
@@ -70,7 +70,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private Ticket ticket;
     ProgressDialog loader;
     private String ksn_posId;
-    private SQLiteTpv sqLiteTpv;
+    private DBManager dbManager;
     Cursor cursor;
 
     @Override
@@ -97,10 +97,9 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         ksn_posId = intent.getStringExtra("ksn_posId");
         type_transaction = intent.getStringExtra("type_transaction");
 
-        sqLiteTpv = new SQLiteTpv(this);
-        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
-        sqLiteTpv.onCreate(db);
-        cursor=sqLiteTpv.TpvConsult(ksn_posId);
+        dbManager = new DBManager(mContext);
+        dbManager.open();
+        cursor = dbManager.fetch(ksn_posId);
 
         initInfo();
 
@@ -314,7 +313,13 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
-            jsonBody.put("subject","Ticket de compra");
+            if(type_transaction.equals("venta")){
+                jsonBody.put("subject","Ticket de compra");
+                jsonBody.put("tipo", "V");
+            }else{
+                jsonBody.put("subject","Ticket de Cancelación");
+                jsonBody.put("tipo", "C");
+            }
             jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
             jsonBody.put("amount", Utils.isNull(v_subtotal, "N/A"));
             jsonBody.put("tip", Utils.isNull( v_tip, "N/A"));

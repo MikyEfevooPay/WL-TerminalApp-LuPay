@@ -57,10 +57,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         ksn_posId = intent.getStringExtra("ksn_posId");
         spinner = Utils.getLoaderSpinner(this);
 
-
         readJsontxn();
-
-
     }
 
     @Override
