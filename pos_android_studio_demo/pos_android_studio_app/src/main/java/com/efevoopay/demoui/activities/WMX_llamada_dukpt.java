@@ -14,7 +14,7 @@ public class WMX_llamada_dukpt {
     ArrayList<Transaction> transactions = new ArrayList<>();
     ArrayList<CorteCaja> cortecaja = new ArrayList<>();
     JSONObject objectcorte;
-    public String total;
+    public String total, subtotal, tip;
     public void readJsonnew(String _json){
        if(this.transactions.size() > 0) this.transactions.clear();
         try {
@@ -53,23 +53,25 @@ public class WMX_llamada_dukpt {
             JSONObject object = new JSONObject(_json);
             //TRACE.d("object:" +  TRACE.NEW_LINE + object.toString());
             if(object.has("corte")){
-                JSONArray array = new JSONArray(object.getString("corte").toString());
-                //TRACE.d("array:" +  TRACE.NEW_LINE + array.toString());
+                JSONArray array = new JSONArray(object.getString("corte"));
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object1 = array.getJSONObject(i);
                     //JSONObject data =new  JSONObject(object1.getString("corte").toString());
-                    //TRACE.d("data" +  TRACE.NEW_LINE + object1.toString());
-                    CorteCaja _data = new CorteCaja(
-                            object1.getString("idCorte"),
+                    TRACE.d("data: " +  TRACE.NEW_LINE + object1.toString() + " " + array.length() + " " + i);
+                    CorteCaja _data = new CorteCaja().setHistoricDetails(object1.getString("idCorte"),
                             object1.getString("Identificador"),
-                            object1.getString("Cantidad"),
-                            object1.getString("FechaHora"));
+                            object1.getString("total"),
+                            object1.getString("FechaHora"),
+                            object1.getString("subtotal"),
+                            object1.getString("propina"));
+                    TRACE.d("CAJA: " + _data);
                     this.cortecaja.add(_data);
                 }
             }
             //TRACE.d("transaccion" +  TRACE.NEW_LINE + transactions.toArray().length);
         } catch (JSONException e) {
             e.printStackTrace();
+            TRACE.d("Error: " + e.getMessage());
         }
     }
     public void finalcortecaja(String _json){
@@ -81,7 +83,9 @@ public class WMX_llamada_dukpt {
             if(objectcorte.has("corte")){
                 JSONArray array = new JSONArray(objectcorte.getString("corte").toString());
                 //TRACE.d("array:" +  TRACE.NEW_LINE + array.toString());
-                total=objectcorte.getString("total").toString();
+                total=objectcorte.has("total") ?  objectcorte.getString("total") : "";
+                subtotal=objectcorte.has("subtotal") ?  objectcorte.getString("subtotal") : "";
+                tip=objectcorte.has("propina") ? objectcorte.getString("propina") : "";
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object1 = array.getJSONObject(i);
                     //JSONObject data =new  JSONObject(object1.getString("corte").toString());

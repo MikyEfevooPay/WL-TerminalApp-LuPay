@@ -121,6 +121,11 @@
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:exported="false"
             />
+        <activity
+            android:name="com.efevoopay.demoui.activities.WMX_Final_CorteCaja_Ticket"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:exported="false"
+            />
 
         <meta-data
             android:name="preloaded_fonts"

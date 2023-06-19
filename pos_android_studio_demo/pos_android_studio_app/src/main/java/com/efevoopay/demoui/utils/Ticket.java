@@ -3,6 +3,7 @@ package com.efevoopay.demoui.utils;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.RemoteException;
 
 import androidx.core.content.ContextCompat;
@@ -15,17 +16,43 @@ import com.efevoopay.demoui.R;
 import java.util.Locale;
 
 public class Ticket {
+
+    public interface ICustomPrinterCallback {
+        void onPrintStart();
+
+        void onPrintFinish(int height);
+
+        void onError(int error, String message);
+    }
+
     Cursor cursor;
     private String trans_type, approve, card, card_type, date_time, amount, tip, total, ARQC, AID, ksn_posId;
+    private boolean printeravailable;
+    private ActionPrinter _printer;
     private final String SEPARATOR = "__________________________________";
     private android.content.Context ctx;
+    private ICustomPrinterCallback _callback;
 
     public Ticket(android.content.Context ctx) {
         this.ctx = ctx;
-        ActionPrinter.getInstance(ctx).bind();
+        _printer = getPrinter();
+        if(printeravailable) _printer.bind();
     }
 
+    public void setTicketCallback(ICustomPrinterCallback callback) {
+        this._callback = callback;
+    }
 
+    public void setData(String trans_type, String approve, String total, String amount, String tip, String date_time, Cursor cursor, String  ksn_posId) {
+        this.trans_type = trans_type;
+        this.approve = approve;
+        this.date_time = date_time;
+        this.amount = amount;
+        this.tip = tip;
+        this.total = total;
+        this.ksn_posId = ksn_posId;
+        this.cursor= cursor;
+    }
     public void setData(String trans_type, String approve, String card, String card_type, String date_time, String amount, String tip, String total, String ARQC, String AID,String  ksn_posId,Cursor cursor) {
         this.trans_type = trans_type;
         this.approve = approve;
@@ -37,11 +64,30 @@ public class Ticket {
         this.total = total;
         this.ARQC = ARQC;
         this.AID = AID;
-        this.ksn_posId=ksn_posId;
-        this.cursor=cursor;
+        this.ksn_posId = ksn_posId;
+        this.cursor= cursor;
     }
 
-    public String ticketLayout(int transaction_type, int section) {
+
+    public  String ticketResumeLayout(int section){
+        StringBuilder ticket = new StringBuilder();
+        switch (section) {
+            case 1:
+                ticket.append("Subtotal :                   "+amount);
+                ticket.append("\n");
+                ticket.append("Propinas :                    "+tip);
+                ticket.append("\n");
+                ticket.append("MontoTotal :                      "+total);
+                break;
+            case 2:
+                ticket.append("Fecha y Hora :      "+date_time);
+                break;
+        }
+        return ticket.toString();
+    }
+
+
+    public String ticketStoreLayout(ActionPrinter printer, int transaction_type, int section) throws RemoteException {
         StringBuilder ticket = new StringBuilder();
 
         switch(section) {
@@ -50,7 +96,7 @@ public class Ticket {
                 TRACE.d("length"+_list.length);
                 ticket.append(trans_type.toUpperCase(Locale.ROOT));
                 ticket.append("\n");
-                ticket.append(tildetarjeta(approve));
+                if(card_type != null) ticket.append(tildetarjeta(approve));
                 ticket.append("\n\n");
                 ticket.append(Utils.isNull(cursor.getString(9), "N/A").toUpperCase(Locale.ROOT));
                 ticket.append("\n");
@@ -61,18 +107,12 @@ public class Ticket {
                 ticket.append(Utils.isVacio(_list,4));
                 ticket.append("\n");
                 ticket.append(Utils.isVacio(_list,5));
-//                ticket.append("PROL LOS SOLES 200 105-PB DEL VALLE ORIENTE");
-//                ticket.append("\n");
-//                ticket.append("SAN PEDRO GARZA GARCIA,");
-//                ticket.append("\n");
-//                ticket.append("NUEVO LEON ");
                 ticket.append("\n");
                 ticket.append("TERMINAL");
                 ticket.append("\n");
                 ticket.append(ksn_posId);
                 break;
             case 2:
-                ticket.append("\n");
                 ticket.append("********"+card);
                 break;
             case 3:
@@ -111,13 +151,6 @@ public class Ticket {
                 ticket.append("de apertura de crédito que el banco");
                 ticket.append("\n");
                 ticket.append("acreditante y el tarjetahabiente tienen celebrado.");
-                ticket.append("\n");
-                ticket.append("\n");
-                ticket.append("\n");
-                ticket.append("\n");
-                ticket.append("\n");
-                ticket.append("\n");
-                ticket.append("\n");
                 break;
         }
 
@@ -125,98 +158,120 @@ public class Ticket {
     }
 
 
-    private void ticket(ActionPrinter printer, int transaction_type) throws RemoteException {
+    private void ticket_store(ActionPrinter printer, int transaction_type) throws RemoteException {
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 22);
-        printer.addText(ticketLayout(transaction_type, 1));
-        printer.addText("");
+        printer.addText(ticketStoreLayout(printer, transaction_type, 1));
+        printer.lineFeed(1);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
         printer.addText(SEPARATOR);
-        printer.addText(ticketLayout(transaction_type, 2));
+        printer.lineFeed(1);
+        printer.addText(ticketStoreLayout(printer,transaction_type, 2));
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        printer.addText(ticketLayout(transaction_type, 3));
+        printer.addText(ticketStoreLayout(printer,transaction_type, 3));
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText("");
+        printer.lineFeed(1);
         printer.addText(SEPARATOR);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        printer.addText("");
+        printer.lineFeed(1);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText(ticketLayout(transaction_type, 4));
+        printer.addText(ticketStoreLayout(printer,transaction_type, 4));
+        printer.lineFeed(1);
         printer.addText(SEPARATOR);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
-        printer.addText("");
+        printer.lineFeed(1);
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 18);
-        printer.addText(ticketLayout(transaction_type, 5));
-        printer.addText("");
+        printer.addText(ticketStoreLayout(printer,transaction_type, 5));
+        printer.lineFeed(1);
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 16);
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
-        printer.addText(ticketLayout(transaction_type, 6));
-        printer.addText("");
-        printer.addText("");
-        printer.addText("");
+        printer.addText(ticketStoreLayout(printer,transaction_type, 6));
+        printer.lineFeed(5);
     }
 
-    public String getTicketString(int transaction_type) {
-        StringBuilder ticket = new StringBuilder();
-        ticket.append(ticketLayout(transaction_type, 1));
-        ticket.append(SEPARATOR);
-        ticket.append(ticketLayout(transaction_type, 2));
-        ticket.append(ticketLayout(transaction_type, 3));
-        ticket.append(SEPARATOR);
-        ticket.append(ticketLayout(transaction_type, 4));
-        ticket.append(SEPARATOR);
-        ticket.append(ticketLayout(transaction_type, 5));
-        ticket.append(ticketLayout(transaction_type, 6));
-
-        return ticket.toString();
+    private void ticket_resume(ActionPrinter printer) throws RemoteException {
+        printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 22);
+        printer.addText(ticketStoreLayout(printer,0, 1));
+        printer.lineFeed(1);
+        printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
+        printer.addText(SEPARATOR);
+        printer.lineFeed(1);
+        printer.addText(ticketResumeLayout(1));
+        printer.lineFeed(1);
+        printer.addText(SEPARATOR);
+        printer.lineFeed(1);
+        printer.addText(ticketResumeLayout(2));
+        printer.lineFeed(1);
+        printer.addText(SEPARATOR);
+        printer.lineFeed(1);
+        printer.addText("Fin del resumen");
+        printer.lineFeed(5);
     }
 
 
-    public void GenerateTicket(PRINT_TYPE type, int transaction_type) {
-        ActionPrinter printer = ActionPrinter.getInstance(ctx);
-        if(ctx == null || printer == null) return;
+    public boolean isPrinterAvailable() { return printeravailable && Build.MODEL.equals("D30"); }
+
+    private ActionPrinter getPrinter() {
         try {
-            Drawable drawable = ContextCompat.getDrawable(ctx, R.drawable.logo_ticket);
-            Bitmap bitmap = Utils.drawableToBitmap(drawable);
-            printer.addBitmap(bitmap, 100);
-            printer.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
-            printer.addText("");
-            if(type == PRINT_TYPE.CLIENT) {
-                printer.addText("*** COPIA CLIENTE ***");
-                printer.addText("");
+            ActionPrinter printer = ActionPrinter.getInstance(ctx);
+            printeravailable = printer != null;
+            return printer;
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+            printeravailable = false;
+            return null;
+        }
+    }
+
+    private Bitmap getImageLogo() {
+        Drawable drawable = ContextCompat.getDrawable(ctx, R.drawable.logo_ticket);
+        return Utils.drawableToBitmap(drawable);
+    }
+
+
+    public void GenerateTicket(PRINT_TYPE type, int ...transaction_type) {
+        if(ctx == null || _printer == null) return;
+        try {
+            _printer.addBitmap(getImageLogo(), 100);
+            _printer.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
+            _printer.lineFeed(2);
+            _printer.setParameter(1, 2);
+            if(type == PRINT_TYPE.CLIENT || type == PRINT_TYPE.STORE) {
+                if(type == PRINT_TYPE.CLIENT) {
+                    _printer.addText("*** COPIA CLIENTE ***");
+                    _printer.addText("");
+                }
+                ticket_store(_printer, transaction_type[0]);
+            } else {
+                ticket_resume(_printer);
             }
-            ticket(printer, transaction_type);
-            printer.lineFeed(5);
-            printer.print(new IPrinterCallback.Default() {
+            _printer.print(new IPrinterCallback.Default() {
                 @Override
                 public void onPrintStart() throws RemoteException {
+                    TRACE.d("TICKET START");
                     super.onPrintStart();
-
-                    //todo
-
-                    TRACE.d("onPrintStart");
-
                 }
 
                 @Override
                 public void onPrintFinish(int height) throws RemoteException {
                     super.onPrintFinish(height);
-                    //todo
-                    TRACE.d("onPrintFinish");
+                    TRACE.d(" TICKET END");
+                    if(_callback != null) _callback.onPrintFinish(height);
                 }
 
                 @Override
                 public void onError(int error, String message) throws RemoteException {
                     super.onError(error, message);
-                    TRACE.d("onError");
-                    //todo
+                    if(_callback != null) _callback.onError(error, message);
                 }
             });
         }
         catch (RemoteException e) {
             TRACE.d("RemoteException"+ e.toString());
+            if(_callback != null) _callback.onError(0, "");
            e.printStackTrace();
         } catch (NullPointerException e) {
             TRACE.d("Exception"+ e.toString());
+            if(_callback != null) _callback.onError(0, "");
             e.printStackTrace();
         }
     }

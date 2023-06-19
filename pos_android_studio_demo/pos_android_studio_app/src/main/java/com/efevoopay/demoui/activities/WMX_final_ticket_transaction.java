@@ -301,7 +301,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             in.close();
             return strBulider.toString();
         } catch (IOException e) {
-            return ticket.getTicketString(1);
+            return "";
         }
     }
 

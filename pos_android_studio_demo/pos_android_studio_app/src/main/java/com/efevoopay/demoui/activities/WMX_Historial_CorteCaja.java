@@ -45,6 +45,7 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
     ArrayList<CorteCaja> cortecaja = new ArrayList<>();
     Button btn_hacercorte;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
+    private WMX_llamada_dukpt jsondukpt_details = new WMX_llamada_dukpt();
     private String ksn_posId;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +90,7 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
 
     @Override
     public void onItemClick(int position) {
-
+        getHistorialDetails(ksn_posId, cortecaja.get(position).get_idCorte(), position);
     }
 
     public void setItems() {
@@ -113,6 +114,91 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
             e.printStackTrace();
         }
     }
+
+    private void onDetailsScreen(int position) throws JSONException {
+        Intent intent = new Intent(WMX_Historial_CorteCaja.this, WMX_Final_CorteCaja_Ticket.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("ksn_posId", cortecaja.get(position).get_Identificador());
+        intent.putExtra("totalamount", cortecaja.get(position).get_Total());
+        intent.putExtra("tip", cortecaja.get(position).get_Propina());
+        intent.putExtra("corte", cortecaja.get(position).get_Subtotal());
+        intent.putExtra("fechaCorte", cortecaja.get(position).get_FechaHora());
+        intent.putExtra("type", 0);
+        intent.putExtra("tablerows", jsondukpt_details.objectcorte.getString("corte"));
+        startActivity(intent);
+    }
+
+    private void getHistorialDetails(String _devicesid, String idCorte, int position) {
+        spinner.show();
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = Utils.TPVCONFIG + "/apiv0/agrs/corte/crud";
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("snTerminal", _devicesid);
+            jsonBody.put("idCorte", idCorte);
+            jsonBody.put("operacion", "Hd");
+            final String requestBody = jsonBody.toString();
+            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if(spinner.isShowing()) spinner.dismiss();
+                    jsondukpt_details.finalcortecaja(response);
+                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    try {
+                        onDetailsScreen(position);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
+                    if(spinner.isShowing()) spinner.dismiss();
+                    WMX_Historial_CorteCaja.super.showAlert("error", error.toString());
+                }
+            }) {
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    String parsed;
+                    try {
+                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException var4) {
+                        parsed = new String(response.data);
+                    }
+
+                    if (response != null) {
+                        responseString = String.valueOf(parsed);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+
+            };
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+
+            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+
+        }
+    }
+
     private void getHistorial(String _devicesid)throws IOException{
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -125,8 +211,10 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    jsondukpt.historialcortecaja(response.toString());
+                    jsondukpt.historialcortecaja(response);
                     if(spinner.isShowing()) spinner.dismiss();
+                    cortecaja=jsondukpt.cortecaja;
+                    TRACE.d("caja " + cortecaja.size());
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                     setItems();
                 }
@@ -171,7 +259,6 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
                 }
 
             };
-            cortecaja=jsondukpt.cortecaja;
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
 

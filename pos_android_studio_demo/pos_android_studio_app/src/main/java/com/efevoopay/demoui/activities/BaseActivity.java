@@ -156,6 +156,12 @@ public abstract class BaseActivity extends AppCompatActivity  {
         }
     }
 
+    public void hideToolbar() {
+        if(toolbar != null) {
+            toolbar.setVisibility(View.GONE);
+        }
+    }
+
     public void setToolbarTextColor(int color) {
         if (toolbar != null) {
             // change title text color

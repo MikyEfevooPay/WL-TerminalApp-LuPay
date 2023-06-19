@@ -39,7 +39,7 @@ public class CorteCajaItemAdapter extends RecyclerView.Adapter<CorteCajaItemAdap
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         //myViewHolder.tv_idCorte.setText(_historialcortecaja.get(i).get_idCorte());
         myViewHolder.tv_Identificador.setText(_historialcortecaja.get(i).get_Identificador());
-        myViewHolder.tv_Cantidad.setText(_historialcortecaja.get(i).get_Cantidad());
+        myViewHolder.tv_Cantidad.setText(_historialcortecaja.get(i).get_Total());
         myViewHolder.tv_FechaHora.setText(_historialcortecaja.get(i).get_FechaHora());
 
 //        myViewHolder.iv_status.setVisibility(View.GONE);
@@ -58,29 +58,25 @@ public class CorteCajaItemAdapter extends RecyclerView.Adapter<CorteCajaItemAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView tv_idCorte, tv_Identificador, tv_Cantidad, tv_FechaHora;
-        //ImageView iv_process, iv_status;
 
         public MyViewHolder(@NonNull View itemView, HistorialCorteCajaViewInterface cortecajaViewInterface) {
             super(itemView);
-            //tv_idCorte=itemView.findViewById(R.id.wmx_historial_cantidad);
             tv_Cantidad=itemView.findViewById(R.id.wmx_historial_cantidad);
             tv_Identificador=itemView.findViewById(R.id.wmx_historial_identificador);
             tv_FechaHora=itemView.findViewById(R.id.wmx_historial_fechahora);
-            //iv_process=itemView.findViewById(R.id.wmx_trans_process);
-            //iv_status=itemView.findViewById(R.id.wmx_trans_status);
 
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if(transactionsViewInterface != null){
-//                        int pos =getAdapterPosition();
-//
-//                        if(pos != RecyclerView.NO_POSITION){
-//                            transactionsViewInterface.onItemClick(pos);
-//                        }
-//                    }
-//                }
-//            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(cortecajaViewInterface != null){
+                       int pos =getAdapterPosition();
+
+                        if(pos != RecyclerView.NO_POSITION){
+                            cortecajaViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 }

@@ -1,15 +1,22 @@
 package com.efevoopay.demoui.utils;
 
 public class CorteCaja {
-    String _idCorte,_Identificador,_Cantidad,_FechaHora;
+    String _idCorte,_Identificador,_total,_FechaHora, _subtotal, _propina;
     String _reqdukpt_id,_device,_numtxn,_monto,_date,_hora,_pan;
 
-    public CorteCaja(String idCorte, String Identificador, String Cantidad, String FechaHora){
-        _idCorte=idCorte;
-        _Identificador = Identificador;
-        _Cantidad = Cantidad;
-        _FechaHora = FechaHora;
+    public CorteCaja(){
     }
+
+    public CorteCaja setHistoricDetails(String idCorte, String Identificador, String total, String FechaHora, String subtotal, String propina) {
+        this._idCorte=idCorte;
+        this._Identificador = Identificador;
+        this._total = total;
+        this._FechaHora = FechaHora;
+        this._subtotal = subtotal;
+        this._propina = propina;
+        return this;
+    }
+
     public CorteCaja(String reqdukpt_id, String device, String numtxn, String monto, String date, String hora, String pan){
         _reqdukpt_id=reqdukpt_id;
         _device = device;
@@ -27,8 +34,16 @@ public class CorteCaja {
         return _Identificador;
     }
 
-    public String get_Cantidad() {
-        return _Cantidad;
+    public String get_Total() {
+        return _total;
+    }
+
+    public String get_Subtotal() {
+        return _subtotal;
+    }
+
+    public String get_Propina() {
+        return _propina;
     }
 
     public String get_FechaHora() {

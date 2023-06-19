@@ -360,6 +360,15 @@
     <string name="wmx_title_welcome">Wirebit México</string>
     <string name="wmx_terminal_del"><![CDATA[<]]></string>
     <string name="wmx_propinas_continue">Continuar</string>
+    <string name="wmx_cortecaja_title">Detalle Corte de caja</string>
+    <string name="wmx_cortecaja_subtitle">Resumen de pago</string>
+    <string name="wmx_cortecaja_subtitle_description">Tu corte de caja se realizó con éxito, a continuación te presentamos el resumen</string>
+    <string name="wmx_cortecaja_subtotal_title">Subtotal</string>
+    <string name="wmx_cortecaja_propina_title">Propina</string>
+    <string name="wmx_cortecaja_total_title">Total</string>
+    <string name="wmx_cortecaja_fechahora_title">Fecha/Hora</string>
+    <string name="wmx_cortecaja_print_title">Imprimir resumen</string>
+    <string name="wmx_cortecaja_email_title">Mandar ticket por mail</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

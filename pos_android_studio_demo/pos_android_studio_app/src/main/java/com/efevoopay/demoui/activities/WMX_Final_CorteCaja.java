@@ -164,7 +164,7 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    jsondukpt.finalcortecaja(response.toString());
+                    jsondukpt.finalcortecaja(response);
                     if (spinner.isShowing())
                         spinner.dismiss();
                     TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response.toString());
@@ -223,6 +223,17 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
         }
     }
 
+    private void ViewTicket() throws JSONException {
+        Intent intent = new Intent(mContext, WMX_Final_CorteCaja_Ticket.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("ksn_posId", ksn_posId);
+        intent.putExtra("totalamount", jsondukpt.total);
+        intent.putExtra("tip", jsondukpt.tip);
+        intent.putExtra("corte", jsondukpt.subtotal);
+        intent.putExtra("fechaCorte", txt_datetime.getText().toString());
+        intent.putExtra("tablerows", jsondukpt.objectcorte.getString("corte"));
+        startActivity(intent);
+    }
+
     private void ConfirmarCorte(String _devicesid) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -241,7 +252,7 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
                         if (object.getString("code").toString().equals("00")) {
                             WMX_Final_CorteCaja.super.showAlert("success", "¡Corte de caja realizado con éxito!");
                             btn_enable(false);
-                            openModalSendEmail();
+                            ViewTicket();
                         } else {
                             WMX_Final_CorteCaja.super.showAlert("error", "¡Corte de caja no exitoso!");
                         }
@@ -302,147 +313,7 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void openModalSendEmail() {
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogContentView = inflater.inflate(R.layout.wmx_modal_email_input, null);
 
-        MaterialAlertDialogBuilder modalEmail = new MaterialAlertDialogBuilder(mContext,
-                R.style.ThemeOverlay_App_MaterialAlertDialog);
-        modalEmail.setView(dialogContentView);
-
-        AppCompatButton btn_modal_sendEmail = dialogContentView.findViewById(R.id.btn_modal_sendEmail);
-        AppCompatImageButton btn_close = dialogContentView.findViewById(R.id.btn_correo_modal_close);
-        btn_modal_sendEmail.setEnabled(false);
-        btn_modal_sendEmail.getBackground().setAlpha(128);
-        EditText txt_email = dialogContentView.findViewById(R.id.editTextTextPersonName2);
-        TextView titulo = dialogContentView.findViewById(R.id.textView31);
-        titulo.setText("Recibe tu corte de caja por mail");
-        txt_email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String email = s.toString();
-                boolean isValidEmail = Utils.isValidEmail(email);
-                boolean currEnableState = btn_modal_sendEmail.isEnabled();
-                if (isValidEmail != currEnableState) {
-                    btn_modal_sendEmail.setEnabled(isValidEmail);
-                    btn_modal_sendEmail.getBackground().setAlpha(isValidEmail ? 255 : 128);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        AlertDialog modalEmailCreate = modalEmail.create();
-
-        modalEmailCreate.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                showAlert("error", "¡Correo no enviado!");
-                startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
-        });
-
-        modalEmailCreate.show();
-
-        btn_close.setOnClickListener((view) -> {
-            modalEmailCreate.dismiss();
-        });
-
-        btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                try {
-                    setCorreo(txt_email.getText().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    modalEmailCreate.dismiss();
-                }
-            }
-        });
-    }
-
-    private void setCorreo(String _correo) throws IOException {
-        loader.show();
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correocortecaja";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("correo", _correo);
-            jsonBody.put("subject", "Corte de caja");
-            jsonBody.put("montototal", Utils.isNull(txt_totalamount.getText().toString(), "N/A"));
-            jsonBody.put("fechacorte", Utils.isNull(txt_datetime.getText().toString(), "N/A"));
-            jsonBody.put("tablerows",jsondukpt.objectcorte.getString("corte").toString());
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " + TRACE.NEW_LINE + requestBody.toString());
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response.toString());
-                    showAlert("success", "¡Corte caja enviado con éxito!");
-                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + error.toString());
-                    showAlert("error", "¡Correo no enviado!");
-                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody,
-                                "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + e.toString());
-
-        }
-    }
 
     private String getHTMLEmailTemplate() {
         StringBuilder strBulider = new StringBuilder();
