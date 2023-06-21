@@ -25,7 +25,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     private Intent intent;
     private LinearLayout transfer, other, ajustes, meses, cancelaciones, cortecaja;
     public WMX_KSN ksn;
-    public static Cursor cursor;
+    public Cursor cursor;
     private ConfigTpv configTpv;
     ProgressDialog spinner;
 

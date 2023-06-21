@@ -135,7 +135,7 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", _devicesid);
             jsonBody.put("idCorte", idCorte);
-            jsonBody.put("operacion", "Hd");
+            jsonBody.put("operacion", "HD");
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -206,6 +206,7 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", _devicesid);
             jsonBody.put("operacion", "H");
+            jsonBody.put("idCorte", "0");
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

@@ -198,7 +198,7 @@ public class GNTBackEnd {
         if (_tipo.equals("credit")){
             return "Crédito";
         }else if (_tipo.equals("debit")) {
-            return "Debito";
+            return "Débito";
         }else  {
             return _tipo;
         }
@@ -227,7 +227,7 @@ public class GNTBackEnd {
         //TRACE.d("tag50 : " + tag50.toString());
         //TRACE.d("tag9f12 : " + tag9f12.toString());
         if (tag50.contains("DEBIT")||tag9f12.contains("DEBIT")){
-            return "Debito";
+            return "Débito";
         }else if (tag50.contains("CREDIT")||tag9f12.contains("CREDIT")){
             return "Crédito";
         }else{

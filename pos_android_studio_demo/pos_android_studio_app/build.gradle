@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId "com.efevoopay.demoui"
         minSdkVersion 17
-        targetSdkVersion 31
+        targetSdk 31
         versionCode 202
         versionName '1.2.7'
 
@@ -81,6 +81,5 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation files('libs/actionprinter.jar ')
     implementation files('libs/DUKPK2009_CBC.jar')
-    def lottieVersion = "3.4.0"
-    implementation "com.airbnb.android:lottie:$lottieVersion"
+    implementation "com.airbnb.android:lottie:3.4.0"
 }

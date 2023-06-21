@@ -3,6 +3,7 @@ package com.efevoopay.demoui.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 
+import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
@@ -76,7 +78,8 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     private LinearLayout lyt_cortecaja_email, lyt_cortecaja_print;
     private Ticket ticket;
     private final WMX_llamada_dukpt jsondukpt = new WMX_llamada_dukpt();
-    private SQLiteTpv sqLiteTpv;
+    private DBManager dbManager;
+    Cursor cursor;
     private CORTE_CAJA_TYPE type;
     private boolean _final;
 
@@ -117,9 +120,9 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         txt_totalamount.setText(totalamount);
         txt_datetime.setText(date);
 
-        sqLiteTpv = new SQLiteTpv(this);
-        SQLiteDatabase db = sqLiteTpv.getWritableDatabase();
-        sqLiteTpv.onCreate(db);
+        dbManager = new DBManager(mContext);
+        dbManager.open();
+        cursor = dbManager.fetch(ksn_posId);
     }
 
     @Override
@@ -136,6 +139,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
                     onBackPressed();
                     else
                     startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
                 break;
         }
     }
@@ -155,7 +159,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     }
 
     private void printTicket() {
-        ticket.setData("Corte de Caja","",totalamount, corte, tip, date, WMX_Menu.cursor, ksn_posId);
+        ticket.setData("Corte de Caja","",totalamount, corte, tip, date, cursor, ksn_posId);
         ticket.GenerateTicket(PRINT_TYPE.RESUME);
     }
 
@@ -228,6 +232,9 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
             jsonBody.put("subject", "Corte de caja");
+            jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
+            jsonBody.put("subtotal", Utils.isNull(corte, "N/A"));
+            jsonBody.put("propina", Utils.isNull( tip, "N/A"));
             jsonBody.put("montototal", Utils.isNull(totalamount, "N/A"));
             jsonBody.put("fechacorte", Utils.isNull(date, "N/A"));
             jsonBody.put("tablerows",Utils.isNull(TableRowsString, "[]"));

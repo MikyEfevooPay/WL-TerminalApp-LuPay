@@ -229,7 +229,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         isPinCanceled = false;
         Status_lector.setText(R.string.starting);
         if (posType == POS_TYPE.UART) {
-            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD);
+            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP_UNALLOWED_LOW_TRADE);
             pos.doTrade(60);
         }
     }
@@ -268,7 +268,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
         //pos.setD20Trade(true);
-        pos.setConext(getApplicationContext());
+        pos.setConext(this);
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
 //        pos.getQposId();

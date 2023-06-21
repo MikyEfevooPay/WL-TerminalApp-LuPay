@@ -108,7 +108,11 @@ public class Ticket {
                 ticket.append("\n");
                 ticket.append(Utils.isVacio(_list,5));
                 ticket.append("\n");
-                ticket.append("TERMINAL");
+                if(transaction_type == 0) {
+                    ticket.append("NO. TERMINAL");
+                }else{
+                    ticket.append("TERMINAL");
+                }
                 ticket.append("\n");
                 ticket.append(ksn_posId);
                 break;
@@ -192,6 +196,7 @@ public class Ticket {
         printer.setPrintStyle(PrintStyle.Key.FONT_SIZE, 22);
         printer.addText(ticketStoreLayout(printer,0, 1));
         printer.lineFeed(1);
+        printer.addText("Resumen Corte de Caja");
         printer.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
         printer.addText(SEPARATOR);
         printer.lineFeed(1);

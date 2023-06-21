@@ -1,6 +1,7 @@
 package com.efevoopay.demoui.activities;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -159,6 +160,7 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", _devicesid);
             jsonBody.put("operacion", "D");
+            jsonBody.put("idCorte", "0");
             final String requestBody = jsonBody.toString();
             TRACE.d("requestBody " + TRACE.NEW_LINE + requestBody);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -224,16 +226,25 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
     }
 
     private void ViewTicket() throws JSONException {
-        Intent intent = new Intent(mContext, WMX_Final_CorteCaja_Ticket.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent = new Intent(this, WMX_Final_CorteCaja_Ticket.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //Intent intent = new Intent(mContext, WMX_Final_CorteCaja_Ticket.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("ksn_posId", ksn_posId);
         intent.putExtra("totalamount", jsondukpt.total);
         intent.putExtra("tip", jsondukpt.tip);
         intent.putExtra("corte", jsondukpt.subtotal);
         intent.putExtra("fechaCorte", txt_datetime.getText().toString());
         intent.putExtra("tablerows", jsondukpt.objectcorte.getString("corte"));
-        startActivity(intent);
+        startActivityMiddleware(intent);
     }
-
+    private void startActivityMiddleware(Intent intent) {
+        String CurrPackageName = getPackageName();
+        ComponentName name = intent.resolveActivity(getPackageManager());
+        String intentPackageName = name.getPackageName();
+        String intentClassName = name.getClassName();
+        if(intentPackageName.equals(CurrPackageName) && intentClassName.contains(CurrPackageName)) {
+            startActivity(intent);
+        }
+    }
     private void ConfirmarCorte(String _devicesid) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -241,6 +252,7 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", _devicesid);
             jsonBody.put("operacion", "C");
+            jsonBody.put("idCorte", "0");
             final String requestBody = jsonBody.toString();
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
