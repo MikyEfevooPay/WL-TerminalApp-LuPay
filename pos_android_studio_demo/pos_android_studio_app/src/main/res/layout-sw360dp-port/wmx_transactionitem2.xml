@@ -141,7 +141,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="68px"
+            android:layout_width="45dp"
             android:layout_height="match_parent"
             android:gravity="right"
             android:orientation="vertical"
@@ -156,12 +156,13 @@
 
                 <TextView
                     android:id="@+id/wmx_trans_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|end"
                     android:fontFamily="@font/dm_sans"
-                    android:text="11:11"
 
+                    android:gravity="center"
+                    android:text="11:11"
                     android:textAlignment="center"
                     android:textColor="#5A5A5A"
                     android:textSize="24px" />

@@ -94,7 +94,7 @@ public class WMX_llamada_dukpt {
                             object1.getString("reqdukpt_id"),
                             object1.getString("device"),
                             object1.getString("numtxn"),
-                            object1.getString("total"),
+                            object1.getString("monto"),
                             object1.getString("date"),
                             object1.getString("hora"),
                             object1.getString("pan"));
