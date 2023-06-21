@@ -288,11 +288,11 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     }
 
     private void initData(Intent intent) {
-        String auth, date, time, amount, card, redtarj, tipotarjeta, status, propina, total, msi, aid, arqc, approve;
+        String auth, date, time, subtotal, card, redtarj, tipotarjeta, status, propina, total, msi, aid, arqc, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
-        amount = intent.getStringExtra("amount");
+        subtotal = intent.getStringExtra("subtotal");
         card = intent.getStringExtra("card");
         redtarj = intent.getStringExtra("redtarj");
         tipotarjeta = intent.getStringExtra("tipotarj");
@@ -369,7 +369,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_ARQC.setText(arqc);
         tp_tv_tipotarjeta.setText("Tarjeta " + tipotarjeta);
         tp_tv_auth.setText(auth);
-        tp_tv_amount.setText(amount);
+        tp_tv_amount.setText(subtotal);
         tp_tv_total.setText(total);
         tp_tv_card.setText("**** " + card);
         tp_tv_date_time.setText(date + " " + time);

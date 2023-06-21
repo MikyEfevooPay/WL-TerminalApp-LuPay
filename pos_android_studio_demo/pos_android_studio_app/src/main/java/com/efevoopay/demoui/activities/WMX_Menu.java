@@ -211,6 +211,10 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 if (count[0]++ < 7) {
                     if (!configTpv.bnd[0]) {
                         if (!configTpv.nuevainit) {
+                            if(ksn.posId==null){
+                                ksn = new WMX_KSN();
+                                ksn.onCreate();
+                            }
                             configTpv.tpvConfig(ksn.posId, 1);
                         } else {
                             configTpv.tpvConfig(ksn.posId, 0);
@@ -222,7 +226,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                         handler.removeCallbacks(this);
                     }
                 } else {
-                    WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + ksn.posId);
+                    WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: INTENTE NUEVAMENTE ");
                     if (spinner.isShowing())
                         spinner.dismiss();
                     handler.removeCallbacks(this);

@@ -339,15 +339,13 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                     loader.dismiss();
                     TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                     showAlert("success", "¡Ticket enviado con éxito!");
-                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     loader.dismiss();
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    showAlert("ERROR",  error.toString());
-                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    showAlert("ERROR",  "¡Ticket no enviado!");
                 }
             }) {
 

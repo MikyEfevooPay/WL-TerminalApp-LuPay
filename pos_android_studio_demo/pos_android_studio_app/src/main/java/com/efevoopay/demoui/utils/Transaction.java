@@ -2,17 +2,17 @@ package com.efevoopay.demoui.utils;
 
 public class Transaction {
     String _pan,_date,_amount,_tips;
-    String _auth, _date2, _amount2,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi,_aid,_arqc, _approve;
+    String _auth, _date2, _subtotal,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi,_aid,_arqc, _approve;
     public Transaction(String pan, String date, String amount, String tips){
         _pan=pan;
         _date = date;
         _amount = amount;
         _tips = tips;
     }
-    public Transaction(String auth, String date2, String time, String amount2 ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi,String aid,String arqc, String approve){
+    public Transaction(String auth, String date2, String time, String subtotal ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi,String aid,String arqc, String approve){
         _auth=auth;
         _date2=date2;
-        _amount2=amount2;
+        _subtotal=subtotal;
         _time=time;
         _card=card;
         _redtarj=redtarj;
@@ -50,8 +50,8 @@ public class Transaction {
         return _date2;
     }
 
-    public String get_amount2() {
-        return _amount2;
+    public String get_subtotal() {
+        return _subtotal;
     }
 
     public String get_time() {

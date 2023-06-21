@@ -41,7 +41,7 @@ public class CancelacionesItemAdapter extends RecyclerView.Adapter<Cancelaciones
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_auth.setText(_transactions.get(i).get_auth());
         myViewHolder.tv_date2.setText(_transactions.get(i).get_date2());
-        myViewHolder.tv_amount2.setText(_transactions.get(i).get_amount2());
+        myViewHolder.tv_amount2.setText(_transactions.get(i).get_total());
         myViewHolder.tv_time.setText(_transactions.get(i).get_time());
         myViewHolder.tv_card.setText("**** "+_transactions.get(i).get_card());
 

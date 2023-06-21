@@ -81,7 +81,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         intent.putExtra("auth", transactions.get(position).get_auth());
         intent.putExtra("date", transactions.get(position).get_date2());
         intent.putExtra("time", transactions.get(position).get_time());
-        intent.putExtra("amount", transactions.get(position).get_amount2());
+        intent.putExtra("subtotal", transactions.get(position).get_subtotal());
         intent.putExtra("card", transactions.get(position).get_card());
         intent.putExtra("redtarj", transactions.get(position).get_redtarj());
         intent.putExtra("tipotarj", transactions.get(position).get_tipotarj());

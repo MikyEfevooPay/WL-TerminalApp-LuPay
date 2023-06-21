@@ -61,11 +61,11 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     }
 
     private void initData(Intent intent){
-        String auth,date,time,amount,card,redtarj,tipotarjeta,status,propina,total,msi,aid,arqc, approve;
+        String auth,date,time,subtotal,card,redtarj,tipotarjeta,status,propina,total,msi,aid,arqc, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
-        amount = intent.getStringExtra("amount");
+        subtotal = intent.getStringExtra("subtotal");
         card = intent.getStringExtra("card");
         redtarj = intent.getStringExtra("redtarj");
         tipotarjeta = intent.getStringExtra("tipotarj");
@@ -117,7 +117,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
 
         cp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         cp_tv_auth.setText(auth);
-        cp_tv_amount.setText(amount);
+        cp_tv_amount.setText(subtotal);
         cp_tv_total.setText(total);
         cp_tv_card.setText("**** "+card);
         cp_tv_date_time.setText(date+" "+time);

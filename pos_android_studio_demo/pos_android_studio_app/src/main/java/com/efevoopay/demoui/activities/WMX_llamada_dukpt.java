@@ -28,7 +28,7 @@ public class WMX_llamada_dukpt {
                             data.getString("noAuth"),
                             data.getString("date"),
                             data.getString("hour"),
-                            data.getString("amount"),
+                            data.getString("subtotal"),
                             data.getString("pan"),
                             data.getString("redtarj"),
                             data.getString("tipotarj"),

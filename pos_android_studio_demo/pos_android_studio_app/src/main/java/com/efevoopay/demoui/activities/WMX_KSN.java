@@ -17,7 +17,7 @@ public class WMX_KSN extends CQPOSService{
     protected void onCreate() {
         initUart(QPOSService.CommunicationMode.UART);
         pos.getQposId();
-        pos.closeUart();
+        //pos.closeUart();
 
     }
     private void initUart(QPOSService.CommunicationMode mode){
