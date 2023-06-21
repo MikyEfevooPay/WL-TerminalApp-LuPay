@@ -193,14 +193,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="23px"
             android:layout_weight="1"
-            android:gravity="bottom"
+            android:gravity="center"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/lyt_cortecaja_print"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
+                android:layout_marginBottom="24dp"
                 android:orientation="horizontal"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp">

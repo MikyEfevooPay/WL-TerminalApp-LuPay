@@ -193,7 +193,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="23px"
             android:layout_weight="1"
-            android:gravity="bottom"
+            android:gravity="center"
             android:orientation="vertical">
 
             <LinearLayout

@@ -252,7 +252,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
                 public void onErrorResponse(VolleyError error) {
                     loader.dismiss();
                     TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + error.toString());
-                    showAlert("error", "¡Correo no enviado!");
+                    showAlert("error", "ERROR", "¡Correo no enviado!");
                 }
             }) {
 
