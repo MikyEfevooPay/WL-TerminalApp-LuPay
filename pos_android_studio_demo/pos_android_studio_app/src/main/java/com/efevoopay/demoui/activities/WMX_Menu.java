@@ -23,11 +23,11 @@ import com.efevoopay.demoui.utils.Utils;
 public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     // private Button other, ajustes, meses;
     private Intent intent;
-    private LinearLayout transfer, other, ajustes, meses, cancelaciones, cortecaja;
-    public WMX_KSN ksn;
-    public Cursor cursor;
-    private ConfigTpv configTpv;
-    ProgressDialog spinner;
+    private LinearLayout transfer, other, ajustes, meses, cancelaciones, cortecaja, connection_test;
+    public static WMX_KSN ksn;
+    public static Cursor cursor;
+    public static ConfigTpv configTpv;
+    public static ProgressDialog spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,27 +43,29 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
         spinner = Utils.getLoaderSpinner(this);
 
-        ResponseCode.setCodeResponses();
-
         transfer = findViewById(R.id.btn_transfer);
         other = findViewById(R.id.btn_Other);
         ajustes = findViewById(R.id.btn_Ajustes);
         meses = findViewById(R.id.btn_meses);
         cancelaciones = findViewById(R.id.btn_cancelaciones);
         cortecaja = findViewById(R.id.btn_cortecaja);
+        connection_test = findViewById(R.id.btn_connection_test);
         transfer.setOnClickListener(this);
         other.setOnClickListener(this);
         ajustes.setOnClickListener(this);
         meses.setOnClickListener(this);
         cancelaciones.setOnClickListener(this);
         cortecaja.setOnClickListener(this);
+        connection_test.setOnClickListener(this);
         getinfoScreen();
         configTpv = new ConfigTpv(this);
         configTpv.dbManager.onCreate();
 
+        ResponseCode.setCodeResponses();
         spinner.show();
         configTpv.spinner = spinner;
         optksn();
+
         LLave();
 
     }
@@ -113,16 +115,18 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         cursor = configTpv.dbManager.fetch(ksn.posId);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_transfer:
-                if (!TPVInitializated()) break;
+                if (!TPVInitializated())
+                    break;
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "venta");
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;
             case R.id.btn_Other:
-                if (!TPVInitializated()) break;
+                if (!TPVInitializated())
+                    break;
                 intent = new Intent(this, WMX_Transaccion.class);
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
@@ -133,26 +137,35 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_meses:
-                if (!TPVInitializated()) break;
-                if(cursor.getString(10).equals("1")){
-                        intent = new Intent(this, WMX_Terminal.class);
-                        intent.putExtra("type_transaction", "msi");
-                        intent.putExtra("ksn_posId", ksn.posId);
-                        startActivity(intent);
-                    }else{
-                        WMX_Menu.super.showAlert("informative","OPCIÓN NO HABILITADA");
-                    }
+                if (!TPVInitializated())
+                    break;
+                if (cursor.getString(10).equals("1")) {
+                    intent = new Intent(this, WMX_Terminal.class);
+                    intent.putExtra("type_transaction", "msi");
+                    intent.putExtra("ksn_posId", ksn.posId);
+                    startActivity(intent);
+                } else {
+                    WMX_Menu.super.showAlert("informative", "OPCIÓN NO HABILITADA");
+                }
                 break;
             case R.id.btn_cancelaciones:
-                if (!TPVInitializated())  break;
+                if (!TPVInitializated())
+                    break;
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);
                 intent.putExtra("ksn_posId", ksn.posId);
                 startActivity(intent);
                 break;
             case R.id.btn_cortecaja:
-                if (!TPVInitializated())  break;
+                if (!TPVInitializated())
+                    break;
                 intent = new Intent(this, WMX_Historial_CorteCaja.class);
                 intent.putExtra("ksn_posId", ksn.posId);
+                startActivity(intent);
+                break;
+            case R.id.btn_connection_test:
+                intent = new Intent(this, WMX_Connection_Test.class);
+                intent.putExtra("ksn_posId", ksn.posId);
+                intent.putExtra("type", 1);
                 startActivity(intent);
                 break;
         }
@@ -211,7 +224,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 if (count[0]++ < 7) {
                     if (!configTpv.bnd[0]) {
                         if (!configTpv.nuevainit) {
-                            if(ksn.posId==null){
+                            if (ksn.posId == null) {
                                 ksn = new WMX_KSN();
                                 ksn.onCreate();
                             }
@@ -232,7 +245,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     handler.removeCallbacks(this);
                     configTpv.dbManager.onDelete();
                     configTpv.dbManager.onCreate();
-                    cerrarapk();
+                    // cerrarapk();
                 }
 
             }

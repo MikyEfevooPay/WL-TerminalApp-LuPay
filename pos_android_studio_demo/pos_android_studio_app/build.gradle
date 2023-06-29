@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('appkey.jks')
-            storePassword 'gntcapital'
-            keyPassword 'gntcapital'
-            keyAlias 'efevopay'
+            storeFile file('app.keystore')
+            storePassword 'dspread'
+            keyPassword 'dspread'
+            keyAlias 'gundam_wing'
         }
         config {
             keyAlias 'key0'
@@ -81,5 +81,5 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation files('libs/actionprinter.jar ')
     implementation files('libs/DUKPK2009_CBC.jar')
-    implementation "com.airbnb.android:lottie:3.4.0"
+    implementation "com.airbnb.android:lottie:6.0.1"
 }

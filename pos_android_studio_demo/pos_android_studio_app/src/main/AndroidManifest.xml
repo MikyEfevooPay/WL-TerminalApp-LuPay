@@ -121,9 +121,19 @@
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:exported="false"
             />
-        <activity
+            <activity
             android:name="com.efevoopay.demoui.activities.WMX_Final_CorteCaja_Ticket"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:exported="false"
+            />
+        <activity
+            android:name="com.efevoopay.demoui.activities.WMX_Connection_Test"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:exported="false"
+            />
+        <activity
+            android:name="com.efevoopay.demoui.activities.WMX_Connection_Test_Final"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="false"
             />
 

@@ -28,265 +28,306 @@
             app:srcCompat="@drawable/logo_efevoopay_coloresai" />
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="30px"
-        android:layout_marginRight="30px"
-        android:layout_marginBottom="30px">
-        <!--
-        android:paddingLeft="20px"
-        android:paddingTop="20px"
-        android:paddingRight="20px"
-        android:paddingBottom="20px"
--->
+        android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:orientation="vertical">
 
-        <GridLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:columnCount="2"
-            android:orientation="horizontal"
-            android:useDefaultMargins="true"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:id="@+id/btn_transfer"
-                android:layout_width="0dp"
-                android:layout_height="160px"
-                android:layout_columnWeight="1"
-                android:background="@drawable/wmx_menu_btn"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="18px"
-                android:paddingTop="35px"
-                android:paddingRight="18px"
-                android:paddingBottom="15px"
-
-                >
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:columnCount="2"
+                android:orientation="horizontal"
+                android:useDefaultMargins="true"
+                android:weightSum="2">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="62px"
-                        app:srcCompat="@drawable/efevoo_i_grupo_41702" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:text="@string/wmx_menu_transfer"
-                    android:textAllCaps="false"
-                    android:textColor="@color/ep_btn_menu_texto"
-                    android:textSize="18px" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_meses"
-                android:layout_width="0dp"
-                android:layout_height="160px"
-                android:layout_columnWeight="1"
-                android:background="@drawable/wmx_menu_btn"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="18px"
-                android:paddingTop="35px"
-                android:paddingRight="18px"
-                android:paddingBottom="15px">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="62px"
-                        app:srcCompat="@drawable/efevoo_i_msi" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_bold"
+                    android:id="@+id/btn_transfer"
+                    android:layout_width="0dp"
+                    android:layout_height="160px"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/wmx_menu_btn"
                     android:gravity="center"
-                    android:lineSpacingMultiplier="0.8"
-                    android:text="@string/wmx_menu_meses"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/ep_btn_menu_texto"
-                    android:textSize="18px" />
+                    android:orientation="vertical"
+                    android:paddingLeft="18px"
+                    android:paddingTop="35px"
+                    android:paddingRight="18px"
+                    android:paddingBottom="15px"
 
-            </LinearLayout>
+                    >
 
-            <LinearLayout
-                android:id="@+id/btn_cancelaciones"
-                android:layout_width="0dp"
-                android:layout_height="160px"
-                android:layout_columnWeight="1"
-                android:background="@drawable/wmx_menu_btn"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="18px"
-                android:paddingTop="27.5px"
-                android:paddingRight="18px"
-                android:paddingBottom="15px">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="62px"
+                            app:srcCompat="@drawable/efevoo_i_grupo_41702" />
 
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="62px"
-                        app:srcCompat="@drawable/efevoo_i_trazado_43" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/wmx_menu_transfer"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ep_btn_menu_texto"
+                        android:textSize="18px" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:text="@string/wmx_menu_cancel"
-                    android:textAllCaps="false"
-                    android:textColor="@color/ep_btn_menu_texto"
-                    android:textSize="18px" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_Other"
-                android:layout_width="0dp"
-                android:layout_height="160px"
-                android:layout_columnWeight="1"
-                android:background="@drawable/wmx_menu_btn"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="18px"
-                android:paddingTop="27.5px"
-                android:paddingRight="18px"
-                android:paddingBottom="15px">
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:id="@+id/btn_meses"
+                    android:layout_width="0dp"
+                    android:layout_height="160px"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/wmx_menu_btn"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="18px"
+                    android:paddingTop="35px"
+                    android:paddingRight="18px"
+                    android:paddingBottom="15px">
 
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="65px"
-                        app:srcCompat="@drawable/efevoo_i_historial" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="62px"
+                            app:srcCompat="@drawable/efevoo_i_msi" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:gravity="center"
+                        android:lineSpacingMultiplier="0.8"
+                        android:text="@string/wmx_menu_meses"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ep_btn_menu_texto"
+                        android:textSize="18px" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:text="@string/wmx_menu_Other"
-                    android:textAllCaps="false"
-                    android:textColor="@color/ep_btn_menu_texto"
-                    android:textSize="18px" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/btn_Ajustes"
-                android:layout_width="0dp"
-                android:layout_height="160px"
-                android:layout_columnWeight="1"
-                android:background="@drawable/wmx_menu_btn"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="18px"
-                android:paddingTop="27.5px"
-                android:paddingRight="18px"
-                android:paddingBottom="15px">
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:id="@+id/btn_cancelaciones"
+                    android:layout_width="0dp"
+                    android:layout_height="160px"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/wmx_menu_btn"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="18px"
+                    android:paddingTop="27.5px"
+                    android:paddingRight="18px"
+                    android:paddingBottom="15px">
 
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="62px"
-                        app:srcCompat="@drawable/efevoo_i_info" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="62px"
+                            app:srcCompat="@drawable/efevoo_i_trazado_43" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/wmx_menu_cancel"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ep_btn_menu_texto"
+                        android:textSize="18px" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:text="@string/wmx_menu_Ajustes"
-                    android:textAllCaps="false"
-                    android:textColor="@color/ep_btn_menu_texto"
-                    android:textSize="18px" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/btn_cortecaja"
-                android:layout_width="0dp"
-                android:layout_height="160px"
-                android:layout_columnWeight="1"
-                android:background="@drawable/wmx_menu_btn"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="18px"
-                android:paddingTop="35px"
-                android:paddingRight="18px"
-                android:paddingBottom="15px"
-
-                >
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:id="@+id/btn_Other"
+                    android:layout_width="0dp"
+                    android:layout_height="160px"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/wmx_menu_btn"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="18px"
+                    android:paddingTop="27.5px"
+                    android:paddingRight="18px"
+                    android:paddingBottom="15px">
 
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="62px"
-                        app:srcCompat="@drawable/efevoo_i_grupo_cc_d30" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="65px"
+                            app:srcCompat="@drawable/efevoo_i_historial" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/wmx_menu_Other"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ep_btn_menu_texto"
+                        android:textSize="18px" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_bold"
-                    android:text="Corte de Caja"
-                    android:textAllCaps="false"
-                    android:textColor="@color/ep_btn_menu_texto"
-                    android:textSize="18px" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_Ajustes"
+                    android:layout_width="0dp"
+                    android:layout_height="160px"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/wmx_menu_btn"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="18px"
+                    android:paddingTop="27.5px"
+                    android:paddingRight="18px"
+                    android:paddingBottom="15px">
 
-        </GridLayout>
-    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="62px"
+                            app:srcCompat="@drawable/efevoo_i_info" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="@string/wmx_menu_Ajustes"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ep_btn_menu_texto"
+                        android:textSize="18px" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_cortecaja"
+                    android:layout_width="0dp"
+                    android:layout_height="160px"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/wmx_menu_btn"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="18px"
+                    android:paddingTop="35px"
+                    android:paddingRight="18px"
+                    android:paddingBottom="15px"
+
+                    >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="62px"
+                            app:srcCompat="@drawable/efevoo_i_grupo_cc_d30" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:text="Corte de Caja"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ep_btn_menu_texto"
+                        android:textSize="18px" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_connection_test"
+                    android:layout_width="0dp"
+                    android:layout_height="160px"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/wmx_menu_btn"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="18px"
+                    android:paddingTop="35px"
+                    android:paddingRight="18px"
+                    android:paddingBottom="15px"
+
+                    >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/img_connection_test"
+                            android:layout_width="match_parent"
+                            android:layout_height="62px"
+                            app:srcCompat="@drawable/comunicacion" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_connection_test_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_bold"
+                        android:gravity="center"
+                        android:text="Prueba de comunicación"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/ep_btn_menu_texto"
+                        android:textSize="18px" />
+
+                </LinearLayout>
+
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

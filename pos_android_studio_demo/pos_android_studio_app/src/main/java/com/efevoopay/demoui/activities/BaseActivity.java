@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.IFetching;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ import java.util.ArrayList;
  * BaseActivity used for to build all activity
  */
 
-public abstract class BaseActivity extends AppCompatActivity  {
+public abstract class BaseActivity extends AppCompatActivity implements IFetching {
     public static final String TAG = "BaseActivity";
 
     protected Toolbar toolbar;
@@ -95,6 +96,11 @@ public abstract class BaseActivity extends AppCompatActivity  {
         return null;
     }
 
+    @Override
+    public void onFetchResult() {
+
+    }
+
     public abstract void onToolbarLinstener();
 
     public void onCalendarLinstener(){};
@@ -131,8 +137,24 @@ public abstract class BaseActivity extends AppCompatActivity  {
         setTitle("Wirebit MX");
     }
 
+    public void setCustomToolbarColor(int CustomColor) {
+        // set toolbar bg color
+        setToolbarBgColor(CustomColor);
+        // set toolbar text color
+        int midColor = getResources().getColor(R.color.custom_middle_color);
+        if (CustomColor >= midColor) {
+            //                setToolbarTextColor(getResources().getColor(R.color.custom_dark_color));
+            setToolbarIconColor(getResources().getColor(R.color.custom_dark_color));
+        } else {
+            //                setToolbarTextColor(getResources().getColor(R.color.custom_light_color));
+            setToolbarIconColor(getResources().getColor(R.color.custom_light_color));
+        }
+        setStatusBarColor(CustomColor);
+        setToolbarIconColor(ContextCompat.getColor(this,R.color.ep_icon_back));
+    }
+
     public void setCustomToolbarColor(String strCustomColor) {
-        if (strCustomColor != null) {
+        if (strCustomColor == null) return;
             int customColor = Color.parseColor(strCustomColor);
             // set toolbar bg color
             setToolbarBgColor(customColor);
@@ -147,7 +169,6 @@ public abstract class BaseActivity extends AppCompatActivity  {
             }
             setStatusBarColor(customColor);
             setToolbarIconColor(ContextCompat.getColor(this,R.color.ep_icon_back));
-        }
     }
 
     public void setToolbarBgColor(int color) {
@@ -215,6 +236,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
         toast.show();
     }
 
+
     public void setInvisiblemargin(boolean status){
         if(!status)
         img_invisible_margin.setVisibility(View.GONE);
@@ -237,6 +259,14 @@ public abstract class BaseActivity extends AppCompatActivity  {
         txt_toolbar_title.setVisibility(View.VISIBLE);
         setTitle(title);
 
+    }
+
+    public void switch_title_logo(String title, int color){
+        logo_image.setVisibility(View.GONE);
+        container_logo.setVisibility(View.GONE);
+        txt_toolbar_title.setVisibility(View.VISIBLE);
+        setTitle(title);
+        txt_toolbar_title.setTextColor(color);
     }
 
     public void show_calendar(){
