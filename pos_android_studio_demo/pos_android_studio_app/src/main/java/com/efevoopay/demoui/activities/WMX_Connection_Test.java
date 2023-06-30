@@ -85,7 +85,7 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
     private void conectividadeco() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API_TEST + "/matriz/certificacion/com/v2/eco";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/com/v2/eco";
             final String requestBody = null;
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
@@ -159,7 +159,7 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
     private void conectividadlogon() {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API_TEST + "/matriz/certificacion/com/v2/logon";
+            String URL = Utils.TERMINAL_API + "/matriz/certificacion/com/v2/logon";
             final String requestBody = null;
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
