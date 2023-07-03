@@ -236,16 +236,17 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getNetworkInfo(1);
-        if (networkInfo != null && networkInfo.isConnected()) {
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        TRACE.d("networkInfo"+ " networkInfo: " + activeNetwork.getType());
+        if (activeNetwork != null && activeNetwork.isConnected()) {
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
                 // Estas conectado a un Wi-Fi
-                TRACE.d("MIAPP"+ " Nombre red Wi-Fi: " + networkInfo.getReason());
+                TRACE.d("MIAPP"+ " Nombre red Wi-Fi: " + activeNetwork.getReason());
                 return true;
             }
-            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                 // Estas conectado a un Mobile
-                TRACE.d("MIAPP"+ " Nombre red Mobile: " + networkInfo.getReason());
+                TRACE.d("MIAPP"+ " Nombre red Mobile: " + activeNetwork.getReason());
                 return true;
             }
         }
