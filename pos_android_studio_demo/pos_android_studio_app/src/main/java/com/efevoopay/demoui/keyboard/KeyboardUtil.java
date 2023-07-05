@@ -41,10 +41,11 @@ public class KeyboardUtil implements View.OnClickListener{
     private int mKeyBoardMarginEditTextTopHeight;//the minimum distance between the keyboard and the top of the edit text
     private List<String> dataList;
 
-    private TextView tv_includeKey_Pin_result;
+    private TextView tv_includeKey_Pin_result,txt_countpin;
     private AppCompatButton confirm, cancel;
+    private int _count;
 
-    public KeyboardUtil(Activity context, View parent,List<String> dataList) {
+    public KeyboardUtil(Activity context, View parent,List<String> dataList,Integer countpin) {
         this.dataList = dataList;
         this.mActivity = context;
         this.mParent = parent;
@@ -63,10 +64,13 @@ public class KeyboardUtil implements View.OnClickListener{
         mKeyBoardMarginEditTextTopHeight = mEditTextHeight * 2;
 
         tv_includeKey_Pin_result = mIncludeKeyboardview.findViewById(R.id.tv_includeKey_Pin_result);
+        txt_countpin = mIncludeKeyboardview.findViewById(R.id.txt_countpin);
         confirm = mIncludeKeyboardview.findViewById(R.id.btn_pin_ok);
         cancel = mIncludeKeyboardview.findViewById(R.id.btn_pin_cancel);
         confirm.setOnClickListener(this);
         cancel.setOnClickListener(this);
+        _count=Integer.parseInt(txt_countpin.getText().toString())-countpin;
+        txt_countpin.setText(String.valueOf(_count));
 
         //mHeightPixels = context.getResources().getDisplayMetrics().heightPixels;
 

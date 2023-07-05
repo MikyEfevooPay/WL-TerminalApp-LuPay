@@ -127,6 +127,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     Cursor cursor;
     ProgressDialog spinner;
     private DBManager dbManager;
+    private Integer _Countpin=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1054,7 +1055,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     pos.pinMapSync(value, 20);
                 }
             });
-            keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, dataList);
+            keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, dataList,_Countpin);
             keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, Pruebaedittext);
         }
 
@@ -1068,6 +1069,14 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 if(keyboardUtil != null) {
                     keyboardUtil.hide();
                     TRACE.d("FINAL INOUT PIN " );
+                    _Countpin+=1;
+                    if(_Countpin>0 && _Countpin<3){
+                        WMX_Card.super.showAlert("informative", "NIP ERRONEO");
+                    }else if(_Countpin==3){
+                        pos.closeUart();
+                        WMX_Card.super.showAlert("informative", "NIP ERRONEO");
+                        startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    }
                 }
             }else{
                 for(int i = 0 ; i <num ; i ++){
@@ -1075,7 +1084,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 }
                 keyboardUtil.setPinText(num);
                 Pruebaedittext.setText(s);//"Pin ：
-
             }
         }
 
@@ -1293,7 +1301,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onEmvICCExceptionData(String arg0) {
             // TODO Auto-generated method stub
             TRACE.d("onEmvICCExceptionData(String arg0):" + arg0);
-
         }
 
         @Override
