@@ -384,7 +384,26 @@
     <string name="wmx_connection_test_error_2">Reiniciar la red Wi Fi</string>
     <string name="wmx_connection_test_error_3">Reiniciar la terminal</string>
     <string name="wmx_connection_test_error_4">Si persisten los problemas, favor de comunicarse con el centro de atención Efevoo Pay</string>
+    <string name="wmx_ticket_card_number">Número de tarjeta</string>
+    <string name="wmx_ticket_consumo">Consumo</string>
+    <string name="wmx_ticket_subtotal">Subtotal</string>
+    <string name="wmx_ticket_tip">Propina</string>
+    <string name="wmx_ticket_total">Total:</string>
+    <string name="wmx_ticket_footer">Por este pagaré me obligo incondicionalmente a pagar a la orden del banco acreditante el importe de este título. Este pagaré procede del contrato de apertura de crédito que el banco acreditante y el tarjetahabiente tienen celebrado.</string>
+    <string name="wmx_ticket_resume_end">FIN DEL RESUMEN</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="wmx_transaction_CAN">Cancelación</string>
+    <string name="wmx_transaction_DEV">Devolución</string>
+    <string name="wmx_transaction_AJU">Ajuste</string>
+    <string name="wmx_transaction_REV">Reverso</string>
+    <string name="wmx_transaction_DES">Destino</string>
+    <string name="wmx_transaction_CHE">Checkin</string>
+    <string name="wmx_transaction_REA">Reautorización</string>
+    <string name="wmx_transaction_OUT">Checkout</string>
+    <string name="wmx_transaction_PRE">Preventa</string>
+    <string name="wmx_transaction_CIE">Cierre de preventa</string>
+    <string name="wmx_transaction_VEN">Venta</string>
 
 </resources>

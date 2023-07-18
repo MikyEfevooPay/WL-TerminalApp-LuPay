@@ -2,12 +2,14 @@ package com.efevoopay.demoui.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
@@ -27,8 +29,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dspread.print.device.PrintListener;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.interfaces.IFetching;
+import com.efevoopay.demoui.interfaces.ITicket;
+import com.efevoopay.demoui.interfaces.TicketLayoutType;
+import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.Ticket;
+import com.efevoopay.demoui.utils.TicketLayoutManager;
+import com.efevoopay.demoui.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -36,7 +45,7 @@ import java.util.ArrayList;
  * BaseActivity used for to build all activity
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements IFetching {
+public abstract class BaseActivity extends AppCompatActivity implements IFetching, ITicket {
     public static final String TAG = "BaseActivity";
 
     protected Toolbar toolbar;
@@ -45,9 +54,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
     public Toast toast;
     private LayoutInflater inflater;
     private View layout;
-    private LinearLayout toolbar_btn_calendar, container_logo;
-
-
+    private LinearLayout container_logo;
+    private Ticket ticket;
+    private ProgressDialog ticket_progress;
+    private PRINT_TYPE entity_print;
+    private TicketLayoutType ticketLayoutType;
+    protected LinearLayout toolbar_btn_calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +99,38 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
             }
         });
 
+        ticket = new Ticket(this);
+        ticket.setPrintListenner(new MyPrinterListener());
+        ticket_progress = Utils.getLoaderSpinner(this, "Imprimiendo ticket...");
+        entity_print = PRINT_TYPE.STORE;
+    }
+    
+
+    public Ticket getTicket() {
+        return this.ticket;
+    }
+
+    @Override
+    public TicketLayoutType getPrintLayout() {
+        return TicketLayoutType.NONE;
+    }
+
+    @Override
+    public void setTicketData(Ticket ticket) {
+    }
+
+    public void PrintTicket(PRINT_TYPE entity) {
+        this.entity_print = entity;
+        PrintTicket();
+    }
+    public void PrintTicket() {
+        if(!ticket.isPrinterAvailable()) return;
+        ticket_progress.show();
+        ticketLayoutType = getPrintLayout();
+        setTicketData(ticket);
+        TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType, this.entity_print);
+        ticketLayoutManager.setTicketDataByLayout(ticket);
+        ticket.printLayout(ticketLayoutManager.getLayout());
     }
 
     public Toolbar getToolbar(){
@@ -100,6 +144,17 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
     public void onFetchResult() {
 
     }
+
+    @Override
+    public void onPrintFinished(boolean isSuccess, PRINT_TYPE print_type, TicketLayoutType layoutType) {
+        if(ticket_progress.isShowing()) ticket_progress.dismiss();
+    }
+
+    @Override
+    public void onPrintError(boolean isSuccess, String status, PRINT_TYPE print_type, TicketLayoutType layoutType) {
+        if(ticket_progress.isShowing()) ticket_progress.dismiss();
+    }
+
 
     public abstract void onToolbarLinstener();
 
@@ -389,6 +444,20 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
         }
     }
 
+
+
+    class MyPrinterListener implements PrintListener {
+
+        @Override
+        public void printResult(boolean b, String status, int type) {
+            //enableButton(btnPrint, true);
+            if (b) {
+                onPrintFinished(b, entity_print, ticketLayoutType);
+            } else {
+                onPrintError(b, status, entity_print, ticketLayoutType);
+            }
+        }
+    }
 
 
 }

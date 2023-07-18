@@ -69,17 +69,16 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.iqiyi.xcrash:xcrash-android-lib:2.4.6'
     implementation 'com.binioter:guideview:1.0.0'
-//    implementation files('libs/dspread_android_pos_sdk_3.1.0.jar')
     implementation files('libs/zxing.jar')
     implementation 'org.jetbrains:annotations-java5:15.0'
-    implementation files('libs/dspread_android_printer_sdk_1.1.jar')
     implementation files('libs/capx-lib_2.0.0.1.jar')
 
     implementation 'com.google.android.material:material:1.6.0'
 
     //https://frogames.es/solucion-a-error-con-el-dexfile-en-android-studionull-cannot-fit-requested-classes-in-a-single-dexfile/
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation files('libs/actionprinter.jar ')
     implementation files('libs/DUKPK2009_CBC.jar')
     implementation "com.airbnb.android:lottie:6.0.1"
+    //dspread sdk
+    implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
 }

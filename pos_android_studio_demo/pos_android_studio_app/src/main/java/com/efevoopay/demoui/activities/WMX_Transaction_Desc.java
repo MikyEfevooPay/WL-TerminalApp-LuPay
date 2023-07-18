@@ -4,9 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,14 +11,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.core.content.ContextCompat;
 
-import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.RemoteException;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -32,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.action.printerservice.IPrinterCallback;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -43,21 +34,17 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.dspread.xpos.r;
-import com.dspread.helper.printer.PrinterClass;
-import com.action.printerservice.ActionPrinter;
-import com.action.printerservice.PrintStyle;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.Ticket;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,7 +60,6 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     LinearLayout tp_ll_content_card;
     private int transaction_type;
     private String card_provider, type_transaction;
-    private Ticket ticket;
     Context mContext;
     private String ksn_posId;
     ProgressDialog loader;
@@ -91,7 +77,6 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         mContext = this;
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
-        ticket = new Ticket(getApplicationContext());
         loader = Utils.getLoaderSpinner(this, "Enviando...");
         ticket_loader = Utils.getLoaderSpinner(this, "Imprimiendo Ticket...");
         initData(intent);
@@ -107,15 +92,37 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         return R.layout.wmx_transaction_prev;
     }
 
+    @Override
+    public TicketLayoutType getPrintLayout() {
+        return TicketLayoutType.TRANSACTION;
+    }
+
+
+    @Override
+    public void setTicketData(Ticket ticket) {
+        ticket.setTrans_Type(tp_tv_trans_type.getText().toString())
+                .setApprove(tp_tv_tipotarjeta.getText().toString())
+                .setCard(tp_tv_card.getText().toString())
+                .setCardType(card_provider)
+                .setDate_Time(tp_tv_date_time.getText().toString())
+                .setAmount(tp_tv_amount.getText().toString())
+                .setTip(tp_tv_tip.getText().toString())
+                .setTotal(tp_tv_total.getText().toString())
+                .setARQC(tp_tv_ARQC.getText().toString())
+                .setAID(tp_tv_AID.getText().toString())
+                .setKsn_posId(ksn_posId)
+                .setCursor(cursor);
+    }
+
     private void onFinish() {
         new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("Impresión de Ticket")
                 .setIcon(R.drawable.printer)
                 .setPositiveButton("Comercio", (dialog, lis) -> {
-                    ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
+                    PrintTicket(PRINT_TYPE.STORE);
                 })
                 .setNeutralButton("Cliente", (dialog, lis) -> {
-                    ticket.GenerateTicket(PRINT_TYPE.CLIENT, transaction_type);
+                    PrintTicket(PRINT_TYPE.CLIENT);
                 })
                 .show();
     }
@@ -330,7 +337,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             }
             type_transaction = "Cancelacion";
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_grupo_41699);
-            tp_tv_trans_type.setText("Cancelada Venta Normal");
+            tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CAN_TYPE));
             tp_tv_trans_type.setTextColor(0xFFCC1818);
             tp_tv_date_time.setTextColor(0xFF121212);
             tp_tv_total_label.setTextColor(0xFF5A5A5A);
@@ -346,13 +353,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         } else if (status.equals("VN")) {
             type_transaction = "venta";
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
-            tp_tv_trans_type.setText("Aprobada Venta Normal");
+            tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_VEN_TYPE));
             tp_tv_tip.setText(propina);
             transaction_type = 1;
 
         } else {
             type_transaction = "venta";
-            tp_tv_trans_type.setText("Aprobada Venta a Meses");
+            tp_tv_trans_type.setText("Venta a Meses");
             tp_tv_tip_label.setText("Meses:");
             tp_tv_tip.setText(msi + " MSI");
             transaction_type = 0;
@@ -379,32 +386,6 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         dbManager.open();
         cursor = dbManager.fetch(ksn_posId);
 
-        ticket.setData(tp_tv_trans_type.getText().toString(),
-                tp_tv_tipotarjeta.getText().toString(), tp_tv_card.getText().toString(),
-                card_provider, tp_tv_date_time.getText().toString(),
-                tp_tv_amount.getText().toString(),
-                tp_tv_tip.getText().toString(),
-                tp_tv_total.getText().toString(),
-                tp_tv_ARQC.getText().toString(),
-                tp_tv_AID.getText().toString(),
-                ksn_posId,
-                cursor);
-
-        ticket.setTicketCallback(new Ticket.ICustomPrinterCallback() {
-            @Override
-            public void onPrintStart() {
-                ticket_loader.show();
-            }
-
-            @Override
-            public void onPrintFinish(int height) {
-                ticket_loader.dismiss();
-            }
-
-            @Override
-            public void onError(int error, String message) {
-                ticket_loader.dismiss();
-            }
-        });
     }
+
 }

@@ -9,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -143,6 +145,21 @@ public class Utils {
 		} else {
 			return "";
 		}
+	}
+
+	public static Bitmap viewToBitmap(View view) {
+		int measuredWidth = View.MeasureSpec.makeMeasureSpec(384, View.MeasureSpec.EXACTLY);
+		int measuredHeight = View.MeasureSpec.makeMeasureSpec(100000, View.MeasureSpec.UNSPECIFIED);
+		view.measure(measuredWidth, measuredHeight);
+		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+		int w = view.getWidth();
+		int h = view.getHeight();
+		Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		Canvas c = new Canvas(bmp);
+		c.drawColor(-1);
+		view.invalidate();
+		view.draw(c);
+		return bmp;
 	}
 
 	/*

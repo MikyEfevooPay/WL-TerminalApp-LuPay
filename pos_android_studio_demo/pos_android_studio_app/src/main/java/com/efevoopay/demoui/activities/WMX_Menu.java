@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.ConfigTpv;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.ResponseCode;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
@@ -64,6 +65,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         ResponseCode.setCodeResponses();
         spinner.show();
         configTpv.spinner = spinner;
+        GNTBackEnd.initTransTypeTitles(getResources());
         optksn();
 
         LLave();

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lyt_transaction_print"
+    android:layout_width="384px"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/img_ticket_logo"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        app:srcCompat="@drawable/logo_ticket" />
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/txt_company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans_bold"
+            android:gravity="center"
+            android:text="Company"
+            android:textColor="#000000"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/txt_address_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:text="adress 1"
+            android:textColor="#000000"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/txt_address_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:text="adress 2"
+            android:textColor="#000000"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/txt_address_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:text="adress 3"
+            android:textColor="#000000"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_separator_tiny"
+        android:layout_width="30dp"
+        android:layout_height="1px"
+        android:layout_gravity="center"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_card_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/txt_transaction_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans_bold"
+            android:gravity="center"
+            android:text="CORTE DE CAJA"
+            android:textColor="#000000"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/txt_ticket_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:text="date"
+            android:textColor="#000000"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#000000"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_amounts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txt_ticket_consumo_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans"
+                    android:gravity="left"
+                    android:text="@string/wmx_ticket_subtotal"
+                    android:textColor="#000000"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:id="@+id/txt_ticket_consumo_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans"
+                    android:gravity="right"
+                    android:text="value"
+                    android:textColor="#000000"
+                    android:textSize="11dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txt_ticket_tip_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans"
+                    android:gravity="left"
+                    android:text="@string/wmx_ticket_tip"
+                    android:textColor="#000000"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:id="@+id/txt_ticket_tip_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans"
+                    android:gravity="right"
+                    android:text="value"
+                    android:textColor="#000000"
+                    android:textSize="11dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txt_ticket_total_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:gravity="left"
+                    android:text="@string/wmx_ticket_total"
+                    android:textColor="#000000"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:id="@+id/txt_ticket_total_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:gravity="right"
+                    android:text="value"
+                    android:textColor="#000000"
+                    android:textSize="22dp" />
+            </TableRow>
+
+        </TableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#000000"
+        android:orientation="horizontal"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="3dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/txt_ticket_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/dm_sans_bold"
+            android:gravity="center"
+            android:text="@string/wmx_ticket_resume_end"
+            android:textColor="#000000"
+            android:textSize="11dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_separator_tiny"
+        android:layout_width="30dp"
+        android:layout_height="1px"
+        android:layout_gravity="center"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_ticket_terminal_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/txt_ticket_kposId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:text="kposId"
+            android:textColor="#000000"
+            android:textSize="11dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

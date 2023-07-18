@@ -1,22 +1,57 @@
 package com.efevoopay.demoui.utils;
 
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Build;
 
 import com.blumonpay.capx.functions.CypherFunctions;
 import com.blumonpay.capx.model.DUKPTData;
 import com.blumonpay.capx.model.TransactionData;
+import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.activities.WMX_Ajustes;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 public class GNTBackEnd {
     public String _redtarj="";
     public String _tiptarj="";
     public String _card="";
+    private static HashMap TRANS_TYPE_TITLES;
+    public static final String TRANS_CAN_TYPE = "CAN";
+    public static final String TRANS_DEV_TYPE = "DEV";
+    public static final String TRANS_AJU_TYPE = "AJU";
+    public static final String TRANS_REV_TYPE= "REV";
+    public static final String TRANS_DES_TYPE = "DES";
+    public static final String TRANS_CHE_TYPE = "CHE";
+    public static final String TRANS_REA_TYPE = "REA";
+    public static final String TRANS_OUT_TYPE = "OUT";
+    public static final String TRANS_PRE_TYPE = "PRE";
+    public static final String TRANS_CIE_TYPE = "CIE";
+    public static final String TRANS_VEN_TYPE = "VEN";
+
+    public static void initTransTypeTitles(Resources res) {
+        TRANS_TYPE_TITLES = new HashMap<String, String>();
+        TRANS_TYPE_TITLES.put(TRANS_CAN_TYPE, res.getString(R.string.wmx_transaction_CAN));
+        TRANS_TYPE_TITLES.put(TRANS_DEV_TYPE, res.getString(R.string.wmx_transaction_DEV));
+        TRANS_TYPE_TITLES.put(TRANS_AJU_TYPE, res.getString(R.string.wmx_transaction_AJU));
+        TRANS_TYPE_TITLES.put(TRANS_REV_TYPE, res.getString(R.string.wmx_transaction_REV));
+        TRANS_TYPE_TITLES.put(TRANS_DES_TYPE, res.getString(R.string.wmx_transaction_DES));
+        TRANS_TYPE_TITLES.put(TRANS_CHE_TYPE, res.getString(R.string.wmx_transaction_CHE));
+        TRANS_TYPE_TITLES.put(TRANS_REA_TYPE, res.getString(R.string.wmx_transaction_REA));
+        TRANS_TYPE_TITLES.put(TRANS_OUT_TYPE, res.getString(R.string.wmx_transaction_OUT));
+        TRANS_TYPE_TITLES.put(TRANS_PRE_TYPE, res.getString(R.string.wmx_transaction_PRE));
+        TRANS_TYPE_TITLES.put(TRANS_CIE_TYPE, res.getString(R.string.wmx_transaction_CIE));
+        TRANS_TYPE_TITLES.put(TRANS_VEN_TYPE, res.getString(R.string.wmx_transaction_VEN));
+    }
+
+    public static String getTitle(String key) {
+        return TRANS_TYPE_TITLES.get(key).toString();
+    }
+
     public DUKPTData EncryptBlumon(String _track2, Integer _counter, Cursor cursor) {
         TransactionData tr = new TransactionData();
         CypherFunctions cy = new CypherFunctions();
@@ -126,29 +161,29 @@ public class GNTBackEnd {
             return "";
         }
     }
-    public  String tipo(String type_trans){
+    public static String tipo(String type_trans){
         if(type_trans.equals("Cancelacion")){
-            return "CAN";
+            return TRANS_CAN_TYPE;
         }else if(type_trans.equals("devolucion")){
-            return "DEV";
+            return TRANS_DEV_TYPE;
         }else if(type_trans.equals("ajuste")){
-            return "AJU";
+            return TRANS_AJU_TYPE;
         }else if(type_trans.equals("reverso")){
-            return "REV";
+            return TRANS_REV_TYPE;
         }else if(type_trans.equals("destino")){
-            return "DES";
+            return TRANS_DES_TYPE;
         }else if(type_trans.equals("checkin")){
-            return "CHE";
+            return TRANS_CHE_TYPE;
         }else if(type_trans.equals("reautorizacion")){
-            return "REA";
+            return TRANS_REA_TYPE;
         }else if(type_trans.equals("checkout")){
-            return "OUT";
+            return TRANS_OUT_TYPE;
         }else if(type_trans.equals("preventa")){
-            return "PRE";
+            return TRANS_PRE_TYPE;
         }else if(type_trans.equals("cierrepreventa")){
-            return "CIE";
+            return TRANS_CIE_TYPE;
         }else{
-            return "VEN";
+            return TRANS_VEN_TYPE;
         }
     }
     public String msi(Integer _msi){

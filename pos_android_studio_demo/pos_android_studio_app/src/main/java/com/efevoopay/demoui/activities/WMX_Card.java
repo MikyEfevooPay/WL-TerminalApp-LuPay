@@ -299,7 +299,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm");
         Date date = new Date();
 
-        intent.putExtra("type_transaction",type_transaction);
+        intent.putExtra("type_transaction",GNTBackEnd.tipo(type_transaction));
         intent.putExtra("v_total",Total_Amount.getText().toString());
         intent.putExtra("v_time",dateFormat.format(date).toString());
         intent.putExtra("v_card","**** "+_card);
@@ -1867,6 +1867,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     public void procesofinal(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,String counter,String time_txn){
         _encryptblumon=gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2),Integer.parseInt(counter),cursor);
         TransExit=gntBackEnd.transaccion(entrada,entrymode,pan.substring(12,pan.length()),_encryptblumon.getTrack2(),_encryptblumon.getCrc32Track2(),_encryptblumon.getKsn(),String.valueOf(_encryptblumon.getCounter()),d4,emv,msi,pan,ksn_posId,redtarjeta,tipotarjeta,_Propina,type_transaction,time_txn,_noAuth,_AID,_ARQC,gntBackEnd.CountTrack2(track2),cursor);
+        TRACE.d("TRANSEXIT: " + TransExit);
         _redtar=gntBackEnd._redtarj;
         _tiptar=gntBackEnd._tiptarj;
         _card=gntBackEnd._card;
@@ -1966,7 +1967,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Urltxn, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    //TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
+                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
                     if(response.equals("00")){
                         ChangeViewToTicket();
                         Status_lector.setText(content);

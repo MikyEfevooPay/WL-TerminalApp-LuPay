@@ -3,7 +3,6 @@ package com.efevoopay.demoui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -15,11 +14,13 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
-import com.efevoopay.demoui.utils.PRINT_TYPE;
-import com.efevoopay.demoui.utils.TRACE;
+import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.util.Locale;
 
 public class WMX_Cancelacion_Desc extends BaseActivity  {
     TextView cp_tv_trans_type,cp_tv_auth,cp_tv_amount,cp_tv_tip,cp_tv_total,cp_tv_card,cp_tv_date_time,cp_tv_approve,cp_tv_tip_label,cp_tv_total_label,cp_tv_tipotarjeta,cp_tv_aid,cp_tv_arqc;
@@ -29,7 +30,6 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     Context mContext;
     private String card_provider;
     private int transaction_type;
-    private Ticket ticket;
     private Intent intent;
     private String ksn_posId;
     private DBManager dbManager;
@@ -41,7 +41,6 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
         mContext=this;
-        ticket = new Ticket(mContext);
 
         initData(intent);
         dbManager = new DBManager(mContext);
@@ -58,6 +57,28 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     @Override
     protected int getLayoutId() {
         return R.layout.wmx_cancelacion_prev;
+    }
+
+    @Override
+    public TicketLayoutType getPrintLayout() {
+        return TicketLayoutType.TRANSACTION;
+    }
+
+
+    @Override
+    public void setTicketData(Ticket ticket) {
+        ticket.setTrans_Type(cp_tv_trans_type.getText().toString())
+                .setApprove(cp_tv_approve.getText().toString())
+                .setCard(cp_tv_card.getText().toString())
+                .setCardType(card_provider)
+                .setDate_Time(cp_tv_date_time.getText().toString())
+                .setAmount(cp_tv_amount.getText().toString())
+                .setTip(cp_tv_tip.getText().toString())
+                .setTotal(cp_tv_total.getText().toString())
+                .setARQC(cp_tv_arqc.getText().toString())
+                .setAID(cp_tv_aid.getText().toString())
+                .setKsn_posId(ksn_posId)
+                .setCursor(cursor);
     }
 
     private void initData(Intent intent){
@@ -98,10 +119,10 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
 
          if (status.equals("VN")){
             cp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
-            cp_tv_trans_type.setText("Aprobada Venta Normal");
+            cp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CAN_TYPE));
              cp_tv_tip.setText(propina);
              transaction_type = 1;
-        }else{cp_tv_trans_type.setText("Aprobada Venta a Meses");
+        }else{cp_tv_trans_type.setText("Cancelación a meses");
              cp_tv_tip_label
             .setText("Meses:");
             cp_tv_tip.setText(msi+" MSI");
@@ -127,18 +148,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     }
 
     private void buttonListener(){
-        ticket.setData(
-                cp_tv_trans_type.getText().toString(),
-                cp_tv_approve.getText().toString(), cp_tv_card.getText().toString(),
-                card_provider, cp_tv_date_time.getText().toString(),
-                cp_tv_amount.getText().toString(),
-                cp_tv_tip.getText().toString(),
-                cp_tv_total.getText().toString(),
-                cp_tv_arqc.getText().toString(),
-                cp_tv_aid.getText().toString(),
-                ksn_posId,
-                cursor
-        );
+
         cp_btn_trans_cancelar = findViewById(R.id.cp_btn_trans_cancelar);
         cp_btn_trans_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +171,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_btn_trans_final.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
+                PrintTicket();
                 onBackPressed();
             }
         });

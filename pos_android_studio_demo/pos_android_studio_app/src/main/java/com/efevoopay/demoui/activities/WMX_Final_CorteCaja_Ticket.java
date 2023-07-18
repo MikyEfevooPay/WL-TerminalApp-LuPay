@@ -4,12 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,9 +18,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 
+import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
-import com.efevoopay.demoui.utils.PRINT_TYPE;
-import com.efevoopay.demoui.utils.SQLiteTpv;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.Utils;
@@ -76,7 +73,6 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     private Button btn_cortecaja_final;
     private TextView txt_totalamount, txt_datetime, txt_subtotal, txt_tip;
     private LinearLayout lyt_cortecaja_email, lyt_cortecaja_print;
-    private Ticket ticket;
     private final WMX_llamada_dukpt jsondukpt = new WMX_llamada_dukpt();
     private DBManager dbManager;
     Cursor cursor;
@@ -96,7 +92,6 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         TRACE.d("TableRowsString: " + TableRowsString);
         type = CORTE_CAJA_TYPE.getByNumber(intent.getIntExtra("type", 1));
         mContext = this;
-        ticket = new Ticket(mContext);
 
         loader = Utils.getLoaderSpinner(mContext, "Enviando...");
         btn_cortecaja_final = findViewById(R.id.btn_cortecaja_final);
@@ -132,7 +127,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
                 openModalSendEmail();
                 break;
             case R.id.lyt_cortecaja_print:
-                printTicket();
+                PrintTicket();
                 break;
             case R.id.btn_cortecaja_final:
                 if(type == CORTE_CAJA_TYPE.DETAILS)
@@ -158,9 +153,20 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         return R.layout.wmx_final_cortecaja_ticket;
     }
 
-    private void printTicket() {
-        ticket.setData("Corte de Caja","",totalamount, corte, tip, date, cursor, ksn_posId);
-        ticket.GenerateTicket(PRINT_TYPE.RESUME);
+    @Override
+    public TicketLayoutType getPrintLayout() {
+        return TicketLayoutType.CORTE;
+    }
+
+    @Override
+    public void setTicketData(Ticket ticket) {
+        ticket.setTrans_Type("CORTE DE CAJA")
+                .setDate_Time(date)
+                .setAmount(corte)
+                .setTip(tip)
+                .setTotal(totalamount)
+                .setKsn_posId(ksn_posId)
+                .setCursor(cursor);
     }
 
     private void openModalSendEmail() {

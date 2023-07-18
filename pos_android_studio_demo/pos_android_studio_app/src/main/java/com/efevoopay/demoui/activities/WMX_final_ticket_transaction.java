@@ -3,12 +3,8 @@ package com.efevoopay.demoui.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,17 +15,10 @@ import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.core.content.ContextCompat;
-
-import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.action.printerservice.ActionPrinter;
-import com.action.printerservice.IPrinterCallback;
-import com.action.printerservice.PrintStyle;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -41,7 +30,9 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
@@ -52,11 +43,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.Locale;
 
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
 
@@ -64,10 +53,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private LinearLayout ll_btn_open_modal_email;
     Context mContext;
     private String  type_transaction;
-    private int transaction_type;
     private boolean isTicketPrinted;
     String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal, v_months, v_months_total, card_provider;
-    private Ticket ticket;
     ProgressDialog loader;
     private String ksn_posId;
     private DBManager dbManager;
@@ -84,7 +71,6 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
         mContext=this;
 
-        ticket = new Ticket(this);
         loader = Utils.getLoaderSpinner(this, "Enviando...");
 
         btn_ticket_final =  (AppCompatButton) findViewById(R.id.btn_ticket_final);
@@ -132,12 +118,11 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         v_AID = intent.getStringExtra("v_AID");
         v_ARQC = intent.getStringExtra("v_ARQC");
 
-        transaction_type = v_type_transaction.equals("msi") ? 0 : 1;
 
         ticket_tv_total_value.setText(v_total);
         ticket_tv_time_value.setText(v_time);
         ticket_tv_card_value.setText(v_card);
-        ticket_tv_method_value.setText(ticket.tildetarjeta(v_tipotarjeta));
+        ticket_tv_method_value.setText(v_tipotarjeta);
         txt_AID.setText(v_AID);
         txt_ARQC.setText(v_ARQC);
 
@@ -151,13 +136,13 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             ticket_tv_tip_label.setText( v_months+" MSI");
             ticket_tv_tip_value.setText(v_months_total);
 
-        }else if(type_transaction.equals("venta")){
+        }else if(type_transaction.equals(GNTBackEnd.TRANS_VEN_TYPE)){
             v_tip = intent.getStringExtra("v_tip");
             v_subtotal = intent.getStringExtra("v_subtotal");
 
             ticket_tv_tip_value.setText(v_tip);
             ticket_tv_subtotal_value.setText(v_subtotal);
-        }else if(type_transaction.equals("Cancelacion")){
+        }else if(type_transaction.equals(GNTBackEnd.TRANS_CAN_TYPE)){
             ticket_tv_title.setText("Resumen de cancelación");
             textView16.setText("Cancelación aprobada");
             v_tip = intent.getStringExtra("v_tip");
@@ -185,26 +170,73 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     }
 
     @Override
+    public TicketLayoutType getPrintLayout() {
+        return TicketLayoutType.TRANSACTION;
+    }
+
+    @Override
+    public void setTicketData(Ticket ticket) {
+        ticket.setTrans_Type(GNTBackEnd.getTitle(v_type_transaction))
+                .setApprove(v_tipotarjeta)
+                .setCard(v_card)
+                .setCardType(card_provider)
+                .setDate_Time(v_time)
+                .setAmount(v_subtotal)
+                .setTip(v_tip)
+                .setTotal(v_total)
+                .setARQC(v_ARQC)
+                .setAID(v_AID)
+                .setKsn_posId(ksn_posId)
+                .setCursor(cursor);
+    }
+
+    @Override
     public void onBackPressed() {
 
     }
 
+    @Override
+    public void onPrintFinished(boolean isSuccess, PRINT_TYPE print_type, TicketLayoutType layoutType) {
+       super.onPrintFinished(isSuccess, print_type, layoutType);
+       if(print_type == PRINT_TYPE.STORE) {
+           showConfirmClientTicketDialog();
+       } else if(print_type == PRINT_TYPE.CLIENT) {
+           startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+       }
+    }
 
+    @Override
+    public void onPrintError(boolean isSuccess, String status, PRINT_TYPE print_type, TicketLayoutType layoutType) {
+        super.onPrintError(isSuccess, status, print_type, layoutType);
+        TRACE.d("print_type " + print_type.toString());
+        if(print_type == PRINT_TYPE.STORE) {
+            showConfirmClientTicketDialog();
+        } else if(print_type == PRINT_TYPE.CLIENT) {
+            runOnUiThread(() -> startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        }
+    }
 
     private void onFinish() {
-        if(!isTicketPrinted) ticket.GenerateTicket(PRINT_TYPE.STORE, transaction_type);
-        isTicketPrinted = true;
-        new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
+        if(!isTicketPrinted) {
+            isTicketPrinted = true;
+            PrintTicket(PRINT_TYPE.STORE);
+            return;
+        }
+        showConfirmClientTicketDialog();
+    }
+
+    private void showConfirmClientTicketDialog() {
+        MaterialAlertDialogBuilder confirm =   new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("¿Imprimir copia del ticket al cliente?")
                 .setIcon(R.drawable.printer)
                 .setPositiveButton("Sí",(dialog, lis) -> {
-                    ticket.GenerateTicket(PRINT_TYPE.CLIENT, transaction_type);
-                    startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    PrintTicket(PRINT_TYPE.CLIENT);
                 })
                 .setNeutralButton("No",(dialog, lis) -> {
                     startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                })
-                .show();
+                });
+
+        runOnUiThread(() -> confirm.show());
     }
 
     @Override
@@ -214,7 +246,6 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         switch (view.getId()){
             case R.id.btn_ticket_final:
                 if(Build.MODEL.equals("D30")){
-                    ticket.setData(v_type_transaction, v_tipotarjeta, v_card, card_provider, v_time, v_subtotal, v_tip, v_total, v_ARQC, v_AID, ksn_posId, cursor);
                     onFinish();
                 }else{
                     startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -313,7 +344,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
-            if(type_transaction.equals("venta")){
+            if(type_transaction.equals(GNTBackEnd.TRANS_VEN_TYPE)){
                 jsonBody.put("subject","Ticket de compra");
                 jsonBody.put("tipo", "V");
             }else{

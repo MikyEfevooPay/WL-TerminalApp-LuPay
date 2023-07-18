@@ -7,6 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.util.Pair;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,6 +77,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         btn_date = findViewById(R.id.btn_fecha);
         txt_date = findViewById(R.id.btn_date_txt);
         dpFecha = (DatePicker) findViewById(R.id.dpFecha);
+        configLocale();
         DatePickerListener();
         date1 = new Date();
         date2 = new Date();
@@ -139,17 +142,18 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         }
     }
 
-    @Override
-    public void onCalendarLinstener(){
-        TRACE.d("change");
+    private void configLocale() {
         Locale locale = new Locale("es", "ES");
         Locale.setDefault(locale);
         Configuration config = getBaseContext().getResources().getConfiguration();
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
+    }
 
-
+    @Override
+    public void onCalendarLinstener(){
+        toolbar_btn_calendar.setEnabled(false);
         dpDate.show(getSupportFragmentManager(), "date");
     };
 
@@ -159,6 +163,10 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
                 .setTitleText("Seleccione fecha")
                 .setTheme(R.style.MaterialCalendarThemeBackground)
                 .build();
+
+        dpDate.addOnDismissListener((selector) -> {
+            toolbar_btn_calendar.setEnabled(true);
+        });
 
         dpDate.addOnPositiveButtonClickListener((selection) -> {
             Pair<Long, Long> datesMilliseconds = (Pair<Long, Long>)dpDate.getSelection();
