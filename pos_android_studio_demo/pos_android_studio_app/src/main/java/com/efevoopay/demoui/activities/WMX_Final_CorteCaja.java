@@ -236,15 +236,7 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
         intent.putExtra("tablerows", jsondukpt.objectcorte.getString("corte"));
         startActivityMiddleware(intent);
     }
-    private void startActivityMiddleware(Intent intent) {
-        String CurrPackageName = getPackageName();
-        ComponentName name = intent.resolveActivity(getPackageManager());
-        String intentPackageName = name.getPackageName();
-        String intentClassName = name.getClassName();
-        if(intentPackageName.equals(CurrPackageName) && intentClassName.contains(CurrPackageName)) {
-            startActivity(intent);
-        }
-    }
+
     private void ConfirmarCorte(String _devicesid) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);

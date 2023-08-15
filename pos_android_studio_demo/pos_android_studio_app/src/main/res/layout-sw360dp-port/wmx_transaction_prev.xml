@@ -74,6 +74,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_msi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15px"
@@ -104,6 +105,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lyt_transaction_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15px"

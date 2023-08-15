@@ -81,6 +81,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/ll_ZeroPercent"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginBottom="25px"
@@ -110,6 +111,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_teenPercent"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginBottom="25px"
@@ -140,6 +142,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_fifteenPercent"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginBottom="25px"
@@ -168,6 +171,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_twentyPercent"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginBottom="25px"
@@ -194,7 +198,34 @@
                             android:textColor="#5A5A5A"
                             android:textSize="30px" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_twentyfivePercent"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="25px"
+                        android:orientation="horizontal">
 
+                        <RadioButton
+                            android:id="@+id/rBTwentyFive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/radiobutton_custom"
+                            android:fontFamily="@font/dm_sans"
+                            android:paddingLeft="20px"
+                            android:text="25%"
+                            android:textColor="#121212"
+                            android:textSize="30px" />
+
+                        <TextView
+                            android:id="@+id/twentyfivePercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/dm_sans"
+                            android:text="$0.0 MXN"
+                            android:textColor="#5A5A5A"
+                            android:textSize="30px" />
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/ll_otherPercent"
                         android:layout_width="match_parent"

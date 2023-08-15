@@ -46,4 +46,12 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="DialogBottomStyle" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
 </resources>

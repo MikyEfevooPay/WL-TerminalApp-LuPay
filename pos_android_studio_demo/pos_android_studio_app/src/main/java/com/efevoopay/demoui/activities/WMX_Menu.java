@@ -143,7 +143,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     break;
                 if (cursor.getString(10).equals("1")) {
                     intent = new Intent(this, WMX_Terminal.class);
-                    intent.putExtra("type_transaction", "msi");
+                    intent.putExtra("type_transaction", "MSI");
                     intent.putExtra("ksn_posId", ksn.posId);
                     startActivity(intent);
                 } else {

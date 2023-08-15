@@ -389,6 +389,7 @@
     <string name="wmx_ticket_subtotal">Subtotal</string>
     <string name="wmx_ticket_tip">Propina</string>
     <string name="wmx_ticket_total">Total:</string>
+    <string name="wmx_ticket_electronic_sign">Firmado electrónico</string>
     <string name="wmx_ticket_footer">Por este pagaré me obligo incondicionalmente a pagar a la orden del banco acreditante el importe de este título. Este pagaré procede del contrato de apertura de crédito que el banco acreditante y el tarjetahabiente tienen celebrado.</string>
     <string name="wmx_ticket_resume_end">FIN DEL RESUMEN</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -405,5 +406,7 @@
     <string name="wmx_transaction_PRE">Preventa</string>
     <string name="wmx_transaction_CIE">Cierre de preventa</string>
     <string name="wmx_transaction_VEN">Venta</string>
+    <string name="wmx_transaction_MSI">Venta MSI</string>
+    <string name="wmx_transaction_CANMSI">Cancelación MSI</string>
 
 </resources>

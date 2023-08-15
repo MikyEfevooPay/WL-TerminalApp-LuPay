@@ -4,19 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import androidx.annotation.LayoutRes;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -25,6 +20,7 @@ public class Utils {
 	public static final String TERMINAL_API_TEST = "https://test-efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_BIN = "https://lookup.binlist.net/";
 	public static final String TPVCONFIG = "https://testagrswl.gntapi.com";
+	private static char MASK_CHAR = '*';
 
 	public static String bytes2Hex(byte[] data) {
 
@@ -400,6 +396,10 @@ public class Utils {
 		return nDialog;
 	}
 
+	public static View getViewByResource(@LayoutRes int Resource, LayoutInflater inflater) {
+		return inflater.inflate(Resource, null);
+	}
+
 	public static void LoadingTask(Context ctx, LoaderTask taskhandle) {
 
 		ProgressDialog nDialog = new ProgressDialog(ctx);
@@ -431,6 +431,28 @@ public class Utils {
 
 	public static boolean isValidEmail(String email) {
 		return patternMatches(email, "^.+@.+(\\.[^\\.]+)+$");
+	}
+
+	public static String maskText(String text, int maskLenght, char mask, boolean... start) {
+		MASK_CHAR = mask;
+		return maskText(text, maskLenght, start);
+	}
+
+	public static String maskText(String text, int maskLenght, boolean... start) {
+		String replaceAllRegex = "[\\s\\S]";
+		if (text.length() < maskLenght)
+			return text;
+		if (text.length() == maskLenght)
+			return text.replaceAll(replaceAllRegex, Character.toString(MASK_CHAR));
+		int unmaskedLenght = text.length() - maskLenght;
+		boolean _start = start.length > 0 && start[0];
+		String unmaskedText = _start ? text.substring(0, maskLenght) : text.substring(unmaskedLenght);
+		StringBuilder maskedText = new StringBuilder();
+		for (int i = 0; i <= unmaskedLenght; i++) {
+			maskedText.append(MASK_CHAR);
+		}
+		MASK_CHAR = '*';
+		return _start ? unmaskedText + maskedText : maskedText + unmaskedText;
 	}
 
 }

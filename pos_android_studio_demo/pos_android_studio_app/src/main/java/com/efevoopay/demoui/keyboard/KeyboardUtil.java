@@ -43,7 +43,6 @@ public class KeyboardUtil implements View.OnClickListener{
 
     private TextView tv_includeKey_Pin_result,txt_countpin;
     private AppCompatButton confirm, cancel;
-    private int _count;
 
     public KeyboardUtil(Activity context, View parent,List<String> dataList,Integer countpin) {
         this.dataList = dataList;
@@ -69,8 +68,7 @@ public class KeyboardUtil implements View.OnClickListener{
         cancel = mIncludeKeyboardview.findViewById(R.id.btn_pin_cancel);
         confirm.setOnClickListener(this);
         cancel.setOnClickListener(this);
-        _count=Integer.parseInt(txt_countpin.getText().toString())-countpin;
-        txt_countpin.setText(String.valueOf(_count));
+        txt_countpin.setText(countpin.toString());
 
         //mHeightPixels = context.getResources().getDisplayMetrics().heightPixels;
 

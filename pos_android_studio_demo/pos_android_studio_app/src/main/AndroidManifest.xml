@@ -136,6 +136,11 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="false"
             />
+        <activity
+            android:name="com.efevoopay.demoui.activities.WMX_Transaction_Cancel"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:exported="false"
+            />
 
         <meta-data
             android:name="preloaded_fonts"

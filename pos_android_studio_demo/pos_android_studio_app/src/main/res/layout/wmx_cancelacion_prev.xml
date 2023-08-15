@@ -11,13 +11,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="585px"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="37px"
         android:layout_marginRight="37px"
-        android:layout_marginBottom="22px"
+        android:layout_weight="1"
         android:background="@drawable/fondo_ticket"
-        android:orientation="vertical"
 
+        android:orientation="vertical"
         android:paddingLeft="18px"
         android:paddingTop="30px"
         android:paddingRight="18px"
@@ -70,6 +70,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_msi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15px"
@@ -194,6 +195,7 @@
                 android:textColor="#5A5A5A"
                 android:textSize="20px" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -219,6 +221,7 @@
                 android:textColor="#5A5A5A"
                 android:textSize="20px" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/textView27"
             android:layout_width="match_parent"
@@ -331,25 +334,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cp_btn_trans_cancelar"
-            android:layout_width="390px"
+            android:layout_width="match_parent"
             android:layout_height="60px"
             android:background="@drawable/rounded_corner_cancel"
-            android:backgroundTint="#FFBABA"
+            android:backgroundTint="@color/ep_btn_continuar_fondo"
 
             android:enabled="true"
             android:fontFamily="@font/dm_sans_bold"
             android:minHeight="50dip"
             android:stateListAnimator="@null"
-            android:text="Cancelar"
+            android:text="Cancelar transacción"
             android:textAllCaps="false"
-            android:textColor="#FF6E6E"
+            android:textColor="#FFFFFF"
 
             android:textSize="22px"
 

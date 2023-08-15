@@ -176,6 +176,16 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             String address=objtpv.getString("address").toString();
             String comercio=objtpv.getString("comercio").toString();
             String msi=objtpv.getString("msi").toString();
+            String msi3=objtpv.getString("msi3").toString();
+            String msi6=objtpv.getString("msi6").toString();
+            String msi9=objtpv.getString("msi9").toString();
+            String msi12=objtpv.getString("msi12").toString();
+            String msi18=objtpv.getString("msi18").toString();
+            String minimo3=objtpv.getString("minimo3").toString();
+            String minimo6=objtpv.getString("minimo6").toString();
+            String minimo9=objtpv.getString("minimo9").toString();
+            String minimo12=objtpv.getString("minimo12").toString();
+            String minimo18=objtpv.getString("minimo18").toString();
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("tpv", Build.MODEL+"Android smart POS");
             jsonBody.put("device_id", ksn_posId);
@@ -191,7 +201,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    DatosInicializacion(response.toString(),p43,p48,p120,address,comercio,msi);
+                    DatosInicializacion(response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
                     if(spinner.isShowing()) spinner.dismiss();
                 }
             }, new Response.ErrorListener() {
@@ -241,13 +251,13 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
         }
     }
-    public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi){
+    public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18){
         try {
             JSONObject object = new JSONObject(_json);
 
             if(object.getString("codigo").equals("00")){
                 dbManager.onUpgrade();
-                dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")));
+                dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
 
                 WMX_Ajustes.super.showAlert("success", "¡Inicialización con éxito!");
             }else{

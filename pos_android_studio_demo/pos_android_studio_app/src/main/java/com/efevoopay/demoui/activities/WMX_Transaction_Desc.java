@@ -50,6 +50,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickListener {
@@ -57,14 +58,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     TextView tp_tv_trans_type, tp_tv_auth, tp_tv_amount, tp_tv_tip, tp_tv_total, tp_tv_card, tp_tv_date_time,
             tp_tv_approve, tp_tv_tip_label, tp_tv_total_label, tp_tv_tipotarjeta, tp_tv_AID, tp_tv_ARQC;
     ImageView tp_iv_trans_type, tp_iv_process;
-    LinearLayout tp_ll_content_card;
+    LinearLayout tp_ll_content_card, ll_msi, lyt_transaction_tip;
     private int transaction_type;
-    private String card_provider, type_transaction;
+    private String card_provider, type_transaction, v_months, tipotarjeta;
     Context mContext;
     private String ksn_posId;
     ProgressDialog loader;
     private DBManager dbManager;
-    private ProgressDialog ticket_loader;
     Cursor cursor;
 
     @Override
@@ -78,7 +78,6 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
         loader = Utils.getLoaderSpinner(this, "Enviando...");
-        ticket_loader = Utils.getLoaderSpinner(this, "Imprimiendo Ticket...");
         initData(intent);
     }
 
@@ -97,13 +96,14 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         return TicketLayoutType.TRANSACTION;
     }
 
-
     @Override
     public void setTicketData(Ticket ticket) {
         ticket.setTrans_Type(tp_tv_trans_type.getText().toString())
-                .setApprove(tp_tv_tipotarjeta.getText().toString())
                 .setCard(tp_tv_card.getText().toString())
-                .setCardType(card_provider)
+                .setCardType(tipotarjeta)
+                .setCard_provider(card_provider)
+                .setStatus("APROBADA")
+                .setApprove(tp_tv_approve.getText().toString())
                 .setDate_Time(tp_tv_date_time.getText().toString())
                 .setAmount(tp_tv_amount.getText().toString())
                 .setTip(tp_tv_tip.getText().toString())
@@ -111,7 +111,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                 .setARQC(tp_tv_ARQC.getText().toString())
                 .setAID(tp_tv_AID.getText().toString())
                 .setKsn_posId(ksn_posId)
-                .setCursor(cursor);
+                .setCursor(cursor)
+                .setMsi(v_months);
     }
 
     private void onFinish() {
@@ -215,14 +216,19 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("correo", _correo);
+
             if (type_transaction.equals("venta")) {
                 jsonBody.put("subject", "Ticket de compra");
-                jsonBody.put("tipo", "V");
-            } else {
+                jsonBody.put("tipo", "sale");
+            } else if (type_transaction.equals("Cancelacion")) {
                 jsonBody.put("subject", "Ticket de Cancelación");
-                jsonBody.put("tipo", "C");
+                jsonBody.put("tipo", "cancel");
+            } else if (type_transaction.equals("MSI")) {
+                jsonBody.put("subject", "Ticket MSI");
+                jsonBody.put("tipo", "msi");
             }
             jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
+            jsonBody.put("msi", Utils.isNull(v_months, "N/A"));
             jsonBody.put("amount", Utils.isNull(tp_tv_amount.getText().toString(), "N/A"));
             jsonBody.put("tip", Utils.isNull(tp_tv_tip.getText().toString(), "N/A"));
             jsonBody.put("total", Utils.isNull(tp_tv_total.getText().toString(), "N/A"));
@@ -295,7 +301,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     }
 
     private void initData(Intent intent) {
-        String auth, date, time, subtotal, card, redtarj, tipotarjeta, status, propina, total, msi, aid, arqc, approve;
+        String auth, date, time, subtotal, card, redtarj, status, propina, total, msi, aid, arqc, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
@@ -313,6 +319,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         approve = intent.getStringExtra("approve");
         ksn_posId = intent.getStringExtra("ksn_posId");
 
+        // ll_msi = findViewById(R.id.ll_msi);
         tp_tv_trans_type = findViewById(R.id.tp_tv_trans_type);
         tp_tv_auth = findViewById(R.id.tp_tv_auth);
         tp_tv_amount = findViewById(R.id.tp_tv_amount);
@@ -329,15 +336,28 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_tipotarjeta = findViewById(R.id.tp_tv_tipotarjeta);
         tp_tv_AID = findViewById(R.id.txt_AID);
         tp_tv_ARQC = findViewById(R.id.txt_ARQC);
+        lyt_transaction_tip = findViewById(R.id.lyt_transaction_tip);
 
+        tp_tv_amount.setText(subtotal + " MXN");
+        tp_tv_tip.setText(propina + " MXN");
+        v_months = msi;
         if (status.equals("CAN")) {
-            tp_tv_tip.setText(propina);
             if (Integer.parseInt(msi) > 0) {
-                tp_tv_tip.setText(msi + " MSI");
+                // Float _amountc =
+                // Float.parseFloat(total.replace("$","").replace(",","").replace(" ",""));
+                // Float total_msi= _amountc / Integer.parseInt(v_months);
+                // NumberFormat format = NumberFormat.getCurrencyInstance();
+                // format.setMaximumFractionDigits(2);
+                // tp_tv_tip.setText(msi + " MSI");
+                tp_tv_total_label.setText(v_months + " MSI");
+                tp_tv_amount.setText(GNTBackEnd.Amount_msi(total, v_months) + " MXN");
+                tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CANMSI_TYPE));
+            } else {
+                tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CAN_TYPE));
             }
             type_transaction = "Cancelacion";
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_grupo_41699);
-            tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CAN_TYPE));
+
             tp_tv_trans_type.setTextColor(0xFFCC1818);
             tp_tv_date_time.setTextColor(0xFF121212);
             tp_tv_total_label.setTextColor(0xFF5A5A5A);
@@ -354,15 +374,26 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             type_transaction = "venta";
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_VEN_TYPE));
-            tp_tv_tip.setText(propina);
+            // tp_tv_tip.setText(propina);
             transaction_type = 1;
-
+            // v_months="0";
         } else {
-            type_transaction = "venta";
-            tp_tv_trans_type.setText("Venta a Meses");
-            tp_tv_tip_label.setText("Meses:");
-            tp_tv_tip.setText(msi + " MSI");
+            // v_months=msi;
+            type_transaction = GNTBackEnd.TRANS_MSI_TYPE;
+            tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_MSI_TYPE));
+            /*
+             * Float _amount =
+             * Float.parseFloat(total.replace("$","").replace(",","").replace(" ",""));
+             * Float total_msi= _amount / Integer.parseInt(v_months);
+             * NumberFormat format = NumberFormat.getCurrencyInstance();
+             * format.setMaximumFractionDigits(2);
+             */
+            // tp_tv_tip_label.setText("Meses:");
+            tp_tv_total_label.setText(v_months + " MSI");
+            tp_tv_amount.setText(GNTBackEnd.Amount_msi(total, v_months)  + " MXN");
+            // tp_tv_tip.setText(propina);
             transaction_type = 0;
+            lyt_transaction_tip.setVisibility(View.GONE);
         }
 
         if (redtarj.equals("MC")) {
@@ -376,16 +407,16 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_ARQC.setText(arqc);
         tp_tv_tipotarjeta.setText("Tarjeta " + tipotarjeta);
         tp_tv_auth.setText(auth);
-        tp_tv_amount.setText(subtotal);
-        tp_tv_total.setText(total);
+
+        tp_tv_total.setText(total  + " MXN");
         tp_tv_card.setText("**** " + card);
         tp_tv_date_time.setText(date + " " + time);
         tp_tv_approve.setText(approve);
+
 
         dbManager = new DBManager(mContext);
         dbManager.open();
         cursor = dbManager.fetch(ksn_posId);
 
     }
-
 }

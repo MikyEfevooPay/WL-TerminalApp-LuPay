@@ -2,6 +2,7 @@ package com.efevoopay.demoui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -14,20 +15,24 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.GlobalFunctions;
 import com.efevoopay.demoui.utils.InputFilterMinMax;
+import com.efevoopay.demoui.utils.TRACE;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     private Context mContext;
     private String Amount, type_transaction, v_msi="3", v_total_msi,ksn_posId;
-    private TextView Total_Amount, tv_zero, tv_ten, tv_fifteen, tv_twenty, tv_total, tv_propina_final, tv_propina_percent, tv_caption;
-    private RadioButton zero, ten, fifteen, twenty, other;
+    private TextView Total_Amount, tv_zero, tv_ten, tv_fifteen, tv_twenty, tv_twentyfive, tv_total, tv_propina_final, tv_propina_percent, tv_caption,Propinas_subtotal;
+    private RadioButton zero, ten, fifteen, twenty, twentyfive, other;
     private GlobalFunctions gf ;
     private TextInputEditText et;
     private Button continuar;
     private Intent intent;
-    private LinearLayout ll_otherPercent, ll_tips, ll_total;
+    private LinearLayout ll_otherPercent, ll_tips, ll_total,ll_ZeroPercent,ll_teenPercent,ll_fifteenPercent,ll_twentyPercent,ll_twentyfivePercent;
+    private DBManager dbManager;
+    Cursor cursor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         tv_ten = (TextView) findViewById(R.id.tenPercent);
         tv_fifteen = (TextView) findViewById(R.id.fifteenPercent);
         tv_twenty = (TextView) findViewById(R.id.twentyPercent);
+        tv_twentyfive = (TextView) findViewById(R.id.twentyfivePercent);
         tv_total= (TextView) findViewById(R.id.Propinas_total_result);
         tv_propina_final= (TextView) findViewById(R.id.Propinas_final_result);
         tv_propina_percent=(TextView) findViewById(R.id.propinas_percent_label);
@@ -55,6 +61,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         ten = (RadioButton) findViewById(R.id.rBTen);
         fifteen = (RadioButton) findViewById(R.id.rBFifteen);
         twenty = (RadioButton) findViewById(R.id.rBTwenty);
+        twentyfive = (RadioButton) findViewById(R.id.rBTwentyFive);
         other = (RadioButton) findViewById(R.id.rBOther);
 
 
@@ -65,7 +72,12 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         ten.setOnClickListener(this);
         fifteen.setOnClickListener(this);
         twenty.setOnClickListener(this);
+        twentyfive.setOnClickListener(this);
         other.setOnClickListener(this);
+
+        dbManager = new DBManager(mContext);
+        dbManager.open();
+        cursor = dbManager.fetch(ksn_posId);
 
         Total_Amount.setText("$"+Amount+" MXN");
         tv_total.setText("$"+Amount+" MXN");
@@ -79,19 +91,29 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     public void initViewType(){
         ll_otherPercent = findViewById(R.id.ll_otherPercent);
         ll_tips = findViewById(R.id.ll_tips);
+        ll_ZeroPercent = findViewById(R.id.ll_ZeroPercent);
+        ll_teenPercent = findViewById(R.id.ll_teenPercent);
+        ll_fifteenPercent = findViewById(R.id.ll_fifteenPercent);
+        ll_twentyPercent = findViewById(R.id.ll_twentyPercent);
+        ll_twentyfivePercent = findViewById(R.id.ll_twentyfivePercent);
         ll_total = findViewById(R.id.ll_total);
-        if(type_transaction.equals("msi")){
+        Propinas_subtotal=findViewById(R.id.Propinas_subtotal);
+        if(type_transaction.equals("MSI")){
             // Caption
+            Propinas_subtotal.setText("Total");
             tv_caption.setText("Selecciona tus mensualidades");
             // Options
             zero.setText("3 MSI");
             ten.setText("6 MSI");
             fifteen.setText("9 MSI");
             twenty.setText("12 MSI");
+            twentyfive.setText("18 MSI");
+            Habilitamsi();
             ll_otherPercent.setVisibility(View.GONE);
             // Tips
             ll_tips.setVisibility(View.GONE);
             ll_total.setGravity(Gravity.BOTTOM);
+            ll_total.setVisibility(View.GONE);
 
             // MSI totals
             Float _amount = Float.parseFloat(Amount.replace(",",""));
@@ -103,10 +125,12 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
             tv_fifteen.setText(gf.formatMoney(String.valueOf(total_msi),true) + " MXN");
             total_msi= _amount / 12;
             tv_twenty.setText(gf.formatMoney(String.valueOf(total_msi),true) + " MXN");
+            total_msi= _amount / 18;
+            tv_twentyfive.setText(gf.formatMoney(String.valueOf(total_msi),true) + " MXN");
 
         }else if(type_transaction.equals("venta")){
             tv_caption.setText("¿Desea agregar propina?");
-
+            ll_twentyfivePercent.setVisibility(View.GONE);
         }
     }
 
@@ -119,7 +143,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         else
             changeCheck(id);
 
-        if(type_transaction.equals("msi") && id != R.id.Propinas_btn_continue){
+        if(type_transaction.equals("MSI") && id != R.id.Propinas_btn_continue){
             switch (id){
                 case R.id.rBZero:
                     v_msi="3";
@@ -132,6 +156,9 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
                     break;
                 case R.id.rBTwenty:
                     v_msi="12";
+                    break;
+                case R.id.rBTwentyFive:
+                    v_msi="18";
                     break;
             }
         }else if(id != R.id.Propinas_btn_continue){
@@ -173,6 +200,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         ten.setChecked(false);
         fifteen.setChecked(false);
         twenty.setChecked(false);
+        twentyfive.setChecked(false);
         other.setChecked(false);
         et.setEnabled(false);
 
@@ -188,6 +216,9 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.rBTwenty:
                 twenty.setChecked(true);
+                break;
+            case R.id.rBTwentyFive:
+                twentyfive.setChecked(true);
                 break;
             case R.id.rBOther:
                 other.setChecked(true);
@@ -228,16 +259,18 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     }
 
     private void changeView(){
+        String tmp = tv_total.getText().toString().replace("$","").replace(",","").replace(" MXN","");
+        if(ValidarMonto(Float.parseFloat(tmp))){
         intent = new Intent(this, WMX_Card.class);
         intent.putExtra("AmountToShow",tv_total.getText());
         intent.putExtra("type_transaction",type_transaction );
         intent.putExtra("ksn_posId",ksn_posId);
-        String tmp = tv_total.getText().toString().replace("$","").replace(",","").replace(" MXN","");
+        //String tmp = tv_total.getText().toString().replace("$","").replace(",","").replace(" MXN","");
         intent.putExtra("Amount",tmp);
 
         intent.putExtra("total",tv_total.getText());
 
-        if(type_transaction.equals("msi")){
+        if(type_transaction.equals("MSI")){
             intent.putExtra("months",v_msi);
             Float _amount = Float.parseFloat(Amount.replace(",",""));
             Float total_msi= _amount / Float.valueOf(v_msi);
@@ -249,8 +282,10 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
             intent.putExtra("propina",tv_propina_final.getText().toString().replace("$","").replace(",","").replace(" MXN",""));
         }
 
-
         startActivity(intent);
+        }else{
+            WMX_Propinas.super.showAlert("error", "¡No cumple importe mínimo de compra!");
+        }
     }
 
     @Override
@@ -277,5 +312,65 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         _amount = _amount +tip;
         tv_total.setText(gf.formatMoney(String.valueOf(_amount),true) + " MXN");
         tv_propina_final.setText(gf.formatMoney(String.valueOf(tip),true) + " MXN");
+    }
+    public boolean ValidarMonto(Float importe){
+        TRACE.d("IMPORTE:" + importe);
+        if (type_transaction.equals("MSI"))
+        {
+            if(v_msi=="3" && importe>=Float.parseFloat(cursor.getString(17))){
+                return true;
+            }else if(v_msi=="6" && importe>=Float.parseFloat(cursor.getString(18))){
+                return true;
+            }else if(v_msi=="9" && importe>=Float.parseFloat(cursor.getString(19))){
+                return true;
+            }else if(v_msi=="12" && importe>=Float.parseFloat(cursor.getString(20))){
+                return true;
+            }else if(v_msi=="18" && importe>=Float.parseFloat(cursor.getString(21))){
+                return true;
+            }else {
+                return false;
+            }
+        } else{
+            return true;
+        }
+
+    }
+    public void Habilitamsi(){
+        // cursor
+        if (cursor.getString(12).equals("0")){
+            zero.setChecked(false);
+            //zero.callOnClick();
+            ll_ZeroPercent.setVisibility(View.GONE);
+        }
+        if (cursor.getString(13).equals("0")){
+            ten.setChecked(false);
+            //ten.callOnClick();
+            ll_teenPercent.setVisibility(View.GONE);
+        }
+        if (cursor.getString(14).equals("0")){
+            fifteen.setChecked(false);
+            //fifteen.callOnClick();
+            ll_fifteenPercent.setVisibility(View.GONE);
+        }
+        if (cursor.getString(15).equals("0")){
+            twenty.setChecked(false);
+            //twenty.callOnClick();
+            ll_twentyPercent.setVisibility(View.GONE);
+        }
+        if (cursor.getString(16).equals("0")){
+            twentyfive.setChecked(false);
+            //twentyfive.callOnClick();
+            ll_twentyfivePercent.setVisibility(View.GONE);
+        }
+        if (cursor.getString(12).equals("1") && cursor.getString(13).equals("1") && cursor.getString(14).equals("1")){
+            zero.setChecked(true);
+            //zero.callOnClick();
+        }else if (cursor.getString(13).equals("1") && cursor.getString(14).equals("1") && cursor.getString(15).equals("1")){
+            ten.setChecked(true);
+            ten.callOnClick();
+        }else if (cursor.getString(14).equals("1") && cursor.getString(15).equals("1") && cursor.getString(16).equals("1")){
+            fifteen.setChecked(true);
+            fifteen.callOnClick();
+        }
     }
 }

@@ -3,12 +3,6 @@ package com.efevoopay.demoui.utils;
 public class Transaction {
     String _pan,_date,_amount,_tips;
     String _auth, _date2, _subtotal,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi,_aid,_arqc, _approve;
-    public Transaction(String pan, String date, String amount, String tips){
-        _pan=pan;
-        _date = date;
-        _amount = amount;
-        _tips = tips;
-    }
     public Transaction(String auth, String date2, String time, String subtotal ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi,String aid,String arqc, String approve){
         _auth=auth;
         _date2=date2;

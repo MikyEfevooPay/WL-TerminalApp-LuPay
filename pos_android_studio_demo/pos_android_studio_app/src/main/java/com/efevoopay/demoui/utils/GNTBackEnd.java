@@ -13,6 +13,7 @@ import com.efevoopay.demoui.activities.WMX_Ajustes;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -32,6 +33,8 @@ public class GNTBackEnd {
     public static final String TRANS_PRE_TYPE = "PRE";
     public static final String TRANS_CIE_TYPE = "CIE";
     public static final String TRANS_VEN_TYPE = "VEN";
+    public static final String TRANS_MSI_TYPE = "MSI";
+    public static final String TRANS_CANMSI_TYPE = "CANMSI";
 
     public static void initTransTypeTitles(Resources res) {
         TRANS_TYPE_TITLES = new HashMap<String, String>();
@@ -46,6 +49,8 @@ public class GNTBackEnd {
         TRANS_TYPE_TITLES.put(TRANS_PRE_TYPE, res.getString(R.string.wmx_transaction_PRE));
         TRANS_TYPE_TITLES.put(TRANS_CIE_TYPE, res.getString(R.string.wmx_transaction_CIE));
         TRANS_TYPE_TITLES.put(TRANS_VEN_TYPE, res.getString(R.string.wmx_transaction_VEN));
+        TRANS_TYPE_TITLES.put(TRANS_MSI_TYPE, res.getString(R.string.wmx_transaction_MSI));
+        TRANS_TYPE_TITLES.put(TRANS_CANMSI_TYPE, res.getString(R.string.wmx_transaction_CANMSI));
     }
 
     public static String getTitle(String key) {
@@ -182,6 +187,8 @@ public class GNTBackEnd {
             return TRANS_PRE_TYPE;
         }else if(type_trans.equals("cierrepreventa")){
             return TRANS_CIE_TYPE;
+        }else if(type_trans.equals("MSI")){
+            return TRANS_MSI_TYPE;
         }else{
             return TRANS_VEN_TYPE;
         }
@@ -198,7 +205,7 @@ public class GNTBackEnd {
     public String tipotxn(String type_trans){
         if (type_trans.equals("venta")){
             return "VN";
-        }else if(type_trans.equals("msi")) {
+        }else if(type_trans.equals("MSI")) {
             return "MSI";
         }else if(type_trans.equals("devolucion")) {
             return "DEV";
@@ -223,7 +230,7 @@ public class GNTBackEnd {
         }
     }
     public String propina(String type_trans,String propina){
-        if(type_trans.equals("msi")||type_trans.equals("Cancelacion")||type_trans.equals("devolucion")||type_trans.equals("ajuste")||type_trans.equals("reverso")||type_trans.equals("destino")||type_trans.equals("checkin")||type_trans.equals("reautorizacion")||type_trans.equals("checkout")||type_trans.equals("preventa")||type_trans.equals("cierrepreventa")) {
+        if(type_trans.equals("MSI")||type_trans.equals("devolucion")||type_trans.equals("ajuste")||type_trans.equals("reverso")||type_trans.equals("destino")||type_trans.equals("checkin")||type_trans.equals("reautorizacion")||type_trans.equals("checkout")||type_trans.equals("preventa")||type_trans.equals("cierrepreventa")) {
             return "0.00";
         }else{
             return propina;
@@ -300,5 +307,12 @@ public class GNTBackEnd {
             sb.append((char) decimal);
         }
         return sb.toString().toUpperCase(Locale.ROOT);
+    }
+    public static String Amount_msi(String _total, String _msi){
+        Float _amount = Float.parseFloat(_total.replace("$","").replace(",","").replace(" ",""));
+        Float total_msi= _amount / Integer.parseInt(_msi);
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setMaximumFractionDigits(2);
+        return  format.format(total_msi).replace("$","$ ");
     }
 }

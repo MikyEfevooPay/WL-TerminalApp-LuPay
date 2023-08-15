@@ -21,6 +21,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String _COMERCIO="comercio";
     public static final String _MSI="msi";
     public static final String _COUNTER="counter";
+    public static final String _MSI3="msi3";
+    public static final String _MSI6="msi6";
+    public static final String _MSI9="msi9";
+    public static final String _MSI12="msi12";
+    public static final String _MSI18="msi18";
+    public static final String _minimo3="minimo3";
+    public static final String _minimo6="minimo6";
+    public static final String _minimo9="minimo9";
+    public static final String _minimo12="minimo12";
+    public static final String _minimo18="minimo18";
 
     // Database Information
     static final String DB_NAME = "TPV";
@@ -42,7 +52,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT NOT NULL,"+ _COMERCIO
             + " TEXT NOT NULL,"+ _MSI
             + " TEXT NOT NULL,"+_COUNTER
-            + " BIGINT NOT NULL);";
+            + " BIGINT NOT NULL,"+_MSI3
+            + " TEXT NOT NULL,"+_MSI6
+            + " TEXT NOT NULL,"+_MSI9
+            + " TEXT NOT NULL,"+_MSI12
+            + " TEXT NOT NULL,"+_MSI18
+            + " TEXT NOT NULL," +_minimo3
+            + " TEXT NOT NULL,"+_minimo6
+            + " TEXT NOT NULL,"+_minimo9
+            + " TEXT NOT NULL,"+_minimo12
+            + " TEXT NOT NULL,"+_minimo18
+            + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

@@ -17,23 +17,27 @@ import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.GNTBackEnd;
+import com.efevoopay.demoui.utils.GlobalFunctions;
 import com.efevoopay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.text.NumberFormat;
 import java.util.Locale;
 
 public class WMX_Cancelacion_Desc extends BaseActivity  {
-    TextView cp_tv_trans_type,cp_tv_auth,cp_tv_amount,cp_tv_tip,cp_tv_total,cp_tv_card,cp_tv_date_time,cp_tv_approve,cp_tv_tip_label,cp_tv_total_label,cp_tv_tipotarjeta,cp_tv_aid,cp_tv_arqc;
+    TextView cp_tv_trans_type,cp_tv_auth,cp_tv_amount,cp_tv_tip,cp_tv_total,cp_tv_card,cp_tv_date_time,cp_tv_approve,cp_tv_tip_label,cp_tv_total_label,cp_tv_tipotarjeta,cp_tv_aid,cp_tv_arqc,tp_tv_amount;
     ImageView cp_iv_trans_type,cp_iv_process;
-    LinearLayout cp_ll_content_card;
+    LinearLayout cp_ll_content_card,ll_msi;
     AppCompatButton cp_btn_trans_cancelar, cp_btn_trans_final;
     Context mContext;
-    private String card_provider;
+    private String card_provider, tipotarjeta;
     private int transaction_type;
     private Intent intent;
     private String ksn_posId;
+    private String meses;
     private DBManager dbManager;
     Cursor cursor;
+    private GlobalFunctions gf ;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,9 +72,11 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     @Override
     public void setTicketData(Ticket ticket) {
         ticket.setTrans_Type(cp_tv_trans_type.getText().toString())
+                .setStatus("APROBADA")
                 .setApprove(cp_tv_approve.getText().toString())
                 .setCard(cp_tv_card.getText().toString())
                 .setCardType(card_provider)
+                .setCard_provider(tipotarjeta)
                 .setDate_Time(cp_tv_date_time.getText().toString())
                 .setAmount(cp_tv_amount.getText().toString())
                 .setTip(cp_tv_tip.getText().toString())
@@ -82,7 +88,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     }
 
     private void initData(Intent intent){
-        String auth,date,time,subtotal,card,redtarj,tipotarjeta,status,propina,total,msi,aid,arqc, approve;
+        String auth,date,time,subtotal,card,redtarj,status,propina,total,msi,aid,arqc, approve;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
@@ -99,6 +105,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
 
         approve = intent.getStringExtra("approve");
         ksn_posId=intent.getStringExtra("ksn_posId");
+        meses=msi;
+
 
         cp_tv_trans_type = findViewById(R.id.cp_tv_trans_type);
         cp_tv_auth = findViewById(R.id.cp_tv_auth);
@@ -111,21 +119,30 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         cp_iv_trans_type = findViewById(R.id.cp_iv_trans_type);
         cp_iv_process = findViewById(R.id.cp_iv_process);
         cp_ll_content_card = findViewById(R.id.cp_ll_content_card);
+        //ll_msi = findViewById(R.id.ll_msi);
+        tp_tv_amount=findViewById(R.id.tp_tv_amount);
         cp_tv_tip_label =findViewById(R.id.cp_tv_tip_label);
         cp_tv_total_label = findViewById(R.id.cp_tv_total_label);
         cp_tv_tipotarjeta = findViewById(R.id.cp_tv_tipotarjeta);
         cp_tv_aid = findViewById(R.id.txt_AID);
         cp_tv_arqc = findViewById(R.id.txt_ARQC);
 
+        cp_tv_amount.setText(subtotal);
+        cp_tv_tip.setText(propina);
          if (status.equals("VN")){
             cp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             cp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CAN_TYPE));
-             cp_tv_tip.setText(propina);
              transaction_type = 1;
-        }else{cp_tv_trans_type.setText("Cancelación a meses");
-             cp_tv_tip_label
-            .setText("Meses:");
-            cp_tv_tip.setText(msi+" MSI");
+        }else{
+             cp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CANMSI_TYPE));
+//             Float _amount = Float.parseFloat(total.replace("$","").replace(",","").replace(" ",""));
+//             Float total_msi= _amount / Integer.parseInt(msi);
+//             NumberFormat format = NumberFormat.getCurrencyInstance();
+//             format.setMaximumFractionDigits(2);
+             cp_tv_total_label.setText(meses+"MSI");
+             cp_tv_amount.setText(GNTBackEnd.Amount_msi(total,meses));
+             //cp_tv_tip.setText(propina);
+             //ll_msi.setVisibility(View.GONE);
              transaction_type = 0;
         }
 
@@ -138,7 +155,6 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
 
         cp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
         cp_tv_auth.setText(auth);
-        cp_tv_amount.setText(subtotal);
         cp_tv_total.setText(total);
         cp_tv_card.setText("**** "+card);
         cp_tv_date_time.setText(date+" "+time);
@@ -198,18 +214,26 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     }
     private void changeView(){
         intent = new Intent(this, WMX_Card.class);
-        intent.putExtra("AmountToShow",cp_tv_total.getText());
+        intent.putExtra("AmountToShow",formatMoney(cp_tv_total.getText().toString().replace("$","").replace(",","").replace(" ","")));
         intent.putExtra("type_transaction","Cancelacion" );
         intent.putExtra("cp_tv_auth",cp_tv_auth.getText());
         intent.putExtra("ksn_posId",ksn_posId);
         String tmp = cp_tv_total.getText().toString().replace("$","").replace(",","").replace(" ","").replace(" MXN","");
         intent.putExtra("Amount",tmp);
 
-        intent.putExtra("total",cp_tv_total.getText());
+        intent.putExtra("total",formatMoney(cp_tv_total.getText().toString().replace("$","").replace(",","").replace(" ","")));
 
-        intent.putExtra("subtotal",cp_tv_amount.getText());
-        intent.putExtra("tips",cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" MXN",""));
+        intent.putExtra("subtotal",formatMoney(cp_tv_amount.getText().toString().replace("$","").replace(",","").replace(" ","")));
+        intent.putExtra("months",meses);
+        intent.putExtra("approve",cp_tv_approve.getText().toString());
+        intent.putExtra("tips",formatMoney(cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ","")));
+        intent.putExtra("propina",cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ",""));
 
         startActivity(intent);
+    }
+    public String formatMoney(String amount){
+        String str="";
+        str = "$" + amount +" MXN";
+        return str;
     }
 }

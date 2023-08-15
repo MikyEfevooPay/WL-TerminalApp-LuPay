@@ -3,6 +3,9 @@ package com.efevoopay.demoui.activities;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -16,6 +19,8 @@ import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.ActionMenuView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +40,7 @@ import com.efevoopay.demoui.interfaces.IFetching;
 import com.efevoopay.demoui.interfaces.ITicket;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.TicketLayoutManager;
 import com.efevoopay.demoui.utils.Utils;
@@ -51,20 +57,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
     protected Toolbar toolbar;
     private TextView txt_toolbar_title;
     private ImageView img_invisible_margin, logo_image;
-    public Toast toast;
     private LayoutInflater inflater;
-    private View layout;
     private LinearLayout container_logo;
     private Ticket ticket;
     private ProgressDialog ticket_progress;
     private PRINT_TYPE entity_print;
     private TicketLayoutType ticketLayoutType;
     protected LinearLayout toolbar_btn_calendar;
+    protected Handler ticketHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        initAlert();
-
         if(savedInstanceState != null) {
             savedInstanceState.clear();
             savedInstanceState = null;
@@ -91,17 +95,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
                     onCalendarLinstener();
                 }
             });
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onToolbarLinstener();
+                }
+            });
         }
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onToolbarLinstener();
-            }
-        });
 
         ticket = new Ticket(this);
         ticket.setPrintListenner(new MyPrinterListener());
         ticket_progress = Utils.getLoaderSpinner(this, "Imprimiendo ticket...");
+        ticketHandler = new Handler();
         entity_print = PRINT_TYPE.STORE;
     }
     
@@ -130,7 +135,16 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
         setTicketData(ticket);
         TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType, this.entity_print);
         ticketLayoutManager.setTicketDataByLayout(ticket);
-        ticket.printLayout(ticketLayoutManager.getLayout());
+
+        //Se agrega un posdelay en caso de que haya un error que la libreria no este catcheando para ocultar el spinner
+        ticketHandler.postDelayed(() -> {
+            hideTicketSpinner();
+        }, 7000);
+        boolean success = ticket.printLayout(ticketLayoutManager.getLayout());
+        if(!success) {
+            hideTicketSpinner();
+            ticketHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     public Toolbar getToolbar(){
@@ -147,12 +161,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
 
     @Override
     public void onPrintFinished(boolean isSuccess, PRINT_TYPE print_type, TicketLayoutType layoutType) {
-        if(ticket_progress.isShowing()) ticket_progress.dismiss();
     }
 
     @Override
     public void onPrintError(boolean isSuccess, String status, PRINT_TYPE print_type, TicketLayoutType layoutType) {
-        if(ticket_progress.isShowing()) ticket_progress.dismiss();
     }
 
 
@@ -249,46 +261,47 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
         }
     }
 
-    public void initAlert (){
-        toast = new Toast(getApplicationContext());
-        inflater=getLayoutInflater();
-        layout = inflater.inflate(R.layout.wmx_alert, (ViewGroup) findViewById(R.id.custom_alert));
 
+    public void showAlert(String type, String title, String... desc){
+        if(isActivityFinished(this)) return;
+        View layout = ConfigToastLayout(type, title, desc);
+        Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.FILL_HORIZONTAL,0,0);
         toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
+
+       toast.show();
     }
 
-    public void showAlert(String type, String title, String... desc){
-        ImageView image = layout.findViewById(R.id.AlertImage);
-        TextView tv_titulo = layout.findViewById(R.id.AlertTextTitulo);
-        TextView tv_desc = layout.findViewById(R.id.AlertTextDesc);
-        LinearLayout ll_custom_aler = layout.findViewById(R.id.custom_alert);
+    private View ConfigToastLayout(String type, String title, String... desc) {
+        LayoutInflater inflater=getLayoutInflater();
+        View layout = inflater.inflate(R.layout.wmx_alert, (ViewGroup) findViewById(R.id.custom_alert));
+        ImageView toast_image = layout.findViewById(R.id.AlertImage);
+        TextView toast_tv_titulo = layout.findViewById(R.id.AlertTextTitulo);
+        TextView toast_tv_desc = layout.findViewById(R.id.AlertTextDesc);
+        LinearLayout toast_ll_custom_alert = layout.findViewById(R.id.custom_alert);
         switch (type){
             case "success":
-                image.setImageResource(R.drawable.check_exito);
-                tv_titulo.setTextColor(0xff4AAC38);
-                ll_custom_aler.setBackgroundColor(0xffB9E0AB);
+                toast_image.setImageResource(R.drawable.check_exito);
+                toast_tv_titulo.setTextColor(0xff4AAC38);
+                toast_ll_custom_alert.setBackgroundColor(0xffB9E0AB);
                 break;
             case "error":
-                image.setImageResource(R.drawable.exclamation_mark);
-                tv_titulo.setTextColor(Color.parseColor("#FFFFFF"));
-                ll_custom_aler.setBackgroundColor(0xffFF9393);
+                toast_image.setImageResource(R.drawable.exclamation_mark);
+                toast_tv_titulo.setTextColor(Color.parseColor("#FFFFFF"));
+                toast_ll_custom_alert.setBackgroundColor(0xffFF9393);
                 break;
             case "informative":
-                image.setImageResource(R.drawable.efevoo_i_info);
-                tv_titulo.setTextColor(Color.parseColor("#FFFFFF"));
-                ll_custom_aler.setBackgroundColor(Color.parseColor("#5DADE2"));
+                toast_image.setImageResource(R.drawable.efevoo_i_info);
+                toast_tv_titulo.setTextColor(Color.parseColor("#FFFFFF"));
+                toast_ll_custom_alert.setBackgroundColor(Color.parseColor("#5DADE2"));
                 break;
         }
-
-
-        tv_titulo.setText(title);
+        toast_tv_titulo.setText(title);
         if(desc.length>0)
-            tv_desc.setText(desc[0]);
-
-        toast.show();
+            toast_tv_desc.setText(desc[0]);
+        return layout;
     }
 
 
@@ -314,6 +327,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
         txt_toolbar_title.setVisibility(View.VISIBLE);
         setTitle(title);
 
+    }
+
+    protected void hideTicketSpinner() {
+        if(ticket_progress.isShowing()) ticket_progress.dismiss();
     }
 
     public void switch_title_logo(String title, int color){
@@ -356,6 +373,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
             isHigher = true;
         }
         return isHigher;
+    }
+
+    protected boolean isActivityFinished(Context ctx) {
+        return ctx instanceof Activity && ((Activity) ctx).isFinishing();
     }
 
     /**
@@ -416,6 +437,16 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
         }
     }
 
+    protected void startActivityMiddleware(Intent intent) {
+        String CurrPackageName = getPackageName();
+        ComponentName name = intent.resolveActivity(getPackageManager());
+        String intentPackageName = name.getPackageName();
+        String intentClassName = name.getClassName();
+        if(intentPackageName.equals(CurrPackageName) && intentClassName.contains(CurrPackageName)) {
+            startActivity(intent);
+        }
+    }
+
     private void setOverflowButtonColor(final Activity activity, final PorterDuffColorFilter colorFilter) {
         final String overflowDescription = activity.getString(R.string.abc_action_menu_overflow_description);
         final ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
@@ -450,11 +481,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
 
         @Override
         public void printResult(boolean b, String status, int type) {
-            //enableButton(btnPrint, true);
+            hideTicketSpinner();
+            ticketHandler.removeCallbacksAndMessages(null);
             if (b) {
-                onPrintFinished(b, entity_print, ticketLayoutType);
+                onPrintFinished(true, entity_print, ticketLayoutType);
             } else {
-                onPrintError(b, status, entity_print, ticketLayoutType);
+                onPrintError(false, status, entity_print, ticketLayoutType);
             }
         }
     }

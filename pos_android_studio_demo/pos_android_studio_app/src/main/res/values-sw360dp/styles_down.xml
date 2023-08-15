@@ -107,8 +107,8 @@
         <item name="android:layout_gravity">center</item>
         <item name="background">@drawable/rounded_corner_cancel</item>
         <item name="android:layout_marginBottom">15px</item>
-        <item name="backgroundTint">#FFBABA</item>
-        <item name="android:textColor">#E93736</item>
+        <item name="backgroundTint">#121212</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="PositiveButtonStyle_Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
