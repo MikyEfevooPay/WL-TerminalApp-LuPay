@@ -1,14 +1,11 @@
 package com.efevoopay.demoui.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,39 +15,27 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Transaction;
 import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.widget.TransactionItemAdapter2;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.function.Predicate;
 
 public class WMX_Transaccion extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
 
@@ -63,9 +48,10 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     MaterialDatePicker dpDate;
     Date date1, date2;
     Intent intent;
-    ProgressDialog spinner;
     private String ksn_posId;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
+
+    private final String TRANSACTION_HISTORY = "getTransactionHistory";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +74,6 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         btn_date.setOnClickListener(this);
         txt_date.setOnClickListener(this);
         txt_date.setText(getFecha());
-        spinner = Utils.getLoaderSpinner(this);
 
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
@@ -96,10 +81,42 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
-        readJsontxn();
+        getFetchManager().CallAll();
     }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch history = manager.addFetch(TRANSACTION_HISTORY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
+        history.setSetBodyListenner(this::getBody);
+    }
+
+
+    private void getBody(JSONObject body) throws JSONException {
+        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd");
+        body.put("deviceid", ksn_posId);
+        body.put("pantalla", "Historial");
+        body.put("fechainicio", obj.format(date1));
+        body.put("fechafinal", obj.format(date2));
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        super.onFetchCurrentResult(entity, error);
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case TRANSACTION_HISTORY:
+                jsondukpt.readJsonnew(entity.result.toString());
+                transactions=jsondukpt.transactions;
+                setItems();
+                break;
+            default:
+                break;
+        }
+    }
+
+
 
     private void setItems() {
         if(transactions.size() > 0) {
@@ -173,7 +190,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             date1 = new Date(datesMilliseconds.first);
             date2 = new Date(datesMilliseconds.second);
             dpDate.dismiss();
-            readJsontxn();
+            getFetchManager().CallById(TRANSACTION_HISTORY);
         });
     }
 
@@ -221,82 +238,5 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         intent.putExtra("ksn_posId",ksn_posId);
 
         startActivity(intent);
-    }
-    private void getHistorial(String _devicesid)throws IOException{
-        try {
-            DateFormat obj = new SimpleDateFormat("yyyy-MM-dd");
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("deviceid", _devicesid);
-            jsonBody.put("pantalla", "Historial");
-            jsonBody.put("fechainicio", obj.format(date1));
-            jsonBody.put("fechafinal", obj.format(date2));
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    jsondukpt.readJsonnew(response.toString());
-                    if(spinner.isShowing()) spinner.dismiss();
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                    setItems();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(spinner.isShowing()) spinner.dismiss();
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    WMX_Transaccion.super.showAlert("ERROR", error.toString());
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            transactions=jsondukpt.transactions;
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
-    }
-    public void readJsontxn() {
-        try {
-            spinner.show();
-            getHistorial(ksn_posId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

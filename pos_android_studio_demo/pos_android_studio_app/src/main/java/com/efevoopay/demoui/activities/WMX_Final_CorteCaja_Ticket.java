@@ -1,6 +1,5 @@
 package com.efevoopay.demoui.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,34 +13,27 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.Utils;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 
 public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnClickListener {
@@ -67,9 +59,8 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     }
 
     private Intent intent;
-    private String ksn_posId, totalamount, date, corte, tip, TableRowsString;
+    private String ksn_posId, totalamount, date, corte, tip, TableRowsString, currEmail;
     private Context mContext;
-    private ProgressDialog loader;
     private Button btn_cortecaja_final;
     private TextView txt_totalamount, txt_datetime, txt_subtotal, txt_tip;
     private LinearLayout lyt_cortecaja_email, lyt_cortecaja_print;
@@ -77,7 +68,8 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     private DBManager dbManager;
     Cursor cursor;
     private CORTE_CAJA_TYPE type;
-    private boolean _final;
+
+    private final String SEND_EMAIL = "sendEmail";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +85,6 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         type = CORTE_CAJA_TYPE.getByNumber(intent.getIntExtra("type", 1));
         mContext = this;
 
-        loader = Utils.getLoaderSpinner(mContext, "Enviando...");
         btn_cortecaja_final = findViewById(R.id.btn_cortecaja_final);
         btn_cortecaja_final.setOnClickListener(this);
         lyt_cortecaja_email = findViewById(R.id.lyt_cortecaja_email);
@@ -118,7 +109,44 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         dbManager = new DBManager(mContext);
         dbManager.open();
         cursor = dbManager.fetch(ksn_posId);
+        setFetchProgressTitle("Enviando...");
     }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch history = manager.addFetch(SEND_EMAIL, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correocortecaja", Request.Method.POST));
+        history.setSetBodyListenner(this::getBody);
+    }
+
+    private void getBody(JSONObject body) throws JSONException {
+        body.put("correo", currEmail);
+        body.put("subject", "Corte de caja");
+        body.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
+        body.put("subtotal", Utils.isNull(corte, "N/A"));
+        body.put("propina", Utils.isNull( tip, "N/A"));
+        body.put("montototal", Utils.isNull(totalamount, "N/A"));
+        body.put("fechacorte", Utils.isNull(date, "N/A"));
+        body.put("tablerows",Utils.isNull(TableRowsString, "[]"));
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        if(error != null) {
+            TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + error.result);
+            showAlert("error", "ERROR", "¡Correo no enviado!");
+            return;
+        }
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case SEND_EMAIL:
+                TRACE.d("** ResponseResult " + TRACE.NEW_LINE + entity.result.toString());
+                showAlert("success", "¡Corte caja enviado con éxito!");
+                break;
+            default:
+                break;
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -218,90 +246,10 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                try {
-                    setCorreo(txt_email.getText().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    modalEmailCreate.dismiss();
-                }
+                currEmail = txt_email.getText().toString();
+                getFetchManager().CallById(SEND_EMAIL);
             }
         });
-    }
-
-    private void setCorreo(String _correo) throws IOException {
-        loader.show();
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correocortecaja";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("correo", _correo);
-            jsonBody.put("subject", "Corte de caja");
-            jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
-            jsonBody.put("subtotal", Utils.isNull(corte, "N/A"));
-            jsonBody.put("propina", Utils.isNull( tip, "N/A"));
-            jsonBody.put("montototal", Utils.isNull(totalamount, "N/A"));
-            jsonBody.put("fechacorte", Utils.isNull(date, "N/A"));
-            jsonBody.put("tablerows",Utils.isNull(TableRowsString, "[]"));
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " + TRACE.NEW_LINE + requestBody);
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response.toString());
-                    showAlert("success", "¡Corte caja enviado con éxito!");
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + error.toString());
-                    showAlert("error", "ERROR", "¡Correo no enviado!");
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody,
-                                "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = parsed;
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + e.toString());
-
-        }
     }
 
 

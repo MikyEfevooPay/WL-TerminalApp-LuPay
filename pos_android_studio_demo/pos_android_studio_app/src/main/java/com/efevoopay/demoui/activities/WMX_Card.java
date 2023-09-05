@@ -3,12 +3,10 @@ package com.efevoopay.demoui.activities;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +14,8 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,21 +25,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.ResponseCode;
 import com.efevoopay.demoui.utils.TLV;
@@ -54,7 +53,6 @@ import com.efevoopay.demoui.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +60,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -80,7 +79,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String blueTootchAddress = "";
     private boolean isPinCanceled = false;
     private Context mContext;
-    private Dialog dialog;
     private Dialog dialogPin;
     private Intent intent;
     private MediaPlayer Beep;
@@ -96,7 +94,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
 
-    private Button WMX_btn_trade;
     private TextView tv_card_label_1, tv_card_label_2;
 
     private String cardNofinal = "";
@@ -131,6 +128,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private DBManager dbManager;
     private Integer _Countpin = 0;
     private static final int MAX_PIN_ATTEMPTS = 3;
+
+    private final String CALL_TRANSACTION = "callTransaction";
+    private final String VALIDATE_TRANSACTION = "validateTransaction";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +204,55 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
          * }, 2000);
          */
     }
+
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch call = manager.addFetch(CALL_TRANSACTION, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/iso/gral", Request.Method.POST));
+        call.setSetBodyListenner(this::getCallBody);
+        Fetch validate = manager.addFetch(VALIDATE_TRANSACTION, new FetchOptions(Utils.TERMINAL_API + "/efevoo/tpv/transaccion", Request.Method.POST));
+        validate.setSetBodyListenner(this::getValidateBody);
+    }
+
+
+    private void getCallBody(JSONObject body) throws JSONException {
+        JSONObject newBody =  new JSONObject(TransExit);
+        Iterator<String> keys = newBody.keys();
+        while(keys.hasNext()) {
+            String key = keys.next();
+            body.put(key, newBody.get(key));
+        }
+    }
+
+    private void getValidateBody(JSONObject body) throws JSONException {
+        body.put("deviceid", ksn_posId);
+        body.put("arqc", _ARQC);
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        if(error != null) {
+            TRACE.d("ENTRY CARD ERROR: " + error.result.toString());
+            onCancelTransaction(getFinalErrorMessage(error.result.toString()));
+            return;
+        }
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case CALL_TRANSACTION:
+                processTransaction(entity.result.toString());
+                break;
+            case VALIDATE_TRANSACTION:
+                processValidateTransaction(entity.result.toString());
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestsFetching(boolean isFetching) {
+    }
+
 
     @Override
     public void onDestroy() {
@@ -1255,7 +1304,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onError(QPOSService.Error errorState) {
             TRACE.d("onError:" + errorState);
             String Errormessage = errorState.toString().equals("UNKNOWN") ? "Tarjeta no leída, intente de nuevo." : errorState.toString();
-            onCancelTransaction(Errormessage);
+            onCancelTransaction(getFinalErrorMessage(Errormessage));
         }
 
         @Override
@@ -1985,73 +2034,31 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         _redtar = gntBackEnd._redtarj;
         _tiptar = gntBackEnd._tiptarj;
         _card = gntBackEnd._card;
-        call(TransExit, Utils.TERMINAL_API + "/matriz/certificacion/iso/gral");
+        getFetchManager().CallById(CALL_TRANSACTION);
 
     }
 
-    private void call(String contenido, String url) {
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            final String requestBody = contenido;
+    private void processTransaction(String response) {
+        TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
+        if (response.equals("00")) {
+            ChangeViewToTicket();
+            Status_lector.setText(content);
+        } else if (response.equals("")) {
+            esperarYCerrar(ksn_posId, _ARQC);
+        } else {
+            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
+            onCancelTransaction(details.description);
+        }
+    }
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response.toString());
-                    if (response.equals("00")) {
-                        ChangeViewToTicket();
-                        Status_lector.setText(content);
-                    } else if (response.equals("")) {
-                        esperarYCerrar(ksn_posId, _ARQC);
-                    } else {
-                        ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
-                        onCancelTransaction(details.description);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    onCancelTransaction("TRANSACCION NO PROCESADA : " + error);
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody,
-                                "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-
-            requestQueue.add(stringRequest);
-        } catch (Exception e) {
-            TRACE.d("** Exception ERROR " + TRACE.NEW_LINE + e.toString());
+    private void processValidateTransaction(String response) {
+        TRACE.d("** ResponseValidateResult " + TRACE.NEW_LINE + response);
+        if (response.equals("00")) {
+            ChangeViewToTicket();
+            Status_lector.setText(content);
+        } else {
+            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
+            onCancelTransaction(details.description);
         }
     }
 
@@ -2059,79 +2066,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                // acciones que se ejecutan tras los milisegundos
-                ValidacionTxn(ksn_posId, _ARQC);
+               getFetchManager().CallById(VALIDATE_TRANSACTION);
             }
         }, 4000);
-    }
-
-    private void ValidacionTxn(String deviceid, String arqc) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String Urltxn = Utils.TERMINAL_API + "/efevoo/tpv/transaccion";
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("deviceid", deviceid);
-            jsonBody.put("arqc", arqc);
-            final String requestBody = jsonBody.toString();
-            // TRACE.d("requestBody " + TRACE.NEW_LINE + requestBody );
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, Urltxn,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response.toString());
-                            if (response.equals("00")) {
-                                ChangeViewToTicket();
-                                Status_lector.setText(content);
-                            } else {
-                                ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
-                                onCancelTransaction(details.description);
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                            onCancelTransaction("VALIDAR TRANSACCION EN HISTORIAL: " + error);
-                        }
-                    }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody,
-                                "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
 }

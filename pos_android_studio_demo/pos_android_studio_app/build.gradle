@@ -81,4 +81,8 @@ dependencies {
     implementation "com.airbnb.android:lottie:6.0.1"
     //dspread sdk
     implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.8.5'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
 }

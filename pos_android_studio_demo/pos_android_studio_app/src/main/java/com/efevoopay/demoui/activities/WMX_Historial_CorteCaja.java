@@ -1,5 +1,6 @@
 package com.efevoopay.demoui.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,9 +24,13 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.HistorialCorteCajaViewInterface;
 import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
 import com.efevoopay.demoui.utils.CorteCaja;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.widget.CancelacionesItemAdapter;
@@ -36,9 +42,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClickListener, HistorialCorteCajaViewInterface {
-    ProgressDialog spinner;
     RecyclerView recyclerView;
     LinearLayout cortecaja_empty_layout;
     Intent intent;
@@ -46,7 +52,13 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
     Button btn_hacercorte;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
     private WMX_llamada_dukpt jsondukpt_details = new WMX_llamada_dukpt();
-    private String ksn_posId;
+    private String ksn_posId, currIdCorte;
+    private int currPosition;
+
+    private final String CORTE_CAJA_HISTORIAL = "getCorteCajaHistorial";
+    private final String CORTE_CAJA_HISTORIAL_DETAILS = "getCorteCajaHistorialDetails";
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,11 +70,33 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
         ksn_posId = intent.getStringExtra("ksn_posId");
         btn_hacercorte =  (Button) findViewById(R.id.btn_hacercortecaja);
         btn_hacercorte.setOnClickListener(this);
+    }
 
-        spinner = Utils.getLoaderSpinner(this);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getFetchManager().CallById(CORTE_CAJA_HISTORIAL);
+    }
 
-        readjsonhistorialcortecaja();
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch history = manager.addFetch(CORTE_CAJA_HISTORIAL, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/corte/crud", Request.Method.POST));
+        history.setSetBodyListenner(this::historyBody);
+        Fetch details = manager.addFetch(CORTE_CAJA_HISTORIAL_DETAILS, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/corte/crud", Request.Method.POST));
+        details.setSetBodyListenner(this::detailsBody);
+    }
 
+
+    private void historyBody(JSONObject body) throws JSONException {
+        body.put("snTerminal", ksn_posId);
+        body.put("operacion", "H");
+        body.put("idCorte", "0");
+    }
+
+    private void detailsBody(JSONObject body) throws JSONException {
+        body.put("snTerminal", ksn_posId);
+        body.put("idCorte", currIdCorte);
+        body.put("operacion", "HD");
     }
 
     @Override
@@ -90,7 +124,36 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
 
     @Override
     public void onItemClick(int position) {
-        getHistorialDetails(ksn_posId, cortecaja.get(position).get_idCorte(), position);
+        currIdCorte = cortecaja.get(position).get_idCorte();
+        currPosition = position;
+        getFetchManager().CallById(CORTE_CAJA_HISTORIAL_DETAILS);
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        super.onFetchCurrentResult(entity, error);
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case CORTE_CAJA_HISTORIAL:
+                jsondukpt.historialcortecaja(entity.result.toString());
+                cortecaja=jsondukpt.cortecaja;
+                setItems();
+                break;
+            case CORTE_CAJA_HISTORIAL_DETAILS:
+                jsondukpt_details.finalcortecaja(entity.result.toString());
+                try {
+                    onDetailsScreen(currPosition);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    @Override
+    public void onFetchResults(List<FetchEntity> entities, List<FetchEntity> errors) {
+
     }
 
     public void setItems() {
@@ -106,15 +169,6 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
         }
     }
 
-    public void readjsonhistorialcortecaja(){
-        try {
-            spinner.show();
-            getHistorial(ksn_posId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void onDetailsScreen(int position) throws JSONException {
         Intent intent = new Intent(WMX_Historial_CorteCaja.this, WMX_Final_CorteCaja_Ticket.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("ksn_posId", cortecaja.get(position).get_Identificador());
@@ -127,144 +181,4 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
         startActivity(intent);
     }
 
-    private void getHistorialDetails(String _devicesid, String idCorte, int position) {
-        spinner.show();
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TPVCONFIG + "/apiv0/agrs/corte/crud";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("snTerminal", _devicesid);
-            jsonBody.put("idCorte", idCorte);
-            jsonBody.put("operacion", "HD");
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    if(spinner.isShowing()) spinner.dismiss();
-                    jsondukpt_details.finalcortecaja(response);
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                    try {
-                        onDetailsScreen(position);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    if(spinner.isShowing()) spinner.dismiss();
-                    WMX_Historial_CorteCaja.super.showAlert("error", error.toString());
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
-    }
-
-    private void getHistorial(String _devicesid)throws IOException{
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TPVCONFIG + "/apiv0/agrs/corte/crud";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("snTerminal", _devicesid);
-            jsonBody.put("operacion", "H");
-            jsonBody.put("idCorte", "0");
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    jsondukpt.historialcortecaja(response);
-                    if(spinner.isShowing()) spinner.dismiss();
-                    cortecaja=jsondukpt.cortecaja;
-                    TRACE.d("caja " + cortecaja.size());
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                    setItems();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    if(spinner.isShowing()) spinner.dismiss();
-                    WMX_Historial_CorteCaja.super.showAlert("error", error.toString());
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
-    }
 }

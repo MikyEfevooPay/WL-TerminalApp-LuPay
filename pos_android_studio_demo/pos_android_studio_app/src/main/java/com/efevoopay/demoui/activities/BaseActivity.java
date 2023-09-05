@@ -1,5 +1,6 @@
 package com.efevoopay.demoui.activities;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
@@ -36,22 +38,26 @@ import android.widget.Toast;
 
 import com.dspread.print.device.PrintListener;
 import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.IFetching;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.IFetchs;
 import com.efevoopay.demoui.interfaces.ITicket;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
-import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.TicketLayoutManager;
 import com.efevoopay.demoui.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * BaseActivity used for to build all activity
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements IFetching, ITicket {
+public abstract class BaseActivity extends AppCompatActivity implements ITicket, IFetchs {
     public static final String TAG = "BaseActivity";
 
     protected Toolbar toolbar;
@@ -61,10 +67,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
     private LinearLayout container_logo;
     private Ticket ticket;
     private ProgressDialog ticket_progress;
+    private ProgressDialog fetch_progress;
     private PRINT_TYPE entity_print;
     private TicketLayoutType ticketLayoutType;
+    private FetchUIManager manager;
     protected LinearLayout toolbar_btn_calendar;
     protected Handler ticketHandler;
+    protected boolean execALLFetchs;
 
 
     @Override
@@ -108,7 +117,40 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
         ticket_progress = Utils.getLoaderSpinner(this, "Imprimiendo ticket...");
         ticketHandler = new Handler();
         entity_print = PRINT_TYPE.STORE;
+
+        fetch_progress = Utils.getLoaderSpinner(this, "Cargando...");
+        manager = new FetchUIManager(this) {
+            @Override
+            public void onFetchCurrentResult(FetchEntity entity,@Nullable FetchEntity error) {
+                super.onFetchCurrentResult(entity, error);
+                BaseActivity.this.onFetchCurrentResult(entity, error);
+            }
+
+            @Override
+            public void onFetchResults(List<FetchEntity> entities, List<FetchEntity> errors) {
+                super.onFetchResults(entities, errors);
+                BaseActivity.this.onFetchResults(entities, errors);
+            }
+
+            @Override
+            public void onRequestsFetching(boolean isFetching) {
+                super.onRequestsFetching(isFetching);
+                BaseActivity.this.onRequestsFetching(isFetching);
+            }
+        };
+        try {
+            addFetchs(manager);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    protected void setFetchProgressTitle(String title) {
+        if(fetch_progress == null) return;
+        fetch_progress.setMessage(title);
+    }
+
+    public FetchUIManager getFetchManager() { return this.manager; }
     
 
     public Ticket getTicket() {
@@ -154,10 +196,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
         return null;
     }
 
-    @Override
-    public void onFetchResult() {
-
-    }
 
     @Override
     public void onPrintFinished(boolean isSuccess, PRINT_TYPE print_type, TicketLayoutType layoutType) {
@@ -173,6 +211,39 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
     public void onCalendarLinstener(){};
 
     protected abstract int getLayoutId();
+
+    @SuppressLint("NewApi")
+    protected String getFinalErrorMessage(String message) {
+        String messageLower = message.toLowerCase(Locale.ROOT);
+        Map.Entry<String, String> getMessage = Utils.errorMessagesDictionary.entrySet().stream().filter(x -> messageLower.contains(x.getKey())).findAny().orElse(null);
+        return getMessage != null ? getMessage.getValue() : "Ha ocurrido un error desconocido";
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        if(error != null) {
+            String message = error.result.toString().toLowerCase(Locale.ROOT);
+            showAlert("error", getFinalErrorMessage(message));
+        }
+    }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+
+    }
+
+    @Override
+    public void onFetchResults(List<FetchEntity> entities, List<FetchEntity> errors) {
+
+    }
+    @Override
+    public void onRequestsFetching(boolean isFetching) {
+        if(isFetching) {
+            fetch_progress.show();
+        } else if(fetch_progress.isShowing()) {
+            fetch_progress.dismiss();
+        }
+    }
 
     //protected abstract int getFragmentContainer();
 
@@ -306,10 +377,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IFetchin
 
 
     public void setInvisiblemargin(boolean status){
-        if(!status)
-        img_invisible_margin.setVisibility(View.GONE);
-        else
-        img_invisible_margin.setVisibility(View.VISIBLE);
+        if(!status) {
+            img_invisible_margin.setVisibility(View.GONE);
+        }
+
+        else {
+            img_invisible_margin.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setWhiteLogo(){

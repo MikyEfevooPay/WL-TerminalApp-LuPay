@@ -68,11 +68,6 @@ public class WMX_Connection_Test_Final extends BaseActivity implements View.OnCl
         initLayout();
     }
 
-    @Override
-    public void onFetchResult() {
-    }
-
-
     private void initLayout() {
         Resources rsc = getResources();
         switch (type) {

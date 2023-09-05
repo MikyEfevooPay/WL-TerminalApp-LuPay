@@ -51,7 +51,6 @@ public class WMX_llamada_dukpt {
         if(this.cortecaja.size() > 0) this.cortecaja.clear();
         try {
             JSONObject object = new JSONObject(_json);
-            //TRACE.d("object:" +  TRACE.NEW_LINE + object.toString());
             if(object.has("corte")){
                 JSONArray array = new JSONArray(object.getString("corte"));
                 for (int i = 0; i < array.length(); i++) {
@@ -68,7 +67,7 @@ public class WMX_llamada_dukpt {
                     this.cortecaja.add(_data);
                 }
             }
-            //TRACE.d("transaccion" +  TRACE.NEW_LINE + transactions.toArray().length);
+            TRACE.d("transaccion" +  TRACE.NEW_LINE + cortecaja.toArray().length);
         } catch (JSONException e) {
             e.printStackTrace();
             TRACE.d("Error: " + e.getMessage());
@@ -78,8 +77,6 @@ public class WMX_llamada_dukpt {
         if(this.cortecaja.size() > 0) this.cortecaja.clear();
         try {
             objectcorte=new JSONObject(_json);
-            //JSONObject objectcorte = new JSONObject(_json);
-            //TRACE.d("object:" +  TRACE.NEW_LINE + object.toString());
             if(objectcorte.has("corte")){
                 JSONArray array = new JSONArray(objectcorte.getString("corte").toString());
                 //TRACE.d("array:" +  TRACE.NEW_LINE + array.toString());
@@ -88,8 +85,6 @@ public class WMX_llamada_dukpt {
                 tip=objectcorte.has("propina") ? objectcorte.getString("propina") : "";
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object1 = array.getJSONObject(i);
-                    //JSONObject data =new  JSONObject(object1.getString("corte").toString());
-                    //TRACE.d("data" +  TRACE.NEW_LINE + object1.toString());
                     CorteCaja _data = new CorteCaja(
                             object1.getString("reqdukpt_id"),
                             object1.getString("device"),
@@ -101,7 +96,6 @@ public class WMX_llamada_dukpt {
                     this.cortecaja.add(_data);
                 }
             }
-            //TRACE.d("transaccion" +  TRACE.NEW_LINE + transactions.toArray().length);
         } catch (JSONException e) {
             e.printStackTrace();
         }

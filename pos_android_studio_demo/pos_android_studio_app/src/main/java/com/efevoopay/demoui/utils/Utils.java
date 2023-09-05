@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.annotation.LayoutRes;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -20,7 +21,15 @@ public class Utils {
 	public static final String TERMINAL_API_TEST = "https://test-efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_BIN = "https://lookup.binlist.net/";
 	public static final String TPVCONFIG = "https://testagrswl.gntapi.com";
+	public static HashMap<String,String> errorMessagesDictionary;
 	private static char MASK_CHAR = '*';
+
+	public static void setErrorMessages() {
+		errorMessagesDictionary = new HashMap();
+		errorMessagesDictionary.put("com.android.volley.timeout", "Límite de tiempo excedido");
+		errorMessagesDictionary.put("invalid amount", "Límite de tiempo excedido");
+		errorMessagesDictionary.put("com.android.volley.noconnectionerror", "Conexión no exitosa, favor de realizar prueba de comunicación");
+	}
 
 	public static String bytes2Hex(byte[] data) {
 

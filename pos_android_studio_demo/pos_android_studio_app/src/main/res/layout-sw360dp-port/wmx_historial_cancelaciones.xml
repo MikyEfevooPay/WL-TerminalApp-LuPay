@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/dm_sans_bold"
-                    android:text="Aún no se ha hecho ninguna trsacción"
+                    android:text="Aún no se ha hecho ninguna transacción"
                     android:textAlignment="center"
                     android:textColor="#6498FA"
                     android:textSize="30px" />

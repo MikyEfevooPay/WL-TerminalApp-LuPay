@@ -1,51 +1,41 @@
 package com.efevoopay.demoui.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
-import com.efevoopay.demoui.utils.TRACE;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.Transaction;
 import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.widget.CancelacionesItemAdapter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class WMX_Historial_Cancelaciones extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
     RecyclerView recyclerView;
     LinearLayout cancellation_empty_layout;
     ArrayList<Transaction> transactions = new ArrayList<>();
     Intent intent;
-    ProgressDialog spinner;
+    private final String CANCELATION_HISTORY_KEY = "getCancelacionHistory";
 
     private String ksn_posId;
-    private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
+    private WMX_llamada_dukpt jsondukpt;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,9 +45,29 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         cancellation_empty_layout = findViewById((R.id.layout_cancellation_empty));
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
-        spinner = Utils.getLoaderSpinner(this);
+        jsondukpt=new WMX_llamada_dukpt();
+        setFetchProgressTitle("Cargando historial...");
+    }
 
-        readJsontxn();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FetchUIManager manager = getFetchManager();
+        manager.CallAll();
+    }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch cancelacionHistory = manager.addFetch(CANCELATION_HISTORY_KEY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
+        cancelacionHistory.setSetBodyListenner(this::setBody);
+    }
+
+
+    private void setBody(JSONObject body) throws JSONException {
+        body.put("deviceid", ksn_posId);
+        body.put("pantalla", "Cancelacion");
+        body.put("fechainicio", "");
+        body.put("fechafinal", "");
     }
 
     @Override
@@ -97,6 +107,21 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         startActivity(intent);
     }
 
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        super.onFetchCurrentResult(entity, error);
+        if(entity.key.equals(CANCELATION_HISTORY_KEY)) {
+            if(entity.result == null) return;
+            jsondukpt.readJsonnew(entity.result.toString());
+            transactions = jsondukpt.transactions;
+            setItems();
+        }
+    }
+    @Override
+    public void onFetchResults(List<FetchEntity> entities, List<FetchEntity> errors) {
+
+    }
+
     public void setItems() {
         if(transactions.size() > 0) {
             cancellation_empty_layout.setVisibility(View.GONE);
@@ -109,87 +134,5 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
             recyclerView.setVisibility(View.GONE);
         }
     }
-
-
-    private void getHistorial(String _devicesid)throws IOException{
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("deviceid", _devicesid);
-            jsonBody.put("pantalla", "Cancelacion");
-            jsonBody.put("fechainicio", "");
-            jsonBody.put("fechafinal", "");
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " +  TRACE.NEW_LINE + requestBody );
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    jsondukpt.readJsonnew(response.toString());
-                    if(spinner.isShowing()) spinner.dismiss();
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                    setItems();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString() );
-                    if(spinner.isShowing()) spinner.dismiss();
-                    WMX_Historial_Cancelaciones.super.showAlert("ERROR", error.toString());
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            transactions=jsondukpt.transactions;
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
-
-
-    }
-
-    public void readJsontxn(){
-        try {
-            spinner.show();
-            getHistorial(ksn_posId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 }

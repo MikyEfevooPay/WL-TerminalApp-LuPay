@@ -61,6 +61,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         getinfoScreen();
         configTpv = new ConfigTpv(this);
         configTpv.dbManager.onCreate();
+        Utils.setErrorMessages();
 
         ResponseCode.setCodeResponses();
         spinner.show();
