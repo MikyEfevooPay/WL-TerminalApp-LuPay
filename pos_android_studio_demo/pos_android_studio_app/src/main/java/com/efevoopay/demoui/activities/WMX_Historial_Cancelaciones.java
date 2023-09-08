@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WMX_Historial_Cancelaciones extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
@@ -114,6 +115,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
             if(entity.result == null) return;
             jsondukpt.readJsonnew(entity.result.toString());
             transactions = jsondukpt.transactions;
+            Collections.reverse(transactions);
             setItems();
         }
     }

@@ -5,7 +5,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
@@ -31,9 +30,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.dspread.xpos.TradeSoundType;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
 import com.efevoopay.demoui.keyboard.MyKeyboardView;
 import com.efevoopay.demoui.utils.DBManager;
@@ -70,8 +69,14 @@ import libdukpt.DUKPK2009_CBC;
 import com.blumonpay.capx.model.DUKPTData;
 import com.efevoopay.demoui.utils.Utils;
 
+interface INTERNAL_QPOS_STATUS {
+    int CONNECTED = 1;
+    int DISCONNECTED = 0;
+}
+
 public class WMX_Card extends BaseActivity implements View.OnClickListener {
-    private Button trading, pruebas;
+
+    private Button trading;
     private TextView Total_Amount, Status_lector;
     private EditText Pruebaedittext;
     private String Amount, AmountToShow;
@@ -124,13 +129,14 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String _ARQC = "N/A";
     private String _9F41 = "";
     Cursor cursor;
-    ProgressDialog spinner;
     private DBManager dbManager;
     private Integer _Countpin = 0;
     private static final int MAX_PIN_ATTEMPTS = 3;
 
     private final String CALL_TRANSACTION = "callTransaction";
     private final String VALIDATE_TRANSACTION = "validateTransaction";
+
+    private int QPOS_STATUS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,9 +178,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         trading = (Button) findViewById(R.id.WMX_btn_trade);
         trading.setOnClickListener(this);
 
-        pruebas = (Button) findViewById(R.id.WMX_btn_pruebas_tmp);
-        pruebas.setOnClickListener(this);
-
         mContext = this;
 
         Beep = MediaPlayer.create(mContext, R.raw.beep);
@@ -188,21 +191,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         dbManager = new DBManager(mContext);
         dbManager.open();
         cursor = dbManager.fetch(ksn_posId);
+        this.QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
         initSDK();
-        /**
-         * open(QPOSService.CommunicationMode.UART);
-         * posType = POS_TYPE.UART;
-         * blueTootchAddress = "/dev/ttyS1";
-         * pos.setDeviceAddress(blueTootchAddress);
-         * pos.openUart();
-         **/
-
-        /*
-         * Handler handler = new Handler();
-         * handler.postDelayed(() -> {
-         * 
-         * }, 2000);
-         */
     }
 
 
@@ -251,6 +241,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onRequestsFetching(boolean isFetching) {
+        if(isFetching){
+            ChangeViewtoProccess();
+        }
     }
 
 
@@ -258,13 +251,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         TRACE.d("CARD onDestroy");
-        pos.closeUart();
+        closeService();
     }
 
-    public String formatMoney(String amount) {
-        String str = "";
-        str = "$" + amount + " MXN";
-        return str;
+    private void closeService() {
+        if(this.QPOS_STATUS == INTERNAL_QPOS_STATUS.DISCONNECTED) return;
+        pos.cancelTrade();
+        pos.closeUart();
     }
 
     @Override
@@ -278,24 +271,28 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.WMX_btn_trade:
-                pos.cancelSetAmount();
-                pos.cancelTrade();
-                onBackPressed();
+                onCancelTransaction();
                 break;
-            case R.id.WMX_btn_pruebas_tmp:
-                pos.cancelSetAmount();
-                pos.cancelTrade();
-                // pos.getKsn();
-
-                break;
-
         }
     }
 
     private void DoTrade() {
+        trading.setEnabled(true);
+        // btnDisconnect.setEnabled(true);
+        if (ActivityCompat.checkSelfPermission(WMX_Card.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
+            // 申请权限
+            ActivityCompat.requestPermissions(WMX_Card.this,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
         Status_lector.setText("");
         if (pos == null) {
             Status_lector.setText(R.string.scan_bt_pos_error);
@@ -310,20 +307,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void initSDK() {
-        if (true) {
-            open(QPOSService.CommunicationMode.UART);
-            posType = POS_TYPE.UART;
-            blueTootchAddress = "/dev/ttyS1";
-            pos.setDeviceAddress(blueTootchAddress);
-            pos.openUart();
-        } else {
-            open(QPOSService.CommunicationMode.AUDIO);
-            posType = POS_TYPE.AUDIO;
-            pos.openAudio();
-        }
-        // pos.generateTransportKey(20);
-        DoTrade();
-
+        open(QPOSService.CommunicationMode.UART);
+        posType = POS_TYPE.UART;
+        blueTootchAddress = "/dev/ttyS1";
+        pos.setDeviceAddress(blueTootchAddress);
+        pos.openUart();
     }
 
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
@@ -334,20 +322,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private void open(QPOSService.CommunicationMode mode) {
         MyPosListener listener = new MyPosListener();
-        pos = QPOSService.getInstance(mode);
-        if (pos == null) {
-            // Error CommunicationMode unknow
-            return;
-        }
+        pos = QPOSService.getInstance(this,mode);
+        pos.setCustomTradeSound(TradeSoundType.Type.TONE_CDMA_SIGNAL_OFF);
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
-        // pos.setD20Trade(true);
-        pos.setConext(this);
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
-        // pos.getQposId();
-
     }
 
     private KeyboardUtil keyboardUtil;
@@ -367,8 +348,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         String v_total = thisIntent.getStringExtra("total");
 
         intent = new Intent(this, WMX_final_ticket_transaction.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // TRACE.d("date "+getTime());
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
         Date date = new Date();
@@ -404,36 +383,26 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private void onCancelTransaction(String ...error) {
         if(transactionCancel) return;
+        transactionCancel = true;
+        Intent intent = new Intent(mContext, WMX_Transaction_Cancel.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Amount", Amount);
+        intent.putExtra("AmountToShow", AmountToShow);
+        intent.putExtra("type_transaction", type_transaction);
+        intent.putExtra("ksn_posId", ksn_posId);
+        intent.putExtra("propina", _Propina);
+        intent.putExtra("months", msi.toString());
+        intent.putExtra("cp_tv_auth", _noAuth);
+        intent.putExtra("months_total", v_months_total);
+        intent.putExtra("subtotal", v_subtotal);
+        intent.putExtra("tips", v_tip);
+        intent.putExtra("approve", _approve);
+        intent.putExtra("error", error.length > 0 ? error[0]: null);
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            Intent intent = new Intent(mContext, WMX_Transaction_Cancel.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("Amount", Amount);
-            intent.putExtra("AmountToShow", AmountToShow);
-            intent.putExtra("type_transaction", type_transaction);
-            intent.putExtra("ksn_posId", ksn_posId);
-            intent.putExtra("propina", _Propina);
-            intent.putExtra("months", msi.toString());
-            intent.putExtra("cp_tv_auth", _noAuth);
-            intent.putExtra("months_total", v_months_total);
-            intent.putExtra("subtotal", v_subtotal);
-            intent.putExtra("tips", v_tip);
-            intent.putExtra("approve", _approve);
-            intent.putExtra("error", error.length > 0 ? error[0]: null);
             startActivityMiddleware(intent);
-            transactionCancel = true;
             finish();
+            overridePendingTransition(R.anim.slide_to_top, R.anim.slide_to_bottom);
         }, 300);
-    }
-
-    private String getTime() {
-        // YYMMDDHHmmss
-        // DateTimeFormat dtf = DateTimeFormatter.SimpleDateFormat("YY/MM/DD HH:mm:ss");
-        // LocalTime localDate = LocalTime.now();
-
-        DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
-        Date date = new Date();
-
-        return dateFormat.format(date).toString();
     }
 
     /** CLASS **/
@@ -441,27 +410,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     class MyPosListener extends CQPOSService {
         public void onRequestQposConnected() {
             TRACE.d("onRequestQposConnected()");
-            /* AQUI DEBE IR LO DE PROSA, TE LO TENGO QUE DEVOLVER */
-            String groupId = "00";
-            String trackKsn = "00000081958255400001";
-            String trackipek = "C5BFFC5E6551D64F62E3D80F6A3126F8";
-            String trackipekKCV = "B34512";
-            String pinKsn = "00000081958255400001";
-            String pinipek = "C5BFFC5E6551D64F62E3D80F6A3126F8";
-            String pinipekKCV = "B34512";
-            String emvKsn = "00000081958255400001";
-            String emvIPEK = "C5BFFC5E6551D64F62E3D80F6A3126F8";
-            String emipekKCV = "B34512";
-            TRACE.d("INYECCION()");
-
-            trading.setEnabled(true);
-            // btnDisconnect.setEnabled(true);
-            if (ActivityCompat.checkSelfPermission(WMX_Card.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
-                // 申请权限
-                ActivityCompat.requestPermissions(WMX_Card.this,
-                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_WRITE_EXTERNAL_STORAGE);
-            }
+            QPOS_STATUS = INTERNAL_QPOS_STATUS.CONNECTED;
+            DoTrade();
         }
 
         public void onRequestSetAmount() {
@@ -903,7 +853,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 msg = getString(R.string.try_another_interface);
             } else if (displayMsg == QPOSService.Display.PROCESSING) {
                 msg = getString(R.string.processing);
-                ChangeViewtoProccess();
             } else if (displayMsg == QPOSService.Display.INPUT_PIN_ING) {
                 msg = "please input pin on pos";
             } else if (displayMsg == QPOSService.Display.INPUT_OFFLINE_PIN_ONLY
@@ -1182,15 +1131,12 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
-            // TRACE.d("onQposRequestPinResult()");
+            pos.setCustomTradeSound(TradeSoundType.Type.TONE_PROP_BEEP);
             super.onQposRequestPinResult(dataList, offlineTime);
             keyBoardList = dataList;
-            MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
-                @Override
-                public void getNumberValue(String value) {
-                    TRACE.d("init change handle event: " + value);
-                    pos.pinMapSync(value, 120);
-                }
+            MyKeyboardView.setKeyBoardListener(value -> {
+                TRACE.d("init change handle event: " + value);
+                pos.pinMapSync(value, 120);
             });
             if (_Countpin < MAX_PIN_ATTEMPTS) {
                 if(isActivityFinished(mContext)) return;
@@ -1204,11 +1150,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             }
         }
 
+
         @Override
         public void onReturnGetPinInputResult(int num) {
-            // TRACE.d("onReturnGetPinInputResult() " + num);
-
             super.onReturnGetPinInputResult(num);
+            TRACE.d("onReturnGetPinInputResult(int num): " + num);
             String s = "";
             if (num == -1) {
                 if (keyboardUtil != null) {
@@ -1298,13 +1244,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onRequestQposDisconnected() {
             TRACE.d("onRequestQposDisconnected()");
+            QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
         }
 
         @Override
         public void onError(QPOSService.Error errorState) {
             TRACE.d("onError:" + errorState);
-            String Errormessage = errorState.toString().equals("UNKNOWN") ? "Tarjeta no leída, intente de nuevo." : errorState.toString();
-            onCancelTransaction(getFinalErrorMessage(Errormessage));
+            onCancelTransaction(getFinalErrorMessage(errorState));
         }
 
         @Override
@@ -1908,14 +1854,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onQposDoSetRsaPublicKey(boolean arg0) {
             // TODO Auto-generated method stub
             TRACE.d("onQposDoSetRsaPublicKey(boolean arg0):" + arg0);
-            /*
-             * if (arg0) {
-             * statusEditText.setText("set rsa is successed!");
-             * 
-             * } else {
-             * statusEditText.setText("set rsa is failed!");
-             * }
-             */
         }
 
         @Override
@@ -1928,41 +1866,19 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String enKcvPinKeyData = arg0.get("enPinKcvKey");
                 String enCardKeyData = arg0.get("enDataCardKey");
                 String enKcvCardKeyData = arg0.get("enKcvDataCardKey");
-                // statusEditText.setText("rsaFileName:" + rsaFileName + "\nenPinKeyData:" +
-                // enPinKeyData + "\nenKcvPinKeyData:" +
-                // enKcvPinKeyData + "\nenCardKeyData:" + enCardKeyData + "\nenKcvCardKeyData:"
-                // + enKcvCardKeyData);
             } else {
                 TRACE.d("onQposGenerateSessionKeysResult  get key failed,pls try again!");
-
-                // statusEditText.setText("get key failed,pls try again!");
             }
         }
 
         @Override
         public void transferMifareData(String arg0) {
             TRACE.d("transferMifareData(String arg0):" + arg0.toString());
-
-            /*
-             * // TODO Auto-generated method stub
-             * if (arg0 != null) {
-             * statusEditText.setText("response data:" + arg0);
-             * } else {
-             * statusEditText.setText("transfer data failed!");
-             * }
-             */
         }
 
         @Override
         public void onReturnRSAResult(String arg0) {
             TRACE.d("onReturnRSAResult(String arg0):" + arg0.toString());
-            /*
-             * if (arg0 != null) {
-             * statusEditText.setText("rsa data:\n" + arg0);
-             * } else {
-             * statusEditText.setText("get the rsa failed");
-             * }
-             */
         }
 
         @Override
@@ -1975,7 +1891,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onRequestGenerateTransportKey(Hashtable result) {
             TRACE.d("onRequestGenerateTransportKey(Hashtable<String, String> arg0):" + result.toString());
-            DoTrade();
         }
 
     }
@@ -2044,10 +1959,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             ChangeViewToTicket();
             Status_lector.setText(content);
         } else if (response.equals("")) {
-            esperarYCerrar(ksn_posId, _ARQC);
+            esperarYCerrar();
         } else {
             ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
             onCancelTransaction(details.description);
+            getFetchManager().ForceClose();
         }
     }
 
@@ -2062,13 +1978,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    public void esperarYCerrar(String deviceid, String arqc) {
+    public void esperarYCerrar() {
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-               getFetchManager().CallById(VALIDATE_TRANSACTION);
-            }
-        }, 4000);
+        handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 4000);
     }
 
 }

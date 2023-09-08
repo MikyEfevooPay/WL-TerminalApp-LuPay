@@ -1,32 +1,24 @@
 package com.efevoopay.demoui.activities;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
+import androidx.annotation.Nullable;
+
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.blumonpay.capx.functions.RSA;
 import com.blumonpay.capx.model.RSAData;
 import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.ResponseCode;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
@@ -34,13 +26,7 @@ import com.efevoopay.demoui.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-
 public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
-    private String blueTootchAddress = "";
-    private String posId = "";
-    private String TransportKey = "";
     private Button initialize;
     private String _rsa = "";
     private String _tk = "";
@@ -50,7 +36,11 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private String ksn_posId;
     public String name="";
     private DBManager dbManager;
-    ProgressDialog spinner;
+    private String p43, p48, p120, address, comercio, msi, msi3, msi6, msi9, msi12, msi18, minimo3, minimo6, minimo9, minimo12, minimo18;
+
+    private final String INITIALIZE_TPV = "initializeTPV";
+    private final String TPV_CONFIG = "configTPV";
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,10 +56,90 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
         txt_ksn.setText(ksn_posId);
-        spinner = Utils.getLoaderSpinner(this);
         dbManager = new DBManager(this);
         dbManager.open();
+        getFetchManager().setForceFetchDone(true);
     }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch config = manager.addFetch(TPV_CONFIG, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/terminales/tpv", Request.Method.POST));
+        config.setSetBodyListenner(this::getConfigBody);
+        Fetch initialize = manager.addFetch(INITIALIZE_TPV, new FetchOptions( Utils.TERMINAL_API + "/efevoo/tpv/initllave", Request.Method.POST));
+        initialize.setSetBodyListenner(this::getInitializeBody);
+    }
+
+    private void getConfigBody(JSONObject body) throws JSONException {
+        body.put("snTerminal", ksn_posId);
+    }
+
+    private void getInitializeBody(JSONObject body) throws JSONException {
+        body.put("tpv", Build.MODEL+"Android smart POS");
+        body.put("device_id", ksn_posId);
+        body.put("device_tk", _tk);
+        body.put("device_rsa", _rsa);
+        body.put("device_p43", p43);
+        body.put("device_p48", p48);
+        body.put("device_p120", p120);
+        body.put("device_address", address);
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        if(error != null) {
+            TRACE.d("ERROR: " + error.result.toString());
+            WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
+            return;
+        }
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case TPV_CONFIG:
+                processConfig((String)entity.result);
+                break;
+            case INITIALIZE_TPV:
+                processInitialization((String)entity.result);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void processConfig(String response) {
+        try {
+            JSONObject objtpv = new JSONObject(response);
+            if(objtpv.has("mensaje")) {
+                showAlert("error", objtpv.getString("mensaje"));
+                getFetchManager().ForceClose();
+                return;
+            }
+            p43=objtpv.getString("p43");
+            p48=objtpv.getString("p48");
+            p120=objtpv.getString("p120");
+            address=objtpv.getString("address");
+            comercio=objtpv.getString("comercio");
+            msi=objtpv.getString("msi");
+            msi3=objtpv.getString("msi3");
+            msi6=objtpv.getString("msi6");
+            msi9=objtpv.getString("msi9");
+            msi12=objtpv.getString("msi12");
+            msi18=objtpv.getString("msi18");
+            minimo3=objtpv.getString("minimo3");
+            minimo6=objtpv.getString("minimo6");
+            minimo9=objtpv.getString("minimo9");
+            minimo12=objtpv.getString("minimo12");
+            minimo18=objtpv.getString("minimo18");
+            getFetchManager().CallById(INITIALIZE_TPV);
+        } catch (JSONException e) {
+            getFetchManager().ForceClose();
+            e.printStackTrace();
+        }
+
+    }
+
+    private void processInitialization(String response) {
+        DatosInicializacion(response,p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
+    }
+
 
     @Override
     public void onToolbarLinstener() {
@@ -85,7 +155,6 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.WMX_btn_initialize_keys:
-                spinner.show();
                 try {
                     RSA rsa = new RSA();
 
@@ -99,158 +168,11 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
                 }catch (Throwable t){
                     TRACE.d("error rsa: " + t);
                 }
-                tpvConfig();
+                getFetchManager().CallById(TPV_CONFIG);
                 break;
         }
     }
-    private void tpvConfig() {
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TPVCONFIG + "/apiv0/agrs/terminales/tpv";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("snTerminal", ksn_posId);
 
-            final String requestBody = jsonBody.toString();
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    initllave(response.toString());
-                    TRACE.d("ResponseResult: " +  TRACE.NEW_LINE + response.toString() );
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
-                    WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
-                    if(spinner.isShowing()) spinner.dismiss();
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-            TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
-        }
-    }
-
-    private void initllave(String _tpv) {
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/efevoo/tpv/initllave";
-            JSONObject objtpv = new JSONObject(_tpv);
-            String p43=objtpv.getString("p43").toString();
-            String p48=objtpv.getString("p48").toString();
-            String p120=objtpv.getString("p120").toString();
-            String address=objtpv.getString("address").toString();
-            String comercio=objtpv.getString("comercio").toString();
-            String msi=objtpv.getString("msi").toString();
-            String msi3=objtpv.getString("msi3").toString();
-            String msi6=objtpv.getString("msi6").toString();
-            String msi9=objtpv.getString("msi9").toString();
-            String msi12=objtpv.getString("msi12").toString();
-            String msi18=objtpv.getString("msi18").toString();
-            String minimo3=objtpv.getString("minimo3").toString();
-            String minimo6=objtpv.getString("minimo6").toString();
-            String minimo9=objtpv.getString("minimo9").toString();
-            String minimo12=objtpv.getString("minimo12").toString();
-            String minimo18=objtpv.getString("minimo18").toString();
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("tpv", Build.MODEL+"Android smart POS");
-            jsonBody.put("device_id", ksn_posId);
-            jsonBody.put("device_tk", _tk);
-            jsonBody.put("device_rsa", _rsa);
-            jsonBody.put("device_p43", p43);
-            jsonBody.put("device_p48", p48);
-            jsonBody.put("device_p120", p120);
-            jsonBody.put("device_address", address);
-
-            final String requestBody = jsonBody.toString();
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    DatosInicializacion(response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
-                    if(spinner.isShowing()) spinner.dismiss();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.getMessage() );
-                    WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
-                    if(spinner.isShowing()) spinner.dismiss();
-
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-        }
-    }
     public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18){
         try {
             JSONObject object = new JSONObject(_json);
@@ -269,10 +191,4 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             e.printStackTrace();
         }
     }
-
-    private POS_TYPE posType = POS_TYPE.BLUETOOTH;
-    private enum POS_TYPE {
-        BLUETOOTH, AUDIO, UART, USB, OTG, BLUETOOTH_BLE
-    }
-
 }

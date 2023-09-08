@@ -219,7 +219,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30px"
             android:fontFamily="@font/dm_sans_bold"
-            android:text="Inicializar llaves"
+            android:text="@string/wmx_ajustes_initialization"
             android:textAllCaps="false"
             android:visibility="visible" />
 

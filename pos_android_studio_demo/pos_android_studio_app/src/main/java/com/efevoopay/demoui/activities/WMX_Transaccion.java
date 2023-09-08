@@ -34,6 +34,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -109,6 +111,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             case TRANSACTION_HISTORY:
                 jsondukpt.readJsonnew(entity.result.toString());
                 transactions=jsondukpt.transactions;
+                Collections.reverse(transactions);
                 setItems();
                 break;
             default:

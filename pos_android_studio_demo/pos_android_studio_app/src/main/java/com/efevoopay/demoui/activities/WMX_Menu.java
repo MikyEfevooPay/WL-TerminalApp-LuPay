@@ -1,17 +1,15 @@
 package com.efevoopay.demoui.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.utils.ConfigTpv;
@@ -25,7 +23,6 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     // private Button other, ajustes, meses;
     private Intent intent;
     private LinearLayout transfer, other, ajustes, meses, cancelaciones, cortecaja, connection_test;
-    public static WMX_KSN ksn;
     public static Cursor cursor;
     public static ConfigTpv configTpv;
     public static ProgressDialog spinner;
@@ -38,10 +35,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         super.setInvisiblemargin(true);
         getSupportActionBar().hide();
         setTitle(getString(R.string.wmx_title_welcome));
-
-        ksn = new WMX_KSN();
-        ksn.onCreate();
-
+        WMX_KSN.init(this);
         spinner = Utils.getLoaderSpinner(this);
 
         transfer = findViewById(R.id.btn_transfer);
@@ -68,9 +62,6 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         configTpv.spinner = spinner;
         GNTBackEnd.initTransTypeTitles(getResources());
         optksn();
-
-        LLave();
-
     }
 
     public void getinfoScreen() {
@@ -105,7 +96,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         boolean init = cursor.getCount() > 0;
 
         if (!init)
-            WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + ksn.posId);
+            WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + WMX_KSN.getPosId());
 
         return init;
     }
@@ -117,26 +108,31 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        cursor = configTpv.dbManager.fetch(ksn.posId);
+        String posId = WMX_KSN.getPosId();
+        if(posId == null) {
+            showAlert("Error", "Ha ocurrido un error al cargar la información de la TPV");
+            return;
+        }
+        cursor = configTpv.dbManager.fetch(posId);
         switch (view.getId()) {
             case R.id.btn_transfer:
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "venta");
-                intent.putExtra("ksn_posId", ksn.posId);
+                intent.putExtra("ksn_posId", posId);
                 startActivity(intent);
                 break;
             case R.id.btn_Other:
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Transaccion.class);
-                intent.putExtra("ksn_posId", ksn.posId);
+                intent.putExtra("ksn_posId", posId);
                 startActivity(intent);
                 break;
             case R.id.btn_Ajustes:
                 intent = new Intent(this, WMX_Ajustes.class);
-                intent.putExtra("ksn_posId", ksn.posId);
+                intent.putExtra("ksn_posId", posId);
                 startActivity(intent);
                 break;
             case R.id.btn_meses:
@@ -145,7 +141,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 if (cursor.getString(10).equals("1")) {
                     intent = new Intent(this, WMX_Terminal.class);
                     intent.putExtra("type_transaction", "MSI");
-                    intent.putExtra("ksn_posId", ksn.posId);
+                    intent.putExtra("ksn_posId", posId);
                     startActivity(intent);
                 } else {
                     WMX_Menu.super.showAlert("informative", "OPCIÓN NO HABILITADA");
@@ -155,19 +151,19 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);
-                intent.putExtra("ksn_posId", ksn.posId);
+                intent.putExtra("ksn_posId", posId);
                 startActivity(intent);
                 break;
             case R.id.btn_cortecaja:
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Historial_CorteCaja.class);
-                intent.putExtra("ksn_posId", ksn.posId);
+                intent.putExtra("ksn_posId", posId);
                 startActivity(intent);
                 break;
             case R.id.btn_connection_test:
                 intent = new Intent(this, WMX_Connection_Test.class);
-                intent.putExtra("ksn_posId", ksn.posId);
+                intent.putExtra("ksn_posId", posId);
                 intent.putExtra("type", 1);
                 startActivity(intent);
                 break;
@@ -175,32 +171,16 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
     }
 
+    @SuppressLint("NewApi")
     public void optksn() {
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            public void run() {
-                // need to do tasks on the UI thread
-                handler.postDelayed(this, 1000);
-                cursor = configTpv.dbManager.fetch(ksn.posId);
-                TRACE.d("ksn: " + ksn.posId);
-                handler.removeCallbacks(this);
-            }
-        };
-        // trigger first time
-        handler.post(runnable);
+        WMX_KSN.getPosIdResult().thenAccept((posId) -> {
+            TRACE.d("FUturablePosId: " + posId);
+            cursor = configTpv.dbManager.fetch(posId);
+            DbSurce(posId);
+            TRACE.d("ksn: " + posId);
+        });
     }
 
-    public void LLave() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // acciones que se ejecutan tras los milisegundos
-                DbSurce();
-                handler.removeCallbacks(this);
-            }
-        }, 1000);
-
-    }
 
     public void cerrarapk() {
         final Handler handler = new Handler();
@@ -215,25 +195,19 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
     }
 
-    public void DbSurce() {
-        final boolean[] isClickable = { Boolean.FALSE };
+    public void DbSurce(String posId) {
         final Handler handler = new Handler();
         int[] count = { 0 };
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                // need to do tasks on the UI thread
                 configTpv.count = count[0];
                 if (count[0]++ < 7) {
                     if (!configTpv.bnd[0]) {
                         if (!configTpv.nuevainit) {
-                            if (ksn.posId == null) {
-                                ksn = new WMX_KSN();
-                                ksn.onCreate();
-                            }
-                            configTpv.tpvConfig(ksn.posId, 1);
+                            configTpv.tpvConfig(posId, 1);
                         } else {
-                            configTpv.tpvConfig(ksn.posId, 0);
+                            configTpv.tpvConfig(posId, 0);
                         }
                         handler.postDelayed(this, 5000);
                     } else {
@@ -248,12 +222,10 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     handler.removeCallbacks(this);
                     configTpv.dbManager.onDelete();
                     configTpv.dbManager.onCreate();
-                    // cerrarapk();
                 }
 
             }
         };
-        // trigger first time
         handler.post(runnable);
     }
 }

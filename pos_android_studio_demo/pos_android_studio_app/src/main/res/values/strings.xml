@@ -372,6 +372,7 @@
     <string name="wmx_cortecaja_fechahora_title">Fecha/Hora</string>
     <string name="wmx_cortecaja_print_title">Imprimir resumen</string>
     <string name="wmx_cortecaja_email_title">Enviar resumen por mail</string>
+    <string name="wmx_historial_details_email_title">Mandar ticket por correo electrónico</string>
         <string name="wmx_connection_test_title">Prueba en proceso</string>
     <string name="wmx_connection_test_subtitle">Revisando comunicación</string>
     <string name="wmx_connection_test_final_header">Comunicación</string>
@@ -408,5 +409,5 @@
     <string name="wmx_transaction_VEN">Venta</string>
     <string name="wmx_transaction_MSI">Venta MSI</string>
     <string name="wmx_transaction_CANMSI">Cancelación MSI</string>
-
+    <string name="wmx_ajustes_initialization">Activación Manual</string>
 </resources>

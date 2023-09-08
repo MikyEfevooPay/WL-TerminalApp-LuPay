@@ -80,6 +80,9 @@ public class Fetch implements IFetching {
     }
 
 
+    /**
+     * Llamada asincrona que manda a hacer la peticion http al backend
+     * */
     @SuppressLint("NewApi")
     public void Call() {
         onRequestFetching(false);

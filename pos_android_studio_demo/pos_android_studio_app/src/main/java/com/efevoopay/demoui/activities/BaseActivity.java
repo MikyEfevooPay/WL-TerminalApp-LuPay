@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dspread.print.device.PrintListener;
+import com.dspread.xpos.QPOSService;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.IFetchs;
@@ -44,6 +45,7 @@ import com.efevoopay.demoui.interfaces.ITicket;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.TicketLayoutManager;
 import com.efevoopay.demoui.utils.Utils;
@@ -181,6 +183,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         //Se agrega un posdelay en caso de que haya un error que la libreria no este catcheando para ocultar el spinner
         ticketHandler.postDelayed(() -> {
             hideTicketSpinner();
+            ticket.close();
         }, 7000);
         boolean success = ticket.printLayout(ticketLayoutManager.getLayout());
         if(!success) {
@@ -216,6 +219,12 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     protected String getFinalErrorMessage(String message) {
         String messageLower = message.toLowerCase(Locale.ROOT);
         Map.Entry<String, String> getMessage = Utils.errorMessagesDictionary.entrySet().stream().filter(x -> messageLower.contains(x.getKey())).findAny().orElse(null);
+        return getMessage != null ? getMessage.getValue() : "Ha ocurrido un error desconocido";
+    }
+
+    @SuppressLint("NewApi")
+    protected String getFinalErrorMessage(QPOSService.Error status) {
+        Map.Entry<QPOSService.Error, String> getMessage = Utils.errorPosDictionary.entrySet().stream().filter(x -> status == x.getKey()).findAny().orElse(null);
         return getMessage != null ? getMessage.getValue() : "Ha ocurrido un error desconocido";
     }
 
@@ -512,12 +521,16 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     protected void startActivityMiddleware(Intent intent) {
+        this.startActivityMiddleware(intent, null);
+    }
+
+    protected void startActivityMiddleware(Intent intent, @Nullable Bundle options) {
         String CurrPackageName = getPackageName();
         ComponentName name = intent.resolveActivity(getPackageManager());
         String intentPackageName = name.getPackageName();
         String intentClassName = name.getClassName();
         if(intentPackageName.equals(CurrPackageName) && intentClassName.contains(CurrPackageName)) {
-            startActivity(intent);
+            startActivity(intent, options);
         }
     }
 
@@ -555,6 +568,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
 
         @Override
         public void printResult(boolean b, String status, int type) {
+            TRACE.d("printResult: " + status);
             hideTicketSpinner();
             ticketHandler.removeCallbacksAndMessages(null);
             if (b) {

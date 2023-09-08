@@ -18,19 +18,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="37px"
             android:layout_marginRight="37px"
-            android:layout_marginBottom="37px"
             android:layout_weight="1"
             android:background="@drawable/fondo_ticket"
             android:orientation="vertical"
             android:paddingLeft="18px"
             android:paddingTop="40px"
             android:paddingRight="18px"
-            android:paddingBottom="56px">
+            android:paddingBottom="20px">
 
             <ImageView
                 android:id="@+id/tp_iv_trans_type"
                 android:layout_width="match_parent"
-                android:layout_height="90px"
+                android:layout_height="80px"
                 android:layout_marginBottom="18px"
                 app:srcCompat="@drawable/efevoo_i_check_exito" />
 
@@ -42,7 +41,7 @@
                 android:gravity="center"
                 android:text="Aprobada Venta Normal"
                 android:textColor="#121212"
-                android:textSize="30px" />
+                android:textSize="28px" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +58,7 @@
                     android:gravity="center"
                     android:text="Aut. No. "
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
 
                 <TextView
                     android:id="@+id/tp_tv_auth"
@@ -70,7 +69,7 @@
                     android:gravity="center"
                     android:text="3884956"
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,7 +89,7 @@
                     android:fontFamily="@font/dm_sans"
                     android:text="Monto:"
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
 
                 <TextView
                     android:id="@+id/tp_tv_amount"
@@ -101,7 +100,7 @@
                     android:gravity="right"
                     android:text="$1,532.00"
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
             </LinearLayout>
 
             <LinearLayout
@@ -121,7 +120,7 @@
                     android:fontFamily="@font/dm_sans"
                     android:text="Propina:"
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
 
                 <TextView
                     android:id="@+id/tp_tv_tip"
@@ -132,7 +131,7 @@
                     android:gravity="right"
                     android:text="$125.00"
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
             </LinearLayout>
 
             <LinearLayout
@@ -151,7 +150,7 @@
                     android:fontFamily="@font/dm_sans_bold"
                     android:text="Total:"
                     android:textColor="#121212"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
 
                 <TextView
                     android:id="@+id/tp_tv_total"
@@ -162,7 +161,7 @@
                     android:gravity="right"
                     android:text="$1,657.00"
                     android:textColor="#121212"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
             </LinearLayout>
 
             <ImageView
@@ -189,7 +188,7 @@
                     android:fontFamily="@font/dm_sans"
                     android:text="AID"
                     android:textColor="#121212"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
 
                 <TextView
                     android:id="@+id/txt_AID"
@@ -198,8 +197,9 @@
                     android:fontFamily="@font/dm_sans"
                     android:text="N/A"
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -214,7 +214,7 @@
                     android:fontFamily="@font/dm_sans"
                     android:text="ARQC"
                     android:textColor="#121212"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
 
                 <TextView
                     android:id="@+id/txt_ARQC"
@@ -223,7 +223,7 @@
                     android:fontFamily="@font/dm_sans"
                     android:text="N/A"
                     android:textColor="#5A5A5A"
-                    android:textSize="30px" />
+                    android:textSize="28px" />
             </LinearLayout>
 
 
@@ -288,7 +288,7 @@
                             android:fontFamily="@font/dm_sans_bold"
                             android:text="Tarjeta Crédito"
                             android:textColor="#121212"
-                            android:textSize="27px" />
+                            android:textSize="25px" />
 
                         <TextView
                             android:id="@+id/tp_tv_card"
@@ -299,7 +299,7 @@
                             android:gravity="right"
                             android:text="**** 9999"
                             android:textColor="#121212"
-                            android:textSize="27px" />
+                            android:textSize="25px" />
 
                     </LinearLayout>
 
@@ -310,7 +310,7 @@
                         android:fontFamily="@font/dm_sans"
                         android:text="27/04/22 16:02"
                         android:textColor="#5A5A5A"
-                        android:textSize="24px" />
+                        android:textSize="22px" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -323,7 +323,7 @@
                 android:gravity="center_horizontal"
                 android:text="Aprobación"
                 android:textColor="#121212"
-                android:textSize="25px" />
+                android:textSize="22px" />
 
             <TextView
                 android:id="@+id/tp_tv_approve"
@@ -333,27 +333,55 @@
                 android:gravity="center_horizontal"
                 android:text="640463"
                 android:textColor="#5A5A5A"
-                android:textSize="25px" />
+                android:textSize="22px" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="116px"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="30px"
             android:layout_marginRight="30px"
             android:layout_marginBottom="25px"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/lyt_historial_details_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/txt_cortecaja_email_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8px"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:text="@string/wmx_historial_details_email_title"
+                    android:textColor="@color/ep_color_blue"
+                    android:textSize="28px" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/flecha_ticket" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_print"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@color/ep_btn_continuar_fondo"
                 android:fontFamily="@font/dm_sans_bold"
-                android:minHeight="50dip"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:text="Imprimir ticket"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"

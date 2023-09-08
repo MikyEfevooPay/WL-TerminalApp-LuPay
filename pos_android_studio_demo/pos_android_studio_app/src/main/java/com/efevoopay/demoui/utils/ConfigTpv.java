@@ -72,7 +72,6 @@ public class ConfigTpv {
                     error.printStackTrace();
                     TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
                     bnd[0] =Boolean.FALSE;
-                    //WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
                 }
             }) {
                 @Override

@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.RemoteException;
 import android.view.View;
+
+import com.action.printerservice.ActionPrinter;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
 import com.dspread.print.device.PrinterManager;
@@ -201,7 +203,12 @@ public class Ticket {
 
     public void close() {
         if (mPrinter != null) {
-            mPrinter.close();
+            try {
+                mPrinter.stopPrint();
+                mPrinter.close();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 

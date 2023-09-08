@@ -58,7 +58,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     TextView tp_tv_trans_type, tp_tv_auth, tp_tv_amount, tp_tv_tip, tp_tv_total, tp_tv_card, tp_tv_date_time,
             tp_tv_approve, tp_tv_tip_label, tp_tv_total_label, tp_tv_tipotarjeta, tp_tv_AID, tp_tv_ARQC;
     ImageView tp_iv_trans_type, tp_iv_process;
-    LinearLayout tp_ll_content_card, ll_msi, lyt_transaction_tip;
+    LinearLayout tp_ll_content_card, lyt_transaction_tip, lyt_historial_details_email;
     private int transaction_type;
     private String card_provider, type_transaction, v_months, tipotarjeta;
     Context mContext;
@@ -74,6 +74,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Button print_button = (Button) findViewById(R.id.btn_print);
         print_button.setOnClickListener(this);
+        lyt_historial_details_email = findViewById(R.id.lyt_historial_details_email);
+        lyt_historial_details_email.setOnClickListener(this);
         mContext = this;
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
@@ -140,11 +142,11 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                 }
 
                 break;
-
-            case R.id.ll_btn_open_modal_email:
+            case R.id.lyt_historial_details_email:
                 openModalSendEmail();
                 break;
             default:
+                break;
 
         }
     }
@@ -162,6 +164,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         btn_modal_sendEmail.setEnabled(false);
         btn_modal_sendEmail.getBackground().setAlpha(128);
         EditText txt_email = dialogContentView.findViewById(R.id.editTextTextPersonName2);
+        txt_email.requestFocus();
 
         txt_email.addTextChangedListener(new TextWatcher() {
             @Override

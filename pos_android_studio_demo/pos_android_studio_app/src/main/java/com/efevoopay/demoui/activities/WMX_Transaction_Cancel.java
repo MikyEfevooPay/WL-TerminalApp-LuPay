@@ -1,13 +1,17 @@
 package com.efevoopay.demoui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.annotation.RequiresApi;
+
 import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Utils;
 
 public class WMX_Transaction_Cancel extends BaseActivity {
     private String  Amount, AmountToShow, type_transaction, ksn_posId, _Propina,_noAuth, total, months_total, subtotal, tips, msi, approve;
@@ -19,6 +23,7 @@ public class WMX_Transaction_Cancel extends BaseActivity {
 
     }
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +59,15 @@ public class WMX_Transaction_Cancel extends BaseActivity {
         intent.putExtra("tips", tips);
         intent.putExtra("approve", approve);
         startActivity(intent);
+        finish();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void onCancel(View view) {
-        startActivity(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        new Handler().postDelayed(() -> {
+            finishAffinity();
+        }, 1000);
+        startActivityMiddleware(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     private void setProps() {

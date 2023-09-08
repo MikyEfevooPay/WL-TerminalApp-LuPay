@@ -16,12 +16,15 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Clase general que maneja multiples Llamadas al backend en un activity
+ * */
 public class FetchUIManager implements IFetchs {
     private List<Fetch> fetchs;
     private List<FetchEntity> Responses;
     private List<FetchEntity> Errors;
     private Context mContext;
-    private boolean isInternalFetching;
+    private boolean isInternalFetching,forceFetchDone;
 
     private void init() {
         fetchs = new ArrayList();
@@ -36,7 +39,17 @@ public class FetchUIManager implements IFetchs {
 
     public FetchUIManager(Context ctx) {
         this.mContext = ctx;
+        this.forceFetchDone = false;
         init();
+    }
+
+    /**
+     * Forza a que todos los fetch de datos se cumplan para llamar al metodo onRequestsFetching en caso de ser llamados uno por uno
+     *
+     *
+     * */
+    public void setForceFetchDone(boolean _forceFetchDone) {
+        this.forceFetchDone = _forceFetchDone;
     }
 
 
@@ -63,12 +76,21 @@ public class FetchUIManager implements IFetchs {
 
     private void onResponseDone(FetchEntity _entity, FetchEntity _error, boolean all) {
         int totalResponses = Responses.size() + Errors.size();
-        if(all == false || totalResponses >= fetchs.size()) {
-            onRequestsFetching(false);
-            onFetchResults(Responses, Errors);
-            onFetchCurrentResult(_entity, _error);
-            clearEntities();
+        onFetchCurrentResult(_entity, _error);
+        boolean allDone = totalResponses >= fetchs.size();
+        if(!all || allDone) {
+            ReturnResults();
         }
+    }
+
+    private void ReturnResults() {
+        onRequestsFetching(false);
+        onFetchResults(Responses, Errors);
+        clearEntities();
+    }
+
+    public void ForceClose() {
+        this.ReturnResults();
     }
 
     @SuppressLint("NewApi")
@@ -116,9 +138,9 @@ public class FetchUIManager implements IFetchs {
     public void CallById(String key) {
         Fetch fetch = getFetch(key);
         if(fetch == null) return;
-        isInternalFetching = true;
+        this.isInternalFetching = true;
         onRequestsFetching(true);
-        processFetch(fetch, false);
+        processFetch(fetch, this.forceFetchDone);
     }
 
     public Fetch addFetch(String key, FetchOptions options) throws Exception {

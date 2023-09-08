@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import androidx.annotation.LayoutRes;
 
+import com.dspread.xpos.QPOSService;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -22,6 +24,7 @@ public class Utils {
 	public static final String TERMINAL_BIN = "https://lookup.binlist.net/";
 	public static final String TPVCONFIG = "https://testagrswl.gntapi.com";
 	public static HashMap<String,String> errorMessagesDictionary;
+	public static HashMap<QPOSService.Error, String> errorPosDictionary;
 	private static char MASK_CHAR = '*';
 
 	public static void setErrorMessages() {
@@ -29,6 +32,12 @@ public class Utils {
 		errorMessagesDictionary.put("com.android.volley.timeout", "Límite de tiempo excedido");
 		errorMessagesDictionary.put("invalid amount", "Límite de tiempo excedido");
 		errorMessagesDictionary.put("com.android.volley.noconnectionerror", "Conexión no exitosa, favor de realizar prueba de comunicación");
+
+		errorPosDictionary = new HashMap();
+		errorPosDictionary.put(QPOSService.Error.UNKNOWN, "Tarjeta no leída, intente de nuevo.");
+		errorPosDictionary.put(QPOSService.Error.CMD_TIMEOUT, "Límite de tiempo excedido");
+		errorPosDictionary.put(QPOSService.Error.TIMEOUT, "Límite de tiempo excedido");
+		errorPosDictionary.put(QPOSService.Error.APP_SELECT_TIMEOUT, "Límite de tiempo excedido");
 	}
 
 	public static String bytes2Hex(byte[] data) {
