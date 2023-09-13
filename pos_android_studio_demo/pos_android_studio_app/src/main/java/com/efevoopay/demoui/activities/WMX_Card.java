@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,11 +26,9 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.dspread.xpos.TradeSoundType;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.FetchOptions;
@@ -39,6 +38,8 @@ import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.Fetch;
 import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.GNTBackEnd;
+import com.efevoopay.demoui.utils.QPOSStatus;
+import com.efevoopay.demoui.utils.RequestSingleton;
 import com.efevoopay.demoui.utils.ResponseCode;
 import com.efevoopay.demoui.utils.TLV;
 import com.efevoopay.demoui.utils.TLVParser;
@@ -88,7 +89,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Intent intent;
     private MediaPlayer Beep;
     private LottieAnimationView LottieTerminalView, LottiePointsView;
-    private boolean transactionCancel;
+    private boolean transactionCancel, isCardProcesing, successCancelTrade;
 
     private String FinalPin = "";
     private LinearLayout lin;
@@ -101,11 +102,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private TextView tv_card_label_1, tv_card_label_2;
 
-    private String cardNofinal = "";
     private String type_transaction;
     public GNTBackEnd gntBackEnd = new GNTBackEnd();
     private DUKPTData _encryptblumon;
-    // RequestQueue requestQueue;
     private String _Propina = "";
     private String TransExit = "";
     private String content = "";
@@ -192,6 +191,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         dbManager.open();
         cursor = dbManager.fetch(ksn_posId);
         this.QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
+        this.isCardProcesing = false;
+        this.successCancelTrade = false;
         initSDK();
     }
 
@@ -255,9 +256,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void closeService() {
-        if(this.QPOS_STATUS == INTERNAL_QPOS_STATUS.DISCONNECTED) return;
-        pos.cancelTrade();
-        pos.closeUart();
+        if(QPOS_STATUS == INTERNAL_QPOS_STATUS.DISCONNECTED) return;
+        QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
+        this.successCancelTrade = true;
+        new Thread(() -> {
+            pos.cancelTrade();
+            pos.closeUart();
+        }).start();
     }
 
     @Override
@@ -272,6 +277,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
+        if(isCardProcesing) return;
         super.onBackPressed();
     }
 
@@ -285,21 +291,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void DoTrade() {
-        trading.setEnabled(true);
-        // btnDisconnect.setEnabled(true);
+        enableTradingCancel(true);
         if (ActivityCompat.checkSelfPermission(WMX_Card.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
-            // 申请权限
             ActivityCompat.requestPermissions(WMX_Card.this,
                     new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_WRITE_EXTERNAL_STORAGE);
         }
-        Status_lector.setText("");
-        if (pos == null) {
-            Status_lector.setText(R.string.scan_bt_pos_error);
-            return;
-        }
         isPinCanceled = false;
-        Status_lector.setText(R.string.starting);
         if (posType == POS_TYPE.UART) {
             pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP_UNALLOWED_LOW_TRADE);
             pos.doTrade(60);
@@ -345,7 +343,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private void ChangeViewToTicket() {
         Intent thisIntent = getIntent();
-        String v_total = thisIntent.getStringExtra("total");
 
         intent = new Intent(this, WMX_final_ticket_transaction.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -381,9 +378,17 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         finish();
     }
 
+    private void enableTradingCancel(boolean enable) {
+        isCardProcesing = !enable;
+        trading.setEnabled(enable);
+        trading.getBackground().setAlpha(enable ? 255 : 160);
+    }
+
     private void onCancelTransaction(String ...error) {
         if(transactionCancel) return;
         transactionCancel = true;
+        if(keyboardUtil != null)keyboardUtil.hide();
+        closeService();
         Intent intent = new Intent(mContext, WMX_Transaction_Cancel.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("Amount", Amount);
         intent.putExtra("AmountToShow", AmountToShow);
@@ -397,12 +402,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         intent.putExtra("tips", v_tip);
         intent.putExtra("approve", _approve);
         intent.putExtra("error", error.length > 0 ? error[0]: null);
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            startActivityMiddleware(intent);
-            finish();
-            overridePendingTransition(R.anim.slide_to_top, R.anim.slide_to_bottom);
-        }, 300);
+        startActivityMiddleware(intent);
+        finish();
+        overridePendingTransition(R.anim.slide_to_top, R.anim.slide_to_bottom);
     }
 
     /** CLASS **/
@@ -550,23 +552,22 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
                 Status_lector.setText(getString(R.string.try_another_interface));
             } else if (result == QPOSService.DoTradeResult.ICC) {
+                enableTradingCancel(false);
                 Status_lector.setText(getString(R.string.icc_card_inserted));
                 TRACE.d("EMV ICC Start");
-                //
-                //
-
-                // try{
-                // ICCTag=pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"57");
-                // TRACE.d("ICCTag" + ICCTag + TRACE.NEW_LINE);
-                // }catch (Throwable t){
-                //
-                // }
                 pos.doEmvApp(QPOSService.EmvOption.START);
             } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
                 Status_lector.setText(getString(R.string.card_inserted));
             } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
                 Status_lector.setText(getString(R.string.bad_swipe));
             } else if (result == QPOSService.DoTradeResult.MCR) {// Magnetic card
+                enableTradingCancel(false);
+                TRACE.d("Magnetic card: " + decodeData.toString());
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && decodeData.entrySet().stream().allMatch(data -> TextUtils.isEmpty(data.getValue()))) {
+                        TRACE.d("CARD NO DETECTED");
+                        onCancelTransaction(Utils.errorPosDictionary.get(QPOSService.Error.UNKNOWN));
+                        return;
+                    }
                 Status_lector.setText(result.toString());
                 content = getString(R.string.card_swiped);
                 _track2MN = "";
@@ -671,7 +672,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     }
                 }
                 String terminalTime = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
-                // TRACE.d("_track2MN: "+_track2MN);
+                TRACE.d("_track2MN: "+_track2MN);
                 maskedPAN = _track2MN.substring(0, 8) + "XXXX" + _track2MN.substring(12, 16);
                 Integer _9f = Integer.parseInt(pinKsn.substring(15, 20), 16);
                 ValidacionRequest(_track2MN.substring(0, 8), "MCR", "90", "", maskedPAN, _track2MN, _9f.toString(),
@@ -684,6 +685,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 // nfcLog = decodeData.get("nfcLog");
                 Status_lector.setText(result.toString());
                 TRACE.d("EMV NFC Start");
+                enableTradingCancel(false);
                 Beep.start();
                 List<TLV> parse = TLVParser.parse(pos.getNFCBatchData().get("tlv"));
                 // C0
@@ -1074,60 +1076,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
             dialogPin = new Dialog(mContext);
             dialogPin.setContentView(R.layout.wmx_pin_keyboard);
-
-            /**
-             * dialog = new Dialog(mContext);
-             * dialog.setContentView(R.layout.wmx_pin_keyboard);
-             * 
-             * 
-             * 
-             * 
-             * 
-             * dialog.findViewById(R.id.confirmButton).setOnClickListener(new
-             * View.OnClickListener() {
-             * 
-             * @Override
-             *           public void onClick(View v) {
-             *           String pin = ((EditText)
-             *           dialog.findViewById(R.id.pinEditText)).getText().toString();
-             *           if (pin.length() >= 4 && pin.length() <= 12) {
-             *           if (pin.equals("000000")) {
-             *           pos.sendEncryptPin("5516422217375116");
-             * 
-             *           } else {
-             *           pos.sendPin(pin);
-             *           }
-             *           //dismissDialog();
-             *           }
-             *           }
-             *           });
-             * 
-             *           dialog.findViewById(R.id.bypassButton).setOnClickListener(new
-             *           View.OnClickListener() {
-             * 
-             * @Override
-             *           public void onClick(View v) {
-             *           // pos.bypassPin();
-             *           pos.sendPin("");
-             * 
-             *           //dismissDialog();
-             *           }
-             *           });
-             * 
-             *           dialog.findViewById(R.id.cancelButton).setOnClickListener(new
-             *           View.OnClickListener() {
-             * 
-             * @Override
-             *           public void onClick(View v) {
-             *           isPinCanceled = true;
-             *           pos.cancelPin();
-             *           //dismissDialog();
-             *           }
-             *           });
-             * 
-             *           dialog.show();
-             **/
-
         }
 
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
@@ -1244,7 +1192,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onRequestQposDisconnected() {
             TRACE.d("onRequestQposDisconnected()");
-            QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
+            QPOSStatus.getInstance().onRequestQposDisconnected();
         }
 
         @Override
@@ -1291,7 +1239,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onGetCardNoResult(String cardNo) {// get card number result
             TRACE.d("onGetCardNoResult(String cardNo):" + cardNo);
-            cardNofinal = cardNo;
         }
 
         @Override
@@ -1657,6 +1604,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onTradeCancelled() {
             TRACE.d("onTradeCancelled");
+            if(successCancelTrade) return;
+            onCancelTransaction("La transacción fue cancelada, intentelo de nuevo");
         }
 
         @Override
@@ -1912,7 +1861,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private void ValidacionRequest(String _bin, String entrada, String entrymode, String emv, String pan, String track2,
             String counter, String time_txn) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
         String UrlBin = Utils.TERMINAL_BIN + _bin;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlBin, null,
                 new Response.Listener<JSONObject>() {
@@ -1934,8 +1882,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         procesofinal(entrada, entrymode, emv, "", "", pan, track2, counter, time_txn);
                     }
                 });
-        // requestQueue=Volley.newRequestQueue(mContext);
-        requestQueue.add(request);
+        RequestSingleton.getInstance(this).getRequestQueue().add(request);
     }
 
     public void procesofinal(String entrada, String entrymode, String emv, String redtarjeta, String tipotarjeta,
@@ -1957,7 +1904,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
         if (response.equals("00")) {
             ChangeViewToTicket();
-            Status_lector.setText(content);
         } else if (response.equals("")) {
             esperarYCerrar();
         } else {

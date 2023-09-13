@@ -13,34 +13,20 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.HistorialCorteCajaViewInterface;
-import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
 import com.efevoopay.demoui.utils.CorteCaja;
 import com.efevoopay.demoui.utils.Fetch;
 import com.efevoopay.demoui.utils.FetchUIManager;
-import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
-import com.efevoopay.demoui.widget.CancelacionesItemAdapter;
 import com.efevoopay.demoui.widget.CorteCajaItemAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 

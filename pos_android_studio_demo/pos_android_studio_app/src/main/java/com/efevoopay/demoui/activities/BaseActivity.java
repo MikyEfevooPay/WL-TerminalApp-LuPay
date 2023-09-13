@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.dspread.print.device.PrintListener;
 import com.dspread.xpos.QPOSService;
 import com.efevoopay.demoui.R;
@@ -45,6 +46,7 @@ import com.efevoopay.demoui.interfaces.ITicket;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
+import com.efevoopay.demoui.utils.RequestSingleton;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.TicketLayoutManager;
@@ -72,27 +74,26 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     private ProgressDialog fetch_progress;
     private PRINT_TYPE entity_print;
     private TicketLayoutType ticketLayoutType;
+
     private FetchUIManager manager;
     protected LinearLayout toolbar_btn_calendar;
     protected Handler ticketHandler;
-    protected boolean execALLFetchs;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             savedInstanceState.clear();
             savedInstanceState = null;
         }
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        toolbar =  findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             txt_toolbar_title = toolbar.findViewById(R.id.txt_toolbar_title);
             img_invisible_margin = toolbar.findViewById(R.id.img_invisible_margin);
             setInvisiblemargin(false);
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); //show the left arrow
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // show the left arrow
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             setDefaultToolbarColor();
             toolbar.setPadding(0, 0, 0, 0);
@@ -123,7 +124,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         fetch_progress = Utils.getLoaderSpinner(this, "Cargando...");
         manager = new FetchUIManager(this) {
             @Override
-            public void onFetchCurrentResult(FetchEntity entity,@Nullable FetchEntity error) {
+            public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
                 super.onFetchCurrentResult(entity, error);
                 BaseActivity.this.onFetchCurrentResult(entity, error);
             }
@@ -147,13 +148,22 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RequestQueue requestQueue = RequestSingleton.getInstance(this).getRequestQueue();
+        requestQueue.getCache().clear();
+    }
+
     protected void setFetchProgressTitle(String title) {
-        if(fetch_progress == null) return;
+        if (fetch_progress == null)
+            return;
         fetch_progress.setMessage(title);
     }
 
-    public FetchUIManager getFetchManager() { return this.manager; }
-    
+    public FetchUIManager getFetchManager() {
+        return this.manager;
+    }
 
     public Ticket getTicket() {
         return this.ticket;
@@ -172,33 +182,36 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         this.entity_print = entity;
         PrintTicket();
     }
+
     public void PrintTicket() {
-        if(!ticket.isPrinterAvailable()) return;
+        if (!ticket.isPrinterAvailable())
+            return;
         ticket_progress.show();
         ticketLayoutType = getPrintLayout();
         setTicketData(ticket);
-        TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType, this.entity_print);
+        TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType,
+                this.entity_print);
         ticketLayoutManager.setTicketDataByLayout(ticket);
 
-        //Se agrega un posdelay en caso de que haya un error que la libreria no este catcheando para ocultar el spinner
+        // Se agrega un posdelay en caso de que haya un error que la libreria no este
+        // catcheando para ocultar el spinner
         ticketHandler.postDelayed(() -> {
             hideTicketSpinner();
             ticket.close();
         }, 7000);
         boolean success = ticket.printLayout(ticketLayoutManager.getLayout());
-        if(!success) {
+        if (!success) {
             hideTicketSpinner();
             ticketHandler.removeCallbacksAndMessages(null);
         }
     }
 
-    public Toolbar getToolbar(){
-        if(toolbar!=null){
+    public Toolbar getToolbar() {
+        if (toolbar != null) {
             return this.toolbar;
         }
         return null;
     }
-
 
     @Override
     public void onPrintFinished(boolean isSuccess, PRINT_TYPE print_type, TicketLayoutType layoutType) {
@@ -208,29 +221,31 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     public void onPrintError(boolean isSuccess, String status, PRINT_TYPE print_type, TicketLayoutType layoutType) {
     }
 
-
     public abstract void onToolbarLinstener();
 
-    public void onCalendarLinstener(){};
+    public void onCalendarLinstener() {
+    };
 
     protected abstract int getLayoutId();
 
     @SuppressLint("NewApi")
     protected String getFinalErrorMessage(String message) {
         String messageLower = message.toLowerCase(Locale.ROOT);
-        Map.Entry<String, String> getMessage = Utils.errorMessagesDictionary.entrySet().stream().filter(x -> messageLower.contains(x.getKey())).findAny().orElse(null);
+        Map.Entry<String, String> getMessage = Utils.errorMessagesDictionary.entrySet().stream()
+                .filter(x -> messageLower.contains(x.getKey())).findAny().orElse(null);
         return getMessage != null ? getMessage.getValue() : "Ha ocurrido un error desconocido";
     }
 
     @SuppressLint("NewApi")
     protected String getFinalErrorMessage(QPOSService.Error status) {
-        Map.Entry<QPOSService.Error, String> getMessage = Utils.errorPosDictionary.entrySet().stream().filter(x -> status == x.getKey()).findAny().orElse(null);
+        Map.Entry<QPOSService.Error, String> getMessage = Utils.errorPosDictionary.entrySet().stream()
+                .filter(x -> status == x.getKey()).findAny().orElse(null);
         return getMessage != null ? getMessage.getValue() : "Ha ocurrido un error desconocido";
     }
 
     @Override
     public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
-        if(error != null) {
+        if (error != null) {
             String message = error.result.toString().toLowerCase(Locale.ROOT);
             showAlert("error", getFinalErrorMessage(message));
         }
@@ -245,16 +260,17 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     public void onFetchResults(List<FetchEntity> entities, List<FetchEntity> errors) {
 
     }
+
     @Override
     public void onRequestsFetching(boolean isFetching) {
-        if(isFetching) {
+        if (isFetching) {
             fetch_progress.show();
-        } else if(fetch_progress.isShowing()) {
+        } else if (fetch_progress.isShowing()) {
             fetch_progress.dismiss();
         }
     }
 
-    //protected abstract int getFragmentContainer();
+    // protected abstract int getFragmentContainer();
 
     public void setActionBarIcon(int iconRes) {
         toolbar.setNavigationIcon(iconRes);
@@ -265,7 +281,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     public void setTitle(String title) {
-        if(title != null && !title.equals("")) {
+        if (title != null && !title.equals("")) {
             if (txt_toolbar_title != null) {
                 txt_toolbar_title.setText(title);
                 toolbar.setTitle("");
@@ -278,8 +294,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
 
     public void setDefaultToolbarColor() {
         setToolbarBgColor(ContextCompat.getColor(this, R.color.ep_fondo));
-        //setToolbarTextColor(ContextCompat.getColor(this,R.color.wmx_purble));
-        setToolbarIconColor(ContextCompat.getColor(this,R.color.ep_icon_back));
+        // setToolbarTextColor(ContextCompat.getColor(this,R.color.wmx_purble));
+        setToolbarIconColor(ContextCompat.getColor(this, R.color.ep_icon_back));
         setStatusBarColor(ContextCompat.getColor(this, R.color.eb_col_11));
         setTitle("Wirebit MX");
     }
@@ -290,32 +306,33 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         // set toolbar text color
         int midColor = getResources().getColor(R.color.custom_middle_color);
         if (CustomColor >= midColor) {
-            //                setToolbarTextColor(getResources().getColor(R.color.custom_dark_color));
+            // setToolbarTextColor(getResources().getColor(R.color.custom_dark_color));
             setToolbarIconColor(getResources().getColor(R.color.custom_dark_color));
         } else {
-            //                setToolbarTextColor(getResources().getColor(R.color.custom_light_color));
+            // setToolbarTextColor(getResources().getColor(R.color.custom_light_color));
             setToolbarIconColor(getResources().getColor(R.color.custom_light_color));
         }
         setStatusBarColor(CustomColor);
-        setToolbarIconColor(ContextCompat.getColor(this,R.color.ep_icon_back));
+        setToolbarIconColor(ContextCompat.getColor(this, R.color.ep_icon_back));
     }
 
     public void setCustomToolbarColor(String strCustomColor) {
-        if (strCustomColor == null) return;
-            int customColor = Color.parseColor(strCustomColor);
-            // set toolbar bg color
-            setToolbarBgColor(customColor);
-            // set toolbar text color
-            int midColor = getResources().getColor(R.color.custom_middle_color);
-            if (customColor >= midColor) {
-                //                setToolbarTextColor(getResources().getColor(R.color.custom_dark_color));
-                setToolbarIconColor(getResources().getColor(R.color.custom_dark_color));
-            } else {
-                //                setToolbarTextColor(getResources().getColor(R.color.custom_light_color));
-                setToolbarIconColor(getResources().getColor(R.color.custom_light_color));
-            }
-            setStatusBarColor(customColor);
-            setToolbarIconColor(ContextCompat.getColor(this,R.color.ep_icon_back));
+        if (strCustomColor == null)
+            return;
+        int customColor = Color.parseColor(strCustomColor);
+        // set toolbar bg color
+        setToolbarBgColor(customColor);
+        // set toolbar text color
+        int midColor = getResources().getColor(R.color.custom_middle_color);
+        if (customColor >= midColor) {
+            // setToolbarTextColor(getResources().getColor(R.color.custom_dark_color));
+            setToolbarIconColor(getResources().getColor(R.color.custom_dark_color));
+        } else {
+            // setToolbarTextColor(getResources().getColor(R.color.custom_light_color));
+            setToolbarIconColor(getResources().getColor(R.color.custom_light_color));
+        }
+        setStatusBarColor(customColor);
+        setToolbarIconColor(ContextCompat.getColor(this, R.color.ep_icon_back));
     }
 
     public void setToolbarBgColor(int color) {
@@ -325,7 +342,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     public void hideToolbar() {
-        if(toolbar != null) {
+        if (toolbar != null) {
             toolbar.setVisibility(View.GONE);
         }
     }
@@ -341,27 +358,27 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         }
     }
 
-
-    public void showAlert(String type, String title, String... desc){
-        if(isActivityFinished(this)) return;
+    public void showAlert(String type, String title, String... desc) {
+        if (isActivityFinished(this))
+            return;
         View layout = ConfigToastLayout(type, title, desc);
         Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.FILL_HORIZONTAL,0,0);
-        toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,0);
+        toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);
+        toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
 
-       toast.show();
+        toast.show();
     }
 
     private View ConfigToastLayout(String type, String title, String... desc) {
-        LayoutInflater inflater=getLayoutInflater();
+        LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.wmx_alert, (ViewGroup) findViewById(R.id.custom_alert));
         ImageView toast_image = layout.findViewById(R.id.AlertImage);
         TextView toast_tv_titulo = layout.findViewById(R.id.AlertTextTitulo);
         TextView toast_tv_desc = layout.findViewById(R.id.AlertTextDesc);
         LinearLayout toast_ll_custom_alert = layout.findViewById(R.id.custom_alert);
-        switch (type){
+        switch (type) {
             case "success":
                 toast_image.setImageResource(R.drawable.check_exito);
                 toast_tv_titulo.setTextColor(0xff4AAC38);
@@ -379,14 +396,13 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
                 break;
         }
         toast_tv_titulo.setText(title);
-        if(desc.length>0)
+        if (desc.length > 0)
             toast_tv_desc.setText(desc[0]);
         return layout;
     }
 
-
-    public void setInvisiblemargin(boolean status){
-        if(!status) {
+    public void setInvisiblemargin(boolean status) {
+        if (!status) {
             img_invisible_margin.setVisibility(View.GONE);
         }
 
@@ -395,16 +411,16 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         }
     }
 
-    public void setWhiteLogo(){
+    public void setWhiteLogo() {
         logo_image.setImageResource(R.drawable.logo_efevoopay_blanco);
     }
 
-    public void setMarginLogo(){
+    public void setMarginLogo() {
         container_logo = toolbar.findViewById(R.id.toolbar_logo_container);
-        container_logo.setPadding(0,0,0,0);
+        container_logo.setPadding(0, 0, 0, 0);
     }
 
-    public void switch_title_logo(String title){
+    public void switch_title_logo(String title) {
         logo_image.setVisibility(View.GONE);
         container_logo.setVisibility(View.GONE);
         txt_toolbar_title.setVisibility(View.VISIBLE);
@@ -413,10 +429,11 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     protected void hideTicketSpinner() {
-        if(ticket_progress.isShowing()) ticket_progress.dismiss();
+        if (ticket_progress.isShowing())
+            ticket_progress.dismiss();
     }
 
-    public void switch_title_logo(String title, int color){
+    public void switch_title_logo(String title, int color) {
         logo_image.setVisibility(View.GONE);
         container_logo.setVisibility(View.GONE);
         txt_toolbar_title.setVisibility(View.VISIBLE);
@@ -424,7 +441,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         txt_toolbar_title.setTextColor(color);
     }
 
-    public void show_calendar(){
+    public void show_calendar() {
         toolbar_btn_calendar.setVisibility(View.VISIBLE);
     }
 
@@ -469,21 +486,22 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
      */
     public void setToolbarIconColor(int toolbarIconsColor) {
         if (toolbar != null) {
-            final PorterDuffColorFilter colorFilter = new PorterDuffColorFilter(toolbarIconsColor, PorterDuff.Mode.SRC_ATOP);//MULTIPLY
+            final PorterDuffColorFilter colorFilter = new PorterDuffColorFilter(toolbarIconsColor,
+                    PorterDuff.Mode.SRC_ATOP);// MULTIPLY
 
             for (int i = 0; i < toolbar.getChildCount(); i++) {
                 final View v = toolbar.getChildAt(i);
 
-                //Step 1 : Changing the color of back button (or open drawer button).
+                // Step 1 : Changing the color of back button (or open drawer button).
                 if (v instanceof ImageButton) {
-                    //Action Bar back button
+                    // Action Bar back button
                     ((ImageButton) v).getDrawable().setColorFilter(colorFilter);
                 }
 
                 if (v instanceof ActionMenuView) {
                     for (int j = 0; j < ((ActionMenuView) v).getChildCount(); j++) {
-                        //Step 2: Changing the color of any ActionMenuViews - icons that
-                        //are not back button, nor text, nor overflow menu icon.
+                        // Step 2: Changing the color of any ActionMenuViews - icons that
+                        // are not back button, nor text, nor overflow menu icon.
                         final View innerView = ((ActionMenuView) v).getChildAt(j);
 
                         if (innerView instanceof ActionMenuItemView) {
@@ -492,13 +510,14 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
                                 if (((ActionMenuItemView) innerView).getCompoundDrawables()[k] != null) {
                                     final int finalK = k;
 
-                                    //Important to set the color filter in seperate thread,
-                                    //by adding it to the message queue
-                                    //Won't work otherwise.
+                                    // Important to set the color filter in seperate thread,
+                                    // by adding it to the message queue
+                                    // Won't work otherwise.
                                     innerView.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            ((ActionMenuItemView) innerView).getCompoundDrawables()[finalK].setColorFilter(colorFilter);
+                                            ((ActionMenuItemView) innerView).getCompoundDrawables()[finalK]
+                                                    .setColorFilter(colorFilter);
                                         }
                                     });
                                 }
@@ -507,14 +526,14 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
                     }
                 }
 
-                //Step 3: Changing the color of title and subtitle.
-                //if(txt_toolbar_title != null) {
-                //    txt_toolbar_title.setTextColor(toolbarIconsColor);
-                //}
-                //toolbar.setTitleTextColor(toolbarIconsColor);
-                //toolbar.setSubtitleTextColor(toolbarIconsColor);
+                // Step 3: Changing the color of title and subtitle.
+                // if(txt_toolbar_title != null) {
+                // txt_toolbar_title.setTextColor(toolbarIconsColor);
+                // }
+                // toolbar.setTitleTextColor(toolbarIconsColor);
+                // toolbar.setSubtitleTextColor(toolbarIconsColor);
 
-                //Step 4: Changing the color of the Overflow Menu icon.
+                // Step 4: Changing the color of the Overflow Menu icon.
                 setOverflowButtonColor(this, colorFilter);
             }
         }
@@ -529,7 +548,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         ComponentName name = intent.resolveActivity(getPackageManager());
         String intentPackageName = name.getPackageName();
         String intentClassName = name.getClassName();
-        if(intentPackageName.equals(CurrPackageName) && intentClassName.contains(CurrPackageName)) {
+        if (intentPackageName.equals(CurrPackageName) && intentClassName.contains(CurrPackageName)) {
             startActivity(intent, options);
         }
     }
@@ -562,8 +581,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         }
     }
 
-
-
     class MyPrinterListener implements PrintListener {
 
         @Override
@@ -578,6 +595,5 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
             }
         }
     }
-
 
 }

@@ -31,7 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24px"
         android:fontFamily="@font/dm_sans_medium"
-        android:text="Recibe tu ticket por mail"
+        android:gravity="center"
+        android:text="Recibe tu ticket por correo electrónico"
+        android:textAlignment="center"
+        android:textAllCaps="false"
         android:textColor="#0F0F0F"
         android:textSize="20px" />
 

@@ -3,40 +3,27 @@ package com.efevoopay.demoui.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.efevoopay.demoui.activities.WMX_Historial_Cancelaciones;
 import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.IFetching;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.CompletableFuture;
 
 public class Fetch implements IFetching {
     private JSONObject jsonBody;
     private FetchOptions options;
-    private String FetchResponseString;
     private String contentType;
     private CompletableFuture<String> ResponseAsync;
-    private RequestQueue requestQueue;
     private FetchSetBody setBodyListenner;
+    private Context mContext;
     public String key;
 
     @SuppressLint("NewApi")
@@ -45,11 +32,7 @@ public class Fetch implements IFetching {
         this.options = _options;
         this.jsonBody = new JSONObject();
         this.ResponseAsync = new CompletableFuture();
-        requestQueue = Volley.newRequestQueue(ctx);
-    }
-
-    public String getFetchResponseString() {
-        return this.FetchResponseString;
+        this.mContext = ctx;
     }
 
     public void setSetBodyListenner(FetchSetBody listenner) {
@@ -113,6 +96,8 @@ public class Fetch implements IFetching {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return null;
+                } finally {
+                    jsonBody = new JSONObject();
                 }
             }
             @Override
@@ -133,7 +118,6 @@ public class Fetch implements IFetching {
             }
 
         };
-
-        requestQueue.add(stringRequest);
+        RequestSingleton.getInstance(mContext).getRequestQueue().add(stringRequest);
     }
 }

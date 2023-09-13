@@ -11,7 +11,13 @@ import android.widget.Button;
 
 import androidx.annotation.RequiresApi;
 
+import com.dspread.xpos.CQPOSService;
+import com.dspread.xpos.QPOSService;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.QPOSStatus;
+import com.efevoopay.demoui.utils.TRACE;
+
+import java.util.Map;
 
 public class WMX_Transaction_Cancel extends BaseActivity {
     private String  Amount, AmountToShow, type_transaction, ksn_posId, _Propina,_noAuth, total, months_total, subtotal, tips, msi, approve;
@@ -33,6 +39,22 @@ public class WMX_Transaction_Cancel extends BaseActivity {
 
         btn_retry.setOnClickListener(this::onRetry);
         btn_cancel.setOnClickListener(this::onCancel);
+        onEnableRetry(false);
+
+        QPOSStatus.getInstance().addActivityListeners("cancelTransaction", new CQPOSService() {
+            @Override
+            public void onRequestQposDisconnected() {
+                TRACE.d("CANCEL DISABLED");
+                runOnUiThread(() -> {
+                    onEnableRetry(true);
+                });
+            }
+        });
+    }
+
+    private void onEnableRetry(boolean enable) {
+        btn_retry.setEnabled(enable);
+        btn_retry.getBackground().setAlpha(enable ? 255 : 160);
     }
 
     @Override

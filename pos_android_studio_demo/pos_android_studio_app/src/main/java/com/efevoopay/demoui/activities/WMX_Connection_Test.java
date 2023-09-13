@@ -5,31 +5,28 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
+import androidx.annotation.Nullable;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 
 public class WMX_Connection_Test extends BaseActivity implements View.OnClickListener {
     Intent intent;
     private String ksn_posId;
+
+    private final String TEST_CONNECTION_ECO = "test_connection_eco";
+    private final String TEST_CONNECTION_LOGON = "test_connection_logon";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +37,71 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
         super.setMarginLogo();
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
-        Conectividad(this);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Conectividad(this);
+    }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        manager.addFetch(TEST_CONNECTION_ECO, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/com/v2/eco", Request.Method.POST));
+        manager.addFetch(TEST_CONNECTION_LOGON, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/com/v2/logon", Request.Method.POST));
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        if(error != null) {
+            onResultActivity(1);
+            return;
+        }
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case TEST_CONNECTION_ECO:
+                processConnectionEco(entity.result.toString());
+                break;
+            case TEST_CONNECTION_LOGON:
+                processConnectionLogon(entity.result.toString());
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void processConnectionEco(String response) {
+        try {
+            JSONObject object = new JSONObject(response);
+            if(object.has("P39")){
+                onResultActivity(0);
+                return;
+            }
+            getFetchManager().CallById(TEST_CONNECTION_LOGON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void processConnectionLogon(String response) {
+        try {
+            JSONObject object = new JSONObject(response);
+            onResultActivity(object.has("P39") ? 0 : 1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onResultActivity(int type) {
+        Intent intent = new Intent(WMX_Connection_Test.this, WMX_Connection_Test_Final.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("type", type);
+        intent.putExtra("ksn_posId", ksn_posId);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onRequestsFetching(boolean isFetching) {
     }
 
     @Override
@@ -65,173 +125,13 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
     }
 
     public void Conectividad(Context context) {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // acciones que se ejecutan tras los milisegundos
-                if(isNetworkAvailable(context)){
-                    conectividadeco();
-                }else{
-                Intent intent = new Intent(WMX_Connection_Test.this, WMX_Connection_Test_Final.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("type", 1);
-                intent.putExtra("ksn_posId", ksn_posId);
-                startActivity(intent);
-                }
-                handler.removeCallbacks(this);
+        new Thread(() -> {
+            if(isNetworkAvailable(context)){
+                getFetchManager().CallById(TEST_CONNECTION_ECO);
+            }else{
+                onResultActivity(1);
             }
-        }, 6000);
-
-    }
-    private void conectividadeco() {
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/com/v2/eco";
-            final String requestBody = null;
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        if(object.has("P39")){
-                            Intent intent = new Intent(WMX_Connection_Test.this, WMX_Connection_Test_Final.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("type", 0);
-                            intent.putExtra("ksn_posId", ksn_posId);
-                            startActivity(intent);
-                            TRACE.d("conectividadeco: " +  TRACE.NEW_LINE + response.toString() );
-                        }
-                        else{
-                            conectividadlogon();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Intent intent = new Intent(WMX_Connection_Test.this, WMX_Connection_Test_Final.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("type", 1);
-                    intent.putExtra("ksn_posId", ksn_posId);
-                    startActivity(intent);
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString());
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (Exception e) {
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
-    }
-    private void conectividadlogon() {
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/com/v2/logon";
-            final String requestBody = null;
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject object = new JSONObject(response);
-                        if(object.has("P39")){
-                            Intent intent = new Intent(WMX_Connection_Test.this, WMX_Connection_Test_Final.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("type", 0);
-                            intent.putExtra("ksn_posId", ksn_posId);
-                            startActivity(intent);
-                            TRACE.d("conectividadlogon: " +  TRACE.NEW_LINE + response.toString() );
-                        }else{
-                            Intent intent = new Intent(WMX_Connection_Test.this, WMX_Connection_Test_Final.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("type", 1);
-                            intent.putExtra("ksn_posId", ksn_posId);
-                            startActivity(intent);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    TRACE.d("** ResponseResult " +  TRACE.NEW_LINE + response.toString() );
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Intent intent = new Intent(WMX_Connection_Test.this, WMX_Connection_Test_Final.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("type", 1);
-                    intent.putExtra("ksn_posId", ksn_posId);
-                    startActivity(intent);
-                    TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.toString());
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (Exception e) {
-
-            TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-
-        }
+        }).start();
     }
 
     public static boolean isNetworkAvailable(Context context) {
@@ -239,12 +139,10 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null && activeNetwork.isConnected()) {
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                // Estas conectado a un Wi-Fi
                 TRACE.d("MIAPP"+ " Nombre red Wi-Fi: " + activeNetwork.getReason());
                 return true;
             }
             if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                // Estas conectado a un Mobile
                 TRACE.d("MIAPP"+ " Nombre red Mobile: " + activeNetwork.getReason());
                 return true;
             }

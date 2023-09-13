@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -24,20 +25,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.GNTBackEnd;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
@@ -47,12 +43,6 @@ import com.efevoopay.demoui.utils.Ticket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickListener {
 
     TextView tp_tv_trans_type, tp_tv_auth, tp_tv_amount, tp_tv_tip, tp_tv_total, tp_tv_card, tp_tv_date_time,
@@ -60,12 +50,14 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     ImageView tp_iv_trans_type, tp_iv_process;
     LinearLayout tp_ll_content_card, lyt_transaction_tip, lyt_historial_details_email;
     private int transaction_type;
-    private String card_provider, type_transaction, v_months, tipotarjeta;
+    private String card_provider, type_transaction, v_months, tipotarjeta, currEmail;
     Context mContext;
     private String ksn_posId;
     ProgressDialog loader;
     private DBManager dbManager;
     Cursor cursor;
+
+    private final String TRANSACTION_SEND_EMAIL = "transaction_send_email";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +72,54 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         super.switch_title_logo("Detalle Transacción");
         Intent intent = getIntent();
         loader = Utils.getLoaderSpinner(this, "Enviando...");
+        setFetchProgressTitle("Enviando...");
         initData(intent);
+    }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch history = manager.addFetch(TRANSACTION_SEND_EMAIL, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
+        history.setSetBodyListenner(this::getBody);
+    }
+
+    private void getBody(JSONObject body) throws JSONException {
+        body.put("correo", currEmail);
+
+        if (type_transaction.equals("venta")) {
+            body.put("subject", "Ticket de compra");
+            body.put("tipo", "sale");
+        } else if (type_transaction.equals("Cancelacion")) {
+            body.put("subject", "Ticket de Cancelación");
+            body.put("tipo", "cancel");
+        } else if (type_transaction.equals("MSI")) {
+            body.put("subject", "Ticket MSI");
+            body.put("tipo", "msi");
+        }
+        body.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
+        body.put("msi", Utils.isNull(v_months, "N/A"));
+        body.put("amount", Utils.isNull(tp_tv_amount.getText().toString(), "N/A"));
+        body.put("tip", Utils.isNull(tp_tv_tip.getText().toString(), "N/A"));
+        body.put("total", Utils.isNull(tp_tv_total.getText().toString(), "N/A"));
+        body.put("pay_method", Utils.isNull(card_provider, "N/A"));
+        body.put("card", Utils.isNull(tp_tv_card.getText().toString(), "N/A"));
+        body.put("payment_date", Utils.isNull(tp_tv_date_time.getText().toString(), "N/A"));
+        body.put("address", Utils.isNull(cursor.getString(8), "N/A"));
+        body.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
+        body.put("arqc", Utils.isNull(tp_tv_ARQC.getText().toString(), "N/A"));
+        body.put("aid", Utils.isNull(tp_tv_AID.getText().toString(), "N/A"));
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        super.onFetchCurrentResult(entity, error);
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case TRANSACTION_SEND_EMAIL:
+                showAlert("success", "¡Ticket enviado con éxito!");
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -197,110 +236,11 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             modalEmailCreate.dismiss();
         });
 
-        btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                try {
-                    setCorreo(txt_email.getText().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    modalEmailCreate.dismiss();
-                }
-            }
+        btn_modal_sendEmail.setOnClickListener(view -> {
+            currEmail = txt_email.getText().toString();
+            getFetchManager().CallById(TRANSACTION_SEND_EMAIL);
+            modalEmailCreate.dismiss();
         });
-    }
-
-    private void setCorreo(String _correo) throws IOException {
-        loader.show();
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("correo", _correo);
-
-            if (type_transaction.equals("venta")) {
-                jsonBody.put("subject", "Ticket de compra");
-                jsonBody.put("tipo", "sale");
-            } else if (type_transaction.equals("Cancelacion")) {
-                jsonBody.put("subject", "Ticket de Cancelación");
-                jsonBody.put("tipo", "cancel");
-            } else if (type_transaction.equals("MSI")) {
-                jsonBody.put("subject", "Ticket MSI");
-                jsonBody.put("tipo", "msi");
-            }
-            jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
-            jsonBody.put("msi", Utils.isNull(v_months, "N/A"));
-            jsonBody.put("amount", Utils.isNull(tp_tv_amount.getText().toString(), "N/A"));
-            jsonBody.put("tip", Utils.isNull(tp_tv_tip.getText().toString(), "N/A"));
-            jsonBody.put("total", Utils.isNull(tp_tv_total.getText().toString(), "N/A"));
-            jsonBody.put("pay_method", Utils.isNull(card_provider, "N/A"));
-            jsonBody.put("card", Utils.isNull(tp_tv_card.getText().toString(), "N/A"));
-            jsonBody.put("payment_date", Utils.isNull(tp_tv_date_time.getText().toString(), "N/A"));
-            jsonBody.put("address", Utils.isNull(cursor.getString(8), "N/A"));
-            jsonBody.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
-            jsonBody.put("arqc", Utils.isNull(tp_tv_ARQC.getText().toString(), "N/A"));
-            jsonBody.put("aid", Utils.isNull(tp_tv_AID.getText().toString(), "N/A"));
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " + TRACE.NEW_LINE + requestBody);
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response.toString());
-                    showAlert("success", "¡Ticket enviado con éxito!");
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + error.toString());
-                    showAlert("ERROR", error.toString());
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody,
-                                "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + e.toString());
-
-        }
-
     }
 
     private void initData(Intent intent) {
@@ -322,7 +262,6 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         approve = intent.getStringExtra("approve");
         ksn_posId = intent.getStringExtra("ksn_posId");
 
-        // ll_msi = findViewById(R.id.ll_msi);
         tp_tv_trans_type = findViewById(R.id.tp_tv_trans_type);
         tp_tv_auth = findViewById(R.id.tp_tv_auth);
         tp_tv_amount = findViewById(R.id.tp_tv_amount);
@@ -346,12 +285,6 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         v_months = msi;
         if (status.equals("CAN")) {
             if (Integer.parseInt(msi) > 0) {
-                // Float _amountc =
-                // Float.parseFloat(total.replace("$","").replace(",","").replace(" ",""));
-                // Float total_msi= _amountc / Integer.parseInt(v_months);
-                // NumberFormat format = NumberFormat.getCurrencyInstance();
-                // format.setMaximumFractionDigits(2);
-                // tp_tv_tip.setText(msi + " MSI");
                 tp_tv_total_label.setText(v_months + " MSI");
                 tp_tv_amount.setText(GNTBackEnd.Amount_msi(total, v_months) + " MXN");
                 tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_CANMSI_TYPE));
@@ -377,24 +310,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             type_transaction = "venta";
             tp_iv_trans_type.setImageResource(R.drawable.efevoo_i_check_exito);
             tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_VEN_TYPE));
-            // tp_tv_tip.setText(propina);
             transaction_type = 1;
-            // v_months="0";
         } else {
             // v_months=msi;
             type_transaction = GNTBackEnd.TRANS_MSI_TYPE;
             tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_MSI_TYPE));
-            /*
-             * Float _amount =
-             * Float.parseFloat(total.replace("$","").replace(",","").replace(" ",""));
-             * Float total_msi= _amount / Integer.parseInt(v_months);
-             * NumberFormat format = NumberFormat.getCurrencyInstance();
-             * format.setMaximumFractionDigits(2);
-             */
-            // tp_tv_tip_label.setText("Meses:");
             tp_tv_total_label.setText(v_months + " MSI");
             tp_tv_amount.setText(GNTBackEnd.Amount_msi(total, v_months)  + " MXN");
-            // tp_tv_tip.setText(propina);
             transaction_type = 0;
             lyt_transaction_tip.setVisibility(View.GONE);
         }

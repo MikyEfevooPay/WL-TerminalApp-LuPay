@@ -350,6 +350,8 @@
                 android:id="@+id/lyt_historial_details_email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:paddingTop="10dp"
@@ -363,6 +365,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/dm_sans_medium"
                     android:text="@string/wmx_historial_details_email_title"
+                    android:textAlignment="center"
                     android:textColor="@color/ep_color_blue"
                     android:textSize="28px" />
 
@@ -370,6 +373,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:src="@drawable/flecha_ticket" />
             </LinearLayout>
 

@@ -7,16 +7,13 @@ import android.os.Build;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.blumonpay.capx.functions.RSA;
 import com.blumonpay.capx.model.RSAData;
-import com.efevoopay.demoui.activities.WMX_Ajustes;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,10 +35,10 @@ public class ConfigTpv {
         dbManager.open();
         context=mContext;
     }
+
     public void tpvConfig(String ksn_posId,Integer valor) {
         try {
             nuevainit = false;
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
             String URL = Utils.TPVCONFIG + "/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", ksn_posId);
@@ -106,7 +103,7 @@ public class ConfigTpv {
                 }
             };
 
-            requestQueue.add(stringRequest);
+           RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
         }
@@ -114,7 +111,6 @@ public class ConfigTpv {
     private void initactiva(String _tpv,String ksn_posId,Integer valor) {
         String URL="";
         try {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
 
             //String URL =  Utils.TPVCONFIG + "/efevoo/tpv/initllave";
             JSONObject objtpv = new JSONObject(_tpv);
@@ -202,7 +198,7 @@ public class ConfigTpv {
                 }
             };
 
-            requestQueue.add(stringRequest);
+            RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
         }

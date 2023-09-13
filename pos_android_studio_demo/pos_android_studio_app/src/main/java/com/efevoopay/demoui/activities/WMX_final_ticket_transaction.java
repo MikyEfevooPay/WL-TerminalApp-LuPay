@@ -12,28 +12,22 @@ import android.view.View;
 
 import android.content.Intent;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.interfaces.FetchEntity;
+import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
 import com.efevoopay.demoui.utils.DBManager;
+import com.efevoopay.demoui.utils.Fetch;
+import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.GNTBackEnd;
-import com.efevoopay.demoui.utils.GlobalFunctions;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
@@ -42,12 +36,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
 
     AppCompatButton btn_ticket_final;
@@ -56,12 +44,14 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private String type_transaction;
     private boolean isTicketPrinted;
     String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal,
-            v_months, v_months_total, card_provider, _noauth, _approve;
+            v_months, v_months_total, card_provider, _noauth, _approve, currEmail;
     ProgressDialog loader;
     private String ksn_posId;
     private DBManager dbManager;
     Cursor cursor;
     TextView ticket_tv_tip_label;
+
+    private final String TRANSACTION_TICKET_SEND_EMAIL = "transaction_ticket_send_email";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +80,56 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         dbManager = new DBManager(mContext);
         dbManager.open();
         cursor = dbManager.fetch(ksn_posId);
-
+        setFetchProgressTitle("Enviando...");
         initInfo();
 
     }
+
+    @Override
+    public void addFetchs(FetchUIManager manager) throws Exception {
+        Fetch history = manager.addFetch(TRANSACTION_TICKET_SEND_EMAIL, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
+        history.setSetBodyListenner(this::getBody);
+    }
+
+    private void getBody(JSONObject body) throws JSONException {
+        body.put("correo", currEmail);
+        if (type_transaction.equals(GNTBackEnd.TRANS_VEN_TYPE)) {
+            body.put("subject", "Ticket de compra");
+            body.put("tipo", "sale");
+        } else if (type_transaction.equals(GNTBackEnd.TRANS_CAN_TYPE)) {
+            body.put("subject", "Ticket de Cancelación");
+            body.put("tipo", "cancel");
+        } else if (type_transaction.equals(GNTBackEnd.TRANS_MSI_TYPE)) {
+            body.put("subject", "Ticket MSI");
+            body.put("tipo", "msi");
+        }
+        body.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
+        body.put("msi", Utils.isNull(v_months, "0"));
+        body.put("amount", Utils.isNull(v_subtotal, "N/A"));
+        body.put("tip", Utils.isNull(v_tip, "N/A"));
+        body.put("total", Utils.isNull(v_total, "N/A"));
+        body.put("pay_method", Utils.isNull(card_provider, "N/A"));
+        body.put("card", Utils.isNull(v_card, "N/A"));
+        body.put("payment_date", Utils.isNull(v_time, "N/A"));
+        body.put("address", Utils.isNull(cursor.getString(8), "N/A"));
+        body.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
+        body.put("arqc", Utils.isNull(v_ARQC, "N/A"));
+        body.put("aid", Utils.isNull(v_AID, "N/A"));
+    }
+
+    @Override
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
+        super.onFetchCurrentResult(entity, error);
+        if(entity.result == null) return;
+        switch (entity.key) {
+            case TRANSACTION_TICKET_SEND_EMAIL:
+                showAlert("success", "¡Ticket enviado con éxito!");
+                break;
+            default:
+                break;
+        }
+    }
+
 
     private void initInfo() {
 
@@ -164,7 +200,6 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 ticket_tv_subtotal_label.setText(v_months + " MSI");
                 ticket_tv_subtotal_value.setText(v_subtotal);
                 ticket_ll_propina.setVisibility(View.GONE);
-                // v_tip ="$0.00 MXN";
             } else {
                 ticket_tv_title.setText("Resumen de cancelación");
             }
@@ -329,125 +364,11 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             modalEmailCreate.dismiss();
         });
 
-        btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                try {
-                    setCorreo(txt_email.getText().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    modalEmailCreate.dismiss();
-                }
-            }
+        btn_modal_sendEmail.setOnClickListener(view -> {
+            currEmail = txt_email.getText().toString();
+            getFetchManager().CallById(TRANSACTION_TICKET_SEND_EMAIL);
+            modalEmailCreate.dismiss();
         });
-    }
-
-    private String getHTMLEmailTicketTemplate() {
-        StringBuilder strBulider = new StringBuilder();
-        try {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(getAssets().open("email_ticket_template.html")));
-            String html;
-            while ((html = in.readLine()) != null) {
-                strBulider.append(html);
-            }
-            in.close();
-            return strBulider.toString();
-        } catch (IOException e) {
-            return "";
-        }
-    }
-
-    private void setCorreo(String _correo) throws IOException {
-        loader.show();
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = Utils.TERMINAL_API + "/matriz/certificacion/correoticket";
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("correo", _correo);
-            if (type_transaction.equals(GNTBackEnd.TRANS_VEN_TYPE)) {
-                jsonBody.put("subject", "Ticket de compra");
-                jsonBody.put("tipo", "sale");
-            } else if (type_transaction.equals(GNTBackEnd.TRANS_CAN_TYPE)) {
-                jsonBody.put("subject", "Ticket de Cancelación");
-                jsonBody.put("tipo", "cancel");
-            } else if (type_transaction.equals(GNTBackEnd.TRANS_MSI_TYPE)) {
-                jsonBody.put("subject", "Ticket MSI");
-                jsonBody.put("tipo", "msi");
-            }
-            jsonBody.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
-            jsonBody.put("msi", Utils.isNull(v_months, "0"));
-            jsonBody.put("amount", Utils.isNull(v_subtotal, "N/A"));
-            jsonBody.put("tip", Utils.isNull(v_tip, "N/A"));
-            jsonBody.put("total", Utils.isNull(v_total, "N/A"));
-            jsonBody.put("pay_method", Utils.isNull(card_provider, "N/A"));
-            jsonBody.put("card", Utils.isNull(v_card, "N/A"));
-            jsonBody.put("payment_date", Utils.isNull(v_time, "N/A"));
-            jsonBody.put("address", Utils.isNull(cursor.getString(8), "N/A"));
-            jsonBody.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
-            jsonBody.put("arqc", Utils.isNull(v_ARQC, "N/A"));
-            jsonBody.put("aid", Utils.isNull(v_AID, "N/A"));
-            final String requestBody = jsonBody.toString();
-            TRACE.d("requestBody " + TRACE.NEW_LINE + requestBody);
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response.toString());
-                    showAlert("success", "¡Ticket enviado con éxito!");
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    loader.dismiss();
-                    TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + error.toString());
-                    showAlert("ERROR", "¡Ticket no enviado!");
-                }
-            }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody,
-                                "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    String parsed;
-                    try {
-                        parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    } catch (UnsupportedEncodingException var4) {
-                        parsed = new String(response.data);
-                    }
-
-                    if (response != null) {
-                        responseString = String.valueOf(parsed);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-            requestQueue.add(stringRequest);
-        } catch (JSONException e) {
-
-            TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + e.toString());
-
-        }
-
     }
 
 }
