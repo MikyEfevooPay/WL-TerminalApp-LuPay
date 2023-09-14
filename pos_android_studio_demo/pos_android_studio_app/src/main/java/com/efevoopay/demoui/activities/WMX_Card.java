@@ -130,6 +130,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     Cursor cursor;
     private DBManager dbManager;
     private Integer _Countpin = 0;
+    private Handler onOpenUartHandler;
+
     private static final int MAX_PIN_ATTEMPTS = 3;
 
     private final String CALL_TRANSACTION = "callTransaction";
@@ -193,6 +195,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         this.QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
         this.isCardProcesing = false;
         this.successCancelTrade = false;
+        this.onOpenUartHandler = new Handler();
         initSDK();
     }
 
@@ -259,6 +262,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         if(QPOS_STATUS == INTERNAL_QPOS_STATUS.DISCONNECTED) return;
         QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
         this.successCancelTrade = true;
+        this.onOpenUartHandler.removeCallbacksAndMessages(null);
         new Thread(() -> {
             pos.cancelTrade();
             pos.closeUart();
@@ -310,6 +314,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         blueTootchAddress = "/dev/ttyS1";
         pos.setDeviceAddress(blueTootchAddress);
         pos.openUart();
+        onOpenUartHandler.postDelayed(() -> {
+            //En caso de que no se abra correctamente el serial se cancela la transaccion
+            TRACE.d("onOpenUartHandler");
+            onCancelTransaction(Utils.errorPosDictionary.get(QPOSService.Error.TIMEOUT));
+        }, 7000);
     }
 
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
@@ -413,6 +422,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestQposConnected() {
             TRACE.d("onRequestQposConnected()");
             QPOS_STATUS = INTERNAL_QPOS_STATUS.CONNECTED;
+            onOpenUartHandler.removeCallbacksAndMessages(null);
             DoTrade();
         }
 
