@@ -17,11 +17,14 @@ import android.os.Looper;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -85,7 +88,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String blueTootchAddress = "";
     private boolean isPinCanceled = false;
     private Context mContext;
-    private Dialog dialogPin;
+    private Dialog dialogPin, appDialog;
     private Intent intent;
     private MediaPlayer Beep;
     private LottieAnimationView LottieTerminalView, LottiePointsView;
@@ -304,7 +307,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         isPinCanceled = false;
         if (posType == POS_TYPE.UART) {
             pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP_UNALLOWED_LOW_TRADE);
-            pos.doTrade(60);
+          pos.doTrade(60);
         }
     }
 
@@ -422,7 +425,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestQposConnected() {
             TRACE.d("onRequestQposConnected()");
             QPOS_STATUS = INTERNAL_QPOS_STATUS.CONNECTED;
-            onOpenUartHandler.removeCallbacksAndMessages(null);
             DoTrade();
         }
 
@@ -541,6 +543,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         public void onRequestWaitingUser() {// wait for card
             TRACE.d("onRequestWaitingUser()");
+            onOpenUartHandler.removeCallbacksAndMessages(null);
             Status_lector.setText(getString(R.string.waiting_for_card));
         }
 
@@ -1181,6 +1184,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onRequestSelectEmvApp(ArrayList<String> appList) {
             TRACE.d("onRequestSelectEmvApp():" + appList.toString());
+            
         }
 
         @Override
@@ -1938,5 +1942,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         Handler handler = new Handler();
         handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 4000);
     }
+
 
 }
