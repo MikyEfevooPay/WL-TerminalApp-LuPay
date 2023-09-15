@@ -42,6 +42,31 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
+    public void onReturnCheckCardResult(boolean b, Hashtable<String, String> data) {
+        TRACE.d("onReturnReadCardResult()");
+    }
+
+    @Override
+    public void onReturnReadCardResult(boolean b, Hashtable<String, String> data) {
+        TRACE.d("onReturnReadCardResult()");
+    }
+
+    @Override
+    public void onReturnSearchCardResult(boolean b, Hashtable<String, String> data) {
+        TRACE.d("onReturnSearchCardResult()");
+    }
+
+    @Override
+    public void onReturnPowerOffCardResult(boolean b, Hashtable<String, String> data) {
+        TRACE.d("onReturnPowerOffCardResult()");
+    }
+
+    @Override
+    public void onReturnPowerOnCardResult(boolean b, Hashtable<String, String> data) {
+        TRACE.d("onReturnPowerOnCardResult()");
+    }
+
+    @Override
     public void onQposRequestPinResult(List<String> list, int i) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onQposRequestPinResult(list, i);

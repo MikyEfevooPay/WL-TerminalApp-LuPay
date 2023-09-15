@@ -55,6 +55,8 @@ public class WMX_Transaction_Cancel extends BaseActivity {
     private void onEnableRetry(boolean enable) {
         btn_retry.setEnabled(enable);
         btn_retry.getBackground().setAlpha(enable ? 255 : 160);
+        btn_cancel.setEnabled(enable);
+        btn_cancel.getBackground().setAlpha(enable ? 255 : 160);
     }
 
     @Override

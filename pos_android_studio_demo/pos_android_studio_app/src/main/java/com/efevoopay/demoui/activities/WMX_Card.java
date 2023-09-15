@@ -133,7 +133,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     Cursor cursor;
     private DBManager dbManager;
     private Integer _Countpin = 0;
-    private Handler onOpenUartHandler;
+    private Handler onOpenUartHandler, onWaitingUserHandler;
 
     private static final int MAX_PIN_ATTEMPTS = 3;
 
@@ -196,9 +196,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         dbManager.open();
         cursor = dbManager.fetch(ksn_posId);
         this.QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
-        this.isCardProcesing = false;
+        enableTradingCancel(false);
         this.successCancelTrade = false;
         this.onOpenUartHandler = new Handler();
+        this.onWaitingUserHandler = new Handler();
         initSDK();
     }
 
@@ -298,7 +299,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void DoTrade() {
-        enableTradingCancel(true);
         if (ActivityCompat.checkSelfPermission(WMX_Card.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(WMX_Card.this,
@@ -544,6 +544,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestWaitingUser() {// wait for card
             TRACE.d("onRequestWaitingUser()");
             onOpenUartHandler.removeCallbacksAndMessages(null);
+            onWaitingUserHandler.postDelayed(() -> {
+                enableTradingCancel(true);
+            }, 500);
             Status_lector.setText(getString(R.string.waiting_for_card));
         }
 
