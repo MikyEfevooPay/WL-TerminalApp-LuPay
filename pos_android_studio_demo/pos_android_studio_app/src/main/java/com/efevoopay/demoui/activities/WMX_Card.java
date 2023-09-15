@@ -945,7 +945,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestBatchData(String tlv) {
             TRACE.d(getString(R.string.end_transaction));
             String content = getString(R.string.batch_data);
-            // TRACE.d("\n\"onRequestBatchData(String tlv):\":\n" + tlv);
+            TRACE.d("\n\"onRequestBatchData(String tlv):\":\n" + tlv);
             content += tlv;
             Status_lector.setText(content);
             // call(tlv);
@@ -1184,7 +1184,27 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onRequestSelectEmvApp(ArrayList<String> appList) {
             TRACE.d("onRequestSelectEmvApp():" + appList.toString());
-            
+            appDialog = new Dialog(WMX_Card.this);
+            appDialog.setContentView(R.layout.wmx_card_select_emv_app);
+            appDialog.setTitle("Selecciona");
+            ListView appListView = (ListView) appDialog.findViewById(R.id.lst_emv_apps);
+            String[] appNameList = new String[appList.size()];
+            for (int i = 0; i < appNameList.length; ++i) {
+
+                appNameList[i] = appList.get(i);
+            }
+            appListView.setAdapter(new ArrayAdapter(WMX_Card.this, android.R.layout.simple_list_item_1, appNameList));
+            appListView.setOnItemClickListener((parent, view, position, id) -> {
+
+                pos.selectEmvApp(position);
+                TRACE.d("select emv app position = " + position);
+                appDialog.dismiss();
+            });
+            appDialog.findViewById(R.id.btn_cancel).setOnClickListener(v -> {
+                pos.cancelSelectEmvApp();
+                appDialog.dismiss();
+            });
+            appDialog.show();
         }
 
         @Override

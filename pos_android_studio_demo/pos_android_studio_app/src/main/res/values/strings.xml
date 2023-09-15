@@ -221,6 +221,7 @@
     <string name="disconnect">disconnect</string>
     <string name="start_emv">Start EMV</string>
     <string name="cancel">Cancel</string>
+    <string name="cancel_2">Cancelar</string>
     <string name="pin">PIN</string>
     <string name="cashback_amount">Cashback</string>
     <string name="confirm">Confirm</string>
@@ -354,6 +355,7 @@
     <string name="common_accept">Aceptar</string>
     <string name="common_continue">Continuar</string>
     <string name="common_close">Cerrar</string>
+    <string name="wmx_card_select_emv_app_title">Selecciona tipo de tarjeta</string>
     <!-- WMX Strings -->
     <string name="wmx_menu_transfer">Transacciones</string>
     <string name="wmx_menu_meses">Meses\nsin Intereses</string>

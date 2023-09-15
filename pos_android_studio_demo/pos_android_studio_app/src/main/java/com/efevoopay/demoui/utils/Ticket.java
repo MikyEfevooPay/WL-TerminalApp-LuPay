@@ -202,14 +202,13 @@ public class Ticket {
     }
 
     public void close() {
-        if (mPrinter != null) {
+        if (mPrinter == null) return;
             try {
                 mPrinter.stopPrint();
                 mPrinter.close();
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
     }
 
     public boolean isPrinterAvailable() {
