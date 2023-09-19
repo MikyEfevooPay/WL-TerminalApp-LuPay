@@ -1190,6 +1190,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             appDialog = new Dialog(WMX_Card.this);
             appDialog.setContentView(R.layout.wmx_card_select_emv_app);
             appDialog.setTitle("Selecciona");
+            appDialog.setCanceledOnTouchOutside(false);
             ListView appListView = (ListView) appDialog.findViewById(R.id.lst_emv_apps);
             String[] appNameList = new String[appList.size()];
             for (int i = 0; i < appNameList.length; ++i) {

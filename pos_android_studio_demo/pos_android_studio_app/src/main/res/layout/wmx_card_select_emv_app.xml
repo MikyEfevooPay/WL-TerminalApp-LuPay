@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="37px"
+    android:paddingTop="28px"
+    android:paddingBottom="28px"
+    android:paddingRight="37px"
+    android:background="@drawable/rounded_corner"
+    android:backgroundTint="#fff"
     android:orientation="vertical">
 
     <TextView
@@ -10,18 +16,33 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/wmx_card_select_emv_app_title"
+        android:layout_marginBottom="24px"
+        android:fontFamily="@font/dm_sans_medium"
+        android:textSize="30px"
         android:textAlignment="center"
         tools:ignore="MissingConstraints" />
 
     <ListView
         android:id="@+id/lst_emv_apps"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:textColor="#0F0F0F"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        />
 
     <Button
         android:id="@+id/btn_cancel"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel_2" />
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="#000"
+        android:fontFamily="@font/dm_sans_bold"
+        android:minHeight="50dip"
+        android:text="@string/cancel_2"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:layout_marginTop="32px"
+        android:textSize="22px"
+     />
 
 </LinearLayout>

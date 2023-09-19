@@ -49,8 +49,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
         txt_ksn=(TextView)findViewById(R.id.txtksn);
         txt_version=(TextView)findViewById(R.id.txtversion);
         txtmodelo=(TextView)findViewById(R.id.txtmodelo);
-        initialize = (Button) findViewById(R.id.WMX_btn_initialize_keys);
-        initialize.setOnClickListener(this);
+//        initialize = (Button) findViewById(R.id.WMX_btn_initialize_keys);
+//        initialize.setOnClickListener(this);
         txt_version.setText(BuildConfig.VERSION_NAME);
         txtmodelo.setText(Build.MODEL);
         intent = getIntent();
@@ -153,24 +153,24 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.WMX_btn_initialize_keys:
-                try {
-                    RSA rsa = new RSA();
-
-                    RSAData rsaD = new RSAData();
-                    rsaD = rsa.generateKeys("3082010902820100CF57041EC2E7399C2BBD6CB0E8EDFC126B7837442541BCE86CC2804F9D90FE06EAE65B07014D789ED17300540D665213054E3E3A2A16D7FE1CFCC1382AF1485C542469D2AB327522444BF1A1EF1D8B79D9E9317B87D3531B364A8FCD24C0C6476E534D0D89070EEE2CBC999F00C5BEF3B935719AB459BBEE4EA86FEBEAC0F02A4F25D4007BA948E7B1E4A0456EB77107C4FCDAC79125EEE5A9D039995B6111F339DB1296A21D9F2048A8213BE29CE36DF0338D1BC04C3D42C0F6965E9694AFB05203D0BC05E6113AA6DA20DF0AB23DEA631144A8891352D866CBA9423B71890A4FD2B2112CE7BB57081581816232CD831932834EF05AA050C6FEBD434E9512ED0203010001");
-
-                    _rsa=rsaD.getRsa();
-                    _pk=rsaD.getPublicKey();
-                    _tk=rsaD.getTk();
-
-                }catch (Throwable t){
-                    TRACE.d("error rsa: " + t);
-                }
-                getFetchManager().CallById(TPV_CONFIG);
-                break;
-        }
+//        switch (view.getId()){
+//            case R.id.WMX_btn_initialize_keys:
+//                try {
+//                    RSA rsa = new RSA();
+//
+//                    RSAData rsaD = new RSAData();
+//                    rsaD = rsa.generateKeys("3082010902820100CF57041EC2E7399C2BBD6CB0E8EDFC126B7837442541BCE86CC2804F9D90FE06EAE65B07014D789ED17300540D665213054E3E3A2A16D7FE1CFCC1382AF1485C542469D2AB327522444BF1A1EF1D8B79D9E9317B87D3531B364A8FCD24C0C6476E534D0D89070EEE2CBC999F00C5BEF3B935719AB459BBEE4EA86FEBEAC0F02A4F25D4007BA948E7B1E4A0456EB77107C4FCDAC79125EEE5A9D039995B6111F339DB1296A21D9F2048A8213BE29CE36DF0338D1BC04C3D42C0F6965E9694AFB05203D0BC05E6113AA6DA20DF0AB23DEA631144A8891352D866CBA9423B71890A4FD2B2112CE7BB57081581816232CD831932834EF05AA050C6FEBD434E9512ED0203010001");
+//
+//                    _rsa=rsaD.getRsa();
+//                    _pk=rsaD.getPublicKey();
+//                    _tk=rsaD.getTk();
+//
+//                }catch (Throwable t){
+//                    TRACE.d("error rsa: " + t);
+//                }
+//                getFetchManager().CallById(TPV_CONFIG);
+//                break;
+//        }
     }
 
     public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18){

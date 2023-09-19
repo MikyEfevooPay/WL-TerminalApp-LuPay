@@ -63,14 +63,14 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_modal_sendEmail"
+        android:stateListAnimator="@null"
+        android:text="Enviar"
         android:layout_width="match_parent"
         android:layout_height="60px"
         android:background="@drawable/rounded_corner"
         android:backgroundTint="#B9E0AB"
         android:fontFamily="@font/dm_sans_bold"
         android:minHeight="50dip"
-        android:stateListAnimator="@null"
-        android:text="Enviar"
         android:textAllCaps="false"
         android:textColor="#4AAC38"
         android:textSize="22px" />
