@@ -106,10 +106,11 @@
     <string name="no_card_detected">No card detected. Please insert or swipe card again and press check card.</string>
     <string name="icc_card_inserted">ICC Card Inserted</string>
     <string name="card_inserted">Card Inserted (Not ICC)</string>
-    <string name="bad_swipe">Bad Swipe. Please swipe again and press check card.</string>
+    <string name="bad_swipe">Tarjeta no detectada por banda magnética</string>
     <string name="card_swiped">Card Swiped: </string>
     <string name="mag_head_fail">Magnetic head fail</string>
     <string name="card_no_response">Check card no response</string>
+    <string name="card_removed">Tarjeta removida</string>
     <string name="card_swiped_track2_only">Card Swiped (Track 2 only):\n</string>
     <string name="nfc_track2">Card Tapped (Track 2 Emulation):\n</string>
     <string name="format_id">Format ID: </string>
@@ -159,9 +160,9 @@
     <string name="please_select_app">Please select app</string>
     <string name="transaction_result">Transaction Result</string>
     <string name="transaction_approved">Approved</string>
-    <string name="transaction_terminated">Terminated</string>
+    <string name="transaction_terminated">Tarjeta removida</string>
     <string name="transaction_declined">Declined</string>
-    <string name="transaction_cancel">Cancel</string>
+    <string name="transaction_cancel">Operación cancelada</string>
     <string name="transaction_capk_fail">Fail (CAPK fail)</string>
     <string name="transaction_not_icc">Fail (Not ICC card)</string>
     <string name="transaction_app_fail">Fail (App fail)</string>
@@ -189,7 +190,7 @@
     <string name="use_mag_stripe">Please use mag stripe</string>
     <string name="try_again">Please try again</string>
     <string name="refer_payment_device">Please refer to your payment pos</string>
-    <string name="try_another_interface">Please try another interface</string>
+    <string name="try_another_interface">Tarjeta no disponible</string>
     <string name="online_required">Online required</string>
     <string name="processing">Processing…</string>
     <string name="welcome">Welcome</string>

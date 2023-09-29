@@ -82,7 +82,7 @@ interface INTERNAL_QPOS_STATUS {
 public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private Button trading;
-    private TextView Total_Amount, Status_lector;
+    private TextView Total_Amount;
     private EditText Pruebaedittext;
     private String Amount, AmountToShow;
     private QPOSService pos;
@@ -176,7 +176,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             msi = Integer.parseInt(thisintent.getStringExtra("months"));
         }
 
-        Status_lector = (TextView) findViewById(R.id.wmx_status_lector);
         Total_Amount = (TextView) findViewById(R.id.wmx_text_total_Amount);
         Pruebaedittext = (EditText) findViewById(R.id.pruebaedittext);
         lin = findViewById(R.id.lyt_card);
@@ -281,7 +280,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         TRACE.d("** ResponseValidateResult " + TRACE.NEW_LINE + response);
         if (response.equals("00")) {
             ChangeViewToTicket();
-            Status_lector.setText(content);
         } else {
             ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
             onCancelTransaction(details.description);
@@ -592,7 +590,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             onWaitingUserHandler.postDelayed(() -> {
                 enableTradingCancel(true);
             }, 500);
-            Status_lector.setText(getString(R.string.waiting_for_card));
         }
 
         @Override
@@ -608,19 +605,17 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("FinalTradeType" + FinalTradeType + TRACE.NEW_LINE);
 
             if (result == QPOSService.DoTradeResult.NONE) {
-                Status_lector.setText(getString(R.string.no_card_detected));
                 onCancelTransaction("Tarjeta no detectada");
             } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
-                Status_lector.setText(getString(R.string.try_another_interface));
+                onCancelTransaction(getString(R.string.try_another_interface));
             } else if (result == QPOSService.DoTradeResult.ICC) {
                 enableTradingCancel(false);
-                Status_lector.setText(getString(R.string.icc_card_inserted));
                 TRACE.d("EMV ICC Start");
                 pos.doEmvApp(QPOSService.EmvOption.START);
             } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
-                Status_lector.setText(getString(R.string.card_inserted));
+                onCancelTransaction(getString(R.string.transaction_not_icc));
             } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
-                Status_lector.setText(getString(R.string.bad_swipe));
+
             } else if (result == QPOSService.DoTradeResult.MCR) {// Magnetic card
                 enableTradingCancel(false);
                 TRACE.d("Magnetic card: " + decodeData.toString());
@@ -629,7 +624,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         onCancelTransaction(Utils.errorPosDictionary.get(QPOSService.Error.UNKNOWN));
                         return;
                     }
-                Status_lector.setText(result.toString());
                 content = getString(R.string.card_swiped);
                 _track2MN = "";
                 String formatID = decodeData.get("formatID");
@@ -738,13 +732,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 Integer _9f = Integer.parseInt(pinKsn.substring(15, 20), 16);
                 ValidacionRequest(_track2MN.substring(0, 8), "MCR", "90", "", maskedPAN, _track2MN, _9f.toString(),
                         terminalTime);
-                // call(content);
-                // Status_lector.setText(content);
-                // autoDoTrade(0);
-
             } else if (result == QPOSService.DoTradeResult.NFC_ONLINE) {
-                // nfcLog = decodeData.get("nfcLog");
-                Status_lector.setText(result.toString());
                 TRACE.d("EMV NFC Start");
                 enableTradingCancel(false);
                 Beep.start();
@@ -892,7 +880,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
             TRACE.d("onRequestTime" + terminalTime);
-            Status_lector.setText(getString(R.string.request_terminal_time) + " " + terminalTime);
         }
 
         @Override
@@ -926,13 +913,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             } else if (displayMsg == QPOSService.Display.CARD_REMOVED) {
                 msg = "card removed";
             }
-            Status_lector.setText(msg);
         }
 
         @Override
         public void onRequestOnlineProcess(final String tlv) {
-            // TRACE.d("\nonRequestOnlineProcess \n" + tlv);
-            Status_lector.setText(R.string.request_data_to_server);
             List<TLV> parse = TLVParser.parse(tlv);
             // C0
             String onLineksn = TLVParser.searchTLV(parse, "C0").value;
@@ -960,12 +944,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String decodeData2 = pos.anlysEmvTLVData(tlv);
             // TRACE.d("\nanlysEmvTLVData(tlv):\n" + decodeData2);
 
-            if (isPinCanceled) {
-                Status_lector.setText(R.string.replied_failed);
-
-            } else {
-                Status_lector.setText(R.string.replied_success);
-            }
             try {
                 // analyData(tlv);// analy tlv ,get the tag you need
             } catch (Exception e) {
@@ -991,31 +969,14 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         @Override
         public void onRequestBatchData(String tlv) {
-            TRACE.d(getString(R.string.end_transaction));
-            String content = getString(R.string.batch_data);
-            TRACE.d("\n\"onRequestBatchData(String tlv):\":\n" + tlv);
-            content += tlv;
-            Status_lector.setText(content);
-            // call(tlv);
-            // autoDoTrade(0);
         }
 
         @Override
         public void onRequestTransactionResult(QPOSService.TransactionResult transactionResult) {
             TRACE.d("onRequestTransactionResult()" + transactionResult.toString());
             if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
-                // clearDisplay();
-                Status_lector.setText("CARD_REMOVED");
+                onCancelTransaction(getString(R.string.card_removed));
             }
-
-            // dismissDialog();
-
-            // dialog = new Dialog(mContext);
-            // dialog.setContentView(R.layout.alert_dialog);
-            // dialog.setTitle(R.string.transaction_result);
-            // TextView messageTextView = (TextView)
-            // dialog.findViewById(R.id.messageTextView);
-
             if (transactionResult == QPOSService.TransactionResult.APPROVED) {
                 TRACE.d("TransactionResult.APPROVED");
                 String message = getString(R.string.transaction_approved) + "\n" + getString(R.string.amount) + ": $"
@@ -1025,8 +986,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                  * message += getString(R.string.cashback_amount) + ": INR" + cashbackAmount;
                  * }
                  **/
-                // messageTextView.setText(message);
-                Status_lector.setText(message);
                 ICCTag = pos.getICCTag(QPOSService.EncryptType.PLAINTEXT, 1, 1, "5A");
                 String _pinpan = ICCTag.get("tlv").toString();
                 ICCTag = pos.getICCTag(QPOSService.EncryptType.PLAINTEXT, 1, 1, "57");
@@ -1056,78 +1015,40 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 // String(FileUtils.readAssetsLine("emv_profile_tlv_D30.xml",WMX_Card.this)));
 
             } else if (transactionResult == QPOSService.TransactionResult.TERMINATED) {
-                // clearDisplay();
-                Status_lector.setText(getString(R.string.transaction_terminated));
-                onCancelTransaction();
+                onCancelTransaction(getString(R.string.transaction_terminated));
             } else if (transactionResult == QPOSService.TransactionResult.DECLINED) {
-                Status_lector.setText(getString(R.string.transaction_declined));
-                onCancelTransaction();
+                onCancelTransaction(getString(R.string.transaction_declined));
             } else if (transactionResult == QPOSService.TransactionResult.CANCEL) {
-                TRACE.d("Cancel Transaction");
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.transaction_cancel));
+                onCancelTransaction(getString(R.string.transaction_cancel));
             } else if (transactionResult == QPOSService.TransactionResult.CAPK_FAIL) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.transaction_capk_fail));
+                onCancelTransaction(getString(R.string.transaction_capk_fail));
             } else if (transactionResult == QPOSService.TransactionResult.NOT_ICC) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.transaction_not_icc));
+                onCancelTransaction(getString(R.string.transaction_not_icc));
             } else if (transactionResult == QPOSService.TransactionResult.SELECT_APP_FAIL) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.transaction_app_fail));
+                onCancelTransaction(getString(R.string.transaction_app_fail));
             } else if (transactionResult == QPOSService.TransactionResult.DEVICE_ERROR) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.transaction_device_error));
+                onCancelTransaction(getString(R.string.transaction_device_error));
             } else if (transactionResult == QPOSService.TransactionResult.TRADE_LOG_FULL) {
-                onCancelTransaction();
-                // statusEditText.setText("pls clear the trace log and then to begin do trade");
-                Status_lector.setText("the trade log has fulled!pls clear the trade log!");
+                onCancelTransaction("the trade log has fulled!pls clear the trade log!");
             } else if (transactionResult == QPOSService.TransactionResult.CARD_NOT_SUPPORTED) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.card_not_supported));
+                onCancelTransaction(getString(R.string.card_not_supported));
             } else if (transactionResult == QPOSService.TransactionResult.MISSING_MANDATORY_DATA) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.missing_mandatory_data));
+                onCancelTransaction(getString(R.string.missing_mandatory_data));
             } else if (transactionResult == QPOSService.TransactionResult.CARD_BLOCKED_OR_NO_EMV_APPS) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.card_blocked_or_no_evm_apps));
+                onCancelTransaction(getString(R.string.card_blocked_or_no_evm_apps));
             } else if (transactionResult == QPOSService.TransactionResult.INVALID_ICC_DATA) {
-                onCancelTransaction();
-                Status_lector.setText(getString(R.string.invalid_icc_data));
+                onCancelTransaction(getString(R.string.invalid_icc_data));
             } else if (transactionResult == QPOSService.TransactionResult.FALLBACK) {
-                onCancelTransaction();
-                Status_lector.setText("trans fallback");
+                onCancelTransaction("trans fallback");
             } else if (transactionResult == QPOSService.TransactionResult.NFC_TERMINATED) {
-                onCancelTransaction();
+                onCancelTransaction("NFC Terminated");
                 TRACE.d("TransactionResult.NFC_TERMINATED");
-                // clearDisplay();
-                Status_lector.setText("NFC Terminated");
             } else if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
-                onCancelTransaction();
-                // clearDisplay();
-                Status_lector.setText("CARD REMOVED");
+                onCancelTransaction("CARD REMOVED");
             } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
-                onCancelTransaction();
-                // clearDisplay();
-                Status_lector.setText("TOKEN INVALID");
+                onCancelTransaction("TOKEN INVALID");
             }
 
-            /**
-             * onRequestTransactionResult
-             * 
-             * dialog.findViewById(R.id.confirmButton).setOnClickListener(new
-             * View.OnClickListener() {
-             * 
-             * @Override
-             *           public void onClick(View v) {
-             *           dismissDialog();
-             *           }
-             *           });
-             * 
-             *           dialog.show();
-             *           amount = "";
-             *           cashbackAmount = "";
-             **/
         }
 
         @Override
