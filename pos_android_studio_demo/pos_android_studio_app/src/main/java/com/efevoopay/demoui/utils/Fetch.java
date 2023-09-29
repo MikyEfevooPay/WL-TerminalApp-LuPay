@@ -70,7 +70,7 @@ public class Fetch implements IFetching {
     public void Call() {
         onRequestFetching(false);
         StringRequest stringRequest = new StringRequest(options.method,options.URL, response -> {
-            TRACE.d("CURR_INTERNAL_RESPONSE: " + response + TRACE.NEW_LINE + "BODY: " + jsonBody.toString());
+            TRACE.d("CURR_INTERNAL_RESPONSE: " + response + TRACE.NEW_LINE + "BODY: " + jsonBody.toString() + TRACE.NEW_LINE + "KEY: " + this.key);
             onRequestFetching(true);
             ResponseAsync.complete(response);
         }, error -> {

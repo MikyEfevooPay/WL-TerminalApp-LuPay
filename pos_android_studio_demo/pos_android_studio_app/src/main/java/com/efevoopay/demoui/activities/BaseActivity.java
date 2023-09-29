@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Handler;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -541,6 +543,13 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
 
     protected void startActivityMiddleware(Intent intent) {
         this.startActivityMiddleware(intent, null);
+    }
+
+
+    @SuppressLint("NewApi")
+    protected int getDisplayState() {
+        DisplayManager dm = (DisplayManager) this.getSystemService(Context.DISPLAY_SERVICE);
+        return dm.getDisplay(0).getState();
     }
 
     protected void startActivityMiddleware(Intent intent, @Nullable Bundle options) {

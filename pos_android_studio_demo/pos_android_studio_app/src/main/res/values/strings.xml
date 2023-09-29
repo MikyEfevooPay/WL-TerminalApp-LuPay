@@ -393,6 +393,8 @@
     <string name="wmx_ticket_tip">Propina</string>
     <string name="wmx_ticket_total">Total:</string>
     <string name="wmx_ticket_electronic_sign">Firmado electrónico</string>
+    <string name="wmx_ticket_contact_less_sign">Autorizado sin firma vía contactless </string>
+    <string name="wmx_ticket_physic_sign">Autorizado de forma Electrónica mediante firma física o número de identificador personal</string>
     <string name="wmx_ticket_footer">Por este pagaré me obligo incondicionalmente a pagar a la orden del banco acreditante el importe de este título. Este pagaré procede del contrato de apertura de crédito que el banco acreditante y el tarjetahabiente tienen celebrado.</string>
     <string name="wmx_ticket_resume_end">FIN DEL RESUMEN</string>
     <!-- TODO: Remove or change this placeholder text -->

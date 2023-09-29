@@ -13,8 +13,10 @@ import androidx.annotation.LayoutRes;
 import com.dspread.xpos.QPOSService;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -471,6 +473,12 @@ public class Utils {
 		}
 		MASK_CHAR = '*';
 		return _start ? unmaskedText + maskedText : maskedText + unmaskedText;
+	}
+
+	public static Date dateToUTC(Long timestamp) {
+		TimeZone timeZoneUTC = TimeZone.getDefault();
+		int offsetFromUTC = timeZoneUTC.getOffset(new Date().getTime()) * -1;
+		return new Date(timestamp + offsetFromUTC);
 	}
 
 }

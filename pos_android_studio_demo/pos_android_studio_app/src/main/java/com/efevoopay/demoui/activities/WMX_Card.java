@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -134,6 +135,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private DBManager dbManager;
     private Integer _Countpin = 0;
     private Handler onOpenUartHandler, onWaitingUserHandler;
+    private int validateTransactionCount;
 
     private static final int MAX_PIN_ATTEMPTS = 3;
 
@@ -200,6 +202,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         this.successCancelTrade = false;
         this.onOpenUartHandler = new Handler();
         this.onWaitingUserHandler = new Handler();
+        this.validateTransactionCount = 0;
         initSDK();
     }
 
@@ -230,7 +233,21 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     @Override
     public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
         if(error != null) {
-            TRACE.d("ENTRY CARD ERROR: " + error.result.toString());
+            String errorString = error.result.toString();
+            TRACE.d("ENTRY CARD ERROR: " + errorString);
+            if(errorString.toLowerCase(Locale.ROOT).contains("timeout")) {
+                if(error.key.equals(CALL_TRANSACTION)) {
+                    getFetchManager().CallById(VALIDATE_TRANSACTION);
+                } else if (error.key.equals(VALIDATE_TRANSACTION)) {
+                    if(this.validateTransactionCount >= 3) {
+                        onCancelTransaction(getFinalErrorMessage(error.result.toString()));
+                        return;
+                    }
+                    this.validateTransactionCount++;
+                    getFetchManager().CallById(VALIDATE_TRANSACTION);
+                }
+                return;
+            }
             onCancelTransaction(getFinalErrorMessage(error.result.toString()));
             return;
         }
@@ -244,6 +261,30 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 break;
             default:
                 break;
+        }
+    }
+
+    private void processTransaction(String response) {
+        TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
+        if (response.equals("00")) {
+            ChangeViewToTicket();
+        } else if (response.equals("")) {
+            esperarYCerrar();
+        } else {
+            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
+            onCancelTransaction(details.description);
+            getFetchManager().ForceClose();
+        }
+    }
+
+    private void processValidateTransaction(String response) {
+        TRACE.d("** ResponseValidateResult " + TRACE.NEW_LINE + response);
+        if (response.equals("00")) {
+            ChangeViewToTicket();
+            Status_lector.setText(content);
+        } else {
+            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
+            onCancelTransaction(details.description);
         }
     }
 
@@ -386,6 +427,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             intent.putExtra("v_subtotal", v_subtotal.toString());
         }
 
+        getFetchManager().clear();
+
         startActivityMiddleware(intent);
         finish();
     }
@@ -401,6 +444,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         transactionCancel = true;
         if(keyboardUtil != null)keyboardUtil.hide();
         closeService();
+        getFetchManager().clear();
+        this.validateTransactionCount = 0;
         Intent intent = new Intent(mContext, WMX_Transaction_Cancel.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("Amount", Amount);
         intent.putExtra("AmountToShow", AmountToShow);
@@ -1095,6 +1140,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
+            int DisplayStatus = getDisplayState();
+            if(DisplayStatus == Display.STATE_OFF) {
+                onCancelTransaction();
+                return;
+            }
             pos.setCustomTradeSound(TradeSoundType.Type.TONE_PROP_BEEP);
             super.onQposRequestPinResult(dataList, offlineTime);
             keyBoardList = dataList;
@@ -1936,30 +1986,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         _card = gntBackEnd._card;
         getFetchManager().CallById(CALL_TRANSACTION);
 
-    }
-
-    private void processTransaction(String response) {
-        TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
-        if (response.equals("00")) {
-            ChangeViewToTicket();
-        } else if (response.equals("")) {
-            esperarYCerrar();
-        } else {
-            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
-            onCancelTransaction(details.description);
-            getFetchManager().ForceClose();
-        }
-    }
-
-    private void processValidateTransaction(String response) {
-        TRACE.d("** ResponseValidateResult " + TRACE.NEW_LINE + response);
-        if (response.equals("00")) {
-            ChangeViewToTicket();
-            Status_lector.setText(content);
-        } else {
-            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
-            onCancelTransaction(details.description);
-        }
     }
 
     public void esperarYCerrar() {

@@ -96,7 +96,8 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
 
     private void getBody(JSONObject body) throws JSONException {
-        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        TRACE.d("date1: " + obj.format(date1) + TRACE.NEW_LINE + "date2: " + obj.format(date2));
         body.put("deviceid", ksn_posId);
         body.put("pantalla", "Historial");
         body.put("fechainicio", obj.format(date1));
@@ -189,9 +190,9 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         });
 
         dpDate.addOnPositiveButtonClickListener((selection) -> {
-            Pair<Long, Long> datesMilliseconds = (Pair<Long, Long>)dpDate.getSelection();
-            date1 = new Date(datesMilliseconds.first);
-            date2 = new Date(datesMilliseconds.second);
+            Pair<Long, Long> datesMilliseconds = (Pair<Long, Long>)selection;
+            date1 = Utils.dateToUTC(datesMilliseconds.first);
+            date2 = Utils.dateToUTC(datesMilliseconds.second);
             dpDate.dismiss();
             getFetchManager().CallById(TRANSACTION_HISTORY);
         });

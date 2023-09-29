@@ -20,11 +20,15 @@ import java.util.concurrent.CompletableFuture;
  * Clase general que maneja multiples Llamadas al backend en un activity
  * */
 public class FetchUIManager implements IFetchs {
+
+    public enum FetchResultType {
+     SUCCESS, PROCESSING, FAILED
+    }
     private List<Fetch> fetchs;
     private List<FetchEntity> Responses;
     private List<FetchEntity> Errors;
     private Context mContext;
-    private boolean isInternalFetching,forceFetchDone;
+    private boolean isInternalFetching,forceFetchDone, forcedClose;
 
     private void init() {
         fetchs = new ArrayList();
@@ -33,6 +37,7 @@ public class FetchUIManager implements IFetchs {
 
     private void clearEntities() {
         isInternalFetching = false;
+        forcedClose = false;
         Responses = new ArrayList();
         Errors = new ArrayList();
     }
@@ -52,6 +57,25 @@ public class FetchUIManager implements IFetchs {
         this.forceFetchDone = _forceFetchDone;
     }
 
+    public int getFetchCount() {
+        return this.fetchs.size();
+    }
+
+    public int getFetchCount(FetchResultType type) {
+        switch (type) {
+            case SUCCESS:
+                return Responses.size();
+            case PROCESSING:
+                return fetchs.size() - (Responses.size() + Errors.size());
+            case FAILED:
+                return Errors.size();
+        }
+        return 0;
+    }
+
+    public boolean AllFetchDone() {
+        return getFetchCount(FetchResultType.SUCCESS) == getFetchCount();
+    }
 
     @SuppressLint("NewApi")
     private void processFetch(Fetch _fetch, boolean all) {
@@ -90,7 +114,12 @@ public class FetchUIManager implements IFetchs {
     }
 
     public void ForceClose() {
+        this.forcedClose = true;
         this.ReturnResults();
+    }
+
+    public boolean hasForcedClose() {
+        return this.forcedClose;
     }
 
     @SuppressLint("NewApi")
