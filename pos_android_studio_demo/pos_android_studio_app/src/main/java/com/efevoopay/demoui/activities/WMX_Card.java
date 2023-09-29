@@ -235,16 +235,14 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String errorString = error.result.toString();
             TRACE.d("ENTRY CARD ERROR: " + errorString);
             if(errorString.toLowerCase(Locale.ROOT).contains("timeout")) {
-                if(error.key.equals(CALL_TRANSACTION)) {
-                    getFetchManager().CallById(VALIDATE_TRANSACTION);
-                } else if (error.key.equals(VALIDATE_TRANSACTION)) {
-                    if(this.validateTransactionCount >= 3) {
+                if (error.key.equals(VALIDATE_TRANSACTION)) {
+                    if(this.validateTransactionCount >= 7) {
                         onCancelTransaction(getFinalErrorMessage(error.result.toString()));
                         return;
                     }
                     this.validateTransactionCount++;
-                    getFetchManager().CallById(VALIDATE_TRANSACTION);
                 }
+                getFetchManager().CallById(VALIDATE_TRANSACTION);
                 return;
             }
             onCancelTransaction(getFinalErrorMessage(error.result.toString()));
