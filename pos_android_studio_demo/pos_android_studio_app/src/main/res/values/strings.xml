@@ -398,6 +398,10 @@
     <string name="wmx_ticket_physic_sign">Autorizado de forma Electrónica mediante firma física o número de identificador personal</string>
     <string name="wmx_ticket_footer">Por este pagaré me obligo incondicionalmente a pagar a la orden del banco acreditante el importe de este título. Este pagaré procede del contrato de apertura de crédito que el banco acreditante y el tarjetahabiente tienen celebrado.</string>
     <string name="wmx_ticket_resume_end">FIN DEL RESUMEN</string>
+    <string name="wmx_transaction_history_check_title">Respuesta no obtenida correctamente</string>
+    <string name="wmx_transaction_history_check_description">Parece que hubo un problema de conexión y la respuesta no fue obtenida correctamente. Puedes consultar si la transacción fue procesada en el historial.</string>
+    <string name="wmx_go_to_history">Ir a historial</string>
+    <string name="wmx_transaction_not_found">La transacción no fue encontrada</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

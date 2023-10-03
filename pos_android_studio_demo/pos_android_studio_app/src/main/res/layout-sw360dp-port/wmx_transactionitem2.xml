@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:background="@drawable/rounded_corner"
-        android:backgroundTint="#FFFFFF"
+        android:background="@drawable/change_item_background_transition"
+        android:id="@+id/lyt_transaction_item"
         android:paddingLeft="21px"
         android:paddingTop="14px"
         android:paddingRight="21px"

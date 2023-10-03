@@ -9,6 +9,7 @@ import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -50,7 +51,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     MaterialDatePicker dpDate;
     Date date1, date2;
     Intent intent;
-    private String ksn_posId;
+    private String ksn_posId, _ARQC;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
 
     private final String TRANSACTION_HISTORY = "getTransactionHistory";
@@ -79,6 +80,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
+        _ARQC = intent.getStringExtra("ARQC");
 
     }
 
@@ -129,7 +131,10 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             history_layout_empty.setVisibility(View.GONE);
             history_layout_items.setVisibility(View.VISIBLE);
             recyclerView = findViewById(R.id.transactionList);
-            TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this);
+            TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this, _ARQC);
+            if(!TextUtils.isEmpty(_ARQC) && !transactionItemAdapter.hasFoundARQC()) {
+                showAlert("error", getString(R.string.wmx_transaction_not_found));
+            }
             recyclerView.setAdapter(transactionItemAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {
@@ -138,6 +143,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             history_layout_items.setVisibility(View.GONE);
             history_layout_empty.setVisibility(View.VISIBLE);
         }
+
     }
 
 
