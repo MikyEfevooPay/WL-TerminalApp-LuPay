@@ -147,13 +147,13 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             history_layout_empty.setVisibility(View.GONE);
             history_layout_items.setVisibility(View.VISIBLE);
             recyclerView = findViewById(R.id.transactionList);
-            TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this, _ARQC, hasTransactionFoundPromise);
             hasTransactionFoundPromise.thenApply((hasFound) -> {
                 if(!TextUtils.isEmpty(_ARQC) && !hasFound) {
                     showAlert("error", getString(R.string.wmx_transaction_not_found));
                 }
                 return null;
             });
+            TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this, _ARQC, hasTransactionFoundPromise);
             recyclerView.setAdapter(transactionItemAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {

@@ -33,12 +33,15 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
 
     private CompletableFuture<Boolean> hasTransactionFoundPromise;
 
+    private boolean hasFound;
+
     public TransactionItemAdapter2(Context ct, ArrayList<Transaction> transactions, TransactionsViewInterface transactionsViewInterface, String currARQC, CompletableFuture<Boolean> hasTransactionFoundPromise){
         context =ct;
         _transactions = transactions;
         this.transactionsViewInterface = transactionsViewInterface;
         this.currARQC = currARQC;
         this.hasTransactionFoundPromise = hasTransactionFoundPromise;
+        this.hasFound = false;
     }
 
     @NonNull
@@ -59,8 +62,9 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
         myViewHolder.tv_time.setText(_transactions.get(i).get_time());
         myViewHolder.tv_card.setText("**** "+_transactions.get(i).get_card());
 
-        if(!TextUtils.isEmpty(currARQC) && _transactions.get(i).get_arqc().equals(currARQC)) {
+        if(!TextUtils.isEmpty(currARQC) && _transactions.get(i).get_arqc().equals(currARQC) && !hasFound) {
             TRACE.d("Found ARQC: " + currARQC);
+            hasFound = true;
             hasTransactionFoundPromise.complete(true);
             TransitionDrawable background =  (TransitionDrawable) myViewHolder.mainView.getBackground();
             new Handler().postDelayed(() -> {
