@@ -1,5 +1,6 @@
 package com.efevoopay.demoui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 public class WMX_Transaccion extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
 
@@ -54,8 +56,11 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     private String ksn_posId, _ARQC;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
 
+    private CompletableFuture<Boolean> hasTransactionFoundPromise;
+
     private final String TRANSACTION_HISTORY = "getTransactionHistory";
 
+    @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,6 +86,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
         _ARQC = intent.getStringExtra("ARQC");
+        hasTransactionFoundPromise = new CompletableFuture();
 
     }
 
@@ -88,6 +94,15 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     protected void onStart() {
         super.onStart();
         getFetchManager().CallAll();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!TextUtils.isEmpty(_ARQC)) {
+            startActivityMiddleware(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+           return;
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -124,6 +139,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
 
 
+    @SuppressLint("NewApi")
     private void setItems() {
         if(transactions.size() > 0) {
             btn_date.setVisibility(View.VISIBLE);
@@ -131,10 +147,13 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             history_layout_empty.setVisibility(View.GONE);
             history_layout_items.setVisibility(View.VISIBLE);
             recyclerView = findViewById(R.id.transactionList);
-            TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this, _ARQC);
-            if(!TextUtils.isEmpty(_ARQC) && !transactionItemAdapter.hasFoundARQC()) {
-                showAlert("error", getString(R.string.wmx_transaction_not_found));
-            }
+            TransactionItemAdapter2 transactionItemAdapter = new TransactionItemAdapter2(this,transactions, this, _ARQC, hasTransactionFoundPromise);
+            hasTransactionFoundPromise.thenApply((hasFound) -> {
+                if(!TextUtils.isEmpty(_ARQC) && !hasFound) {
+                    showAlert("error", getString(R.string.wmx_transaction_not_found));
+                }
+                return null;
+            });
             recyclerView.setAdapter(transactionItemAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {

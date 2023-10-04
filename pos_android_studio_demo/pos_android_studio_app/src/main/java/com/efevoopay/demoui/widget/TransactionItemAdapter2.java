@@ -1,5 +1,6 @@
 package com.efevoopay.demoui.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -22,19 +23,22 @@ import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Transaction;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionItemAdapter2.MyViewHolder> {
     private final TransactionsViewInterface transactionsViewInterface;
     protected String currARQC;
-    private boolean foundARQC;
     Context context;
     ArrayList<Transaction> _transactions = new ArrayList<>();
 
-    public TransactionItemAdapter2(Context ct,ArrayList<Transaction> transactions, TransactionsViewInterface transactionsViewInterface, String currARQC){
+    private CompletableFuture<Boolean> hasTransactionFoundPromise;
+
+    public TransactionItemAdapter2(Context ct, ArrayList<Transaction> transactions, TransactionsViewInterface transactionsViewInterface, String currARQC, CompletableFuture<Boolean> hasTransactionFoundPromise){
         context =ct;
         _transactions = transactions;
         this.transactionsViewInterface = transactionsViewInterface;
         this.currARQC = currARQC;
+        this.hasTransactionFoundPromise = hasTransactionFoundPromise;
     }
 
     @NonNull
@@ -46,6 +50,7 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
         return new MyViewHolder(view, transactionsViewInterface);
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_auth.setText(_transactions.get(i).get_auth());
@@ -56,11 +61,13 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
 
         if(!TextUtils.isEmpty(currARQC) && _transactions.get(i).get_arqc().equals(currARQC)) {
             TRACE.d("Found ARQC: " + currARQC);
-            foundARQC = true;
+            hasTransactionFoundPromise.complete(true);
             TransitionDrawable background =  (TransitionDrawable) myViewHolder.mainView.getBackground();
             new Handler().postDelayed(() -> {
                 background.reverseTransition(300);
             }, 500);
+        } else if ((i + 1) == _transactions.size()) {
+            hasTransactionFoundPromise.complete(false);
         }
 
         if(_transactions.get(i).get_redtarj().equals("MC")){
@@ -82,8 +89,6 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
     public int getItemCount() {
         return _transactions.size();
     }
-
-    public boolean hasFoundARQC() { return foundARQC; }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 

@@ -1927,6 +1927,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     public void procesofinal(String entrada, String entrymode, String emv, String redtarjeta, String tipotarjeta,
             String pan, String track2, String counter, String time_txn) {
+        if(transactionCancel || checkHistory) return;
         _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2), Integer.parseInt(counter), cursor);
         TransExit = gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
                 _encryptblumon.getTrack2(), _encryptblumon.getCrc32Track2(), _encryptblumon.getKsn(),
