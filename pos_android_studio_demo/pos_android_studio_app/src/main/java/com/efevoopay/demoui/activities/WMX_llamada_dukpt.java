@@ -3,6 +3,7 @@ package com.efevoopay.demoui.activities;
 import com.efevoopay.demoui.utils.CorteCaja;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Transaction;
+import com.efevoopay.demoui.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,7 @@ public class WMX_llamada_dukpt {
                 //TRACE.d("data" +  TRACE.NEW_LINE + data.toString());
                 if(!data.getString("tipotxn").equals("A")){
                     Transaction _data = new Transaction(
+                            Utils.tryIntParse(data.getString("id")),
                             data.getString("noAuth"),
                             data.getString("date"),
                             data.getString("hour"),
@@ -38,7 +40,10 @@ public class WMX_llamada_dukpt {
                             data.getString("msi"),
                             data.getString("aid"),
                             data.getString("arqc"),
-                            data.getString("numref"));
+                            data.getString("numref"),
+                            data.getString("emisor"),
+                            data.getString("nip"),
+                            data.getString("entrada"));
                     this.transactions.add(_data);
                 }
             }

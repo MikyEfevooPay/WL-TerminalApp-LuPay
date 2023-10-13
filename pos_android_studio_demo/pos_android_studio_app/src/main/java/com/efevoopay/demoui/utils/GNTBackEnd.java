@@ -21,6 +21,10 @@ public class GNTBackEnd {
     public String _redtarj="";
     public String _tiptarj="";
     public String _card="";
+    public String emisor="";
+    public String nip="";
+    public String entrada="";
+    public String pan="";
     private static HashMap TRANS_TYPE_TITLES;
     public static final String TRANS_CAN_TYPE = "CAN";
     public static final String TRANS_DEV_TYPE = "DEV";
@@ -89,12 +93,14 @@ public class GNTBackEnd {
         }
         return  dukpt;
     }
-    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC,String _tamtrack2, Cursor cursor){
+    public String transaccion(String _entrada,String _entrymode,String _pinpan,String _Track2,String _crc32,String _ksn,String _Counter,String _d4,String _emv,Integer _msi,String _pan,String _deviceid,String _redtarjeta,String _tipotarjeta,String _propina,String _type_trans,String _time_txn,String _p11,String _AID,String _ARQC,String _tamtrack2, Cursor cursor,String _emisor,Integer _nip){
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("tpv", Build.MODEL+"Android smart POS");
             jsonBody.put("deviceid",_deviceid);
             jsonBody.put("entrada", _entrada);
+            jsonBody.put("emisor", _emisor);
+            jsonBody.put("nip", String.valueOf(_nip));
             jsonBody.put("tipo",tipo(_type_trans));
             jsonBody.put("track2", _Track2);
             jsonBody.put("crc32", _crc32);
@@ -129,6 +135,10 @@ public class GNTBackEnd {
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
             _card=jsonBody.getString("pinPan").toString();
+            emisor=jsonBody.getString("emisor").toString();
+            nip=jsonBody.getString("nip").toString();
+            entrada=jsonBody.getString("entrada").toString();
+            pan=jsonBody.getString("pan").toString();
             //TRACE.d(TRACE.NEW_LINE +  jsonBody.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);
             return jsonBody.toString();
         } catch (JSONException e) {
@@ -202,7 +212,7 @@ public class GNTBackEnd {
             return "";
         }
     }
-    public String tipotxn(String type_trans){
+    public static String tipotxn(String type_trans){
         if (type_trans.equals("venta")){
             return "VN";
         }else if(type_trans.equals("MSI")) {

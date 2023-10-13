@@ -36,6 +36,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
 
     AppCompatButton btn_ticket_final;
@@ -44,7 +49,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     private String type_transaction;
     private boolean isTicketPrinted;
     String v_total, v_time, v_card, v_type_transaction, v_redtarjeta, v_tipotarjeta, v_AID, v_ARQC, v_tip, v_subtotal,
-            v_months, v_months_total, card_provider, _noauth, _approve, currEmail;
+            v_months, v_months_total, card_provider, _noauth, _approve, currEmail, card_emisor, card_nip, card_entrada;
+    private int trans_id;
     ProgressDialog loader;
     private String ksn_posId;
     private DBManager dbManager;
@@ -87,7 +93,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch history = manager.addFetch(TRANSACTION_TICKET_SEND_EMAIL, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
+        Fetch history = manager.addFetch(TRANSACTION_TICKET_SEND_EMAIL,
+                new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
     }
 
@@ -103,24 +110,32 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             body.put("subject", "Ticket MSI");
             body.put("tipo", "msi");
         }
+        DateFormat formatemail = new SimpleDateFormat("ddMMyyHHmmss");
+        Date datemail = new Date();
+        body.put("idemail", "Ticket" + formatemail.format(datemail).toString());
         body.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
         body.put("msi", Utils.isNull(v_months, "0"));
         body.put("amount", Utils.isNull(v_subtotal, "N/A"));
         body.put("tip", Utils.isNull(v_tip, "N/A"));
         body.put("total", Utils.isNull(v_total, "N/A"));
-        body.put("pay_method", Utils.isNull(card_provider, "N/A"));
+        body.put("pay_method", Utils.isNull(v_tipotarjeta + "/" + card_emisor + "/" + card_provider, "N/A"));
         body.put("card", Utils.isNull(v_card, "N/A"));
         body.put("payment_date", Utils.isNull(v_time, "N/A"));
+        body.put("idrecibo", Utils.isNull("", "N/A"));
+        body.put("afiliacion", Utils.isNull(cursor.getString(6), "N/A"));
+        body.put("autorizacion", Utils.isNull("", "N/A"));
         body.put("address", Utils.isNull(cursor.getString(8), "N/A"));
         body.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
-        body.put("arqc", Utils.isNull(v_ARQC, "N/A"));
-        body.put("aid", Utils.isNull(v_AID, "N/A"));
+        body.put("arqc", Utils.isNull(Utils.maskText(v_ARQC, 4), "N/A"));
+        body.put("aid", Utils.isNull(Utils.maskText(v_AID, 4), "N/A"));
+        body.put("singtype", Utils.isNull(tipofirma(card_nip, card_entrada), ""));
     }
 
     @Override
     public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
         super.onFetchCurrentResult(entity, error);
-        if(entity.result == null) return;
+        if (entity.result == null)
+            return;
         switch (entity.key) {
             case TRANSACTION_TICKET_SEND_EMAIL:
                 showAlert("success", "¡Ticket enviado con éxito!");
@@ -129,7 +144,6 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 break;
         }
     }
-
 
     private void initInfo() {
 
@@ -159,7 +173,10 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         v_ARQC = thisintent.getStringExtra("v_ARQC");
         _noauth = thisintent.getStringExtra("v_noauth");
         _approve = thisintent.getStringExtra("v_approve");
-
+        card_emisor = thisintent.getStringExtra("v_emisor");
+        card_nip = thisintent.getStringExtra("v_nip");
+        card_entrada = thisintent.getStringExtra("v_entrada");
+        trans_id = thisintent.getIntExtra("v_trans_id", 0);
         ticket_tv_total_value.setText(v_total);
         ticket_tv_time_value.setText(v_time);
         ticket_tv_card_value.setText(v_card);
@@ -245,7 +262,12 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 .setAID(v_AID)
                 .setKsn_posId(ksn_posId)
                 .setCursor(cursor)
-                .setMsi(v_months);
+                .setMsi(v_months)
+                .setCard_emisor(card_emisor)
+                .setCard_nip(card_nip)
+                .setCard_entrada(card_entrada)
+                .setCard_singtype(tipofirma(card_nip, card_entrada))
+                .setTransId(trans_id);
     }
 
     @Override

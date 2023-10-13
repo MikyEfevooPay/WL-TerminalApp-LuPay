@@ -15,6 +15,7 @@ import java.util.Locale;
 public class Ticket {
 
     Cursor cursor;
+    private int trans_id;
     private String trans_type, // Tipo de transaccion - Venta, Cancelacion, MSI, Corte
             approve, // Numero de referencia
             status, // Aprobada, cancelada
@@ -28,7 +29,11 @@ public class Ticket {
             ARQC, // ARQC
             AID, // AID
             ksn_posId, // Numero de serie
-            msi; // MSI
+            msi,// MSI
+            card_emisor, //Emisor de banco
+            card_nip, //NIP tarjeta
+            card_entrada, //Entrda tarjeta
+            card_singtype; //Leyenda firma
     private boolean printeravailable;
     private android.content.Context ctx;
     private PrinterDevice mPrinter;
@@ -47,6 +52,8 @@ public class Ticket {
     }
 
     // Getters
+
+    public int getTrans_id() { return this.trans_id; }
     public String getTrans_type() {
         return this.trans_type.toUpperCase(Locale.ROOT);
     }
@@ -107,7 +114,21 @@ public class Ticket {
         return this.msi;
     }
 
+    public String getCard_emisor() {
+        return card_emisor;
+    }
+
+    public String getCard_nip() {return card_nip; }
+
+    public String getCard_entrada() {return card_entrada; }
+
+    public String getCard_singtype() {return card_singtype; }
+
     // Setters
+    public Ticket setTransId(int trans_id) {
+        this.trans_id = trans_id;
+        return this;
+    }
     public Ticket setTrans_Type(String trans_type) {
         this.trans_type = trans_type;
         return this;
@@ -180,6 +201,22 @@ public class Ticket {
 
     public Ticket setMsi(String msi) {
         this.msi = msi;
+        return this;
+    }
+    public Ticket setCard_emisor(String card_emisor) {
+        this.card_emisor = card_emisor;
+        return this;
+    }
+    public Ticket setCard_nip(String card_nip) {
+        this.card_nip = card_nip;
+        return this;
+    }
+    public Ticket setCard_entrada(String card_entrada) {
+        this.card_entrada = card_entrada;
+        return this;
+    }
+    public Ticket setCard_singtype(String card_singtype) {
+        this.card_singtype = card_singtype;
         return this;
     }
 

@@ -250,6 +250,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(WMX_Transaccion.this, WMX_Transaction_Desc.class);
+        intent.putExtra("id", transactions.get(position).get_id());
         intent.putExtra("auth", transactions.get(position).get_auth());
         intent.putExtra("date", transactions.get(position).get_date2());
         intent.putExtra("time", transactions.get(position).get_time());
@@ -264,6 +265,9 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         intent.putExtra("aid", transactions.get(position).get_aid());
         intent.putExtra("arqc", transactions.get(position).get_arqc());
         intent.putExtra("approve", transactions.get(position).get_approve());
+        intent.putExtra("emisor", transactions.get(position).get_emisor());
+        intent.putExtra("nip", transactions.get(position).get_nip());
+        intent.putExtra("entrada", transactions.get(position).get_entrada());
         intent.putExtra("ksn_posId",ksn_posId);
 
         startActivity(intent);

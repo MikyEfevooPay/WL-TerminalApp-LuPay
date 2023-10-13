@@ -419,4 +419,7 @@
     <string name="wmx_transaction_MSI">Venta MSI</string>
     <string name="wmx_transaction_CANMSI">Cancelación MSI</string>
     <string name="wmx_ajustes_initialization">Activación Manual</string>
+    <string name="wmx_transaction_ticket_client_sign">Autorizado de forma Física mediante firma o número de identificación personal.</string>
+    <string name="wmx_transaction_ticket_contactless_sign">Autotizado sin firma vía contactless</string>
+    <string name="wmx_transaction_ticket_electronic_sign">Autotizado vía firma electrónica</string>
 </resources>

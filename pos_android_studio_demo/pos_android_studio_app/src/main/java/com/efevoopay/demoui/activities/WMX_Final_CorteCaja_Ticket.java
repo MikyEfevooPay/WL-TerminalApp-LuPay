@@ -35,6 +35,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnClickListener {
 
@@ -119,8 +123,11 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     }
 
     private void getBody(JSONObject body) throws JSONException {
+        DateFormat formatemail = new SimpleDateFormat("ddMMyyHHmmss");
+        Date datemail = new Date();
         body.put("correo", currEmail);
         body.put("subject", "Corte de caja");
+        body.put("idemail", "Corte"+formatemail.format(datemail).toString());
         body.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
         body.put("subtotal", Utils.isNull(corte, "N/A"));
         body.put("propina", Utils.isNull( tip, "N/A"));

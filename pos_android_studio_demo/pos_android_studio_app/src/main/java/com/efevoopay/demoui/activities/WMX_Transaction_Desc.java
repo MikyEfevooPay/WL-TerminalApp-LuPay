@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 
+import com.dspread.xpos.Util;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.FetchOptions;
@@ -43,14 +44,19 @@ import com.efevoopay.demoui.utils.Ticket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickListener {
 
     TextView tp_tv_trans_type, tp_tv_auth, tp_tv_amount, tp_tv_tip, tp_tv_total, tp_tv_card, tp_tv_date_time,
             tp_tv_approve, tp_tv_tip_label, tp_tv_total_label, tp_tv_tipotarjeta, tp_tv_AID, tp_tv_ARQC;
     ImageView tp_iv_trans_type, tp_iv_process;
     LinearLayout tp_ll_content_card, lyt_transaction_tip, lyt_historial_details_email;
-    private int transaction_type;
-    private String card_provider, type_transaction, v_months, tipotarjeta, currEmail;
+    private int transaction_type, trans_id;
+    private String card_provider, type_transaction, v_months, tipotarjeta, currEmail, card_emisor, nip, entrada;
     Context mContext;
     private String ksn_posId;
     ProgressDialog loader;
@@ -78,7 +84,8 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch history = manager.addFetch(TRANSACTION_SEND_EMAIL, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
+        Fetch history = manager.addFetch(TRANSACTION_SEND_EMAIL,
+                new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
     }
 
@@ -95,24 +102,33 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             body.put("subject", "Ticket MSI");
             body.put("tipo", "msi");
         }
+        DateFormat formatemail = new SimpleDateFormat("ddMMyyHHmmss");
+        Date datemail = new Date();
+        body.put("idemail", "Ticket" + formatemail.format(datemail).toString());
         body.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
         body.put("msi", Utils.isNull(v_months, "N/A"));
         body.put("amount", Utils.isNull(tp_tv_amount.getText().toString(), "N/A"));
         body.put("tip", Utils.isNull(tp_tv_tip.getText().toString(), "N/A"));
         body.put("total", Utils.isNull(tp_tv_total.getText().toString(), "N/A"));
-        body.put("pay_method", Utils.isNull(card_provider, "N/A"));
+        body.put("pay_method", Utils.isNull(tipotarjeta + "/" + card_emisor + "/" + card_provider, "N/A"));
+        body.put("idrecibo", Utils.isNull(tp_tv_auth.getText().toString(), "N/A"));
+        body.put("afiliacion", Utils.isNull(cursor.getString(6), "N/A"));
+        body.put("autorizacion", Utils.isNull(tp_tv_approve.getText().toString(), "N/A"));
         body.put("card", Utils.isNull(tp_tv_card.getText().toString(), "N/A"));
         body.put("payment_date", Utils.isNull(tp_tv_date_time.getText().toString(), "N/A"));
         body.put("address", Utils.isNull(cursor.getString(8), "N/A"));
         body.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
-        body.put("arqc", Utils.isNull(tp_tv_ARQC.getText().toString(), "N/A"));
-        body.put("aid", Utils.isNull(tp_tv_AID.getText().toString(), "N/A"));
+        body.put("arqc", Utils.isNull(Utils.maskText(tp_tv_ARQC.getText().toString(), 4), "N/A"));
+        body.put("aid", Utils.isNull(Utils.maskText(tp_tv_AID.getText().toString(), 4), "N/A"));
+        body.put("singtype", Utils.isNull(tipofirma(nip, entrada), ""));
+
     }
 
     @Override
     public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
         super.onFetchCurrentResult(entity, error);
-        if(entity.result == null) return;
+        if (entity.result == null)
+            return;
         switch (entity.key) {
             case TRANSACTION_SEND_EMAIL:
                 showAlert("success", "¡Ticket enviado con éxito!");
@@ -153,7 +169,12 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                 .setAID(tp_tv_AID.getText().toString())
                 .setKsn_posId(ksn_posId)
                 .setCursor(cursor)
-                .setMsi(v_months);
+                .setMsi(v_months)
+                .setCard_emisor(card_emisor)
+                .setCard_entrada(entrada)
+                .setCard_nip(nip)
+                .setCard_singtype(tipofirma(nip, entrada))
+                .setTransId(trans_id);
     }
 
     private void onFinish() {
@@ -258,6 +279,10 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         msi = intent.getStringExtra("msi");
         aid = intent.getStringExtra("aid");
         arqc = intent.getStringExtra("arqc");
+        card_emisor = intent.getStringExtra("emisor");
+        trans_id = intent.getIntExtra("id", 0);
+        nip = intent.getStringExtra("nip");
+        entrada = intent.getStringExtra("entrada");
 
         approve = intent.getStringExtra("approve");
         ksn_posId = intent.getStringExtra("ksn_posId");
@@ -316,7 +341,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             type_transaction = GNTBackEnd.TRANS_MSI_TYPE;
             tp_tv_trans_type.setText(GNTBackEnd.getTitle(GNTBackEnd.TRANS_MSI_TYPE));
             tp_tv_total_label.setText(v_months + " MSI");
-            tp_tv_amount.setText(GNTBackEnd.Amount_msi(total, v_months)  + " MXN");
+            tp_tv_amount.setText(GNTBackEnd.Amount_msi(total, v_months) + " MXN");
             transaction_type = 0;
             lyt_transaction_tip.setVisibility(View.GONE);
         }
@@ -333,11 +358,10 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_tipotarjeta.setText("Tarjeta " + tipotarjeta);
         tp_tv_auth.setText(auth);
 
-        tp_tv_total.setText(total  + " MXN");
+        tp_tv_total.setText(total + " MXN");
         tp_tv_card.setText("**** " + card);
         tp_tv_date_time.setText(date + " " + time);
         tp_tv_approve.setText(approve);
-
 
         dbManager = new DBManager(mContext);
         dbManager.open();

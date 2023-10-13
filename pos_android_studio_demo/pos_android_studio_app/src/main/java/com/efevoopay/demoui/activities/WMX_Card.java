@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -70,6 +71,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import libdukpt.DUKPK2009_CBC;
 
@@ -131,9 +133,14 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String _card = "";
     private String _tiptar = "";
     private String _redtar = "";
+    private String _emisor = "";
+    private Integer _nip = 0;
+    private String _pan = "";
+    public String _entrada = "";
     private String _AID = "N/A";
     private String _ARQC = "N/A";
     private String _9F41 = "";
+    private int trans_id;
     Cursor cursor;
     private DBManager dbManager;
     private Integer _Countpin = 0;
@@ -166,6 +173,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         ksn_posId = thisintent.getStringExtra("ksn_posId");
         _Propina = thisintent.getStringExtra("propina");
         _approve = thisintent.getStringExtra("approve");
+        trans_id = thisintent.getIntExtra("trans_id", 0);
         TRACE.d("_Propina:" + _Propina);
         v_months_total = thisintent.getStringExtra("months_total");
         v_subtotal = thisintent.getStringExtra("subtotal");
@@ -211,20 +219,20 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         initSDK();
     }
 
-
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch call = manager.addFetch(CALL_TRANSACTION, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/iso/gral", Request.Method.POST));
+        Fetch call = manager.addFetch(CALL_TRANSACTION,
+                new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/iso/gral", Request.Method.POST));
         call.setSetBodyListenner(this::getCallBody);
-        Fetch validate = manager.addFetch(VALIDATE_TRANSACTION, new FetchOptions(Utils.TERMINAL_API + "/efevoo/tpv/transaccion", Request.Method.POST));
+        Fetch validate = manager.addFetch(VALIDATE_TRANSACTION,
+                new FetchOptions(Utils.TERMINAL_API + "/efevoo/tpv/transaccion", Request.Method.POST));
         validate.setSetBodyListenner(this::getValidateBody);
     }
 
-
     private void getCallBody(JSONObject body) throws JSONException {
-        JSONObject newBody =  new JSONObject(TransExit);
+        JSONObject newBody = new JSONObject(TransExit);
         Iterator<String> keys = newBody.keys();
-        while(keys.hasNext()) {
+        while (keys.hasNext()) {
             String key = keys.next();
             body.put(key, newBody.get(key));
         }
@@ -233,15 +241,17 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private void getValidateBody(JSONObject body) throws JSONException {
         body.put("deviceid", ksn_posId);
         body.put("arqc", _ARQC);
+        body.put("pan", _pan);
+        body.put("tipotxn", GNTBackEnd.tipotxn(type_transaction));
     }
 
     @Override
     public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
-        if(error != null) {
+        if (error != null) {
             String errorString = error.result.toString();
             TRACE.d("ENTRY CARD ERROR: " + errorString);
             if (error.key.equals(VALIDATE_TRANSACTION)) {
-                if(this.validateTransactionErrorCount >= MAX_CALL_ITERATE) {
+                if (this.validateTransactionErrorCount >= MAX_CALL_ITERATE) {
                     onCheckTransactionHistory(_ARQC);
                     return;
                 }
@@ -250,7 +260,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             esperarYCerrar();
             return;
         }
-        if(entity.result == null) return;
+        if (entity.result == null)
+            return;
         switch (entity.key) {
             case CALL_TRANSACTION:
                 processTransaction(entity.result.toString());
@@ -268,7 +279,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         if (response.equals("00")) {
             ChangeViewToTicket();
         } else if (response.equals("")) {
-            if(this.validateTransactionEmptyResponse >= MAX_CALL_ITERATE) {
+            if (this.validateTransactionEmptyResponse >= MAX_CALL_ITERATE) {
                 onCheckTransactionHistory(_ARQC);
                 return;
             }
@@ -290,11 +301,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onRequestsFetching(boolean isFetching) {
-        if(isFetching){
+        if (isFetching) {
             ChangeViewtoProccess();
         }
     }
-
 
     @Override
     public void onDestroy() {
@@ -304,7 +314,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void closeService() {
-        if(QPOS_STATUS == INTERNAL_QPOS_STATUS.DISCONNECTED) return;
+        if (QPOS_STATUS == INTERNAL_QPOS_STATUS.DISCONNECTED)
+            return;
         QPOS_STATUS = INTERNAL_QPOS_STATUS.DISCONNECTED;
         this.successCancelTrade = true;
         this.onOpenUartHandler.removeCallbacksAndMessages(null);
@@ -326,7 +337,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        if(isCardProcesing || checkHistory) return;
+        if (isCardProcesing || checkHistory)
+            return;
         super.onBackPressed();
     }
 
@@ -348,7 +360,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         isPinCanceled = false;
         if (posType == POS_TYPE.UART) {
             pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP_UNALLOWED_LOW_TRADE);
-          pos.doTrade(60);
+            pos.doTrade(60);
         }
     }
 
@@ -359,7 +371,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         pos.setDeviceAddress(blueTootchAddress);
         pos.openUart();
         onOpenUartHandler.postDelayed(() -> {
-            //En caso de que no se abra correctamente el serial se cancela la transaccion
+            // En caso de que no se abra correctamente el serial se cancela la transaccion
             TRACE.d("onOpenUartHandler");
             onCancelTransaction(Utils.errorPosDictionary.get(QPOSService.Error.TIMEOUT));
         }, 7000);
@@ -373,7 +385,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private void open(QPOSService.CommunicationMode mode) {
         MyPosListener listener = new MyPosListener();
-        pos = QPOSService.getInstance(this,mode);
+        pos = QPOSService.getInstance(this, mode);
         pos.setCustomTradeSound(TradeSoundType.Type.TONE_CDMA_SIGNAL_OFF);
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
@@ -413,6 +425,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         intent.putExtra("v_noauth", _noAuth);
         intent.putExtra("v_approve", _approve);
         intent.putExtra("ksn_posId", ksn_posId);
+        intent.putExtra("v_emisor", _emisor);
+        intent.putExtra("v_nip", String.valueOf(_nip));
+        intent.putExtra("v_entrada", _entrada);
+        intent.putExtra("v_trans_id", trans_id);
 
         if (type_transaction.equals("MSI")) {
             String v_months = thisIntent.getStringExtra("months");
@@ -440,7 +456,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void finishServices() {
-        if(keyboardUtil != null)keyboardUtil.hide();
+        if (keyboardUtil != null)
+            keyboardUtil.hide();
         closeService();
         getFetchManager().clear();
         this.validateTransactionErrorCount = 0;
@@ -448,11 +465,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void onCheckTransactionHistory(String currARQC) {
-        if(checkHistory) return;
+        if (checkHistory)
+            return;
         checkHistory = true;
-        LayoutInflater inflater=getLayoutInflater();
-        View dialogContentView =inflater.inflate(R.layout.wmx_transaction_history_check, null);
-        MaterialAlertDialogBuilder modal = new MaterialAlertDialogBuilder(this,  R.style.ThemeOverlay_App_MaterialAlertDialog);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogContentView = inflater.inflate(R.layout.wmx_transaction_history_check, null);
+        MaterialAlertDialogBuilder modal = new MaterialAlertDialogBuilder(this,
+                R.style.ThemeOverlay_App_MaterialAlertDialog);
         modal.setView(dialogContentView);
         AppCompatButton btn_connection_success = dialogContentView.findViewById(R.id.btn_go_to_history);
         androidx.appcompat.app.AlertDialog modalCreate = modal.create();
@@ -471,8 +490,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         });
     }
 
-    private void onCancelTransaction(String ...error) {
-        if(transactionCancel || checkHistory) return;
+    private void onCancelTransaction(String... error) {
+        if (transactionCancel || checkHistory)
+            return;
         transactionCancel = true;
         finishServices();
         Intent intent = new Intent(mContext, WMX_Transaction_Cancel.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -487,7 +507,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         intent.putExtra("subtotal", v_subtotal);
         intent.putExtra("tips", v_tip);
         intent.putExtra("approve", _approve);
-        intent.putExtra("error", error.length > 0 ? error[0]: null);
+        intent.putExtra("error", error.length > 0 ? error[0] : null);
         startActivityMiddleware(intent);
         finish();
         overridePendingTransition(R.anim.slide_to_top, R.anim.slide_to_bottom);
@@ -633,6 +653,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             d4 = Amount.toString().replace(".", "");
             mascara = mascara.substring(0, 12 - d4.length());
             d4 = mascara + d4;
+            _nip = 0;
             TRACE.d("FinalTradeType" + FinalTradeType + TRACE.NEW_LINE);
 
             if (result == QPOSService.DoTradeResult.NONE) {
@@ -650,11 +671,12 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             } else if (result == QPOSService.DoTradeResult.MCR) {// Magnetic card
                 enableTradingCancel(false);
                 TRACE.d("Magnetic card: " + decodeData.toString());
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && decodeData.entrySet().stream().allMatch(data -> TextUtils.isEmpty(data.getValue()))) {
-                        TRACE.d("CARD NO DETECTED");
-                        onCancelTransaction(Utils.errorPosDictionary.get(QPOSService.Error.UNKNOWN));
-                        return;
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                        && decodeData.entrySet().stream().allMatch(data -> TextUtils.isEmpty(data.getValue()))) {
+                    TRACE.d("CARD NO DETECTED");
+                    onCancelTransaction(Utils.errorPosDictionary.get(QPOSService.Error.UNKNOWN));
+                    return;
+                }
                 content = getString(R.string.card_swiped);
                 _track2MN = "";
                 String formatID = decodeData.get("formatID");
@@ -758,7 +780,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     }
                 }
                 String terminalTime = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
-                TRACE.d("_track2MN: "+_track2MN);
+                TRACE.d("_track2MN: " + _track2MN);
                 maskedPAN = _track2MN.substring(0, 8) + "XXXX" + _track2MN.substring(12, 16);
                 Integer _9f = Integer.parseInt(pinKsn.substring(15, 20), 16);
                 ValidacionRequest(_track2MN.substring(0, 8), "MCR", "90", "", maskedPAN, _track2MN, _9f.toString(),
@@ -885,8 +907,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 }
                 Integer _9f = Integer.parseInt(onLineksn.substring(15, 20), 16);
                 maskedPAN = _track2.substring(0, 8) + "XXXX" + _track2.substring(12, 16);
-                ValidacionDatos(maskedPAN.substring(0, 8), "NFC", _entrymode, tlvNFC, maskedPAN, _track2,
-                        _9f.toString(), _tag50, _tag9F12, _tag9F21);
+                ValidacionRequest(maskedPAN.substring(0, 8), "NFC", _entrymode, tlvNFC, maskedPAN, _track2,
+                        _9f.toString(), _tag9F21);
+                // ValidacionDatos(maskedPAN.substring(0, 8), "NFC", _entrymode, tlvNFC,
+                // maskedPAN, _track2, _9f.toString(), _tag50, _tag9F12, _tag9F21);
 
                 // TRACE.d(TRACE.NEW_LINE + "content in NNFC request(?)" +content);
                 // call(content);
@@ -1037,10 +1061,12 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
                 Integer F41 = Integer.parseInt(_9F41.substring(15, 20), 16);
                 // Integer F41=Integer.parseInt(_9F41);
-
-                ValidacionDatos(_pinpan.substring(4, 12), "ICC", _entrymode.substring(6, _entrymode.length()), emvicc,
-                        pan, _track2.substring(4, _track2.length()), F41.toString(), _tag50, _tag9F12,
+                ValidacionRequest(_pinpan.substring(4, 12), "ICC", _entrymode.substring(6, _entrymode.length()), emvicc,
+                        pan, _track2.substring(4, _track2.length()), F41.toString(),
                         _tag9F21.substring(6, _tag9F21.length()));
+                // ValidacionDatos(_pinpan.substring(4, 12), "ICC", _entrymode.substring(6,
+                // _entrymode.length()), emvicc, pan, _track2.substring(4, _track2.length()),
+                // F41.toString(), _tag50, _tag9F12, _tag9F21.substring(6, _tag9F21.length()));
 
                 // pos.updateEMVConfigByXml(new
                 // String(FileUtils.readAssetsLine("emv_profile_tlv_D30.xml",WMX_Card.this)));
@@ -1093,7 +1119,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
             int DisplayStatus = getDisplayState();
-            if(DisplayStatus == Display.STATE_OFF) {
+            if (DisplayStatus == Display.STATE_OFF) {
                 onCancelTransaction();
                 return;
             }
@@ -1103,19 +1129,20 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             MyKeyboardView.setKeyBoardListener(value -> {
                 TRACE.d("init change handle event: " + value);
                 pos.pinMapSync(value, 120);
+                _nip = 1;
             });
             if (_Countpin < MAX_PIN_ATTEMPTS) {
-                if(isActivityFinished(mContext)) return;
-                    keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, dataList, MAX_PIN_ATTEMPTS - _Countpin);
-                    keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, Pruebaedittext);
-                    if (_Countpin > 0) {
-                        WMX_Card.super.showAlert("informative", "NIP ERRONEO");
-                    }
+                if (isActivityFinished(mContext))
+                    return;
+                keyboardUtil = new KeyboardUtil(WMX_Card.this, lin, dataList, MAX_PIN_ATTEMPTS - _Countpin);
+                keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, Pruebaedittext);
+                if (_Countpin > 0) {
+                    WMX_Card.super.showAlert("informative", "NIP ERRONEO");
+                }
             } else if (_Countpin == MAX_PIN_ATTEMPTS) {
                 onCancelTransaction();
             }
         }
-
 
         @Override
         public void onReturnGetPinInputResult(int num) {
@@ -1132,7 +1159,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 for (int i = 0; i < num; i++) {
                     s += "*";
                 }
-                if(keyboardUtil != null) keyboardUtil.setPinText(num);
+                if (keyboardUtil != null)
+                    keyboardUtil.setPinText(num);
                 Pruebaedittext.setText(s);// "Pin ：
             }
         }
@@ -1644,7 +1672,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onTradeCancelled() {
             TRACE.d("onTradeCancelled");
-            if(successCancelTrade) return;
+            if (successCancelTrade)
+                return;
             onCancelTransaction("La transacción fue cancelada, intentelo de nuevo");
         }
 
@@ -1892,59 +1921,70 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         if (_tiptarj.equals("Desconocido") || _redtarj.equals(("Desconocido"))) {
             ValidacionRequest(_bin, entrada, entrymode, emv, pan, track2, counter, tag9F21);
         } else {
-            // TRACE.d("_tiptarj : " + _tiptarj.toString());
-            // TRACE.d("_redtarj : " + _redtarj.toString());
-            procesofinal(entrada, entrymode, emv, _redtarj, _tiptarj, pan, track2, counter, tag9F21);
+            TRACE.d("_tiptarj : " + _tiptarj.toString());
+            TRACE.d("_redtarj : " + _redtarj.toString());
+            procesofinal(entrada, entrymode, emv, _redtarj, _tiptarj, pan, track2, counter, tag9F21, "");
 
         }
     }
 
     private void ValidacionRequest(String _bin, String entrada, String entrymode, String emv, String pan, String track2,
             String counter, String time_txn) {
-        String UrlBin = Utils.TERMINAL_BIN + _bin;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, UrlBin, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            // TRACE.d("UrlBin : " + response.toString());
-                            procesofinal(entrada, entrymode, emv, response.getString("scheme").toString(),
-                                    response.getString("type").toString(), pan, track2, counter, time_txn);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+        try {
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("binT", _bin);
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Utils.TERMINAL_BIN, jsonParams,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                TRACE.d("UrlBin : " + response.toString());
+                                procesofinal(entrada, entrymode, emv, response.getString("redTarjeta").toString(),
+                                        response.getString("tipoTarjeta").toString(), pan, track2, counter, time_txn,
+                                        response.getString("emisor").toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TRACE.d("UrlBin : VolleyError");
-                        procesofinal(entrada, entrymode, emv, "", "", pan, track2, counter, time_txn);
-                    }
-                });
-        RequestSingleton.getInstance(this).getRequestQueue().add(request);
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            TRACE.d("onErrorResponseBin :" + error.toString());
+                            // procesofinal(entrada, entrymode, emv, "", "", pan, track2, counter,
+                            // time_txn,"");
+                        }
+                    });
+            RequestSingleton.getInstance(this).getRequestQueue().add(request);
+
+        } catch (JSONException e) {
+            TRACE.d("ErrorBin: " + TRACE.NEW_LINE + e.toString());
+        }
     }
 
     public void procesofinal(String entrada, String entrymode, String emv, String redtarjeta, String tipotarjeta,
-            String pan, String track2, String counter, String time_txn) {
-        if(transactionCancel || checkHistory) return;
+            String pan, String track2, String counter, String time_txn, String emisor) {
+        if (transactionCancel || checkHistory)
+            return;
         _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2), Integer.parseInt(counter), cursor);
         TransExit = gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
                 _encryptblumon.getTrack2(), _encryptblumon.getCrc32Track2(), _encryptblumon.getKsn(),
                 String.valueOf(_encryptblumon.getCounter()), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
-                _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, gntBackEnd.CountTrack2(track2), cursor);
+                _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, gntBackEnd.CountTrack2(track2), cursor,
+                emisor, _nip);
         TRACE.d("TRANSEXIT: " + TransExit);
         _redtar = gntBackEnd._redtarj;
         _tiptar = gntBackEnd._tiptarj;
         _card = gntBackEnd._card;
+        _emisor = gntBackEnd.emisor;
+        _entrada = gntBackEnd.entrada;
+        _pan = gntBackEnd.pan;
         getFetchManager().CallById(CALL_TRANSACTION);
-
     }
 
     public void esperarYCerrar() {
         Handler handler = new Handler();
         handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 1000);
     }
-
 
 }

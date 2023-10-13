@@ -89,6 +89,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(WMX_Historial_Cancelaciones.this, WMX_Cancelacion_Desc.class);
+        intent.putExtra("id", transactions.get(position).get_id());
         intent.putExtra("auth", transactions.get(position).get_auth());
         intent.putExtra("date", transactions.get(position).get_date2());
         intent.putExtra("time", transactions.get(position).get_time());

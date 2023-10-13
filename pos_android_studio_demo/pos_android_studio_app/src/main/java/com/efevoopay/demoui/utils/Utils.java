@@ -21,9 +21,10 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
+	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com"; //"https://efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_API_TEST = "https://test-efevoopayloadbalancer-ecommerce.com";
-	public static final String TERMINAL_BIN = "https://lookup.binlist.net/";
+	public static final String TERMINAL_BIN = "https://test-agrs.gntapi.com/apiv0/agrs/terminales/tpv/bines";//"https://testagrswl.gntapi.com/apiv0/agrs/terminales/tpv/bines";
+	public static final String TERMINAL_BIN_TEST = "https://test-agrs.gntapi.com/apiv0/agrs/terminales/tpv/bines";
 	public static final String TPVCONFIG = "https://testagrswl.gntapi.com";
 	public static HashMap<String,String> errorMessagesDictionary;
 	public static HashMap<QPOSService.Error, String> errorPosDictionary;
@@ -453,6 +454,14 @@ public class Utils {
 		return patternMatches(email, "^.+@.+(\\.[^\\.]+)+$");
 	}
 
+	public static int tryIntParse(String num, int ...defaultInt) {
+		try {
+			return Integer.parseInt(num);
+		} catch (Exception e) {
+			return defaultInt.length > 0 ? defaultInt[0] : 0;
+		}
+	}
+
 	public static String maskText(String text, int maskLenght, char mask, boolean... start) {
 		MASK_CHAR = mask;
 		return maskText(text, maskLenght, start);
@@ -474,6 +483,7 @@ public class Utils {
 		MASK_CHAR = '*';
 		return _start ? unmaskedText + maskedText : maskedText + unmaskedText;
 	}
+
 
 	public static Date dateToUTC(Long timestamp) {
 		TimeZone timeZoneUTC = TimeZone.getDefault();

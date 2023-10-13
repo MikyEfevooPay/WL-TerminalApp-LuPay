@@ -31,7 +31,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     AppCompatButton cp_btn_trans_cancelar, cp_btn_trans_final;
     Context mContext;
     private String card_provider, tipotarjeta;
-    private int transaction_type;
+    private int transaction_type, trans_id;
     private Intent intent;
     private String ksn_posId;
     private String meses;
@@ -84,7 +84,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
                 .setARQC(cp_tv_arqc.getText().toString())
                 .setAID(cp_tv_aid.getText().toString())
                 .setKsn_posId(ksn_posId)
-                .setCursor(cursor);
+                .setCursor(cursor)
+                .setTransId(trans_id);
     }
 
     private void initData(Intent intent){
@@ -105,6 +106,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
 
         approve = intent.getStringExtra("approve");
         ksn_posId=intent.getStringExtra("ksn_posId");
+        trans_id = intent.getIntExtra("id", 0);
         meses=msi;
 
 
@@ -217,6 +219,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         intent.putExtra("AmountToShow",formatMoney(cp_tv_total.getText().toString().replace("$","").replace(",","").replace(" ","")));
         intent.putExtra("type_transaction","Cancelacion" );
         intent.putExtra("cp_tv_auth",cp_tv_auth.getText());
+        intent.putExtra("trans_id", trans_id);
         intent.putExtra("ksn_posId",ksn_posId);
         String tmp = cp_tv_total.getText().toString().replace("$","").replace(",","").replace(" ","").replace(" MXN","");
         intent.putExtra("Amount",tmp);

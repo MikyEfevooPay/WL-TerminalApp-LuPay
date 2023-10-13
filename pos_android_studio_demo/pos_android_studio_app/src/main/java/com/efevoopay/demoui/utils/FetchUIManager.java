@@ -18,17 +18,18 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Clase general que maneja multiples Llamadas al backend en un activity
- * */
+ */
 public class FetchUIManager implements IFetchs {
 
     public enum FetchResultType {
-     SUCCESS, PROCESSING, FAILED
+        SUCCESS, PROCESSING, FAILED
     }
+
     private List<Fetch> fetchs;
     private List<FetchEntity> Responses;
     private List<FetchEntity> Errors;
     private Context mContext;
-    private boolean isInternalFetching,forceFetchDone, forcedClose;
+    private boolean isInternalFetching, forceFetchDone, forcedClose;
 
     private void init() {
         fetchs = new ArrayList();
@@ -49,10 +50,11 @@ public class FetchUIManager implements IFetchs {
     }
 
     /**
-     * Forza a que todos los fetch de datos se cumplan para llamar al metodo onRequestsFetching en caso de ser llamados uno por uno
+     * Forza a que todos los fetch de datos se cumplan para llamar al metodo
+     * onRequestsFetching en caso de ser llamados uno por uno
      *
      *
-     * */
+     */
     public void setForceFetchDone(boolean _forceFetchDone) {
         this.forceFetchDone = _forceFetchDone;
     }
@@ -93,7 +95,7 @@ public class FetchUIManager implements IFetchs {
             addErrors(_error);
             onResponseDone(_entity, _error, all);
             return null;
-        }).whenComplete((result,ex) -> { //Finally
+        }).whenComplete((result, ex) -> { // Finally
             _fetch.clearResponse(); // Se limpia el CompletableFuture para eliminar la respuesta previa
         });
     }
@@ -102,7 +104,7 @@ public class FetchUIManager implements IFetchs {
         int totalResponses = Responses.size() + Errors.size();
         onFetchCurrentResult(_entity, _error);
         boolean allDone = totalResponses >= fetchs.size();
-        if(!all || allDone) {
+        if (!all || allDone) {
             ReturnResults();
         }
     }
@@ -124,13 +126,13 @@ public class FetchUIManager implements IFetchs {
 
     @SuppressLint("NewApi")
     private void setFetchEntity(List<FetchEntity> FetchList, FetchEntity entity) {
-        if(!FetchList.stream().anyMatch(e -> e.key.equals(entity.key))) {
+        if (!FetchList.stream().anyMatch(e -> e.key.equals(entity.key))) {
             FetchList.add(entity);
         } else {
             ListIterator<FetchEntity> list = FetchList.listIterator();
-            while(list.hasNext()) {
+            while (list.hasNext()) {
                 FetchEntity currEntity = list.next();
-                if(currEntity.key.equals(entity.key)) {
+                if (currEntity.key.equals(entity.key)) {
                     list.set(entity);
                 }
             }
@@ -154,27 +156,30 @@ public class FetchUIManager implements IFetchs {
         clearEntities();
     }
 
-
     public void CallAll() {
-        if(fetchs.size() == 0) return;
+        if (fetchs.size() == 0)
+            return;
         isInternalFetching = true;
         onRequestsFetching(true);
-        for(Fetch _fetch : fetchs) {
+        for (Fetch _fetch : fetchs) {
             processFetch(_fetch, true);
         }
     }
 
     public void CallById(String key) {
         Fetch fetch = getFetch(key);
-        if(fetch == null) return;
+        if (fetch == null)
+            return;
         this.isInternalFetching = true;
         onRequestsFetching(true);
         processFetch(fetch, this.forceFetchDone);
     }
 
     public Fetch addFetch(String key, FetchOptions options) throws Exception {
-        if(isInternalFetching) throw new Exception("No se puede agregar una nueva llamada cuando se estan procesando los elementos ya existentes");
-        Fetch fetch = new Fetch(key,options, mContext);
+        if (isInternalFetching)
+            throw new Exception(
+                    "No se puede agregar una nueva llamada cuando se estan procesando los elementos ya existentes");
+        Fetch fetch = new Fetch(key, options, mContext);
         fetchs.add(fetch);
         return fetch;
     }
@@ -185,7 +190,7 @@ public class FetchUIManager implements IFetchs {
     }
 
     @Override
-    public void onFetchCurrentResult(FetchEntity entity,@Nullable FetchEntity error) {
+    public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
 
     }
 

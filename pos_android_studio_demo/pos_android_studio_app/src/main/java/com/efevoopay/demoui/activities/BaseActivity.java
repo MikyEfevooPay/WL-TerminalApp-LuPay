@@ -443,6 +443,16 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         txt_toolbar_title.setTextColor(color);
     }
 
+    public String tipofirma(String nip,String entrada){
+        int nipParsed = Utils.tryIntParse(nip);
+        if(nipParsed == 0) {
+            if(entrada.equals("NFC")) return  getString(R.string.wmx_transaction_ticket_contactless_sign);
+            if(entrada.equals("ICC")) return  getString(R.string.wmx_transaction_ticket_client_sign);
+        }
+        if (nipParsed == 1) getString(R.string.wmx_transaction_ticket_electronic_sign);
+       return null;
+    }
+
     public void show_calendar() {
         toolbar_btn_calendar.setVisibility(View.VISIBLE);
     }
@@ -544,7 +554,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     protected void startActivityMiddleware(Intent intent) {
         this.startActivityMiddleware(intent, null);
     }
-
 
     @SuppressLint("NewApi")
     protected int getDisplayState() {
