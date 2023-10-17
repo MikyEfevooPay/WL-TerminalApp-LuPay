@@ -461,7 +461,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
             if(entrada.equals("NFC")) return  getString(R.string.wmx_transaction_ticket_contactless_sign);
             if(entrada.equals("ICC")) return  getString(R.string.wmx_transaction_ticket_client_sign);
         }
-        if (nipParsed == 1) getString(R.string.wmx_transaction_ticket_electronic_sign);
+        if (nipParsed == 1) return getString(R.string.wmx_transaction_ticket_electronic_sign);
        return null;
     }
 
