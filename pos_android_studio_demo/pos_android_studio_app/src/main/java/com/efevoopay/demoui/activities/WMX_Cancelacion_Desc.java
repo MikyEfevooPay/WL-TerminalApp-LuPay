@@ -232,7 +232,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         intent.putExtra("tips",formatMoney(cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ","")));
         intent.putExtra("propina",cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ",""));
 
-        startActivity(intent);
+        startActivityMiddleware(intent);
     }
     public String formatMoney(String amount){
         String str="";

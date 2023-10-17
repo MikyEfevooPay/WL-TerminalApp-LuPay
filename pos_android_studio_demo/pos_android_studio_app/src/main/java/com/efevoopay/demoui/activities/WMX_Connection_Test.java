@@ -42,7 +42,7 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
-        Conectividad(this);
+        Conectividad();
     }
 
     @Override
@@ -124,9 +124,9 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
         return R.layout.wmx_connection_test;
     }
 
-    public void Conectividad(Context context) {
+    public void Conectividad() {
         new Thread(() -> {
-            if(isNetworkAvailable(context)){
+            if(isNetworkAvailable()){
                 getFetchManager().CallById(TEST_CONNECTION_ECO);
             }else{
                 onResultActivity(1);
@@ -134,19 +134,4 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
         }).start();
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork != null && activeNetwork.isConnected()) {
-            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                TRACE.d("MIAPP"+ " Nombre red Wi-Fi: " + activeNetwork.getReason());
-                return true;
-            }
-            if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                TRACE.d("MIAPP"+ " Nombre red Mobile: " + activeNetwork.getReason());
-                return true;
-            }
-        }
-        return false;
-    }
 }

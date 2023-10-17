@@ -121,19 +121,19 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "venta");
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_Other:
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Transaccion.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_Ajustes:
                 intent = new Intent(this, WMX_Ajustes.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_meses:
                 if (!TPVInitializated())
@@ -142,7 +142,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     intent = new Intent(this, WMX_Terminal.class);
                     intent.putExtra("type_transaction", "MSI");
                     intent.putExtra("ksn_posId", posId);
-                    startActivity(intent);
+                    startActivityMiddleware(intent);
                 } else {
                     WMX_Menu.super.showAlert("informative", "OPCIÓN NO HABILITADA");
                 }
@@ -152,20 +152,20 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     break;
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_cortecaja:
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Historial_CorteCaja.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_connection_test:
                 intent = new Intent(this, WMX_Connection_Test.class);
                 intent.putExtra("ksn_posId", posId);
                 intent.putExtra("type", 1);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
         }
 

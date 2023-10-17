@@ -420,6 +420,9 @@
     <string name="wmx_transaction_CANMSI">Cancelación MSI</string>
     <string name="wmx_ajustes_initialization">Activación Manual</string>
     <string name="wmx_transaction_ticket_client_sign">Autorizado de forma Física mediante firma o número de identificación personal.</string>
-    <string name="wmx_transaction_ticket_contactless_sign">Autotizado sin firma vía contactless</string>
-    <string name="wmx_transaction_ticket_electronic_sign">Autotizado vía firma electrónica</string>
+    <string name="wmx_transaction_ticket_contactless_sign">Autorizado sin firma vía contactless</string>
+    <string name="wmx_transaction_ticket_electronic_sign">Autorizado vía firma electrónica</string>
+    <string name="wmx_not_network_connection_title">Tu terminal no esta conectado a internet</string>
+    <string name="wmx_not_network_connection_subtitle">Para solucionarlo</string>
+    <string name="wmx_not_network_connection_footer">¿Aún no puedes conectarte? Remueve la tarjeta SIM y vuelve a insertarla</string>
 </resources>

@@ -12,10 +12,15 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
@@ -46,6 +51,8 @@ import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.IFetchs;
 import com.efevoopay.demoui.interfaces.ITicket;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
+import com.efevoopay.demoui.utils.ActivityFlags;
+import com.efevoopay.demoui.utils.FLAGS;
 import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.RequestSingleton;
@@ -53,11 +60,14 @@ import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.TicketLayoutManager;
 import com.efevoopay.demoui.utils.Utils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * BaseActivity used for to build all activity
@@ -561,7 +571,39 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         return dm.getDisplay(0).getState();
     }
 
+    private void NotNetworkDialog() {
+        LayoutInflater inflater=getLayoutInflater();
+        View dialogContentView =inflater.inflate(R.layout.wmx_not_network_modal, null);
+        MaterialAlertDialogBuilder modal = new MaterialAlertDialogBuilder(this,  R.style.ThemeOverlay_App_MaterialAlertDialog);
+        modal.setView(dialogContentView);
+        AppCompatButton btn_connection_success = dialogContentView.findViewById(R.id.btn_not_network_close);
+        AlertDialog modalCreate = modal.create();
+        modalCreate.show();
+        btn_connection_success.setOnClickListener((view) -> {
+            modalCreate.dismiss();
+        });
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(activeNetwork == null) return false;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    private boolean resolveFlags(Intent intent) {
+        HashMap<FLAGS, Object> Flags = ActivityFlags.getInstance().getByKey(intent.getComponent().getClassName());
+        if(Flags == null) return true;
+        boolean networkFlag = (boolean) Utils.isNull(Flags.get(FLAGS.CHECK_NETWORK), false);
+        if(networkFlag && !isNetworkAvailable()) {
+            NotNetworkDialog();
+            return false;
+        }
+        return true;
+    }
+
     protected void startActivityMiddleware(Intent intent, @Nullable Bundle options) {
+        if(!resolveFlags(intent)) return;
         String CurrPackageName = getPackageName();
         ComponentName name = intent.resolveActivity(getPackageManager());
         String intentPackageName = name.getPackageName();
