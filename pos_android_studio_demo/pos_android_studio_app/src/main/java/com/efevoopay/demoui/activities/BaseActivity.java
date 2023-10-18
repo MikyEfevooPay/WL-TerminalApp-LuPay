@@ -29,6 +29,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ import com.android.volley.RequestQueue;
 import com.dspread.print.device.PrintListener;
 import com.dspread.xpos.QPOSService;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.fragments.NotConnectionDialog;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.IFetchs;
 import com.efevoopay.demoui.interfaces.ITicket;
@@ -572,16 +574,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     private void NotNetworkDialog() {
-        LayoutInflater inflater=getLayoutInflater();
-        View dialogContentView =inflater.inflate(R.layout.wmx_not_network_modal, null);
-        MaterialAlertDialogBuilder modal = new MaterialAlertDialogBuilder(this,  R.style.ThemeOverlay_App_MaterialAlertDialog);
-        modal.setView(dialogContentView);
-        AppCompatButton btn_connection_success = dialogContentView.findViewById(R.id.btn_not_network_close);
-        AlertDialog modalCreate = modal.create();
-        modalCreate.show();
-        btn_connection_success.setOnClickListener((view) -> {
-            modalCreate.dismiss();
-        });
+        NotConnectionDialog dialog = new NotConnectionDialog(this);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     public boolean isNetworkAvailable() {
