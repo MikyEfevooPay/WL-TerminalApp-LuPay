@@ -4,11 +4,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -53,6 +58,15 @@ public class NotConnectionDialog extends BottomSheetDialogFragment {
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         LinearLayout layout = dialog.findViewById(R.id.lyt_not_connection_container);
         assert layout != null;
+
+        TextView txt_connection_footer = view.findViewById(R.id.txt_connection_footer);
+        String text_1 = ctx.getString(R.string.wmx_not_network_connection_footer_1);
+        String text_2 = ctx.getString(R.string.wmx_not_network_connection_footer_2);
+        StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+        SpannableString spannableString = new SpannableString(text_1 + " " + text_2);
+        spannableString.setSpan(boldSpan, 0, text_1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        txt_connection_footer.setText(spannableString);
+
         AppCompatButton btn_connection_cancel = view.findViewById(R.id.btn_not_network_close);
         AppCompatButton btn_connection_test = view.findViewById(R.id.btn_not_network_connection_test);
         btn_connection_cancel.setOnClickListener((v) -> {

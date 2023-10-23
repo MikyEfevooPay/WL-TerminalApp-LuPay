@@ -21,11 +21,12 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
+	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";// "https://efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_API_TEST = "https://test-efevoopayloadbalancer-ecommerce.com";
-	public static final String TERMINAL_BIN = "https://testagrswl.gntapi.com/apiv0/agrs/terminales/tpv/bines";
+	public static final String TERMINAL_BIN = "https://test-agrs.gntapi.com/apiv0/agrs/terminales/tpv/bines"; // "https://testagrswl.gntapi.com/apiv0/agrs/terminales/tpv/bines";
 	public static final String TERMINAL_BIN_TEST = "https://test-agrs.gntapi.com/apiv0/agrs/terminales/tpv/bines";
-	public static final String TPVCONFIG = "https://testagrswl.gntapi.com";
+	public static final String TPVCONFIG = "https://test-agrs.gntapi.com"; //"https://testagrswl.gntapi.com";
+	public static final String TPVCONFIG_TEST = "https://test-agrs.gntapi.com";
 	public static HashMap<String,String> errorMessagesDictionary;
 	public static HashMap<QPOSService.Error, String> errorPosDictionary;
 	private static char MASK_CHAR = '*';

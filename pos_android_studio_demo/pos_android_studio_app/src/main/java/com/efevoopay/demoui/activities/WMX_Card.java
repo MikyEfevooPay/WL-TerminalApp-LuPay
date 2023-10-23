@@ -1913,21 +1913,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     }
 
-    private void ValidacionDatos(String _bin, String entrada, String entrymode, String emv, String pan, String track2,
-            String counter, String tag50, String tag9f12, String tag9F21) {
-        String _redtarj, _tiptarj;
-        _tiptarj = gntBackEnd.tagtipotarjeta(gntBackEnd.hexToString(tag50), gntBackEnd.hexToString(tag9f12));
-        _redtarj = gntBackEnd.tagredtarjeta(gntBackEnd.hexToString(tag50), gntBackEnd.hexToString(tag9f12));
-        if (_tiptarj.equals("Desconocido") || _redtarj.equals(("Desconocido"))) {
-            ValidacionRequest(_bin, entrada, entrymode, emv, pan, track2, counter, tag9F21);
-        } else {
-            TRACE.d("_tiptarj : " + _tiptarj.toString());
-            TRACE.d("_redtarj : " + _redtarj.toString());
-            procesofinal(entrada, entrymode, emv, _redtarj, _tiptarj, pan, track2, counter, tag9F21, "");
-
-        }
-    }
-
     private void ValidacionRequest(String _bin, String entrada, String entrymode, String emv, String pan, String track2,
             String counter, String time_txn) {
         try {

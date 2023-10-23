@@ -358,7 +358,7 @@
     <string name="common_close">Cerrar</string>
     <string name="wmx_card_select_emv_app_title">Selecciona tipo de tarjeta</string>
     <!-- WMX Strings -->
-    <string name="wmx_menu_transfer">Transacciones por Venta</string>
+    <string name="wmx_menu_transfer">Venta</string>
     <string name="wmx_menu_meses">Meses\nsin Intereses</string>
     <string name="wmx_menu_cancel">Cancelación</string>
     <string name="wmx_menu_Other">Historial</string>
@@ -423,11 +423,12 @@
     <string name="wmx_transaction_ticket_contactless_sign">Autorizado sin firma vía contactless</string>
     <string name="wmx_transaction_ticket_electronic_sign">Autorizado vía firma electrónica</string>
     <string name="wmx_not_network_connection_title">Tu terminal no esta conectado a internet</string>
-    <string name="wmx_not_network_connection_subtitle">Para solucionarlo</string>
-    <string name="wmx_not_network_connection_footer">¿Aún no puedes conectarte? Remueve la tarjeta SIM y vuelve a insertarla</string>
-    <string name="wmx_not_network_connection_option_1">Revisa que los datos móviles de tu lector se encuentren activos</string>
-    <string name="wmx_not_network_connection_option_2">Activa el modo avión y espera un minuto para despues desactivarlo</string>
-    <string name="wmx_not_network_connection_option_3">Apaga tu dispositivo y aguarda un par de minutos antes de envenderlo de nuevo</string>
-    <string name="wmx_not_network_connection_option_4">Intenta conectarte a alguna red WiFi</string>
+    <string name="wmx_not_network_connection_subtitle">Para solucionarlo:</string>
+    <string name="wmx_not_network_connection_footer_1">¿Aún no puedes conectarte?</string>
+    <string name="wmx_not_network_connection_footer_2">Remueve la tarjeta SIM y vuelve a insertarla</string>
+    <string name="wmx_not_network_connection_option_1">Revisa que los datos móviles de tu terminal se encuentren activos.</string>
+    <string name="wmx_not_network_connection_option_2">Intenta conectarte a alguna red wifi</string>
+    <string name="wmx_not_network_connection_option_3">Activa modo avión y espera un minuto para despues desactivarlo.</string>
+    <string name="wmx_not_network_connection_option_4">Apaga tu dispositivo y aguarda un par de minutos antes de encenderlo de nuevo.</string>
     <string name="wmx_not_network_connection_test">Realizar prueba de conexión</string>
 </resources>

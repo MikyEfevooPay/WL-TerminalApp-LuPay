@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,14 +22,20 @@ import com.efevoopay.demoui.interfaces.HistorialCorteCajaViewInterface;
 import com.efevoopay.demoui.utils.CorteCaja;
 import com.efevoopay.demoui.utils.Fetch;
 import com.efevoopay.demoui.utils.FetchUIManager;
+import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.widget.CorteCajaItemAdapter;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClickListener, HistorialCorteCajaViewInterface {
     RecyclerView recyclerView;
@@ -36,6 +43,10 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
     Intent intent;
     ArrayList<CorteCaja> cortecaja = new ArrayList<>();
     Button btn_hacercorte;
+    private Date date1, date2;
+
+    private boolean searchByDates;
+    private MaterialDatePicker dpDate;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
     private WMX_llamada_dukpt jsondukpt_details = new WMX_llamada_dukpt();
     private String ksn_posId, currIdCorte;
@@ -50,6 +61,8 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.switch_title_logo("Corte de caja");
+        super.show_calendar();
+        configCalendar();
         recyclerView = findViewById(R.id.historial_cortecaja_List);
         cortecaja_empty_layout = findViewById((R.id.layout_cortecaja_empty));
         intent = getIntent();
@@ -65,6 +78,39 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
     }
 
     @Override
+    public void onCalendarLinstener(){
+        toolbar_btn_calendar.setEnabled(false);
+        dpDate.show(getSupportFragmentManager(), "date");
+    };
+
+    private void configCalendar() {
+        date1 = new Date();
+        date2 = new Date();
+        searchByDates = false;
+        DatePickerListener();
+    }
+
+    private void DatePickerListener() {
+        dpDate = MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Seleccione fecha")
+                .setTheme(R.style.MaterialCalendarThemeBackground)
+                .build();
+
+        dpDate.addOnDismissListener((selector) -> {
+            toolbar_btn_calendar.setEnabled(true);
+        });
+
+        dpDate.addOnPositiveButtonClickListener((selection) -> {
+            Pair<Long, Long> datesMilliseconds = (Pair<Long, Long>)selection;
+            date1 = Utils.dateToUTC(datesMilliseconds.first);
+            date2 = Utils.dateToUTC(datesMilliseconds.second);
+            dpDate.dismiss();
+            searchByDates = true;
+            getFetchManager().CallById(CORTE_CAJA_HISTORIAL);
+        });
+    }
+
+    @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
         Fetch history = manager.addFetch(CORTE_CAJA_HISTORIAL, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/corte/crud", Request.Method.POST));
         history.setSetBodyListenner(this::historyBody);
@@ -74,9 +120,14 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
 
 
     private void historyBody(JSONObject body) throws JSONException {
+        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         body.put("snTerminal", ksn_posId);
-        body.put("operacion", "H");
+        body.put("operacion", searchByDates ? "f" : "H");
         body.put("idCorte", "0");
+        if(searchByDates) {
+            body.put("fechaInicio", obj.format(date1) + " 00:00:00");
+            body.put("fechaFin", obj.format(date2) + " 23:59:59");
+        }
     }
 
     private void detailsBody(JSONObject body) throws JSONException {
