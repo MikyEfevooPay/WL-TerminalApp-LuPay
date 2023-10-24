@@ -585,6 +585,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+    public boolean resolveNetworkFlag(HashMap<FLAGS, Object> Flags) {
         if(Flags == null) return true;
         boolean networkFlag = (boolean) Utils.isNull(Flags.get(FLAGS.CHECK_NETWORK), false);
         if(networkFlag && !isNetworkAvailable()) {
