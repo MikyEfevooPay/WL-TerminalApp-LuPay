@@ -53,14 +53,17 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         cortecaja.setOnClickListener(this);
         connection_test.setOnClickListener(this);
         getinfoScreen();
+        //Config
+        Utils.setErrorMessages();
+        ResponseCode.setCodeResponses();
+        GNTBackEnd.initTransTypeTitles(getResources());
         configTpv = new ConfigTpv(this);
         configTpv.dbManager.onCreate();
-        Utils.setErrorMessages();
+    }
 
-        ResponseCode.setCodeResponses();
-        spinner.show();
-        configTpv.spinner = spinner;
-        GNTBackEnd.initTransTypeTitles(getResources());
+    @Override
+    public void onStart() {
+        super.onStart();
         optksn();
     }
 
@@ -173,6 +176,9 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
     @SuppressLint("NewApi")
     public void optksn() {
+        if(!resolveNetworkFlag(getFlags(this.getClass().getName()))) return;
+        spinner.show();
+        configTpv.spinner = spinner;
         WMX_KSN.getPosIdResult().thenAccept((posId) -> {
             TRACE.d("FUturablePosId: " + posId);
             cursor = configTpv.dbManager.fetch(posId);

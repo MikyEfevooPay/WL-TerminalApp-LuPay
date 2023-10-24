@@ -585,14 +585,23 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    private boolean resolveFlags(Intent intent) {
-        HashMap<FLAGS, Object> Flags = ActivityFlags.getInstance().getByKey(intent.getComponent().getClassName());
         if(Flags == null) return true;
         boolean networkFlag = (boolean) Utils.isNull(Flags.get(FLAGS.CHECK_NETWORK), false);
         if(networkFlag && !isNetworkAvailable()) {
             NotNetworkDialog();
             return false;
         }
+        return true;
+    }
+
+    public HashMap<FLAGS, Object> getFlags(String key) {
+        return ActivityFlags.getInstance().getByKey(key);
+    }
+
+    private boolean resolveFlags(Intent intent) {
+        HashMap<FLAGS, Object> Flags = getFlags(intent.getComponent().getClassName());
+        //Resolve flags
+        if(!resolveNetworkFlag(Flags)) return false;
         return true;
     }
 

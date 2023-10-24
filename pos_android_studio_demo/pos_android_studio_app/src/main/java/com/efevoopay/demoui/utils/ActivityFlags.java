@@ -7,6 +7,7 @@ import com.android.volley.toolbox.Volley;
 import com.efevoopay.demoui.activities.WMX_Card;
 import com.efevoopay.demoui.activities.WMX_Historial_Cancelaciones;
 import com.efevoopay.demoui.activities.WMX_Historial_CorteCaja;
+import com.efevoopay.demoui.activities.WMX_Menu;
 import com.efevoopay.demoui.activities.WMX_Terminal;
 import com.efevoopay.demoui.activities.WMX_Transaccion;
 
@@ -36,6 +37,9 @@ public class ActivityFlags {
     }
 
     private void addFlags() {
+        flags.put(WMX_Menu.class.getName(), new HashMap<FLAGS, Object>(){{
+            put(FLAGS.CHECK_NETWORK, true);
+        }});
         flags.put(WMX_Card.class.getName(), new HashMap<FLAGS, Object>(){{
             put(FLAGS.CHECK_NETWORK, true);
         }});
