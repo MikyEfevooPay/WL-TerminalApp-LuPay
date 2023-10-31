@@ -27,6 +27,7 @@ import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.ActionMenuView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -575,6 +576,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
 
     private void NotNetworkDialog() {
         NotConnectionDialog dialog = new NotConnectionDialog(this);
+        FragmentManager manager = getSupportFragmentManager();
+        if(manager.executePendingTransactions()) return;
         dialog.show(getSupportFragmentManager(), null);
     }
 

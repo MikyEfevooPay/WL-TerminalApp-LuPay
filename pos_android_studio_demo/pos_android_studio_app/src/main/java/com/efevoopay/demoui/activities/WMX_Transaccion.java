@@ -99,7 +99,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     @Override
     public void onBackPressed() {
         if(!TextUtils.isEmpty(_ARQC)) {
-            startActivityMiddleware(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            startActivity(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
            return;
         }
         super.onBackPressed();

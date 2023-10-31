@@ -91,7 +91,7 @@ public class WMX_Transaction_Cancel extends BaseActivity {
         new Handler().postDelayed(() -> {
             finishAffinity();
         }, 1000);
-        startActivityMiddleware(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     private void setProps() {

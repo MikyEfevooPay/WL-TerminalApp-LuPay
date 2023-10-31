@@ -445,7 +445,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         getFetchManager().clear();
 
-        startActivityMiddleware(intent);
+        startActivity(intent);
         finish();
     }
 
@@ -485,7 +485,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             Intent intent = new Intent(this, WMX_Transaccion.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("ARQC", currARQC);
             intent.putExtra("ksn_posId", ksn_posId);
-            startActivityMiddleware(intent);
+            startActivity(intent);
             finish();
         });
     }
@@ -508,7 +508,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         intent.putExtra("tips", v_tip);
         intent.putExtra("approve", _approve);
         intent.putExtra("error", error.length > 0 ? error[0] : null);
-        startActivityMiddleware(intent);
+        startActivity(intent);
         finish();
         overridePendingTransition(R.anim.slide_to_top, R.anim.slide_to_bottom);
     }
@@ -647,6 +647,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable<String, String> decodeData) {
             TRACE.d("(DoTradeResult result, Hashtable<String, String> decodeData) " + result.toString() + TRACE.NEW_LINE
                     + "decodeData:" + decodeData);
+            if(!isNetworkAvailable()) {
+                onCancelTransaction(getString(R.string.wmx_not_network_connection_title));
+                return;
+            }
             maskedPAN = "";
             pinKsn = "";
             FinalTradeType = result.toString();
@@ -1936,8 +1940,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             TRACE.d("onErrorResponseBin :" + error.toString());
-                            // procesofinal(entrada, entrymode, emv, "", "", pan, track2, counter,
-                            // time_txn,"");
+                            onCancelTransaction(getFinalErrorMessage(error.toString()));
                         }
                     });
             RequestSingleton.getInstance(this).getRequestQueue().add(request);
