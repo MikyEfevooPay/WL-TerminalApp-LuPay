@@ -111,7 +111,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         body.put("tip", Utils.isNull(tp_tv_tip.getText().toString(), "N/A"));
         body.put("total", Utils.isNull(tp_tv_total.getText().toString(), "N/A"));
         body.put("pay_method", Utils.isNull(tipotarjeta + "/" + card_emisor + "/" + card_provider, "N/A"));
-        body.put("idrecibo", Utils.isNull(tp_tv_auth.getText().toString(), "N/A"));
+        body.put("idrecibo", Utils.isNull(String.valueOf(trans_id), "N/A"));
         body.put("afiliacion", Utils.isNull(cursor.getString(6), "N/A"));
         body.put("autorizacion", Utils.isNull(tp_tv_approve.getText().toString(), "N/A"));
         body.put("card", Utils.isNull(tp_tv_card.getText().toString(), "N/A"));

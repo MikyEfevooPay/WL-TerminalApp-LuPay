@@ -7,6 +7,7 @@ import android.os.Build;
 import com.blumonpay.capx.functions.CypherFunctions;
 import com.blumonpay.capx.model.DUKPTData;
 import com.blumonpay.capx.model.TransactionData;
+import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.R;
 import com.efevoopay.demoui.activities.WMX_Ajustes;
 
@@ -132,6 +133,7 @@ public class GNTBackEnd {
             jsonBody.put("p43", cursor.getString(5));
             jsonBody.put("p48", cursor.getString(6));
             jsonBody.put("p120", cursor.getString(7));
+            jsonBody.put("version", BuildConfig.VERSION_NAME);
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
             _card=jsonBody.getString("pinPan").toString();

@@ -37,6 +37,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.dspread.xpos.TradeSoundType;
+import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
@@ -243,6 +244,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         body.put("arqc", _ARQC);
         body.put("pan", _pan);
         body.put("tipotxn", GNTBackEnd.tipotxn(type_transaction));
+        body.put("version", BuildConfig.VERSION_NAME);
     }
 
     @Override
@@ -276,9 +278,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private void processTransactionResponse(String response) {
         TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
-        if (response.equals("00")) {
+        if (approvedDukpt(response).equals("00")) {
             ChangeViewToTicket();
-        } else if (response.equals("")) {
+        } else if (approvedDukpt(response).equals("")) {
             if (this.validateTransactionEmptyResponse >= MAX_CALL_ITERATE) {
                 onCheckTransactionHistory(_ARQC);
                 return;
@@ -1975,4 +1977,31 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 1000);
     }
 
+    public String approvedDukpt(String _json)
+    {
+        String trans_code="";
+        trans_id=0;
+        _approve="";
+        try {
+            if (_json!=""){
+                JSONObject object = new JSONObject(_json);
+                if(object.has("codigo"))
+                {
+                    _approve=object.getString("numref");
+                    trans_id=Integer.parseInt(object.getString("id"));
+                    trans_code=object.getString("codigo");
+                }
+                else{
+                    trans_code=_json;
+                }
+            }
+            else{
+                trans_code=_json;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            trans_code="96";
+        }
+        return trans_code;
+    }
 }
