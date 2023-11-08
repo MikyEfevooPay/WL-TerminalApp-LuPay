@@ -289,9 +289,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private void processTransactionResponse(String response) {
         TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
-        if (approvedDukpt(response).equals("00")) {
+        String code = approvedDukpt(response);
+        if (code.equals("00")) {
             ChangeViewToTicket();
-        } else if (approvedDukpt(response).equals("")) {
+        } else if (code.equals("")) {
             if (this.validateTransactionEmptyResponse >= MAX_CALL_ITERATE) {
                 onCheckTransactionHistory(_ARQC);
                 return;
@@ -299,7 +300,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             this.validateTransactionEmptyResponse++;
             esperarYCerrar();
         } else {
-            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(response);
+            TRACE.d("CALL TRANSACTION ERROR ENTRY");
+            this.startTransaction = false;
+            ResponseCode.CodeDetails details = ResponseCode.getCodeDetails(code);
             onCancelTransaction(details.description);
         }
     }
