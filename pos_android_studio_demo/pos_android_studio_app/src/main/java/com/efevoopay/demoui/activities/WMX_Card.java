@@ -99,7 +99,17 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private Intent intent;
     private MediaPlayer Beep;
     private LottieAnimationView LottieTerminalView, LottiePointsView;
-    private boolean transactionCancel, isCardProcesing, successCancelTrade, checkHistory;
+    private boolean
+           //Indica si la transaccion fue previamente cancelada por el usuario
+            transactionCancel,
+            //Indica si la tarjeta fue leida y siendo procesada por el sdk
+            isCardProcesing,
+             //Indica si la transaccion fue cancelada por el sdk
+             successCancelTrade,
+             //Indica si se ha abierto la verificacion de la trasaccion en el historial
+             checkHistory,
+             //Indica si la transaccion esta a apunto de pasar al backend
+             startTransaction;
 
     private String FinalPin = "";
     private LinearLayout lin;
@@ -213,6 +223,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         enableTradingCancel(false);
         this.successCancelTrade = false;
         this.checkHistory = false;
+        this.startTransaction = false;
         this.onOpenUartHandler = new Handler();
         this.onWaitingUserHandler = new Handler();
         this.validateTransactionErrorCount = 0;
@@ -493,7 +504,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void onCancelTransaction(String... error) {
-        if (transactionCancel || checkHistory)
+        if (transactionCancel || checkHistory || startTransaction)
             return;
         transactionCancel = true;
         finishServices();
@@ -1954,8 +1965,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     public void procesofinal(String entrada, String entrymode, String emv, String redtarjeta, String tipotarjeta,
             String pan, String track2, String counter, String time_txn, String emisor) {
-        if (transactionCancel || checkHistory)
+        if (transactionCancel || checkHistory  || startTransaction)
             return;
+        this.startTransaction = true;
         _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2), Integer.parseInt(counter), cursor);
         TransExit = gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
                 _encryptblumon.getTrack2(), _encryptblumon.getCrc32Track2(), _encryptblumon.getKsn(),
