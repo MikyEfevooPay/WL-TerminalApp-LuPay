@@ -238,7 +238,7 @@ public class Ticket {
             mPrinter.setPrinterGrey(110);
             mPrinter.printBitmap(this.ctx, Utils.viewToBitmap(Layout));
             return true;
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             TRACE.d("PRINT ERROR:" + e.getMessage());
             e.printStackTrace();
             return false;

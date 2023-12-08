@@ -178,16 +178,20 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     }
 
     private void onFinish() {
-        new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
-                .setTitle("Impresión de Ticket")
-                .setIcon(R.drawable.printer)
-                .setPositiveButton("Comercio", (dialog, lis) -> {
-                    PrintTicket(PRINT_TYPE.STORE);
-                })
-                .setNeutralButton("Cliente", (dialog, lis) -> {
-                    PrintTicket(PRINT_TYPE.CLIENT);
-                })
-                .show();
+       runOnUiThread(() -> {
+           new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
+                   .setTitle("Impresión de Ticket")
+                   .setIcon(R.drawable.printer)
+                   .setPositiveButton("Comercio", (dialog, lis) -> {
+                       dialog.dismiss();
+                       PrintTicket(PRINT_TYPE.STORE);
+                   })
+                   .setNeutralButton("Cliente", (dialog, lis) -> {
+                       dialog.dismiss();
+                       PrintTicket(PRINT_TYPE.CLIENT);
+                   })
+                   .show();
+       });
     }
 
     @Override

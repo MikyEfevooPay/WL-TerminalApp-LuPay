@@ -199,26 +199,34 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     public void PrintTicket() {
-        if (!ticket.isPrinterAvailable())
-            return;
-        ticket_progress.show();
-        ticketLayoutType = getPrintLayout();
-        setTicketData(ticket);
-        TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType,
-                this.entity_print);
-        ticketLayoutManager.setTicketDataByLayout(ticket);
+        runOnUiThread(() -> {
+            boolean success = false;
+            if (!ticket.isPrinterAvailable())
+                return;
+            if(!ticket_progress.isShowing()) ticket_progress.show();
+            try {
+                ticketLayoutType = getPrintLayout();
+                setTicketData(ticket);
+                TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType,
+                        this.entity_print);
+                ticketLayoutManager.setTicketDataByLayout(ticket);
 
-        // Se agrega un posdelay en caso de que haya un error que la libreria no este
-        // catcheando para ocultar el spinner
-        ticketHandler.postDelayed(() -> {
-            hideTicketSpinner();
-            ticket.close();
-        }, 7000);
-        boolean success = ticket.printLayout(ticketLayoutManager.getLayout());
-        if (!success) {
-            hideTicketSpinner();
-            ticketHandler.removeCallbacksAndMessages(null);
-        }
+                // Se agrega un posdelay en caso de que haya un error que la libreria no este
+                // catcheando para ocultar el spinner
+                ticketHandler.postDelayed(() -> {
+                    hideTicketSpinner();
+                    ticket.close();
+                }, 7000);
+                success = ticket.printLayout(ticketLayoutManager.getLayout());
+            } catch (Exception e) {
+                TRACE.d("TICKET EXCEPTION: " + e.getMessage());
+                e.printStackTrace();
+            }
+            if (!success) {
+                hideTicketSpinner();
+                ticketHandler.removeCallbacksAndMessages(null);
+            }
+        });
     }
 
     public Toolbar getToolbar() {
@@ -444,8 +452,10 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     protected void hideTicketSpinner() {
-        if (ticket_progress.isShowing())
-            ticket_progress.dismiss();
+        runOnUiThread(() -> {
+            if (ticket_progress.isShowing())
+                ticket_progress.dismiss();
+        });
     }
 
     public void switch_title_logo(String title, int color) {
