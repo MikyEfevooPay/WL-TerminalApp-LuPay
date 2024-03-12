@@ -181,8 +181,8 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         configTpv.spinner = spinner;
         WMX_KSN.getPosIdResult().thenAccept((posId) -> {
             TRACE.d("FUturablePosId: " + posId);
-            cursor = configTpv.dbManager.fetch(posId);
             DbSurce(posId);
+            cursor = configTpv.dbManager.fetch(posId);
             TRACE.d("ksn: " + posId);
         });
     }

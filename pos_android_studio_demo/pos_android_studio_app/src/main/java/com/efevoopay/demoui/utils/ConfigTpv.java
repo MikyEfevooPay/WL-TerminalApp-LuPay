@@ -1,5 +1,8 @@
 package com.efevoopay.demoui.utils;
 
+import static com.efevoopay.demoui.utils.AlgorithmAES.generateIv;
+import static com.efevoopay.demoui.utils.AlgorithmAES.generateKey;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
@@ -19,14 +22,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 public class ConfigTpv {
     public DBManager dbManager;
     private Context context;
     public ProgressDialog spinner;
-    private String _rsa = "";
-    private String _tk = "";
-    private String _pk = "";
+    private String _rsa = "",_tk = "",_pk = "",_key="";
     public final boolean[] bnd= {Boolean.FALSE} ;
     public boolean nuevainit = false;
     public int count=0;
@@ -130,12 +132,18 @@ public class ConfigTpv {
             String minimo9=objtpv.getString("minimo9").toString();
             String minimo12=objtpv.getString("minimo12").toString();
             String minimo18=objtpv.getString("minimo18").toString();
+            String interfaz=objtpv.getString("interfaz").toString();
+            String codigopostal=objtpv.getString("codigopostal").toString();
+            String giro=objtpv.getString("giro").toString();
+            String redlogica=objtpv.getString("redlogica").toString();
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
+            jsonBody.put("interfaz", interfaz);
+
             if(valor==1){
                 URL = Utils.TERMINAL_API + "/efevoo/tpv/initactiva";
             }else{
-                rsa();
+                generakey(interfaz);
                 URL =  Utils.TERMINAL_API + "/efevoo/tpv/initllave";
                 jsonBody.put("tpv", Build.MODEL+"Android smart POS");
                 jsonBody.put("device_tk", _tk);
@@ -144,6 +152,7 @@ public class ConfigTpv {
                 jsonBody.put("device_p48", p48);
                 jsonBody.put("device_p120", p120);
                 jsonBody.put("device_address", address);
+                jsonBody.put("device_key", _key);
             }
 
             final String requestBody = jsonBody.toString();
@@ -152,7 +161,7 @@ public class ConfigTpv {
                 @Override
                 public void onResponse(String response) {
                     TRACE.d("initllave" +  TRACE.NEW_LINE + response.toString() );
-                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
+                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica);
                     if(spinner.isShowing()) spinner.dismiss();
                 }
             }, new Response.ErrorListener() {
@@ -203,13 +212,13 @@ public class ConfigTpv {
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
         }
     }
-    private boolean DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18){
+    private boolean DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica){
         try {
             JSONObject object = new JSONObject(_json);
             if(object.has("id")){
                 if(object.getString("codigo").equals("00") && (Integer.parseInt(object.getString("count"))>0 && Integer.parseInt(object.getString("count"))<1000000)){
                     dbManager.onUpgrade();
-                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
+                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica);
                     nuevainit=false;
                     bnd[0] =Boolean.TRUE;
                     TRACE.d("Activa" +  TRACE.NEW_LINE );
@@ -249,6 +258,24 @@ public class ConfigTpv {
         }catch (Throwable t){
             TRACE.d("error rsa: " + t);
             return false;
+        }
+    }
+    private void generakey(String interfaz)
+    {
+        if(interfaz.equals("Agregador"))
+        {
+            rsa();
+        }
+        else
+        {
+            RSA rsa = new RSA();
+
+            RSAData rsaD = new RSAData();
+            rsaD = rsa.generateKeys("3082010902820100CF57041EC2E7399C2BBD6CB0E8EDFC126B7837442541BCE86CC2804F9D90FE06EAE65B07014D789ED17300540D665213054E3E3A2A16D7FE1CFCC1382AF1485C542469D2AB327522444BF1A1EF1D8B79D9E9317B87D3531B364A8FCD24C0C6476E534D0D89070EEE2CBC999F00C5BEF3B935719AB459BBEE4EA86FEBEAC0F02A4F25D4007BA948E7B1E4A0456EB77107C4FCDAC79125EEE5A9D039995B6111F339DB1296A21D9F2048A8213BE29CE36DF0338D1BC04C3D42C0F6965E9694AFB05203D0BC05E6113AA6DA20DF0AB23DEA631144A8891352D866CBA9423B71890A4FD2B2112CE7BB57081581816232CD831932834EF05AA050C6FEBD434E9512ED0203010001");
+
+            _rsa=rsaD.getRsa();
+            _key=generateKey(128);
+            _tk=generateIv();
         }
     }
 }

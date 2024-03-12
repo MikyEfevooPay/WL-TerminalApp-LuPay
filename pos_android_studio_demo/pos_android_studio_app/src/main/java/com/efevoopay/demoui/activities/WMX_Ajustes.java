@@ -36,7 +36,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private String ksn_posId;
     public String name="";
     private DBManager dbManager;
-    private String p43, p48, p120, address, comercio, msi, msi3, msi6, msi9, msi12, msi18, minimo3, minimo6, minimo9, minimo12, minimo18;
+    private String p43, p48, p120, address, comercio, msi, msi3, msi6, msi9, msi12, msi18, minimo3, minimo6, minimo9, minimo12, minimo18,tasa,codigopostal,giro,redlogica;
 
     private final String INITIALIZE_TPV = "initializeTPV";
     private final String TPV_CONFIG = "configTPV";
@@ -128,6 +128,10 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
             minimo9=objtpv.getString("minimo9");
             minimo12=objtpv.getString("minimo12");
             minimo18=objtpv.getString("minimo18");
+            tasa=objtpv.getString("tasa");
+            codigopostal=objtpv.getString("codigopostal");
+            giro=objtpv.getString("giro");
+            redlogica=objtpv.getString("redlogica");
             getFetchManager().CallById(INITIALIZE_TPV);
         } catch (JSONException e) {
             getFetchManager().ForceClose();
@@ -137,7 +141,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     }
 
     private void processInitialization(String response) {
-        DatosInicializacion(response,p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
+        DatosInicializacion(response,p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,tasa,codigopostal,giro,redlogica);
     }
 
 
@@ -173,13 +177,13 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
 //        }
     }
 
-    public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18){
+    public void DatosInicializacion(String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String tasa,String codigopostal,String giro,String redlogica){
         try {
             JSONObject object = new JSONObject(_json);
 
             if(object.getString("codigo").equals("00")){
                 dbManager.onUpgrade();
-                dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18);
+                dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,tasa,codigopostal,giro,redlogica);
 
                 WMX_Ajustes.super.showAlert("success", "¡Inicialización con éxito!");
             }else{

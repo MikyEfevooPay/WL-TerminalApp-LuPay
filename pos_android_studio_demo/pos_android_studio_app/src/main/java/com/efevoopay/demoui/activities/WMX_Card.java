@@ -2,6 +2,8 @@ package com.efevoopay.demoui.activities;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.efevoopay.demoui.utils.AlgorithmAES.decrypt;
+import static com.efevoopay.demoui.utils.AlgorithmAES.encrypt;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,10 +34,16 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.dspread.xpos.TradeSoundType;
 import com.efevoopay.demoui.BuildConfig;
 import com.efevoopay.demoui.interfaces.FetchEntity;
@@ -61,6 +69,7 @@ import com.efevoopay.demoui.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -816,7 +825,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
                 String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                        DUKPK2009_CBC.Enum_mode.ECB, null);
+                        DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
                 List<TLV> NFCparse = TLVParser.parse(tlvNFC);
                 String _track2 = TLVParser.searchTLV(NFCparse, "57").value;
                 String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
@@ -999,8 +1008,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
             emvicc = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                    DUKPK2009_CBC.Enum_mode.ECB, null);
-            // TRACE.d("\nemvicc(tlv):\n" + emvicc);
+                    DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
+             TRACE.d("\nemvicc(tlv):\n" + emvicc);
             emvicc = emvicc.substring(8);
 
             List<TLV> ICCparse = TLVParser.parse(emvicc);
@@ -1971,12 +1980,18 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         if (transactionCancel || checkHistory  || startTransaction)
             return;
         this.startTransaction = true;
-        _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2), Integer.parseInt(counter), cursor);
-        TransExit = gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
-                _encryptblumon.getTrack2(), _encryptblumon.getCrc32Track2(), _encryptblumon.getKsn(),
-                String.valueOf(_encryptblumon.getCounter()), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
-                _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, gntBackEnd.CountTrack2(track2), cursor,
-                emisor, _nip);
+//        _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2), Integer.parseInt(counter), cursor);
+//        TransExit = gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
+//                _encryptblumon.getTrack2(), _encryptblumon.getCrc32Track2(), _encryptblumon.getKsn(),
+//                String.valueOf(_encryptblumon.getCounter()), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
+//                _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, gntBackEnd.CountTrack2(track2), cursor,
+//                emisor, _nip);
+//        TransExit = gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
+//                gntBackEnd.MascaraTrack2(track2), "", "",
+//                String.valueOf(Integer.parseInt(cursor.getString(11))), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
+//                _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, "", cursor,
+//                emisor, _nip);
+        TransExit=generatxn(entrada, entrymode, emv, redtarjeta, tipotarjeta, pan, track2, counter, time_txn, emisor,cursor.getString(22));
         TRACE.d("TRANSEXIT: " + TransExit);
         _redtar = gntBackEnd._redtarj;
         _tiptar = gntBackEnd._tiptarj;
@@ -1989,11 +2004,12 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     public void esperarYCerrar() {
         Handler handler = new Handler();
-        handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 1000);
+        handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 2000);
     }
 
     public String approvedDukpt(String _json)
     {
+        TRACE.d("approvedDukp(" + _json+")");
         String trans_code="";
         trans_id=0;
         _approve="";
@@ -2015,8 +2031,45 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            trans_code="96";
+            trans_code="";
         }
         return trans_code;
+    }
+    public String generatxn(String entrada,String entrymode,String emv,String redtarjeta,String tipotarjeta,String pan,String track2,String counter,String time_txn,String emisor,String interfaz)
+    {
+        if(interfaz.equals("Agregador"))
+        {
+            _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2,interfaz), Integer.parseInt(counter), cursor);
+            return gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),_encryptblumon.getTrack2(),
+                    _encryptblumon.getCrc32Track2(), _encryptblumon.getKsn(), String.valueOf(_encryptblumon.getCounter()), d4,
+                    emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta, _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC,
+                    gntBackEnd.CountTrack2(track2), cursor,emisor, _nip);
+        }
+        else{
+            String key = cursor.getString(4);
+            String iv=cursor.getString(3);
+            String encrypt=null;
+            String decrypt=null;
+
+            //key=generateKey(128);
+            //iv=generateIv();
+            encrypt=encrypt(gntBackEnd.MascaraTrack2(track2,interfaz),cursor.getString(4),cursor.getString(3));
+            decrypt=decrypt(encrypt,cursor.getString(4),cursor.getString(3));
+
+            TRACE.d("key:"+key);
+            TRACE.d("iv:"+iv);
+            TRACE.d("encrypt:"+encrypt);
+            TRACE.d("decrypt:"+decrypt);
+            /*return gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
+                    gntBackEnd.MascaraTrack2(track2,interfaz), "", "",
+                    String.valueOf(Integer.parseInt(cursor.getString(11))), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
+                    _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, "", cursor,
+                    emisor, _nip);*/
+            return gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),
+                    encrypt(gntBackEnd.MascaraTrack2(track2,interfaz),cursor.getString(4),cursor.getString(3)), "", "",
+                    String.valueOf(Integer.parseInt(cursor.getString(11))), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
+                    _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, "", cursor,
+                    emisor, _nip);
+        }
     }
 }

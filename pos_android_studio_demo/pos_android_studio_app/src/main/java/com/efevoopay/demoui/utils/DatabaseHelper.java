@@ -31,6 +31,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String _minimo9="minimo9";
     public static final String _minimo12="minimo12";
     public static final String _minimo18="minimo18";
+    public static final String _interfaz="interfaz";
+    public static final String _codigopostal="codigopostal";
+    public static final String _giro="giro";
+    public static final String _redlogica="redlogica";
 
     // Database Information
     static final String DB_NAME = "TPV";
@@ -62,6 +66,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT NOT NULL,"+_minimo9
             + " TEXT NOT NULL,"+_minimo12
             + " TEXT NOT NULL,"+_minimo18
+            + " TEXT NOT NULL,"+_interfaz
+            + " TEXT NOT NULL,"+_codigopostal
+            + " TEXT NOT NULL,"+_giro
+            + " TEXT NOT NULL,"+_redlogica
             + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {

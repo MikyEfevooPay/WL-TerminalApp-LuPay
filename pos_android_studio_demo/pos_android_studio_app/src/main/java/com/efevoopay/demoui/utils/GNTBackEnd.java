@@ -15,8 +15,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Random;
 
 public class GNTBackEnd {
     public String _redtarj="";
@@ -53,7 +56,7 @@ public class GNTBackEnd {
         TRANS_TYPE_TITLES.put(TRANS_OUT_TYPE, res.getString(R.string.wmx_transaction_OUT));
         TRANS_TYPE_TITLES.put(TRANS_PRE_TYPE, res.getString(R.string.wmx_transaction_PRE));
         TRANS_TYPE_TITLES.put(TRANS_CIE_TYPE, res.getString(R.string.wmx_transaction_CIE));
-        TRANS_TYPE_TITLES.put(TRANS_VEN_TYPE, res.getString(R.string.wmx_transaction_VEN));
+        TRANS_TYPE_TITLES.put(TRANS_VEN_TYPE, "Venta");
         TRANS_TYPE_TITLES.put(TRANS_MSI_TYPE, res.getString(R.string.wmx_transaction_MSI));
         TRANS_TYPE_TITLES.put(TRANS_CANMSI_TYPE, res.getString(R.string.wmx_transaction_CANMSI));
     }
@@ -128,12 +131,16 @@ public class GNTBackEnd {
             jsonBody.put("time_txn", _time_txn);
             jsonBody.put("p11", _p11);
             jsonBody.put("aid", _AID);
-            jsonBody.put("arqc", _ARQC);
+            jsonBody.put("arqc", ValidaArqc(_ARQC));
             jsonBody.put("drafcapture", drafcapture(_type_trans));
             jsonBody.put("p43", cursor.getString(5));
             jsonBody.put("p48", cursor.getString(6));
             jsonBody.put("p120", cursor.getString(7));
             jsonBody.put("version", BuildConfig.VERSION_NAME);
+            jsonBody.put("interfaz", cursor.getString(22));
+            jsonBody.put("codigopostal", cursor.getString(23));
+            jsonBody.put("giro", cursor.getString(24));
+            jsonBody.put("redlogica", cursor.getString(25));
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
             _card=jsonBody.getString("pinPan").toString();
@@ -299,9 +306,14 @@ public class GNTBackEnd {
             return "Desconocido";
         }
     }
-    public String MascaraTrack2(String track2){
+    public String MascaraTrack2(String track2,String interfaz){
         //TRACE.d("track2 original : " + track2.toString());
-        track2= String.format("%"+-48+"s",track2.toUpperCase(Locale.ROOT)).replace(" ","F");
+        if(interfaz.equals("Agregador"))
+        {
+            track2= String.format("%"+-48+"s",track2.toUpperCase(Locale.ROOT)).replace(" ","F");
+        }else{
+            track2= track2.toUpperCase(Locale.ROOT).replace("D","=").replace("F","");
+        }
         //TRACE.d("track2 final : " + track2.toString());
         return track2;
     }
@@ -326,5 +338,22 @@ public class GNTBackEnd {
         NumberFormat format = NumberFormat.getCurrencyInstance();
         format.setMaximumFractionDigits(2);
         return  format.format(total_msi).replace("$","$ ");
+    }
+    public String ValidaArqc(String _arqc){
+        if (_arqc=="N/A")
+        {
+            _arqc= GenArqc(16);
+        }
+        return _arqc;
+    }
+    public String GenArqc(int longitud){
+        String terminalTime = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+        String CHARACTERS ="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"+terminalTime;
+        Random random = new Random();
+        String contrasenia = "";
+        for (int i = 0; i < longitud; i++){
+            contrasenia += CHARACTERS.charAt(random.nextInt(CHARACTERS.length()));
+        }
+        return contrasenia.toUpperCase(Locale.ROOT);
     }
 }
