@@ -22,7 +22,7 @@ android {
         minSdkVersion 17
         targetSdk 31
         versionCode 287
-        versionName '1.5.7'
+        versionName '1.5.9.3'
 
         ndk {
             moduleName "serial_port"

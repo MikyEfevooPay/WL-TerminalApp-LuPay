@@ -162,7 +162,7 @@ public class ConfigTpv {
                 public void onResponse(String response) {
                     TRACE.d("initllave" +  TRACE.NEW_LINE + response.toString() );
                     bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica);
-                    if(spinner.isShowing()) spinner.dismiss();
+                    //if(spinner.isShowing()) spinner.dismiss();
                 }
             }, new Response.ErrorListener() {
                 @Override

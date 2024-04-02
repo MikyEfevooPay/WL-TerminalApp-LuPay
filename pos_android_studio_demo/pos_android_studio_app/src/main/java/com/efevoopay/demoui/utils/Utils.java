@@ -23,11 +23,12 @@ public class Utils {
 
 	//public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
-	//public static final String TERMINAL_BIN = "https://testagrswl.gntapi.com/apiv0/agrs/terminales/tpv/bines";
+	//public static final String TERMINAL_BIN = "https://testagrswl.efevoo.app/apiv0/agrs/terminales/tpv/bines";
 	public static final String TERMINAL_BIN = "https://test-agrs.efevoo.app/apiv0/agrs/terminales/tpv/bines";
-	//public static final String TPVCONFIG = "https://testagrswl.gntapi.com";
+	//public static final String TPVCONFIG = "https://testagrswl.efevoo.app";
 	public static final String TPVCONFIG = "https://test-agrs.efevoo.app";
 	
+
 	public static HashMap<String,String> errorMessagesDictionary;
 	public static HashMap<QPOSService.Error, String> errorPosDictionary;
 	private static char MASK_CHAR = '*';
