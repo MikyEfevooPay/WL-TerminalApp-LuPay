@@ -160,7 +160,7 @@ public class Utils {
 	}
 
 	public static String isVacio(String[] value, int pos) {
-		if (value.length > 0) {
+		if (value.length > pos) {
 			return value[pos].toString().trim().toUpperCase(Locale.ROOT);
 		} else {
 			return "";
