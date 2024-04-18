@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.security.PublicKey;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Name
     public static final String TABLE_NAME = "DEVICE";
@@ -35,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String _codigopostal="codigopostal";
     public static final String _giro="giro";
     public static final String _redlogica="redlogica";
+    public static final String _afiliacion="afiliacion";
 
     // Database Information
     static final String DB_NAME = "TPV";
@@ -70,6 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT NOT NULL,"+_codigopostal
             + " TEXT NOT NULL,"+_giro
             + " TEXT NOT NULL,"+_redlogica
+            + " TEXT NOT NULL,"+_afiliacion
             + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {

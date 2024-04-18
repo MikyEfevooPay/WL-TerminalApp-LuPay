@@ -2014,7 +2014,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         trans_id=0;
         _approve="";
         try {
-            if (_json!=""){
+            if (!_json.equals("")){
                 JSONObject object = new JSONObject(_json);
                 if(object.has("codigo"))
                 {
