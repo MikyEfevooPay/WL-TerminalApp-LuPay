@@ -825,7 +825,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
                 String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                        DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
+                        DUKPK2009_CBC.Enum_mode.ECB, null);
                 List<TLV> NFCparse = TLVParser.parse(tlvNFC);
                 String _track2 = TLVParser.searchTLV(NFCparse, "57").value;
                 String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
@@ -1008,7 +1008,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
             emvicc = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                    DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
+                    DUKPK2009_CBC.Enum_mode.ECB, null);
              TRACE.d("\nemvicc(tlv):\n" + emvicc);
             emvicc = emvicc.substring(8);
 
