@@ -21,7 +21,7 @@ android {
         applicationId "com.efevoopay.demoui"
         minSdkVersion 17
         targetSdk 31
-        versionCode 287
+        versionCode 288
         versionName '1.5.9.4'
 
         ndk {
