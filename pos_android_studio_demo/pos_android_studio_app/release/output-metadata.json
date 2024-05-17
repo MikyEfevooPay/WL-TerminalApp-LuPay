@@ -11,7 +11,7 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 288,
+      "versionCode": 289,
       "versionName": "1.5.9.4",
       "outputFile": "pos_android_studio_app-release.apk"
     }
