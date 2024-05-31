@@ -38,6 +38,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String _giro="giro";
     public static final String _redlogica="redlogica";
     public static final String _afiliacion="afiliacion";
+    public static final String _cantseller="cantseller";
+    public static final String _datafield43="datafield43";
+    public static final String _datafield60="datafield60";
+    public static final String _tkamex="tkamex";
+    public static final String _keyamex="keyamex";
+    public static final String _countamex="countamex";
 
     // Database Information
     static final String DB_NAME = "TPV";
@@ -74,6 +80,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT NOT NULL,"+_giro
             + " TEXT NOT NULL,"+_redlogica
             + " TEXT NOT NULL,"+_afiliacion
+            + " TEXT NOT NULL,"+_cantseller
+            + " TEXT NOT NULL,"+_datafield43
+            + " TEXT NOT NULL,"+_datafield60
+            + " TEXT NOT NULL,"+_tkamex
+            + " TEXT NOT NULL,"+_keyamex
+            + " TEXT NOT NULL,"+_countamex
             + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {

@@ -184,7 +184,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
 
             if(object.getString("codigo").equals("00")){
                 dbManager.onUpgrade();
-                dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,tasa,codigopostal,giro,redlogica,afiliacion);
+                //dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,tasa,codigopostal,giro,redlogica,afiliacion);
 
                 WMX_Ajustes.super.showAlert("success", "¡Inicialización con éxito!");
             }else{

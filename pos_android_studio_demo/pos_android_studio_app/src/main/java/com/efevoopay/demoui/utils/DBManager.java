@@ -35,7 +35,7 @@ public class DBManager {
     public void close() {
         dbHelper.close();
     }
-    public void insert(String name,String ksn,String tk,String key,String p43,String p48, String p120,String address,String comercio,String msi,Integer counter,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion) {
+    public void insert(String name,String ksn,String tk,String key,String p43,String p48, String p120,String address,String comercio,String msi,Integer counter,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String cantseller,String datafield43,String datafield60,String tkamex,String keyamex,Integer countamex) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper._NAME, name);
         contentValue.put(DatabaseHelper._KSN, ksn);
@@ -63,44 +63,28 @@ public class DBManager {
         contentValue.put(DatabaseHelper._giro, giro);
         contentValue.put(DatabaseHelper._redlogica, redlogica);
         contentValue.put(DatabaseHelper._afiliacion,afiliacion);
+        contentValue.put(DatabaseHelper._cantseller,cantseller);
+        contentValue.put(DatabaseHelper._datafield43,datafield43);
+        contentValue.put(DatabaseHelper._datafield60,datafield60);
+        contentValue.put(DatabaseHelper._tkamex,tkamex);
+        contentValue.put(DatabaseHelper._keyamex,keyamex);
+        contentValue.put(DatabaseHelper._countamex,countamex);
         database.insert(DatabaseHelper.TABLE_NAME, null, contentValue);
     }
     public Cursor fetch(String name) {
-        String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper._NAME, DatabaseHelper._KSN,DatabaseHelper._TK,DatabaseHelper._KEY,DatabaseHelper._P43,DatabaseHelper._P48,DatabaseHelper._P120,DatabaseHelper._ADDRESS,DatabaseHelper._COMERCIO,DatabaseHelper._MSI,DatabaseHelper._COUNTER,DatabaseHelper._MSI3,DatabaseHelper._MSI6,DatabaseHelper._MSI9,DatabaseHelper._MSI12,DatabaseHelper._MSI18,DatabaseHelper._minimo3,DatabaseHelper._minimo6,DatabaseHelper._minimo9,DatabaseHelper._minimo12,DatabaseHelper._minimo18,DatabaseHelper._interfaz,DatabaseHelper._codigopostal,DatabaseHelper._giro,DatabaseHelper._redlogica,DatabaseHelper._afiliacion };
+        String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper._NAME, DatabaseHelper._KSN,DatabaseHelper._TK,DatabaseHelper._KEY,DatabaseHelper._P43,DatabaseHelper._P48,DatabaseHelper._P120,DatabaseHelper._ADDRESS,DatabaseHelper._COMERCIO,DatabaseHelper._MSI,DatabaseHelper._COUNTER,DatabaseHelper._MSI3,DatabaseHelper._MSI6,DatabaseHelper._MSI9,DatabaseHelper._MSI12,DatabaseHelper._MSI18,DatabaseHelper._minimo3,DatabaseHelper._minimo6,DatabaseHelper._minimo9,DatabaseHelper._minimo12,DatabaseHelper._minimo18,DatabaseHelper._interfaz,DatabaseHelper._codigopostal,DatabaseHelper._giro,DatabaseHelper._redlogica,DatabaseHelper._afiliacion,DatabaseHelper._cantseller,DatabaseHelper._datafield43,DatabaseHelper._datafield60,DatabaseHelper._tkamex,DatabaseHelper._keyamex,DatabaseHelper._countamex };
         Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, " name = ?", new String[] { String.valueOf(name) }, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
-    public int update(String name,String ksn,String tk,String key,String p43,String p48, String p120,String address,String comercio,String msi,Integer counter,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion) {
+    public int update(String name,String cantseller,String tkamex,String keyamex,Integer countamex) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper._NAME, name);
-        contentValues.put(DatabaseHelper._KSN, ksn);
-        contentValues.put(DatabaseHelper._TK, tk);
-        contentValues.put(DatabaseHelper._KEY, key);
-        contentValues.put(DatabaseHelper._P43, p43);
-        contentValues.put(DatabaseHelper._P48, p48);
-        contentValues.put(DatabaseHelper._P120, p120);
-        contentValues.put(DatabaseHelper._ADDRESS, address);
-        contentValues.put(DatabaseHelper._COMERCIO, comercio);
-        contentValues.put(DatabaseHelper._MSI, msi);
-        contentValues.put(DatabaseHelper._COUNTER, counter);
-        contentValues.put(DatabaseHelper._MSI3, msi3);
-        contentValues.put(DatabaseHelper._MSI6, msi6);
-        contentValues.put(DatabaseHelper._MSI9, msi9);
-        contentValues.put(DatabaseHelper._MSI12, msi12);
-        contentValues.put(DatabaseHelper._MSI18, msi18);
-        contentValues.put(DatabaseHelper._minimo3, minimo3);
-        contentValues.put(DatabaseHelper._minimo6, minimo6);
-        contentValues.put(DatabaseHelper._minimo9, minimo9);
-        contentValues.put(DatabaseHelper._minimo12, minimo12);
-        contentValues.put(DatabaseHelper._minimo18, minimo18);
-        contentValues.put(DatabaseHelper._interfaz, interfaz);
-        contentValues.put(DatabaseHelper._codigopostal, codigopostal);
-        contentValues.put(DatabaseHelper._giro, giro);
-        contentValues.put(DatabaseHelper._redlogica, redlogica);
-        contentValues.put(DatabaseHelper._afiliacion,afiliacion);
+        contentValues.put(DatabaseHelper._cantseller, cantseller);
+        contentValues.put(DatabaseHelper._tkamex, tkamex);
+        contentValues.put(DatabaseHelper._keyamex, keyamex);
+        contentValues.put(DatabaseHelper._countamex,countamex);
         int i = database.update(DatabaseHelper.TABLE_NAME, contentValues, " name = ?", new String[] { String.valueOf (name ) });
         return i;
     }
