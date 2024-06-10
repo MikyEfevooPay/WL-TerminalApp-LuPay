@@ -48,6 +48,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickListener {
 
@@ -198,7 +199,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_print:
-                if (Build.MODEL.equals("D30")) {
+                if (Build.MODEL.equals("D30")||Build.MODEL.equals("D60")) {
                     onFinish();
                 } else {
                     TRACE.d("click email button");
@@ -312,7 +313,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         tp_tv_amount.setText(subtotal + " MXN");
         tp_tv_tip.setText(propina + " MXN");
         v_months = msi;
-        if (status.equals("CAN")) {
+        if (status.equals("CAN") || (status.equals("REV") && redtarj.toUpperCase(Locale.ROOT).equals("AMEX"))) {
             if (Integer.parseInt(msi) > 0) {
                 tp_tv_total_label.setText(v_months + " MSI");
                 tp_tv_amount.setText(GNTBackEnd.Amount_msi(total, v_months) + " MXN");
@@ -356,6 +357,9 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         } else if (redtarj.equals("Visa")) {
             card_provider = "VISA";
             tp_iv_process.setImageResource(R.drawable.visa);
+        }else if (redtarj.toUpperCase(Locale.ROOT).equals("AMEX")) {
+            card_provider = "AMEX";
+            tp_iv_process.setImageResource(R.drawable.amex);
         }
         tp_tv_AID.setText(aid);
         tp_tv_ARQC.setText(arqc);

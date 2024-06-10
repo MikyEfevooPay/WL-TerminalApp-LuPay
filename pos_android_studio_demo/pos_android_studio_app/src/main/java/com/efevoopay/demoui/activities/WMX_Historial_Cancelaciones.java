@@ -15,6 +15,7 @@ import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
 import com.efevoopay.demoui.utils.Fetch;
 import com.efevoopay.demoui.utils.FetchUIManager;
+import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Transaction;
 import com.efevoopay.demoui.utils.Utils;
 import com.efevoopay.demoui.widget.CancelacionesItemAdapter;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class WMX_Historial_Cancelaciones extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
@@ -32,6 +34,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
     ArrayList<Transaction> transactions = new ArrayList<>();
     Intent intent;
     private final String CANCELATION_HISTORY_KEY = "getCancelacionHistory";
+    private final String HISTORY_KEY_AMEX = "getCancelacionHistoryAmex";
 
     private String ksn_posId;
     private WMX_llamada_dukpt jsondukpt;
@@ -54,6 +57,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
     protected void onStart() {
         super.onStart();
         FetchUIManager manager = getFetchManager();
+        if(jsondukpt.transactions.size() > 0) jsondukpt.transactions.clear();
         manager.CallAll();
     }
 
@@ -61,6 +65,9 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
     public void addFetchs(FetchUIManager manager) throws Exception {
         Fetch cancelacionHistory = manager.addFetch(CANCELATION_HISTORY_KEY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
         cancelacionHistory.setSetBodyListenner(this::setBody);
+
+        Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_Amex + "/amex/tpv/txndevice", Request.Method.POST));
+        HistoryAmex.setSetBodyListenner(this::setBodyAmex);
     }
 
 
@@ -70,7 +77,12 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         body.put("fechainicio", "");
         body.put("fechafinal", "");
     }
-
+    private void setBodyAmex(JSONObject body) throws JSONException {
+        body.put("numserie", ksn_posId);
+        body.put("pantalla", "Cancelacion");
+        body.put("fechainicio", "");
+        body.put("fechafinal", "");
+    }
     @Override
     public void onClick(View view) {
 
@@ -91,7 +103,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         Intent intent = new Intent(WMX_Historial_Cancelaciones.this, WMX_Cancelacion_Desc.class);
         intent.putExtra("id", transactions.get(position).get_id());
         intent.putExtra("auth", transactions.get(position).get_auth());
-        intent.putExtra("date", transactions.get(position).get_date2());
+        intent.putExtra("date", transactions.get(position).get_date());
         intent.putExtra("time", transactions.get(position).get_time());
         intent.putExtra("subtotal", transactions.get(position).get_subtotal());
         intent.putExtra("card", transactions.get(position).get_card());
@@ -114,15 +126,31 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         super.onFetchCurrentResult(entity, error);
         if(entity.key.equals(CANCELATION_HISTORY_KEY)) {
             if(entity.result == null) return;
+            //TRACE.d("PROSA: " +entity.result.toString());
             jsondukpt.readJsonnew(entity.result.toString());
-            transactions = jsondukpt.transactions;
-            Collections.reverse(transactions);
-            setItems();
+            //transactions = jsondukpt.transactions;
+            //Collections.reverse(transactions);
+            //setItems();
+        }
+        if(entity.key.equals(HISTORY_KEY_AMEX)) {
+            if(entity.result == null) return;
+            //TRACE.d("AMEX: " +entity.result.toString());
+            jsondukpt.readJsonnew(entity.result.toString());
+
         }
     }
     @Override
     public void onFetchResults(List<FetchEntity> entities, List<FetchEntity> errors) {
-
+        TRACE.d("ultimo: ");
+        transactions = jsondukpt.transactions;
+        Collections.sort(transactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction lhs, Transaction rhs) {
+                return lhs.get_time().compareTo(rhs.get_time());
+            }
+        });
+        Collections.reverse(transactions);
+        setItems();
     }
 
     public void setItems() {

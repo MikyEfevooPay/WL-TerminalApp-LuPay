@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String _giro="giro";
     public static final String _redlogica="redlogica";
     public static final String _afiliacion="afiliacion";
-    public static final String _cantseller="cantseller";
+    public static final String _statusseller="statusseller";
     public static final String _datafield43="datafield43";
     public static final String _datafield60="datafield60";
     public static final String _tkamex="tkamex";
@@ -80,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT NOT NULL,"+_giro
             + " TEXT NOT NULL,"+_redlogica
             + " TEXT NOT NULL,"+_afiliacion
-            + " TEXT NOT NULL,"+_cantseller
+            + " TEXT NOT NULL,"+_statusseller
             + " TEXT NOT NULL,"+_datafield43
             + " TEXT NOT NULL,"+_datafield60
             + " TEXT NOT NULL,"+_tkamex

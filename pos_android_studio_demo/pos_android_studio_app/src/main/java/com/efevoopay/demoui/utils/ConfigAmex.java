@@ -35,7 +35,7 @@ public class ConfigAmex {
         dbManager.open();
         context=mContext;
     }
-    public void tpvConfig(String ksn_posId,Integer valor) {
+    public void tpvConfigAmex(String ksn_posId,Integer valor) {
         try {
             nuevainit = false;
             String URL = Utils.TPVCONFIG + "/apiv0/agrs/terminales/tpv";
@@ -50,7 +50,7 @@ public class ConfigAmex {
                         JSONObject object = new JSONObject(response);
                         if(!object.has("mensaje")){
                             //bndamex[0] =Boolean.TRUE;
-                            initactiva(response.toString(),ksn_posId,valor);
+                            InitActivaAmex(response.toString(),ksn_posId,valor);
                             TRACE.d("tpvConfig: " +  TRACE.NEW_LINE + response.toString() );
                         }else{
                             bndamex[0] =Boolean.FALSE;
@@ -107,8 +107,9 @@ public class ConfigAmex {
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
         }
     }
-    private void initactiva(String _tpv,String ksn_posId,Integer valor) {
+    public void InitActivaAmex(String _tpv,String ksn_posId,Integer valor) {
         String URL="";
+        nuevainit = false;
         try {
 
             //String URL =  Utils.TPVCONFIG + "/efevoo/tpv/initllave";
@@ -151,7 +152,7 @@ public class ConfigAmex {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    TRACE.d("initllave" +  TRACE.NEW_LINE + response.toString() );
+                    TRACE.d("initllaveamex" +  TRACE.NEW_LINE + response.toString() );
                     bndamex[0] =DatosInicializacion(ksn_posId,response.toString());
                     //if(spinner.isShowing()) spinner.dismiss();
                 }
@@ -200,6 +201,7 @@ public class ConfigAmex {
 
             RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
+            bndamex[0] =Boolean.FALSE;;
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
         }
     }
@@ -208,7 +210,7 @@ public class ConfigAmex {
             JSONObject object = new JSONObject(_json);
             if(object.has("id")){
                 if(object.getString("codigo").equals("00") && (Integer.parseInt(object.getString("count"))>0 && Integer.parseInt(object.getString("count"))<1000000)){
-                    dbManager.onUpgrade();
+                    //dbManager.onUpgrade();
                     dbManager.update(ksn_posId, "1",object.getString("tk").toString(),object.getString("ipek").toString(),Integer.parseInt(object.getString("count")));
                     nuevainit=false;
                     bndamex[0] =Boolean.TRUE;

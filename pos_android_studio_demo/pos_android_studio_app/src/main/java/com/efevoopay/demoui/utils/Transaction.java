@@ -1,13 +1,13 @@
 package com.efevoopay.demoui.utils;
 
 public class Transaction {
-    String _pan,_date,_amount,_tips;
+    String _pan,_amount,_tips;
     int _id;
-    String _auth, _date2, _subtotal,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi,_aid,_arqc, _approve,_emisor,_nip,_entrada;
-    public Transaction(int id,String auth, String date2, String time, String subtotal ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi,String aid,String arqc, String approve,String emisor,String nip,String entrada){
+    String _auth, _date, _subtotal,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi,_aid,_arqc, _approve,_emisor,_nip,_entrada,_datehour;
+    public Transaction(int id,String auth, String date, String time, String subtotal ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi,String aid,String arqc, String approve,String emisor,String nip,String entrada, String datehour){
         _id = id;
         _auth=auth;
-        _date2=date2;
+        _date=date;
         _subtotal=subtotal;
         _time=time;
         _card=card;
@@ -23,6 +23,7 @@ public class Transaction {
         _emisor=emisor;
         _nip=nip;
         _entrada=entrada;
+        _datehour=datehour;
     }
 
     public String get_amount() {
@@ -33,8 +34,8 @@ public class Transaction {
         return _pan;
     }
 
-    public String get_date() {
-        return _date;
+    public String get_datehour() {
+        return _datehour;
     }
 
     public String get_tips() {
@@ -45,8 +46,8 @@ public class Transaction {
         return _auth;
     }
 
-    public String get_date2() {
-        return _date2;
+    public String get_date() {
+        return _date;
     }
 
     public String get_subtotal() {

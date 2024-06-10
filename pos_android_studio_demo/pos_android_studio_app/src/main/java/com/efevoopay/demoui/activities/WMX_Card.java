@@ -172,6 +172,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private final String CALL_TRANSACTION = "callTransaction";
     private final String VALIDATE_TRANSACTION = "validateTransaction";
     private final int MAX_CALL_ITERATE = 8;
+    private String CALL_SERVICIO="";
 
     private int QPOS_STATUS;
 
@@ -242,11 +243,19 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch call = manager.addFetch(CALL_TRANSACTION,
-                new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/iso/gral", Request.Method.POST));
+//        Fetch call = manager.addFetch(CALL_TRANSACTION,
+//                new FetchOptions(gntBackEnd.getcalltransaction(CALL_SERVICIO), Request.Method.POST));
+//        call.setSetBodyListenner(this::getCallBody);
+//        Fetch validate = manager.addFetch(VALIDATE_TRANSACTION,
+//                new FetchOptions(gntBackEnd.getcallvalida(CALL_SERVICIO), Request.Method.POST));
+//        validate.setSetBodyListenner(this::getValidateBody);
+    }
+    public void agregaurl() throws Exception {
+        Fetch call =getFetchManager().addFetch(CALL_TRANSACTION,
+                new FetchOptions(gntBackEnd.getcalltransaction(CALL_SERVICIO), Request.Method.POST));
         call.setSetBodyListenner(this::getCallBody);
-        Fetch validate = manager.addFetch(VALIDATE_TRANSACTION,
-                new FetchOptions(Utils.TERMINAL_API + "/efevoo/tpv/transaccion", Request.Method.POST));
+        Fetch validate = getFetchManager().addFetch(VALIDATE_TRANSACTION,
+                new FetchOptions(gntBackEnd.getcallvalida(CALL_SERVICIO), Request.Method.POST));
         validate.setSetBodyListenner(this::getValidateBody);
     }
 
@@ -299,7 +308,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private void processTransactionResponse(String response) {
         TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
         String code = approvedDukpt(response);
-        if (code.equals("00")) {
+        if (code.equals("00") ||code.equals("000") || code.equals("400")) {
             ChangeViewToTicket();
         } else if (code.equals("")) {
             if (this.validateTransactionEmptyResponse >= MAX_CALL_ITERATE) {
@@ -795,7 +804,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         _track2MN = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA,
                                 DUKPK2009_CBC.Enum_mode.ECB, null);
                         String clearPan = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA,
-                                DUKPK2009_CBC.Enum_mode.CBC, null);
+                                DUKPK2009_CBC.Enum_mode.CBC, null).toUpperCase(Locale.ROOT);
                         content += "encTrack2:" + " " + clearPan + "\n";
                         realPan = clearPan.substring(0, maskedPAN.length());
                         content += "realPan:" + " " + realPan + "\n";
@@ -810,9 +819,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 }
                 String terminalTime = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
                 TRACE.d("_track2MN: " + _track2MN);
-                maskedPAN = _track2MN.substring(0, 8) + "XXXX" + _track2MN.substring(12, 16);
+                //maskedPAN = _track2MN.substring(0, 8) + "XXXX" + _track2MN.substring(12, 16);
                 Integer _9f = Integer.parseInt(pinKsn.substring(15, 20), 16);
-                ValidacionRequest(_track2MN.substring(0, 8), "MCR", "90", "", maskedPAN, _track2MN, _9f.toString(),
+                ValidacionRequest(_track2MN.substring(0, 8), "MCR", "90", "", _track2MN, _track2MN, _9f.toString(),
                         terminalTime);
             } else if (result == QPOSService.DoTradeResult.NFC_ONLINE) {
                 TRACE.d("EMV NFC Start");
@@ -827,10 +836,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
                         DUKPK2009_CBC.Enum_mode.ECB, null);
                 List<TLV> NFCparse = TLVParser.parse(tlvNFC);
-                String _track2 = TLVParser.searchTLV(NFCparse, "57").value;
+                String _track2 = TLVParser.searchTLV(NFCparse, "57").value.toUpperCase(Locale.ROOT);
                 String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
-                String _tag50 = TLVParser.searchTLV(NFCparse, "50").value;
-                String _tag9F12 = TLVParser.searchTLV(NFCparse, "9F12").value;
+                //String _tag50 = TLVParser.searchTLV(NFCparse, "50").value;
+                //String _tag9F12 = TLVParser.searchTLV(NFCparse, "9F12").value;
                 String _tag9F21 = TLVParser.searchTLV(NFCparse, "9F21").value;
 
                 _AID = TLVParser.searchTLV(NFCparse, "4F").value.toUpperCase(Locale.ROOT);
@@ -935,8 +944,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                             + "\n";
                 }
                 Integer _9f = Integer.parseInt(onLineksn.substring(15, 20), 16);
-                maskedPAN = _track2.substring(0, 8) + "XXXX" + _track2.substring(12, 16);
-                ValidacionRequest(maskedPAN.substring(0, 8), "NFC", _entrymode, tlvNFC, maskedPAN, _track2,
+                //maskedPAN = _track2.substring(0, 8) + "XXXX" + _track2.substring(12, 16);
+                ValidacionRequest(_track2.substring(0, 8), "NFC", _entrymode, tlvNFC, _track2, _track2,
                         _9f.toString(), _tag9F21);
                 // ValidacionDatos(maskedPAN.substring(0, 8), "NFC", _entrymode, tlvNFC,
                 // maskedPAN, _track2, _9f.toString(), _tag50, _tag9F12, _tag9F21);
@@ -1070,7 +1079,12 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                  * message += getString(R.string.cashback_amount) + ": INR" + cashbackAmount;
                  * }
                  **/
-                ICCTag = pos.getICCTag(QPOSService.EncryptType.PLAINTEXT, 1, 1, "5A");
+                List<TLV> NFCparse = TLVParser.parse(emvicc);
+                String _track2 = TLVParser.searchTLV(NFCparse, "57").value.toUpperCase(Locale.ROOT);
+                String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
+                String _tag9F21 = TLVParser.searchTLV(NFCparse, "9F21").value;
+                String _9F36 = TLVParser.searchTLV(NFCparse, "9F36").value;
+                /*ICCTag = pos.getICCTag(QPOSService.EncryptType.PLAINTEXT, 1, 1, "5A");
                 String _pinpan = ICCTag.get("tlv").toString();
                 ICCTag = pos.getICCTag(QPOSService.EncryptType.PLAINTEXT, 1, 1, "57");
                 String _track2 = ICCTag.get("tlv").toString();
@@ -1083,16 +1097,16 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 ICCTag = pos.getICCTag(QPOSService.EncryptType.PLAINTEXT, 1, 1, "9F12");
                 String _tag9F12 = ICCTag.get("tlv").toString();
                 ICCTag = pos.getICCTag(QPOSService.EncryptType.PLAINTEXT, 1, 1, "9F21");
-                String _tag9F21 = ICCTag.get("tlv").toString();
+                String _tag9F21 = ICCTag.get("tlv").toString();*/
 
                 // TRACE.d("_9f: " + _9F41);
-                String pan = _pinpan.substring(4, 12) + "XXXX" + _pinpan.substring(16, _pinpan.length());
+               // String pan = _pinpan.substring(4, 12) + "XXXX" + _pinpan.substring(16, _pinpan.length());
 
                 Integer F41 = Integer.parseInt(_9F41.substring(15, 20), 16);
                 // Integer F41=Integer.parseInt(_9F41);
-                ValidacionRequest(_pinpan.substring(4, 12), "ICC", _entrymode.substring(6, _entrymode.length()), emvicc,
-                        pan, _track2.substring(4, _track2.length()), F41.toString(),
-                        _tag9F21.substring(6, _tag9F21.length()));
+                ValidacionRequest(_track2.substring(0, 8), "ICC", _entrymode, emvicc,
+                        _track2, _track2, _9F36,
+                        _tag9F21);
                 // ValidacionDatos(_pinpan.substring(4, 12), "ICC", _entrymode.substring(6,
                 // _entrymode.length()), emvicc, pan, _track2.substring(4, _track2.length()),
                 // F41.toString(), _tag50, _tag9F12, _tag9F21.substring(6, _tag9F21.length()));
@@ -1991,7 +2005,18 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 //                String.valueOf(Integer.parseInt(cursor.getString(11))), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
 //                _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, "", cursor,
 //                emisor, _nip);
-        TransExit=generatxn(entrada, entrymode, emv, redtarjeta, tipotarjeta, pan, track2, counter, time_txn, emisor,cursor.getString(22));
+        if((redtarjeta.toUpperCase(Locale.ROOT).equals("AMEX") || track2.substring(0,2).equals("37")) && Integer.parseInt(cursor.getString(27))==1){
+            CALL_SERVICIO="Amex";
+            TransExit=GeneraAmex(entrada,emv,track2,gntBackEnd.panTrack2Amex(pan),gntBackEnd.redtarjetaamex(redtarjeta),gntBackEnd.tipotarjetaamex(tipotarjeta));
+        }else{
+            CALL_SERVICIO="Prosa";
+            TransExit=generatxn(entrada, entrymode, emv, gntBackEnd.redtarjetaamex(redtarjeta), gntBackEnd.tipotarjetaamex(tipotarjeta), gntBackEnd.panTrack2Prosa(pan), track2, counter, time_txn, emisor,cursor.getString(22));
+        }
+        try {
+            agregaurl();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         TRACE.d("TRANSEXIT: " + TransExit);
         _redtar = gntBackEnd._redtarj;
         _tiptar = gntBackEnd._tiptarj;
@@ -2021,6 +2046,12 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     _approve=object.getString("numref");
                     trans_id=Integer.parseInt(object.getString("id"));
                     trans_code=object.getString("codigo");
+                }else if(object.has("msg")){
+                    trans_code=object.getString("msg");
+                    if (trans_code=="null")
+                    {
+                        trans_code="";
+                    }
                 }
                 else{
                     trans_code=_json;
@@ -2039,7 +2070,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     {
         if(interfaz.equals("Agregador"))
         {
-            _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2,interfaz), Integer.parseInt(counter), cursor);
+            _encryptblumon = gntBackEnd.EncryptBlumon(gntBackEnd.MascaraTrack2(track2,interfaz), cursor);
             return gntBackEnd.transaccion(entrada, entrymode, pan.substring(12, pan.length()),_encryptblumon.getTrack2(),
                     _encryptblumon.getCrc32Track2(), _encryptblumon.getKsn(), String.valueOf(_encryptblumon.getCounter()), d4,
                     emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta, _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC,
@@ -2070,6 +2101,23 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     String.valueOf(Integer.parseInt(cursor.getString(11))), d4, emv, msi, pan, ksn_posId, redtarjeta, tipotarjeta,
                     _Propina, type_transaction, time_txn, _noAuth, _AID, _ARQC, "", cursor,
                     emisor, _nip);
+        }
+    }
+    public String GeneraAmex(String entrada,String emv,String track2,String pan,String redtarjeta,String tipotarjeta)
+    {
+        String  encrypt=encrypt(gntBackEnd.MascaraTrack2(track2),cursor.getString(31),cursor.getString(30));
+        String  decrypt=decrypt(encrypt,cursor.getString(31),cursor.getString(30));
+        /*TRACE.d("key:"+cursor.getString(31));
+        TRACE.d("iv:"+cursor.getString(30));
+        TRACE.d("encrypt:"+encrypt);
+        TRACE.d("decrypt:"+decrypt);*/
+        if(type_transaction.equals("Cancelacion"))
+        {
+            TRACE.d("REVERSO AMEX:"+decrypt);
+            return gntBackEnd.RevAmex(encrypt(gntBackEnd.MascaraTrack2(track2),cursor.getString(31),cursor.getString(30)),cursor.getString(32), Amount,redtarjeta, tipotarjeta,_nip,entrada,pan,msi,ksn_posId,"reverso",_Propina,_AID,_ARQC,String.valueOf(trans_id),encrypt(gntBackEnd.tarjetaTrack2(track2),cursor.getString(31),cursor.getString(30)),gntBackEnd.fechaTrack2(track2),gntBackEnd.pinpanTrack2(track2),cursor);
+        }else{
+            TRACE.d("TRANSACCION AMEX:"+decrypt);
+            return gntBackEnd.TxnAmex(encrypt(gntBackEnd.MascaraTrack2(track2),cursor.getString(31),cursor.getString(30)),cursor.getString(32), Amount,emv,redtarjeta, tipotarjeta,_nip,entrada,pan,msi,ksn_posId,type_transaction,_Propina,_AID,_ARQC,encrypt(gntBackEnd.tarjetaTrack2(track2),cursor.getString(31),cursor.getString(30)),gntBackEnd.fechaTrack2(track2),gntBackEnd.pinpanTrack2(track2),cursor);
         }
     }
 }

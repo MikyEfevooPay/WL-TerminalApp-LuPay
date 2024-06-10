@@ -16,6 +16,7 @@ import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
 import com.efevoopay.demoui.utils.Transaction;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class CancelacionesItemAdapter extends RecyclerView.Adapter<CancelacionesItemAdapter.MyViewHolder> {
     private final TransactionsViewInterface transactionsViewInterface;
@@ -40,7 +41,7 @@ public class CancelacionesItemAdapter extends RecyclerView.Adapter<Cancelaciones
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_auth.setText(_transactions.get(i).get_auth());
-        myViewHolder.tv_date2.setText(_transactions.get(i).get_date2());
+        myViewHolder.tv_date2.setText(_transactions.get(i).get_date());
         myViewHolder.tv_amount2.setText(_transactions.get(i).get_total());
         myViewHolder.tv_time.setText(_transactions.get(i).get_time());
         myViewHolder.tv_card.setText("**** "+_transactions.get(i).get_card());
@@ -50,8 +51,10 @@ public class CancelacionesItemAdapter extends RecyclerView.Adapter<Cancelaciones
 
         if(_transactions.get(i).get_redtarj().equals("MC")){
             myViewHolder.iv_process.setImageResource(R.drawable.masterdcard);
-        }else{
+        }else if(_transactions.get(i).get_redtarj().equals("Visa")){
             myViewHolder.iv_process.setImageResource(R.drawable.visa);
+        }else if(_transactions.get(i).get_redtarj().toUpperCase(Locale.ROOT).equals("AMEX")){
+            myViewHolder.iv_process.setImageResource(R.drawable.amex);
         }
 
     }

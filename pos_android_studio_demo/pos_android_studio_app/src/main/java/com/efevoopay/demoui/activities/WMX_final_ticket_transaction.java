@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
 
@@ -228,6 +229,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             card_provider = "MASTERCARD";
         } else if (v_redtarjeta.equals("Visa")) {
             card_provider = "VISA";
+        }else if (v_redtarjeta.toUpperCase(Locale.ROOT).equals("AMEX")) {
+            card_provider = "AMEX";
         }
     }
 
@@ -326,7 +329,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
         switch (view.getId()) {
             case R.id.btn_ticket_final:
-                if (Build.MODEL.equals("D30")) {
+                if (Build.MODEL.equals("D30")||Build.MODEL.equals("D60")) {
                     onFinish();
                 } else {
                     startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

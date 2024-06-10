@@ -65,7 +65,7 @@ public class GNTBackEnd {
         return TRANS_TYPE_TITLES.get(key).toString();
     }
 
-    public DUKPTData EncryptBlumon(String _track2, Integer _counter, Cursor cursor) {
+    public DUKPTData EncryptBlumon(String _track2, Cursor cursor) {
         TransactionData tr = new TransactionData();
         CypherFunctions cy = new CypherFunctions();
         DUKPTData dukpt = new DUKPTData();
@@ -77,7 +77,7 @@ public class GNTBackEnd {
         String tr_tk = cursor.getString(3);
         String track2 = _track2.toUpperCase(Locale.ROOT);
         //TRACE.d(TRACE.NEW_LINE + "track2" + TRACE.NEW_LINE + track2+TRACE.NEW_LINE);
-        Integer tr_counter = _counter;
+        //Integer tr_counter = _counter;
 
         tr.setKey(tr_key);
         tr.setKsn(tr_ksn);
@@ -141,6 +141,118 @@ public class GNTBackEnd {
             jsonBody.put("codigopostal", cursor.getString(23));
             jsonBody.put("giro", cursor.getString(24));
             jsonBody.put("redlogica", cursor.getString(25));
+            _redtarj=jsonBody.getString("redtarj").toString();
+            _tiptarj=jsonBody.getString("tipotarj").toString();
+            _card=jsonBody.getString("pinPan").toString();
+            emisor=jsonBody.getString("emisor").toString();
+            nip=jsonBody.getString("nip").toString();
+            entrada=jsonBody.getString("entrada").toString();
+            pan=jsonBody.getString("pan").toString();
+            //TRACE.d(TRACE.NEW_LINE +  jsonBody.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);
+            return jsonBody.toString();
+        } catch (JSONException e) {
+            TRACE.d("** ERROR JSON " +  TRACE.NEW_LINE + e.toString() );
+            return e.toString();
+        }
+    }
+    public String TxnAmex(String _Track2,String _Counter,String _d4,String _emv,String _redtarjeta,String _tipotarjeta,Integer _nip,String _entrada,String _pan,Integer _msi,String _deviceid,String _type_trans,String _propina,String _AID,String _ARQC,String _tarjetaTrack2,String _fechaTrack2,String _pinpan,Cursor cursor){
+        JSONObject jsonBody = new JSONObject();
+        try {
+            String p37 = new SimpleDateFormat("yyMMdd").format(Calendar.getInstance().getTime());
+
+            jsonBody.put("mti", "1100");
+            jsonBody.put("p2", _tarjetaTrack2);
+            jsonBody.put("p3", "004000");
+            jsonBody.put("p4", _d4);
+            jsonBody.put("p11", _Counter);
+            jsonBody.put("p13", "");
+            jsonBody.put("p14",_fechaTrack2);
+            jsonBody.put("p19", "484");
+            jsonBody.put("p22", p22(_entrada));
+            jsonBody.put("p24", "100");
+            jsonBody.put("p25", "1900");
+            //jsonBody.put("p26", "5814");
+            jsonBody.put("p26", cursor.getString(24));
+            jsonBody.put("p32", "45678912345");
+            jsonBody.put("p33", "45678912345");
+            jsonBody.put("p35",_Track2);
+            jsonBody.put("p37", p37+String.format("%06d", Integer.parseInt(_Counter)));
+            jsonBody.put("p41", _deviceid.substring(_deviceid.length()-8,_deviceid.length()));
+            jsonBody.put("p42", p42(_msi,_entrada));
+            //jsonBody.put("p43", "AA PAYMENTFACILITATOR=SOFTWARE\\MURCIA 118 COLONIA SAN AGUSTIN\\NUEVO LEON\\66260     MX 484");
+            //jsonBody.put("p43", "EFEVOOPAY=EMBOCA\\PROL LOS SOLES 200 VALLE ORIEN\\NUEVO LEON\\66260     MX 484");
+            jsonBody.put("p43",cursor.getString(28));
+            jsonBody.put("p48", msip48(_msi));
+            jsonBody.put("p49", "484");
+            jsonBody.put("p53", "");
+            //jsonBody.put("p60", "AXAAD70000000CROSSFITCXT1        20HOLA@CROSSFITCXT.COM8184503970          ");
+            //jsonBody.put("p60", "AXAAD70000000EMBOCA1             15HOLA@EMBOCA.com8105480593          ");
+            jsonBody.put("p60",cursor.getString(29));
+            jsonBody.put("p63", "");
+            jsonBody.put("emv", _emv);
+            jsonBody.put("redtarj", redtarjeta(_redtarjeta,_pan.substring(0,1)));
+            jsonBody.put("tipotarj", tipotarjeta( _tipotarjeta));
+            jsonBody.put("pinPan", _pinpan);
+            jsonBody.put("emisor", "AMEX");
+            jsonBody.put("nip", String.valueOf(_nip));
+            jsonBody.put("entrada", _entrada);
+            jsonBody.put("pan",_pan );
+            jsonBody.put("msi", _msi);
+            jsonBody.put("deviceid",_deviceid);
+            jsonBody.put("tipotxn",tipotxn(_type_trans));
+            jsonBody.put("propina", propina(_type_trans,_propina));
+            jsonBody.put("aid", _AID);
+            jsonBody.put("arqc", _ARQC);
+            _redtarj=jsonBody.getString("redtarj").toString();
+            _tiptarj=jsonBody.getString("tipotarj").toString();
+            _card=jsonBody.getString("pinPan").toString();
+            emisor=jsonBody.getString("emisor").toString();
+            nip=jsonBody.getString("nip").toString();
+            entrada=jsonBody.getString("entrada").toString();
+            pan=jsonBody.getString("pan").toString();
+            //TRACE.d(TRACE.NEW_LINE +  jsonBody.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);
+            return jsonBody.toString();
+        } catch (JSONException e) {
+            TRACE.d("** ERROR JSON " +  TRACE.NEW_LINE + e.toString() );
+            return e.toString();
+        }
+    }
+    public String RevAmex(String _Track2,String _Counter,String _d4,String _redtarjeta,String _tipotarjeta,Integer _nip,String _entrada,String _pan,Integer _msi,String _deviceid,String _type_trans,String _propina,String _AID,String _ARQC,String _idamex,String _tarjetaTrack2,String _fechaTrack2,String _pinpan,Cursor cursor){
+        JSONObject jsonBody = new JSONObject();
+        try {
+            TRACE.d("_Track2:"+TRACE.NEW_LINE +  _Track2);
+            String p37 = new SimpleDateFormat("yyMMdd").format(Calendar.getInstance().getTime());
+            jsonBody.put("mti", "1420");
+            jsonBody.put("p2", _tarjetaTrack2);
+            jsonBody.put("p3", "024000");
+            jsonBody.put("p4", _d4);
+            jsonBody.put("p11", _Counter);
+            jsonBody.put("p14",_fechaTrack2);
+            jsonBody.put("p19", "484");
+            jsonBody.put("p22", p22(_entrada));
+            jsonBody.put("p25", "1400");
+            jsonBody.put("p26", cursor.getString(24));
+            jsonBody.put("p32", "45678912345");
+            jsonBody.put("p33", "45678912345");
+            jsonBody.put("p37", p37+String.format("%06d", Integer.parseInt(_Counter)));
+            jsonBody.put("p41", _deviceid.substring(_deviceid.length()-8,_deviceid.length()));
+            jsonBody.put("p42", p42(_msi,_entrada));
+            jsonBody.put("p49", "484");
+            jsonBody.put("emv", "");
+            jsonBody.put("idamex", _idamex);
+            jsonBody.put("redtarj", redtarjeta(_redtarjeta,_pan.substring(0,1)));
+            jsonBody.put("tipotarj", tipotarjeta( _tipotarjeta));
+            jsonBody.put("pinPan", _pinpan);
+            jsonBody.put("emisor", "AMEX");
+            jsonBody.put("nip", String.valueOf(_nip));
+            jsonBody.put("entrada", _entrada);
+            jsonBody.put("pan",_pan );
+            jsonBody.put("msi", _msi);
+            jsonBody.put("deviceid",_deviceid);
+            jsonBody.put("tipotxn",tipotxn(_type_trans));
+            jsonBody.put("propina", propina(_type_trans,_propina));
+            jsonBody.put("aid", _AID);
+            jsonBody.put("arqc", ValidaArqc(_ARQC));
             _redtarj=jsonBody.getString("redtarj").toString();
             _tiptarj=jsonBody.getString("tipotarj").toString();
             _card=jsonBody.getString("pinPan").toString();
@@ -307,14 +419,14 @@ public class GNTBackEnd {
         }
     }
     public String MascaraTrack2(String track2,String interfaz){
-        //TRACE.d("track2 original : " + track2.toString());
+        TRACE.d("track2 original : " + track2.toString());
         if(interfaz.equals("Agregador"))
         {
             track2= String.format("%"+-48+"s",track2.toUpperCase(Locale.ROOT)).replace(" ","F");
         }else{
             track2= track2.toUpperCase(Locale.ROOT).replace("D","=").replace("F","");
         }
-        //TRACE.d("track2 final : " + track2.toString());
+        TRACE.d("track2 final : " + track2.toString());
         return track2;
     }
     public String CountTrack2(String track2){
@@ -346,6 +458,22 @@ public class GNTBackEnd {
         }
         return _arqc;
     }
+    public String redtarjetaamex(String redtarjeta){
+        if (redtarjeta.equals("NA"))
+        {
+            return "AMEX";
+        }else  {
+            return redtarjeta;
+        }
+    }
+    public String tipotarjetaamex(String tipotarjeta){
+        if (tipotarjeta.equals("NA"))
+        {
+            return "Crédito";
+        }else  {
+            return tipotarjeta;
+        }
+    }
     public String GenArqc(int longitud){
         String terminalTime = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
         String CHARACTERS ="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"+terminalTime;
@@ -355,5 +483,88 @@ public class GNTBackEnd {
             contrasenia += CHARACTERS.charAt(random.nextInt(CHARACTERS.length()));
         }
         return contrasenia.toUpperCase(Locale.ROOT);
+    }
+    public String panTrack2Amex(String pan){
+        int tamtrack2=pan.indexOf("D");
+        TRACE.d("pan Amex:"+pan);
+        return pan.substring(tamtrack2-tamtrack2,7)+"****"+pan.substring(tamtrack2-4,tamtrack2);
+    }
+    public String panTrack2Prosa(String pan){
+        int tamtrack2=pan.indexOf("D");
+        TRACE.d("pan Prosa:"+pan);
+        return pan.substring(tamtrack2-tamtrack2,8)+"XXXX"+pan.substring(tamtrack2-4,tamtrack2);
+    }
+    public String MascaraTrack2(String track2){
+        track2= track2.toUpperCase(Locale.ROOT).replace("D","=").replace("F","");
+        return track2;
+    }
+    public String tarjetaTrack2(String pan){
+        int tamtrack2=pan.indexOf("D");
+        return pan.substring(0,tamtrack2);
+    }
+    public String fechaTrack2(String pan){
+        int tamtrack2=pan.indexOf("D");
+        return pan.substring(tamtrack2+1,tamtrack2+5);
+    }
+    public String pinpanTrack2(String pan){
+        int tamtrack2=pan.indexOf("D");
+        return pan.substring(tamtrack2-4,tamtrack2);
+    }
+    public String p22(String entrada)
+    {
+        if(entrada.equals("MCR"))
+        {
+            return "511101255124";
+        }else if(entrada.equals("NFC")){
+            return "51110X555124";
+        }else{
+            return "511101511324";
+        }
+    }
+    public String p42(Integer _msi,String entrada)
+    {
+        // && entrada!="MCR"
+        if(_msi==0 )
+        {
+            if(Build.MODEL.equals("D30")||Build.MODEL.equals("D20")||Build.MODEL.equals("D60"))
+            {
+                return "7163170335     ";
+            }else{
+                return "7163170335     ";
+            }
+        }else{
+            return "7163170335     ";
+        }
+    }
+    public String msip48(Integer _msi){
+        if(_msi>0 && _msi <10){
+            return "030"+_msi;
+        }else if(_msi>9){
+            return "03"+_msi;
+        }else {
+            return "";
+        }
+    }
+    public String getcalltransaction(String tipo) {
+        if (tipo.equals("Amex")){
+            TRACE.d("getcalltransactionamex: ");
+            return Utils.TERMINAL_Amex + "/amex/tpv/txn1100";
+        }else if (tipo.equals("Prosa")){
+            TRACE.d("getcalltransactionprosa: ");
+            return Utils.TERMINAL_API + "/matriz/certificacion/iso/gral";
+        }else{
+            return "";
+        }
+    }
+    public String getcallvalida(String tipo) {
+        if (tipo.equals("Amex")){
+            TRACE.d("getcallvalidaamex: ");
+            return Utils.TERMINAL_Amex + "/amex/tpv/transaccion";
+        }else if (tipo.equals("Prosa")){
+            TRACE.d("getcallvalidaprosa: ");
+            return Utils.TERMINAL_API + "/efevoo/tpv/transaccion";
+        }else{
+            return "";
+        }
     }
 }

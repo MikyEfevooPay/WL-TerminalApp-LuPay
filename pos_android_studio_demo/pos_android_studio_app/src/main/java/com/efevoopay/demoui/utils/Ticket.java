@@ -256,7 +256,7 @@ public class Ticket {
     }
 
     public boolean isPrinterAvailable() {
-        return printeravailable && Build.MODEL.equals("D30");
+        return printeravailable && (Build.MODEL.equals("D30")||Build.MODEL.equals("D60"));
     }
 
     private static Cursor createDefaultCursor() {

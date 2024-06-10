@@ -26,13 +26,14 @@ import java.security.NoSuchAlgorithmException;
 
 public class ConfigTpv {
     public DBManager dbManager;
-    private Context context;
+    public Context context;
     public ProgressDialog spinner;
     private String _rsa = "",_tk = "",_pk = "",_key="";
     public final boolean[] bnd= {Boolean.FALSE} ;
     public boolean nuevainit = false;
     public int count=0;
-    public String jsonca="";
+    public String _jsonca="";
+    public Integer _statusseller=0;
 
     public ConfigTpv(Context mContext){
         dbManager = new DBManager(mContext);
@@ -54,8 +55,8 @@ public class ConfigTpv {
                     try {
                         JSONObject object = new JSONObject(response);
                         if(!object.has("mensaje")){
-                            bnd[0] =Boolean.TRUE;
-                            initactiva(response.toString(),ksn_posId,valor);
+                            //bnd[0] =Boolean.TRUE;
+                            bnd[0] =initactiva(response.toString(),ksn_posId,valor);
                             TRACE.d("tpvConfig: " +  TRACE.NEW_LINE + response.toString() );
                         }else{
                             bnd[0] =Boolean.FALSE;
@@ -109,15 +110,16 @@ public class ConfigTpv {
 
            RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
+            bnd[0] =Boolean.FALSE;
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
         }
     }
-    private void initactiva(String _tpv,String ksn_posId,Integer valor) {
+    private boolean initactiva(String _tpv,String ksn_posId,Integer valor) {
         String URL="";
         try {
 
             //String URL =  Utils.TPVCONFIG + "/efevoo/tpv/initllave";
-            jsonca=_tpv;
+            _jsonca=_tpv;
             JSONObject objtpv = new JSONObject(_tpv);
             String p43=objtpv.getString("p43").toString();
             String p48=objtpv.getString("p48").toString();
@@ -142,7 +144,8 @@ public class ConfigTpv {
             String afiliacion=objtpv.getString("afiliacion").toString();
             String datafield43=objtpv.getString("datafield43").toString();
             String datafield60=objtpv.getString("datafield60").toString();
-            String cantseller=objtpv.getString("cantseller").toString();
+            String statusseller=objtpv.getString("statusseller").toString();
+            _statusseller=Integer.parseInt(statusseller);
 
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);
@@ -169,7 +172,7 @@ public class ConfigTpv {
                 @Override
                 public void onResponse(String response) {
                     TRACE.d("initllave" +  TRACE.NEW_LINE + response.toString() );
-                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,cantseller,datafield43,datafield60);
+                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,statusseller,datafield43,datafield60);
                     //if(spinner.isShowing()) spinner.dismiss();
                 }
             }, new Response.ErrorListener() {
@@ -217,16 +220,18 @@ public class ConfigTpv {
 
             RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
+            bnd[0] =Boolean.FALSE;
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
         }
+        return bnd[0];
     }
-    private boolean DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String cantseller,String datafield43, String datafield60){
+    private boolean DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43, String datafield60){
         try {
             JSONObject object = new JSONObject(_json);
             if(object.has("id")){
                 if(object.getString("codigo").equals("00") && (Integer.parseInt(object.getString("count"))>0 && Integer.parseInt(object.getString("count"))<1000000)){
                     dbManager.onUpgrade();
-                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,cantseller,datafield43,datafield60,"","",Integer.parseInt("0"));
+                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,statusseller,datafield43,datafield60,"","",Integer.parseInt("0"));
                     nuevainit=false;
                     bnd[0] =Boolean.TRUE;
                     TRACE.d("Activa" +  TRACE.NEW_LINE );

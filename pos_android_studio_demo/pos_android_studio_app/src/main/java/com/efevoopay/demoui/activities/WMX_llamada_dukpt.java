@@ -17,7 +17,7 @@ public class WMX_llamada_dukpt {
     JSONObject objectcorte;
     public String total, subtotal, tip;
     public void readJsonnew(String _json){
-       if(this.transactions.size() > 0) this.transactions.clear();
+       //if(this.transactions.size() > 0) this.transactions.clear();
         try {
             JSONArray object = new JSONArray(_json);
             for (int i = 0; i < object.length(); i++) {
@@ -43,7 +43,8 @@ public class WMX_llamada_dukpt {
                             data.getString("numref"),
                             data.getString("emisor"),
                             data.getString("nip"),
-                            data.getString("entrada"));
+                            data.getString("entrada"),
+                            data.getString("datehour"));
                     this.transactions.add(_data);
                 }
             }
