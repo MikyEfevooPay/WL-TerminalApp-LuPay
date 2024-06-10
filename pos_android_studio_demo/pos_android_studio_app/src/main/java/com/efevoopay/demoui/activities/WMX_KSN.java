@@ -94,7 +94,7 @@ public class WMX_KSN {
         @Override
         public void onQposIdResult(Hashtable<String, String> posIdTable) {
             RequestAttempt.removeCallbacksAndMessages(null);
-            String ksnId = "01610020202304040010";
+            String ksnId = posIdTable.get("posId");
             posId = ksnId;
             PosIdResult.complete(ksnId);
             closePos();
