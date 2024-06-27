@@ -59,6 +59,7 @@ import com.efevoopay.demoui.utils.FLAGS;
 import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.RequestSingleton;
+import com.efevoopay.demoui.utils.StatusBarCompat;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.TicketLayoutManager;
@@ -93,7 +94,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     private FetchUIManager manager;
     protected LinearLayout toolbar_btn_calendar;
     protected Handler ticketHandler;
-
+    protected View actionbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
@@ -115,7 +116,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
             logo_image = toolbar.findViewById(R.id.toolbar_logo);
             container_logo = toolbar.findViewById(R.id.toolbar_logo_container);
             toolbar_btn_calendar = findViewById(R.id.toolbar_btn_calendar);
-
+            actionbar = findViewById(R.id.actionbar);
             toolbar_btn_calendar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -597,7 +598,16 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         if(activeNetwork == null) return false;
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
+    protected void setThemeColor(int color) {
+        try {
+            if (actionbar != null) {
+                actionbar.setBackgroundColor(color);
+            }
+            StatusBarCompat.compat(this, color);
+        } catch (Exception e) {
 
+        }
+    }
     public boolean resolveNetworkFlag(HashMap<FLAGS, Object> Flags) {
         if(Flags == null) return true;
         boolean networkFlag = (boolean) Utils.isNull(Flags.get(FLAGS.CHECK_NETWORK), false);

@@ -4,4 +4,11 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="sign_actionbar_height">56dp</dimen>
+    <dimen name="sign_actionbar_text_size">26sp</dimen>
+    <dimen name="sign_tool_padding">12dp</dimen>
+    <dimen name="sign_grid_toolbar_height">45dp</dimen>
+    <dimen name="sign_grid_size">250dp</dimen>
+    <dimen name="sign_tool_icon_size">55dp</dimen>
+    <dimen name="sign_eraser_size">28dp</dimen>
 </resources>

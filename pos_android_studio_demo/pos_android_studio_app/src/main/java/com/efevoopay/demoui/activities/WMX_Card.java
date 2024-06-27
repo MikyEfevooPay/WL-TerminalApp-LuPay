@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -46,6 +47,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.dspread.xpos.TradeSoundType;
 import com.efevoopay.demoui.BuildConfig;
+import com.efevoopay.demoui.config.PenConfig;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.FetchOptions;
 import com.efevoopay.demoui.keyboard.KeyboardUtil;
@@ -175,7 +177,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String CALL_SERVICIO="";
 
     private int QPOS_STATUS;
-
+    private boolean isPermissionOk = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -239,6 +241,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         this.validateTransactionErrorCount = 0;
         this.validateTransactionEmptyResponse = 0;
         initSDK();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            isPermissionOk = false;
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    100);
+        } else {
+            isPermissionOk = true;
+        }
     }
 
     @Override
@@ -309,7 +318,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         TRACE.d("** ResponseResult " + TRACE.NEW_LINE + response);
         String code = approvedDukpt(response);
         if (code.equals("00") ||code.equals("000") || code.equals("400")) {
-            ChangeViewToTicket();
+            if(type_transaction.equals("Cancelacion"))
+            {
+                ChangeViewToTicket();
+            }else{
+                FirmaToDigital();
+            }
+
         } else if (code.equals("")) {
             if (this.validateTransactionEmptyResponse >= MAX_CALL_ITERATE) {
                 onCheckTransactionHistory(_ARQC);
@@ -439,7 +454,55 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         tv_card_label_2.setText("");
         trading.setVisibility(View.GONE);
     }
+    private void FirmaToDigital(){
+        Intent thisIntent = getIntent();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+        Date date = new Date();
+        if (_nip==0){
+            if (!isPermissionOk) {
+                return;
+            }
+            intent = new Intent(this, PaintActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("crop", false);   //Set the final image to capture the text area
+            intent.putExtra("format", PenConfig.FORMAT_PNG); //image format
+        }else{
+            intent = new Intent(this, WMX_final_ticket_transaction.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
+        intent.putExtra("type_transaction", GNTBackEnd.tipo(type_transaction));
+        intent.putExtra("v_total", Total_Amount.getText().toString());
+        intent.putExtra("v_time", dateFormat.format(date).toString());
+        intent.putExtra("v_card", "**** " + _card);
+        intent.putExtra("v_redtarjeta", _redtar);
+        intent.putExtra("v_tipotarjeta", _tiptar);
+        intent.putExtra("v_AID", _AID);
+        intent.putExtra("v_ARQC", _ARQC);
+        intent.putExtra("v_noauth", _noAuth);
+        intent.putExtra("v_approve", _approve);
+        intent.putExtra("ksn_posId", ksn_posId);
+        intent.putExtra("v_emisor", _emisor);
+        intent.putExtra("v_nip", String.valueOf(_nip));
+        intent.putExtra("v_entrada", _entrada);
+        intent.putExtra("v_trans_id", trans_id);
 
+        if (type_transaction.equals("MSI")) {
+            String v_months = thisIntent.getStringExtra("months");
+            intent.putExtra("v_months", v_months.toString());
+            intent.putExtra("v_months_total", v_months_total);
+
+        } else {
+            String v_subtotal = thisIntent.getStringExtra("subtotal");
+            String v_tip = thisIntent.getStringExtra("tips");
+            intent.putExtra("v_months", String.valueOf(msi));
+            intent.putExtra("v_tip", v_tip.toString());
+            intent.putExtra("v_subtotal", v_subtotal.toString());
+        }
+
+        getFetchManager().clear();
+
+        startActivity(intent);
+        finish();
+
+    }
     private void ChangeViewToTicket() {
         Intent thisIntent = getIntent();
 
@@ -802,16 +865,16 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     // String realPan = null;
                     if (!TextUtils.isEmpty(trackksn) && !TextUtils.isEmpty(encTrack2)) {
                         _track2MN = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA,
-                                DUKPK2009_CBC.Enum_mode.ECB, null);
+                                DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
                         String clearPan = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA,
-                                DUKPK2009_CBC.Enum_mode.CBC, null).toUpperCase(Locale.ROOT);
+                                DUKPK2009_CBC.Enum_mode.CBC, "B6F0F69E1E6AF2088B80910762FD9EC9").toUpperCase(Locale.ROOT);
                         content += "encTrack2:" + " " + clearPan + "\n";
                         realPan = clearPan.substring(0, maskedPAN.length());
                         content += "realPan:" + " " + realPan + "\n";
                     }
                     if (!TextUtils.isEmpty(pinKsn) && !TextUtils.isEmpty(pinBlock) && !TextUtils.isEmpty(realPan)) {
                         String date = DUKPK2009_CBC.getDUKPT(pinKsn, pinBlock, DUKPK2009_CBC.Enum_key.PIN,
-                                DUKPK2009_CBC.Enum_mode.CBC, null);
+                                DUKPK2009_CBC.Enum_mode.CBC, "B6F0F69E1E6AF2088B80910762FD9EC9");
                         String parsCarN = "0000" + realPan.substring(realPan.length() - 13, realPan.length() - 1);
                         String s = DUKPK2009_CBC.xor(parsCarN, date);
                         content += "PIN:" + " " + s + "\n";
@@ -834,7 +897,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
                 String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                        DUKPK2009_CBC.Enum_mode.ECB, null);
+                        DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
                 List<TLV> NFCparse = TLVParser.parse(tlvNFC);
                 String _track2 = TLVParser.searchTLV(NFCparse, "57").value.toUpperCase(Locale.ROOT);
                 String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
@@ -1017,7 +1080,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
             emvicc = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                    DUKPK2009_CBC.Enum_mode.ECB, null);
+                    DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
              TRACE.d("\nemvicc(tlv):\n" + emvicc);
             emvicc = emvicc.substring(8);
 
