@@ -278,7 +278,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
 
     private void getValidateBody(JSONObject body) throws JSONException {
-        body.put("deviceid", ksn_posId);
+        if (CALL_SERVICIO.equals("Amex")){
+            body.put("numserie", ksn_posId);
+        }else{body.put("deviceid", ksn_posId);}
         body.put("arqc", _ARQC);
         body.put("pan", _pan);
         body.put("tipotxn", GNTBackEnd.tipotxn(type_transaction));
@@ -865,16 +867,16 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                     // String realPan = null;
                     if (!TextUtils.isEmpty(trackksn) && !TextUtils.isEmpty(encTrack2)) {
                         _track2MN = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA,
-                                DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
+                                DUKPK2009_CBC.Enum_mode.ECB, null);
                         String clearPan = DUKPK2009_CBC.getDUKPT(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA,
-                                DUKPK2009_CBC.Enum_mode.CBC, "B6F0F69E1E6AF2088B80910762FD9EC9").toUpperCase(Locale.ROOT);
+                                DUKPK2009_CBC.Enum_mode.CBC, null).toUpperCase(Locale.ROOT);
                         content += "encTrack2:" + " " + clearPan + "\n";
                         realPan = clearPan.substring(0, maskedPAN.length());
                         content += "realPan:" + " " + realPan + "\n";
                     }
                     if (!TextUtils.isEmpty(pinKsn) && !TextUtils.isEmpty(pinBlock) && !TextUtils.isEmpty(realPan)) {
                         String date = DUKPK2009_CBC.getDUKPT(pinKsn, pinBlock, DUKPK2009_CBC.Enum_key.PIN,
-                                DUKPK2009_CBC.Enum_mode.CBC, "B6F0F69E1E6AF2088B80910762FD9EC9");
+                                DUKPK2009_CBC.Enum_mode.CBC, null);
                         String parsCarN = "0000" + realPan.substring(realPan.length() - 13, realPan.length() - 1);
                         String s = DUKPK2009_CBC.xor(parsCarN, date);
                         content += "PIN:" + " " + s + "\n";
@@ -897,7 +899,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
                 String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                        DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
+                        DUKPK2009_CBC.Enum_mode.ECB, null);
                 List<TLV> NFCparse = TLVParser.parse(tlvNFC);
                 String _track2 = TLVParser.searchTLV(NFCparse, "57").value.toUpperCase(Locale.ROOT);
                 String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
@@ -1080,7 +1082,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
             emvicc = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                    DUKPK2009_CBC.Enum_mode.ECB, "B6F0F69E1E6AF2088B80910762FD9EC9");
+                    DUKPK2009_CBC.Enum_mode.ECB, null);
              TRACE.d("\nemvicc(tlv):\n" + emvicc);
             emvicc = emvicc.substring(8);
 

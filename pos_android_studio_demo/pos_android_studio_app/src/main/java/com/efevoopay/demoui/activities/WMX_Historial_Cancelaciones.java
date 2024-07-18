@@ -66,7 +66,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
         Fetch cancelacionHistory = manager.addFetch(CANCELATION_HISTORY_KEY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
         cancelacionHistory.setSetBodyListenner(this::setBody);
 
-        Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_Amex + "/amex/tpv/txndevice", Request.Method.POST));
+        Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_AMEX + "/amex/tpv/txndevice", Request.Method.POST));
         HistoryAmex.setSetBodyListenner(this::setBodyAmex);
     }
 

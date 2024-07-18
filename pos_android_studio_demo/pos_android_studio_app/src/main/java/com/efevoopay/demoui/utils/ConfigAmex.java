@@ -133,10 +133,10 @@ public class ConfigAmex {
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("numserie", ksn_posId);
             if(valor==1){
-                URL = Utils.TERMINAL_Amex + "/amex/tpv/initactiva";
+                URL = Utils.TERMINAL_AMEX + "/amex/tpv/initactiva";
             }else{
                 generakeyamex();
-                URL =  Utils.TERMINAL_Amex + "/amex/tpv/initllave";
+                URL =  Utils.TERMINAL_AMEX + "/amex/tpv/initllave";
                 jsonBody.put("tpv", Build.MODEL+"Android smart POS");
                 jsonBody.put("device_tk", _tkamex);
                 jsonBody.put("device_rsa", _rsaamex);
@@ -236,7 +236,7 @@ public class ConfigAmex {
         return bndamex[0];
     }
     public void initactivaamex(String ksn_posId) {
-        String URL=Utils.TERMINAL_Amex + "/amex/tpv/initactiva";
+        String URL=Utils.TERMINAL_AMEX + "/amex/tpv/initactiva";
         try {
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("numserie", ksn_posId);
@@ -294,7 +294,7 @@ public class ConfigAmex {
         }
     }
     private void initnuevaamex(String ksn_posId) {
-        String URL=Utils.TERMINAL_Amex + "/amex/tpv/initllave";
+        String URL=Utils.TERMINAL_AMEX + "/amex/tpv/initllave";
         try {
             generakeyamex();
             JSONObject jsonBody = new JSONObject();

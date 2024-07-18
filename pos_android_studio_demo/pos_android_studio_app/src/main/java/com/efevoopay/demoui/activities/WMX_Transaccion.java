@@ -115,7 +115,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         Fetch history = manager.addFetch(TRANSACTION_HISTORY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
 
-        Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_Amex + "/amex/tpv/txndevice", Request.Method.POST));
+        Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_AMEX + "/amex/tpv/txndevice", Request.Method.POST));
         HistoryAmex.setSetBodyListenner(this::setBodyAmex);
     }
 

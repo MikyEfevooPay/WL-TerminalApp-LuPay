@@ -385,7 +385,7 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
             switch (msg.what) {
                 case MSG_SAVE_FAILED:
                     mSaveProgressDlg.dismiss();
-                    PaintActivity.super.showAlert("informative", "ERROR AL GUARDAR");
+                    PaintActivity.super.showAlert("informative", "FIRMA NO VALIDA, ERROR AL GUARDAR");
                     //Toast.makeText(getApplicationContext(), "Save failed", Toast.LENGTH_SHORT).show();
                     break;
                 case MSG_SAVE_SUCCESS:
@@ -441,7 +441,6 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
                     //_name=String.valueOf(v_trans_id)+".png";
                     //_imagen=BitmapUtil.convert(result,100,format);
                     Log.d("1","mSavePath:"+mSavePath);
-
                     callfirmaelectronica(String.valueOf(v_ARQC)+".png",BitmapUtil.convert(result,100,format));
                     Log.d("1","callfirmaelectronica---------");
 
@@ -527,11 +526,11 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
     }
     public void callfirmaelectronica(String _name,String _imagen) {
         try {
-            String URL = Utils.TERMINAL_API + "/api/firma/electronica";
+            String URL = Utils.TERMINAL_BATCH + "/api/firma/electronica";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("name", _name);
             jsonBody.put("imagen", _imagen);
-
+            TRACE.d("length: "+_imagen.length());
             final String requestBody = jsonBody.toString();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
@@ -543,7 +542,7 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
                             ChangeViewToTicket();
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        mHandler.obtainMessage(MSG_SAVE_FAILED).sendToTarget();
                     }
 
 
@@ -551,17 +550,10 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    //error.printStackTrace();
                     TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
-                    //bnd[0] =Boolean.FALSE;
+                    mHandler.obtainMessage(MSG_SAVE_FAILED).sendToTarget();
                 }
             }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String>  params = new HashMap<String, String>();
-                    params.put("User-Agent", "Mozilla/5.0");
-                    return params;
-                }
                 @Override
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
@@ -596,6 +588,7 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
 
             RequestSingleton.getInstance(this).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
+            mHandler.obtainMessage(MSG_SAVE_FAILED).sendToTarget();
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
         }
     }

@@ -548,7 +548,7 @@ public class GNTBackEnd {
     public String getcalltransaction(String tipo) {
         if (tipo.equals("Amex")){
             TRACE.d("getcalltransactionamex: ");
-            return Utils.TERMINAL_Amex + "/amex/tpv/txn1100";
+            return Utils.TERMINAL_AMEX + "/amex/tpv/txn1100";
         }else if (tipo.equals("Prosa")){
             TRACE.d("getcalltransactionprosa: ");
             return Utils.TERMINAL_API + "/matriz/certificacion/iso/gral";
@@ -559,7 +559,7 @@ public class GNTBackEnd {
     public String getcallvalida(String tipo) {
         if (tipo.equals("Amex")){
             TRACE.d("getcallvalidaamex: ");
-            return Utils.TERMINAL_Amex + "/amex/tpv/transaccion";
+            return Utils.TERMINAL_AMEX + "/amex/tpv/transaccion";
         }else if (tipo.equals("Prosa")){
             TRACE.d("getcallvalidaprosa: ");
             return Utils.TERMINAL_API + "/efevoo/tpv/transaccion";

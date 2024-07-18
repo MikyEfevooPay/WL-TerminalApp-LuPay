@@ -22,13 +22,15 @@ import java.util.regex.Pattern;
 public class Utils {
 
 	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
-	//public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
 	public static final String TERMINAL_BIN = "https://testagrswl.efevoo.app/apiv0/agrs/terminales/tpv/bines";
-	//public static final String TERMINAL_BIN = "https://test-agrs.efevoo.app/apiv0/agrs/terminales/tpv/bines";
 	public static final String TPVCONFIG = "https://testagrswl.efevoo.app";
-	//public static final String TPVCONFIG = "https://test-agrs.efevoo.app";
-	public static final String TERMINAL_Amex = "https://efevoopayamex-ecommerce.com";
-	//public static final String TERMINAL_Amex="https://test-efevoopayamex-ecommerce.com";
+	public static final String TERMINAL_AMEX = "https://efevoopayamex-ecommerce.com";
+	public static final String TERMINAL_BATCH = "https://efevoopaybatch-ecommerce.com";
+//	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
+//	public static final String TERMINAL_BIN = "https://test-agrs.efevoo.app/apiv0/agrs/terminales/tpv/bines";
+//	public static final String TPVCONFIG = "https://test-agrs.efevoo.app";
+//	public static final String TERMINAL_AMEX="https://test-efevoopayamex-ecommerce.com";
+//	public static final String TERMINAL_BATCH = "https://test-efevoopaybatch-ecommerce.com";
 
 	public static HashMap<String,String> errorMessagesDictionary;
 	public static HashMap<QPOSService.Error, String> errorPosDictionary;
