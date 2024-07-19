@@ -7,6 +7,7 @@
     android:background="@color/ep_fondo"
     android:orientation="vertical">
 
+<!--  No tengo idea pero se utiliza uno de los textos aunque este escondido  -->
     <LinearLayout
         android:id="@+id/lin2"
         android:layout_width="match_parent"
@@ -44,69 +45,84 @@
 
     </LinearLayout>
 
+<!--Ahora si el layout que se muestra-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="34px"
-            android:fontFamily="@font/dm_sans"
-            android:gravity="center"
-            android:text="Inserta tu PIN"
-            android:textAlignment="center"
-            android:textColor="#121212"
-            android:textSize="35px"
-            android:visibility="visible" />
-
-        <TextView
-            android:id="@+id/tv_includeKey_Pin_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16px"
-            android:fontFamily="@font/dm_sans"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:textColor="#121212"
-            android:textSize="78px"
-            android:visibility="visible" />
-
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32px"
-            android:gravity="center"
-            android:orientation="horizontal">
-
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            >
+            <!--Inserta tu pin-->
             <TextView
-                android:id="@+id/textView20"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32px"
                 android:fontFamily="@font/dm_sans"
                 android:gravity="center"
-                android:text="Intentos disponibles: "
+                android:text="Inserta tu PIN"
                 android:textAlignment="center"
-                android:textColor="#5A5A5A"
-                android:textSize="30px"
+                android:textColor="#121212"
+                android:textSize="35px"
                 android:visibility="visible" />
-
+            <!--pin-->
             <TextView
-                android:id="@+id/txt_countpin"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:id="@+id/tv_includeKey_Pin_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14px"
                 android:fontFamily="@font/dm_sans"
-                android:text="3"
-                android:textColor="#5A5A5A"
-                android:textSize="30px" />
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="#121212"
+                android:textSize="78px"
+                android:visibility="visible" />
+            <!--Intentos restantes -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30px"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/dm_sans"
+                    android:gravity="center"
+                    android:text="Intentos disponibles: "
+                    android:textAlignment="center"
+                    android:textColor="#5A5A5A"
+                    android:textSize="28px"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/txt_countpin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/dm_sans"
+                    android:text="3"
+                    android:textColor="#5A5A5A"
+                    android:textSize="28px" />
+            </LinearLayout>
         </LinearLayout>
 
+<!--Keyboard-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="37px"
             android:orientation="vertical">
 
             <com.efevoopay.demoui.keyboard.MyKeyboardView
@@ -121,7 +137,7 @@
                 android:paddingBottom="6dp"
                 android:shadowRadius="0.0" />
         </LinearLayout>
-
+<!--Ok and cancel button-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
