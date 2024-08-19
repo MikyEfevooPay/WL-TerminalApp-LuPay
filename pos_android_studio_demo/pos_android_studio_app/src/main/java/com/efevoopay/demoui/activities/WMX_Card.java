@@ -2109,7 +2109,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 if(object.has("codigo"))
                 {
                     _approve=object.getString("numref");
-                    trans_id=Integer.parseInt(object.getString("id"));
+                    if(!object.getString("id").equals("")){
+                        trans_id=Integer.parseInt(object.getString("id"));
+                    }
                     trans_code=object.getString("codigo");
                 }else if(object.has("msg")){
                     trans_code=object.getString("msg");
