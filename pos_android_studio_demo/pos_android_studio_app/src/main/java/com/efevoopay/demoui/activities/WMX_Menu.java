@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.utils.ConfigAmex;
 import com.efevoopay.demoui.utils.ConfigTpv;
 import com.efevoopay.demoui.utils.DBManager;
 import com.efevoopay.demoui.utils.GNTBackEnd;
@@ -25,6 +26,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     private LinearLayout transfer, other, ajustes, meses, cancelaciones, cortecaja, connection_test;
     public static Cursor cursor;
     public static ConfigTpv configTpv;
+    public static ConfigAmex configAmex;
     public static ProgressDialog spinner;
 
     @Override
@@ -53,14 +55,19 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         cortecaja.setOnClickListener(this);
         connection_test.setOnClickListener(this);
         getinfoScreen();
+        //Config
+        Utils.setErrorMessages();
+        ResponseCode.setCodeResponses();
+        GNTBackEnd.initTransTypeTitles(getResources());
         configTpv = new ConfigTpv(this);
         configTpv.dbManager.onCreate();
-        Utils.setErrorMessages();
+        configAmex = new ConfigAmex(this);
+        configAmex.dbManager.onCreate();
+    }
 
-        ResponseCode.setCodeResponses();
-        spinner.show();
-        configTpv.spinner = spinner;
-        GNTBackEnd.initTransTypeTitles(getResources());
+    @Override
+    public void onStart() {
+        super.onStart();
         optksn();
     }
 
@@ -113,6 +120,13 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
             showAlert("Error", "Ha ocurrido un error al cargar la información de la TPV");
             return;
         }
+        /*TRACE.d("giro: " +cursor.getString(24));
+        TRACE.d("statusseller: " + cursor.getString(27));
+        TRACE.d("datafield43: " + cursor.getString(28));
+        TRACE.d("datafield60: " + cursor.getString(29));
+        TRACE.d("tkamex: " + cursor.getString(30));
+        TRACE.d("keyamex: " + cursor.getString(31));
+        TRACE.d("countamex: " + cursor.getString(32));*/
         cursor = configTpv.dbManager.fetch(posId);
         switch (view.getId()) {
             case R.id.btn_transfer:
@@ -121,19 +135,19 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "venta");
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_Other:
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Transaccion.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_Ajustes:
                 intent = new Intent(this, WMX_Ajustes.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_meses:
                 if (!TPVInitializated())
@@ -142,7 +156,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     intent = new Intent(this, WMX_Terminal.class);
                     intent.putExtra("type_transaction", "MSI");
                     intent.putExtra("ksn_posId", posId);
-                    startActivity(intent);
+                    startActivityMiddleware(intent);
                 } else {
                     WMX_Menu.super.showAlert("informative", "OPCIÓN NO HABILITADA");
                 }
@@ -152,20 +166,20 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     break;
                 intent = new Intent(this, WMX_Historial_Cancelaciones.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_cortecaja:
                 if (!TPVInitializated())
                     break;
                 intent = new Intent(this, WMX_Historial_CorteCaja.class);
                 intent.putExtra("ksn_posId", posId);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
             case R.id.btn_connection_test:
                 intent = new Intent(this, WMX_Connection_Test.class);
                 intent.putExtra("ksn_posId", posId);
                 intent.putExtra("type", 1);
-                startActivity(intent);
+                startActivityMiddleware(intent);
                 break;
         }
 
@@ -173,10 +187,13 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
 
     @SuppressLint("NewApi")
     public void optksn() {
+        if(!resolveNetworkFlag(getFlags(this.getClass().getName()))) return;
+        spinner.show();
+        configTpv.spinner = spinner;
         WMX_KSN.getPosIdResult().thenAccept((posId) -> {
             TRACE.d("FUturablePosId: " + posId);
-            cursor = configTpv.dbManager.fetch(posId);
             DbSurce(posId);
+            cursor = configTpv.dbManager.fetch(posId);
             TRACE.d("ksn: " + posId);
         });
     }
@@ -204,12 +221,55 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 configTpv.count = count[0];
                 if (count[0]++ < 7) {
                     if (!configTpv.bnd[0]) {
+                        TRACE.d("configTpv entra");
                         if (!configTpv.nuevainit) {
                             configTpv.tpvConfig(posId, 1);
                         } else {
                             configTpv.tpvConfig(posId, 0);
                         }
                         handler.postDelayed(this, 5000);
+                    } else {
+                        if(configTpv.bnd[0] && (configTpv._statusseller==1 && !configAmex.bndamex[0])){
+                            TRACE.d("configAmex entra"+configTpv.bnd[0]);
+                            handler.removeCallbacks(this);
+                            //configAmex = new ConfigAmex(configTpv.context);
+                            //configAmex.dbManager.onCreate();
+                            Dbamex(configTpv._jsonca,posId);
+                        }else{
+                            if (spinner.isShowing())
+                                spinner.dismiss();
+                            handler.removeCallbacks(this);
+                        }
+
+                    }
+                } else {
+                    WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: INTENTE NUEVAMENTE ");
+                    if (spinner.isShowing())
+                        spinner.dismiss();
+                    handler.removeCallbacks(this);
+                    configTpv.dbManager.onDelete();
+                    configTpv.dbManager.onCreate();
+                }
+
+            }
+        };
+        handler.post(runnable);
+    }
+    public void Dbamex(String json,String posId) {
+        final Handler handler = new Handler();
+        int[] count = { 0 };
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                configAmex.countamex = count[0];
+                if (count[0]++ < 5) {
+                    if (!configAmex.bndamex[0]) {
+                        if (!configAmex.nuevainit) {
+                            configAmex.InitActivaAmex(json,posId, 1);
+                        } else {
+                            configAmex.InitActivaAmex(json,posId, 0);
+                        }
+                        handler.postDelayed(this, 3000);
                     } else {
                         if (spinner.isShowing())
                             spinner.dismiss();
@@ -220,8 +280,8 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     if (spinner.isShowing())
                         spinner.dismiss();
                     handler.removeCallbacks(this);
-                    configTpv.dbManager.onDelete();
-                    configTpv.dbManager.onCreate();
+                    configAmex.dbManager.onDelete();
+                    configAmex.dbManager.onCreate();
                 }
 
             }

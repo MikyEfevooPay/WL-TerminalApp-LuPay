@@ -36,9 +36,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
@@ -59,6 +62,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     private CompletableFuture<Boolean> hasTransactionFoundPromise;
 
     private final String TRANSACTION_HISTORY = "getTransactionHistory";
+    private final String HISTORY_KEY_AMEX = "getCancelacionHistoryAmex";
 
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +97,14 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     @Override
     protected void onStart() {
         super.onStart();
+        if(jsondukpt.transactions.size() > 0) jsondukpt.transactions.clear();
         getFetchManager().CallAll();
     }
 
     @Override
     public void onBackPressed() {
         if(!TextUtils.isEmpty(_ARQC)) {
-            startActivityMiddleware(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            startActivity(new Intent(this, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
            return;
         }
         super.onBackPressed();
@@ -109,8 +114,10 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     public void addFetchs(FetchUIManager manager) throws Exception {
         Fetch history = manager.addFetch(TRANSACTION_HISTORY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
-    }
 
+        Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_AMEX + "/amex/tpv/txndevice", Request.Method.POST));
+        HistoryAmex.setSetBodyListenner(this::setBodyAmex);
+    }
 
     private void getBody(JSONObject body) throws JSONException {
         DateFormat obj = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -121,11 +128,19 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         body.put("fechafinal", obj.format(date2));
     }
 
+    private void setBodyAmex(JSONObject body) throws JSONException {
+        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        body.put("numserie", ksn_posId);
+        body.put("pantalla", "Historial");
+        body.put("fechainicio", obj.format(date1));
+        body.put("fechafinal", obj.format(date2));
+    }
+
     @Override
     public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
         super.onFetchCurrentResult(entity, error);
-        if(entity.result == null) return;
-        switch (entity.key) {
+        //if(entity.result == null) return;
+        /*switch (entity.key) {
             case TRANSACTION_HISTORY:
                 jsondukpt.readJsonnew(entity.result.toString());
                 transactions=jsondukpt.transactions;
@@ -134,10 +149,44 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
                 break;
             default:
                 break;
+        }*/
+        if(entity.key.equals(TRANSACTION_HISTORY)) {
+            if(entity.result == null) return;
+            //TRACE.d("AMEX: " +entity.result.toString());
+            jsondukpt.readJsonnew(entity.result.toString());
+
+        }
+        if(entity.key.equals(HISTORY_KEY_AMEX)) {
+            if(entity.result == null) return;
+            //TRACE.d("AMEX: " +entity.result.toString());
+            jsondukpt.readJsonnew(entity.result.toString());
+
         }
     }
-
-
+    @Override
+    public void onFetchResults(List<FetchEntity> entities, List<FetchEntity> errors) {
+        TRACE.d("ultimo: ");
+        transactions = jsondukpt.transactions;
+        Collections.sort(transactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction lhs, Transaction rhs) {
+                return lhs.get_datehour().compareTo(rhs.get_datehour());
+            }
+        });
+        /*Collections.sort(transactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction lhs, Transaction rhs) {
+                int result = lhs.get_date2().compareTo(rhs.get_date2());
+                if (result != 0)
+                {
+                    return result;
+                }
+                return lhs.get_time().compareTo(rhs.get_time());
+            }
+        });*/
+        Collections.reverse(transactions);
+        setItems();
+    }
 
     @SuppressLint("NewApi")
     private void setItems() {
@@ -220,6 +269,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             date2 = Utils.dateToUTC(datesMilliseconds.second);
             dpDate.dismiss();
             getFetchManager().CallById(TRANSACTION_HISTORY);
+            getFetchManager().CallById(HISTORY_KEY_AMEX);
         });
     }
 
@@ -252,7 +302,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         Intent intent = new Intent(WMX_Transaccion.this, WMX_Transaction_Desc.class);
         intent.putExtra("id", transactions.get(position).get_id());
         intent.putExtra("auth", transactions.get(position).get_auth());
-        intent.putExtra("date", transactions.get(position).get_date2());
+        intent.putExtra("date", transactions.get(position).get_date());
         intent.putExtra("time", transactions.get(position).get_time());
         intent.putExtra("subtotal", transactions.get(position).get_subtotal());
         intent.putExtra("card", transactions.get(position).get_card());

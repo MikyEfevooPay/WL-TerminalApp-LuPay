@@ -12,18 +12,25 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.ActionMenuView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,22 +49,29 @@ import com.android.volley.RequestQueue;
 import com.dspread.print.device.PrintListener;
 import com.dspread.xpos.QPOSService;
 import com.efevoopay.demoui.R;
+import com.efevoopay.demoui.fragments.NotConnectionDialog;
 import com.efevoopay.demoui.interfaces.FetchEntity;
 import com.efevoopay.demoui.interfaces.IFetchs;
 import com.efevoopay.demoui.interfaces.ITicket;
 import com.efevoopay.demoui.interfaces.TicketLayoutType;
+import com.efevoopay.demoui.utils.ActivityFlags;
+import com.efevoopay.demoui.utils.FLAGS;
 import com.efevoopay.demoui.utils.FetchUIManager;
 import com.efevoopay.demoui.utils.PRINT_TYPE;
 import com.efevoopay.demoui.utils.RequestSingleton;
+import com.efevoopay.demoui.utils.StatusBarCompat;
 import com.efevoopay.demoui.utils.TRACE;
 import com.efevoopay.demoui.utils.Ticket;
 import com.efevoopay.demoui.utils.TicketLayoutManager;
 import com.efevoopay.demoui.utils.Utils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * BaseActivity used for to build all activity
@@ -80,7 +94,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     private FetchUIManager manager;
     protected LinearLayout toolbar_btn_calendar;
     protected Handler ticketHandler;
-
+    protected View actionbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
@@ -102,7 +116,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
             logo_image = toolbar.findViewById(R.id.toolbar_logo);
             container_logo = toolbar.findViewById(R.id.toolbar_logo_container);
             toolbar_btn_calendar = findViewById(R.id.toolbar_btn_calendar);
-
+            actionbar = findViewById(R.id.actionbar);
             toolbar_btn_calendar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -186,26 +200,34 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     public void PrintTicket() {
-        if (!ticket.isPrinterAvailable())
-            return;
-        ticket_progress.show();
-        ticketLayoutType = getPrintLayout();
-        setTicketData(ticket);
-        TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType,
-                this.entity_print);
-        ticketLayoutManager.setTicketDataByLayout(ticket);
+        runOnUiThread(() -> {
+            boolean success = false;
+            if (!ticket.isPrinterAvailable())
+                return;
+            if(!ticket_progress.isShowing()) ticket_progress.show();
+            try {
+                ticketLayoutType = getPrintLayout();
+                setTicketData(ticket);
+                TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType,
+                        this.entity_print);
+                ticketLayoutManager.setTicketDataByLayout(ticket);
 
-        // Se agrega un posdelay en caso de que haya un error que la libreria no este
-        // catcheando para ocultar el spinner
-        ticketHandler.postDelayed(() -> {
-            hideTicketSpinner();
-            ticket.close();
-        }, 7000);
-        boolean success = ticket.printLayout(ticketLayoutManager.getLayout());
-        if (!success) {
-            hideTicketSpinner();
-            ticketHandler.removeCallbacksAndMessages(null);
-        }
+                // Se agrega un posdelay en caso de que haya un error que la libreria no este
+                // catcheando para ocultar el spinner
+                ticketHandler.postDelayed(() -> {
+                    hideTicketSpinner();
+                    ticket.close();
+                }, 7000);
+                success = ticket.printLayout(ticketLayoutManager.getLayout());
+            } catch (Exception e) {
+                TRACE.d("TICKET EXCEPTION: " + e.getMessage());
+                e.printStackTrace();
+            }
+            if (!success) {
+                hideTicketSpinner();
+                ticketHandler.removeCallbacksAndMessages(null);
+            }
+        });
     }
 
     public Toolbar getToolbar() {
@@ -431,8 +453,10 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     protected void hideTicketSpinner() {
-        if (ticket_progress.isShowing())
-            ticket_progress.dismiss();
+        runOnUiThread(() -> {
+            if (ticket_progress.isShowing())
+                ticket_progress.dismiss();
+        });
     }
 
     public void switch_title_logo(String title, int color) {
@@ -449,7 +473,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
             if(entrada.equals("NFC")) return  getString(R.string.wmx_transaction_ticket_contactless_sign);
             if(entrada.equals("ICC")) return  getString(R.string.wmx_transaction_ticket_client_sign);
         }
-        if (nipParsed == 1) getString(R.string.wmx_transaction_ticket_electronic_sign);
+        if (nipParsed == 1) return getString(R.string.wmx_transaction_ticket_electronic_sign);
        return null;
     }
 
@@ -561,7 +585,52 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
         return dm.getDisplay(0).getState();
     }
 
+    private void NotNetworkDialog() {
+        NotConnectionDialog dialog = new NotConnectionDialog(this);
+        FragmentManager manager = getSupportFragmentManager();
+        if(manager.executePendingTransactions()) return;
+        dialog.show(getSupportFragmentManager(), null);
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(activeNetwork == null) return false;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+    protected void setThemeColor(int color) {
+        try {
+            if (actionbar != null) {
+                actionbar.setBackgroundColor(color);
+            }
+            StatusBarCompat.compat(this, color);
+        } catch (Exception e) {
+
+        }
+    }
+    public boolean resolveNetworkFlag(HashMap<FLAGS, Object> Flags) {
+        if(Flags == null) return true;
+        boolean networkFlag = (boolean) Utils.isNull(Flags.get(FLAGS.CHECK_NETWORK), false);
+        if(networkFlag && !isNetworkAvailable()) {
+            NotNetworkDialog();
+            return false;
+        }
+        return true;
+    }
+
+    public HashMap<FLAGS, Object> getFlags(String key) {
+        return ActivityFlags.getInstance().getByKey(key);
+    }
+
+    private boolean resolveFlags(Intent intent) {
+        HashMap<FLAGS, Object> Flags = getFlags(intent.getComponent().getClassName());
+        //Resolve flags
+        if(!resolveNetworkFlag(Flags)) return false;
+        return true;
+    }
+
     protected void startActivityMiddleware(Intent intent, @Nullable Bundle options) {
+        if(!resolveFlags(intent)) return;
         String CurrPackageName = getPackageName();
         ComponentName name = intent.resolveActivity(getPackageManager());
         String intentPackageName = name.getPackageName();

@@ -145,6 +145,37 @@ public class ResponseCode {
         CodeTable.put("70", new CodeDetails("Error Descifrando Track2"));
         CodeTable.put("72", new CodeDetails("Error en activación manual"));
         CodeTable.put("73", new CodeDetails("Error en CRC"));
+
+        CodeTable.put("000", new CodeDetails("Approved", true));
+        CodeTable.put("001", new CodeDetails("Approve with ID", true));
+        CodeTable.put("002", new CodeDetails("Partial Approval (Prepaid Cards only)"));
+        CodeTable.put("100", new CodeDetails("Deny"));
+        CodeTable.put("101", new CodeDetails("Expired Card / Invalid Expiration Date"));
+        CodeTable.put("106", new CodeDetails("Exceeded PIN attempts"));
+        CodeTable.put("109", new CodeDetails("Invalid merchant"));
+        CodeTable.put("110", new CodeDetails("Invalid amount"));
+        CodeTable.put("111", new CodeDetails("Invalid account / Invalid MICR (Travelers Cheque)"));
+        CodeTable.put("115", new CodeDetails("Requested function not supported", true));
+        CodeTable.put("116", new CodeDetails("Not Sufficient Funds", true));
+        CodeTable.put("117", new CodeDetails("Invalid PIN"));
+        CodeTable.put("119", new CodeDetails("Cardmember not enrolled / not permitted"));
+        CodeTable.put("121", new CodeDetails("Limit Exceeded"));
+        CodeTable.put("122", new CodeDetails("Invalid card security code (a.k.a., CID, 4DBC, 4CSC)"));
+        CodeTable.put("125", new CodeDetails("Invalid effective date"));
+        CodeTable.put("130", new CodeDetails("Additional customer identification required"));
+        CodeTable.put("181", new CodeDetails("Format error"));
+        CodeTable.put("183", new CodeDetails("Invalid currency code"));
+        CodeTable.put("187", new CodeDetails("Deny - New card issued"));
+        CodeTable.put("189", new CodeDetails("Deny - Canceled or Closed Merchant/SE"));
+        CodeTable.put("190", new CodeDetails("National ID Mismatch"));
+        CodeTable.put("193", new CodeDetails("Invalid Country Code"));
+        CodeTable.put("200", new CodeDetails("Deny - Pick up card"));
+        CodeTable.put("900", new CodeDetails("Accepted - ATC Synchronization"));
+        CodeTable.put("909", new CodeDetails("System Malfunction (Cryptographic error)"));
+        CodeTable.put("912", new CodeDetails("Issuer not available"));
+        CodeTable.put("977", new CodeDetails("Invalid Payment Plan"));
+        CodeTable.put("978", new CodeDetails("Invalid Payment Times"));
+        CodeTable.put("400",new CodeDetails("Transaction not processed, reverse generated"));
     }
 
     public static HashMap<String, CodeDetails> getCodeResponses() { return CodeTable; }

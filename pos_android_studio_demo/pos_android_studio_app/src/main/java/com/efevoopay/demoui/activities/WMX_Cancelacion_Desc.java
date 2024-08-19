@@ -153,6 +153,8 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
             cp_iv_process.setImageResource(R.drawable.masterdcard);
         }else if(redtarj.equals("Visa")){
             cp_iv_process.setImageResource(R.drawable.visa);
+        }else if(redtarj.toUpperCase(Locale.ROOT).equals("AMEX")){
+            cp_iv_process.setImageResource(R.drawable.amex);
         }
 
         cp_tv_tipotarjeta.setText("Tarjeta "+tipotarjeta);
@@ -232,7 +234,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         intent.putExtra("tips",formatMoney(cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ","")));
         intent.putExtra("propina",cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ",""));
 
-        startActivity(intent);
+        startActivityMiddleware(intent);
     }
     public String formatMoney(String amount){
         String str="";

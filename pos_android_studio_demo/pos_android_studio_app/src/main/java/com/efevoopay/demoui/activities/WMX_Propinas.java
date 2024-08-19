@@ -282,7 +282,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
             intent.putExtra("propina",tv_propina_final.getText().toString().replace("$","").replace(",","").replace(" MXN",""));
         }
 
-        startActivity(intent);
+        startActivityMiddleware(intent);
         }else{
             WMX_Propinas.super.showAlert("error", "¡No cumple importe mínimo de compra!");
         }

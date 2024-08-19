@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class WMX_final_ticket_transaction extends BaseActivity implements View.OnClickListener {
 
@@ -121,9 +122,9 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         body.put("pay_method", Utils.isNull(v_tipotarjeta + "/" + card_emisor + "/" + card_provider, "N/A"));
         body.put("card", Utils.isNull(v_card, "N/A"));
         body.put("payment_date", Utils.isNull(v_time, "N/A"));
-        body.put("idrecibo", Utils.isNull("", "N/A"));
-        body.put("afiliacion", Utils.isNull(cursor.getString(6), "N/A"));
-        body.put("autorizacion", Utils.isNull("", "N/A"));
+        body.put("idrecibo", Utils.isNull(trans_id, "N/A"));
+        body.put("afiliacion", Utils.isNull(cursor.getString(26), "N/A"));
+        body.put("autorizacion", Utils.isNull(_approve, "N/A"));
         body.put("address", Utils.isNull(cursor.getString(8), "N/A"));
         body.put("kpos_id", Utils.isNull(ksn_posId, "N/A"));
         body.put("arqc", Utils.isNull(Utils.maskText(v_ARQC, 4), "N/A"));
@@ -228,6 +229,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             card_provider = "MASTERCARD";
         } else if (v_redtarjeta.equals("Visa")) {
             card_provider = "VISA";
+        }else if (v_redtarjeta.toUpperCase(Locale.ROOT).equals("AMEX")) {
+            card_provider = "AMEX";
         }
     }
 
@@ -326,7 +329,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
         switch (view.getId()) {
             case R.id.btn_ticket_final:
-                if (Build.MODEL.equals("D30")) {
+                if (Build.MODEL.equals("D30")||Build.MODEL.equals("D60")) {
                     onFinish();
                 } else {
                     startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

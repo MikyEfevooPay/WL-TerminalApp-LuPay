@@ -57,7 +57,7 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_auth.setText(_transactions.get(i).get_auth());
-        myViewHolder.tv_date2.setText(_transactions.get(i).get_date2());
+        myViewHolder.tv_date2.setText(_transactions.get(i).get_date());
         myViewHolder.tv_amount2.setText(_transactions.get(i).get_total());
         myViewHolder.tv_time.setText(_transactions.get(i).get_time());
         myViewHolder.tv_card.setText("**** "+_transactions.get(i).get_card());
@@ -76,10 +76,12 @@ public class TransactionItemAdapter2 extends RecyclerView.Adapter<TransactionIte
 
         if(_transactions.get(i).get_redtarj().equals("MC")){
             myViewHolder.iv_process.setImageResource(R.drawable.masterdcard);
+        }else if(_transactions.get(i).get_redtarj().equals("AMEX")){
+            myViewHolder.iv_process.setImageResource(R.drawable.amex);
         }else{
             myViewHolder.iv_process.setImageResource(R.drawable.visa);
         }
-        if(_transactions.get(i).get_tipotxn().equals("CAN")){
+        if(_transactions.get(i).get_tipotxn().equals("CAN") || (_transactions.get(i).get_tipotxn().equals("REV") && _transactions.get(i).get_redtarj().equals("AMEX"))){
             myViewHolder.iv_status.setImageResource(R.drawable.efevoo_i_grupo_41699);
             myViewHolder.tv_amount2.setTextColor(ContextCompat.getColor(context,R.color.wmx_cancelation_text));
         }else{

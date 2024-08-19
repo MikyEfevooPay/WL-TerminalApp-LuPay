@@ -397,6 +397,16 @@
             android:text="@string/wmx_ticket_footer"
             android:textColor="#000000"
             android:textSize="7.5dp" />
+        <TextView
+            android:id="@+id/txt_ticket_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/dm_sans"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="15.5dp" />
     </LinearLayout>
 
 </LinearLayout>

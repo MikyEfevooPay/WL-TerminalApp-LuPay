@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.security.PublicKey;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Name
     public static final String TABLE_NAME = "DEVICE";
@@ -31,6 +33,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String _minimo9="minimo9";
     public static final String _minimo12="minimo12";
     public static final String _minimo18="minimo18";
+    public static final String _interfaz="interfaz";
+    public static final String _codigopostal="codigopostal";
+    public static final String _giro="giro";
+    public static final String _redlogica="redlogica";
+    public static final String _afiliacion="afiliacion";
+    public static final String _statusseller="statusseller";
+    public static final String _datafield43="datafield43";
+    public static final String _datafield60="datafield60";
+    public static final String _tkamex="tkamex";
+    public static final String _keyamex="keyamex";
+    public static final String _countamex="countamex";
 
     // Database Information
     static final String DB_NAME = "TPV";
@@ -62,6 +75,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT NOT NULL,"+_minimo9
             + " TEXT NOT NULL,"+_minimo12
             + " TEXT NOT NULL,"+_minimo18
+            + " TEXT NOT NULL,"+_interfaz
+            + " TEXT NOT NULL,"+_codigopostal
+            + " TEXT NOT NULL,"+_giro
+            + " TEXT NOT NULL,"+_redlogica
+            + " TEXT NOT NULL,"+_afiliacion
+            + " TEXT NOT NULL,"+_statusseller
+            + " TEXT NOT NULL,"+_datafield43
+            + " TEXT NOT NULL,"+_datafield60
+            + " TEXT NOT NULL,"+_tkamex
+            + " TEXT NOT NULL,"+_keyamex
+            + " TEXT NOT NULL,"+_countamex
             + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {

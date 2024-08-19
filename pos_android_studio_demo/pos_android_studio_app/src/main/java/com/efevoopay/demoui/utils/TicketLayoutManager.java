@@ -37,7 +37,7 @@ public class TicketLayoutManager {
     }
 
     public void setTicketDataByLayout(Ticket ticket) {
-        String CommerceNum = ticket.getCursor().getString(6);
+        String CommerceNum = ticket.getCursor().getString(26);
         String[] address = ticket.getCursor().getString(8).split(", ");
         String company = Utils.isNull(ticket.getCursor().getString(9), "");
         switch (this.type) {
