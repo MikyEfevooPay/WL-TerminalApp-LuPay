@@ -2,7 +2,7 @@
     <item android:top="-8dp" android:left="-8dp" android:right="-8dp">
         <shape>
             <solid android:color="@color/transparent"/>
-            <stroke android:color="@color/ep_color_blue" android:width="2px"/>
+            <stroke android:color="@color/ep_set_monto" android:width="2px"/>
         </shape>
     </item>
 </layer-list>

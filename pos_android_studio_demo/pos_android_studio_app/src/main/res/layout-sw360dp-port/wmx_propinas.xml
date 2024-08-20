@@ -198,6 +198,7 @@
                             android:textColor="#5A5A5A"
                             android:textSize="30px" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/ll_twentyfivePercent"
                         android:layout_width="match_parent"
@@ -226,6 +227,7 @@
                             android:textColor="#5A5A5A"
                             android:textSize="30px" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/ll_otherPercent"
                         android:layout_width="match_parent"
@@ -304,7 +306,6 @@
 
                     </LinearLayout>
 
-
                     <LinearLayout
                         android:id="@+id/ll_tips"
                         android:layout_width="match_parent"
@@ -361,7 +362,7 @@
                             android:gravity="center"
                             android:text="Total"
                             android:textAlignment="center"
-                            android:textColor="@color/ep_color_blue"
+                            android:textColor="@color/ep_set_monto"
                             android:textSize="41px" />
 
                         <TextView
@@ -372,7 +373,7 @@
                             android:fontFamily="@font/dm_sans_bold"
                             android:gravity="center|right"
                             android:text="$0.00 MXN"
-                            android:textColor="@color/ep_color_blue"
+                            android:textColor="@color/ep_set_monto"
                             android:textSize="41px" />
 
                     </LinearLayout>

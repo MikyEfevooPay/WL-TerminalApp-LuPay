@@ -227,8 +227,8 @@
     <color name="ep_color_blue">#3378FA</color>
 
     <!--  Radio button  -->
-    <color name="ep_rb_bg">#F8F8FF</color>
-    <color name="ep_rb_stroke">#6498FA</color>
+    <color name="ep_rb_bg">#F0F0F0</color>
+    <color name="ep_rb_stroke">#D4D5D5</color>
     <color name="ep_rb_check">#3378FA</color>
     <color name="ep_crt_error">#DB5F5F</color>
 
