@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ep_fondo_ticket"
+    android:background="@drawable/ticket_background"
     android:orientation="vertical"
-    android:paddingLeft="18px"
+    android:paddingLeft="38px"
     android:paddingTop="26px"
-    android:paddingRight="18px"
+    android:paddingRight="38px"
     android:paddingBottom="26px">
 
     <include layout="@layout/toolbar_layout" />
@@ -40,10 +40,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/fondo_ticket"
         android:orientation="vertical"
-        android:padding="23px">
+        android:padding="42px">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,9 +53,10 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="184px"
-                android:layout_height="103px"
-                app:srcCompat="@drawable/logo_efevoopay_coloresai" />
+                android:layout_width="253px"
+                android:layout_height="59px"
+                android:layout_marginBottom="16px"
+                app:srcCompat="@drawable/logo_cohetepay" />
 
         </LinearLayout>
 
@@ -153,8 +154,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16px"
-            android:layout_marginRight="16px"
+            android:layout_marginLeft="0px"
+            android:layout_marginRight="0px"
             android:layout_marginBottom="23px"
             android:backgroundTint="#A3A6FC"
             android:contentDescription="underline"
@@ -238,6 +239,7 @@
                 android:textColor="#5A5A5A"
                 android:textSize="30px" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -263,10 +265,11 @@
                 android:textColor="#5A5A5A"
                 android:textSize="30px" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="60px"
             android:orientation="horizontal">
 
             <TextView
@@ -304,14 +307,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8px"
                 android:fontFamily="@font/dm_sans_medium"
-                android:text="Mandar ticket por mail"
+                android:text="@string/mandar_ticket_por_correo"
                 android:textColor="@color/ep_color_blue"
                 android:textSize="30px" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/flecha_ticket" />
+                android:src="@drawable/flecha_ticket"
+                android:layout_gravity="center_vertical"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -326,8 +331,6 @@
                 android:id="@+id/btn_ticket_final"
                 android:layout_width="match_parent"
                 android:layout_height="92px"
-                android:layout_marginLeft="30px"
-                android:layout_marginRight="30px"
                 android:background="@drawable/rounded_corner"
                 android:backgroundTint="#B9E0AB"
                 android:fontFamily="@font/dm_sans_bold"
@@ -341,5 +344,6 @@
 
 
     </LinearLayout>
+
 
 </LinearLayout>

@@ -9,8 +9,9 @@
     <ImageView
         android:id="@+id/img_ticket_logo"
         android:layout_width="match_parent"
-        android:layout_height="150px"
-        app:srcCompat="@drawable/logo_ticket" />
+        android:layout_height="57px"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@drawable/logo_cohetepay" />
 
     <LinearLayout
         android:id="@+id/lyt_ticket_address"

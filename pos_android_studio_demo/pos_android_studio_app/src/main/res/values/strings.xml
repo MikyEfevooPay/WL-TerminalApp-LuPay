@@ -431,4 +431,5 @@
     <string name="wmx_not_network_connection_option_3">Activa modo avión y espera un minuto para despues desactivarlo.</string>
     <string name="wmx_not_network_connection_option_4">Apaga tu dispositivo y aguarda un par de minutos antes de encenderlo de nuevo.</string>
     <string name="wmx_not_network_connection_test">Realizar prueba de conexión</string>
+    <string name="mandar_ticket_por_correo">Mandar ticket por correo</string>
 </resources>
