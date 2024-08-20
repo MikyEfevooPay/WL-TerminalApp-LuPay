@@ -82,7 +82,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:textColor="#121212"
+                android:textColor="@color/ep_set_monto"
                 android:textSize="78px"
                 android:visibility="visible" />
             <!--Intentos restantes -->

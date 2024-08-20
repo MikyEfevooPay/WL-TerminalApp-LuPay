@@ -197,6 +197,9 @@
     <color name="ep_fondo_gradient_end_verde">#00DE9A</color>
     <color name="ep_fondo_transaction_item">#DFEAFE</color>
 
+    <color name="ep_fondo_gradient_start">#1C1C1C</color>
+    <color name="ep_fondo_gradient_end">#969696</color>
+
     <color name="ep_fondo">#F4F4F4</color>
     <color name="ep_fondo_resumen">#FFFFFF</color>
     <color name="ep_fondo_ticket">#3378FA</color>
