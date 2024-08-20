@@ -51,255 +51,203 @@
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="34px"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="34dp"
             android:columnCount="3"
             android:orientation="horizontal"
-
             android:useDefaultMargins="true"
-            android:layout_weight="1"
-            android:layout_gravity="center"
+            android:layout_gravity="center|center_vertical|center_horizontal"
+
             >
+            <Button
+                android:id="@+id/btn_1"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="1"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="1"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_2"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="2"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="2"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_3"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="3"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="3"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_4"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="4"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="4"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_5"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="5"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"/>
 
-                <Button
-                    android:id="@+id/btn_5"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="5"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_6"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="6"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_6"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="6"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_7"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="7"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_7"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="7"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_8"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="8"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_8"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="8"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_9"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="9"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20px">
+                android:layout_marginBottom="20px"/>
 
-                <Button
-                    android:id="@+id/btn_9"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="9"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_Dot"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="1"
+                android:textColor="@color/ep_btn_padTerminal_texto"
 
-            </LinearLayout>
+                android:textSize="55px"
+                android:visibility="invisible"
 
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20px"
+                />
 
-                <Button
-                    android:id="@+id/btn_Dot"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="1"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
+            <Button
+                android:id="@+id/btn_0"
+                android:background="@drawable/round_button"
+                android:fontFamily="@font/dm_sans"
+                android:stateListAnimator="@null"
+                android:text="0"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+                android:textSize="55px"
 
-                    android:textSize="55px"
-                    android:visibility="invisible" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20px"/>
 
-                <Button
-                    android:id="@+id/btn_0"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button"
-                    android:fontFamily="@font/dm_sans"
-                    android:stateListAnimator="@null"
-                    android:text="0"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-                    android:textSize="55px" />
+            <Button
+                android:id="@+id/btn_delete"
+                android:background="@drawable/round_button_delete"
+                android:shadowColor="#fff0"
+                android:stateListAnimator="@null"
+                android:textColor="@color/ep_btn_padTerminal_texto"
 
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="150px"
                 android:layout_height="150px"
                 android:layout_columnWeight="1"
-                android:layout_gravity="center_horizontal">
-
-
-                <Button
-                    android:id="@+id/btn_delete"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button_delete"
-                    android:shadowColor="#fff0"
-                    android:stateListAnimator="@null"
-                    android:textColor="@color/ep_btn_padTerminal_texto"
-
-                    />
-
-            </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20px"
+                />
 
         </GridLayout>
 
