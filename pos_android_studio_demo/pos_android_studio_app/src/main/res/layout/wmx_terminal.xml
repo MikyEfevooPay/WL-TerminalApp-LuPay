@@ -278,7 +278,7 @@
             android:layout_columnWeight="1"
             android:layout_gravity="center_horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_delete"
                 android:layout_width="95px"
                 android:layout_height="95px"

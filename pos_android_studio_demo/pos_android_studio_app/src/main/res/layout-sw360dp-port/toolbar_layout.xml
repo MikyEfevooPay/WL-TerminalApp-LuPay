@@ -42,10 +42,10 @@
 
         <ImageView
             android:id="@+id/toolbar_logo"
-            android:layout_width="236px"
+            android:layout_width="328px"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:src="@drawable/logo_efevoopay_coloresai" />
+            android:src="@drawable/logo_cohetepay" />
     </LinearLayout>
 
 

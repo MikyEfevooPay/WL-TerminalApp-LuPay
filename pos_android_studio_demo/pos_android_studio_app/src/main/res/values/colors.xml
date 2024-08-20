@@ -208,8 +208,8 @@
     <!--  botones  -->
     <color name="ep_btn_cancelar_fondo">#FFBABA</color>
     <color name="ep_btn_cancelar_texto">#CC1818</color>
-    <color name="ep_btn_menu_fondo">#E6ECF8</color>
-    <color name="ep_btn_menu_texto">#3378FA</color>
+    <color name="ep_btn_menu_fondo">#FFFFFF</color>
+    <color name="ep_btn_menu_texto">#268A67</color>
     <color name="ep_btn_continuar_fondo">#121212</color>
     <color name="ep_btn_continuar_texto">#FFF</color>
     <color name="ep_btn_confirmacion_fondo">#B9E0AB</color>
@@ -245,5 +245,11 @@
     <color name="black">#000000</color>
 
     <color name="white_half_translate">#7fffffff</color>
+
+    <!--  Text  -->
+
+    <color name="ep_set_monto">#268A67</color>
+
+
 
 </resources>

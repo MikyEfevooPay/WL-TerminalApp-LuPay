@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="oval">
+            <stroke android:color="#E2E3FF" android:width="1px" />
+            <solid android:color="#FFFFFF"/>
+            <size android:width="64dp" android:height="64dp"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/eliminar" android:height="45.66px" android:width="25.18px" android:gravity="center" />
+
+</layer-list>
