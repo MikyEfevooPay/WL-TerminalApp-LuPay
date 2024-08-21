@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ep_fondo_ticket"
+    android:background="@drawable/ticket_background"
     android:orientation="vertical"
     android:paddingLeft="18px"
     android:paddingTop="26px"
@@ -26,7 +26,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/dm_sans_medium"
             android:text="@string/wmx_cortecaja_title"
-            android:textColor="#FFFFFF"
+            android:textColor="#fff"
             android:textSize="30px" />
 
     </LinearLayout>
@@ -34,22 +34,24 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="1000px"
         android:background="@drawable/fondo_ticket"
         android:orientation="vertical"
-        android:padding="23px">
+        android:padding="43px">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="30px"
+            >
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="193px"
-                android:layout_height="103px"
-                app:srcCompat="@drawable/logo_efevoopay_coloresai" />
+                android:layout_width="253px"
+                android:layout_height="59px"
+                app:srcCompat="@drawable/logo_cohetepay" />
 
         </LinearLayout>
 
@@ -191,16 +193,16 @@
             android:id="@+id/lyt_cortecaja_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="23px"
+            android:layout_marginBottom="24dp"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="bottom"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/lyt_cortecaja_print"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="14dp"
                 android:orientation="horizontal"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp">
@@ -252,7 +254,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30px"
+            android:layout_marginBottom="60px"
             android:gravity="bottom|center_horizontal"
 
             android:orientation="vertical">

@@ -30,7 +30,7 @@
                 android:layout_marginBottom="5px"
                 android:fontFamily="@font/dm_sans_bold"
                 android:text="Monto total"
-                android:textColor="@color/membership_green"
+                android:textColor="@color/ep_set_monto"
                 android:textSize="25px" />
 
             <TextView
@@ -41,7 +41,7 @@
                 android:layout_marginBottom="5px"
                 android:fontFamily="@font/dm_sans_bold"
                 android:text="$4,130.00 mxn"
-                android:textColor="@color/membership_green"
+                android:textColor="@color/ep_set_monto"
                 android:textSize="40px" />
 
             <TextView
@@ -81,10 +81,10 @@
 
                 <ImageView
                     android:id="@+id/imageView6"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="424px"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/history_empty" />
+                    app:srcCompat="@drawable/corte_caja_empty" />
 
                 <TextView
                     android:id="@+id/txt_finalcortecaja_empty"
@@ -95,7 +95,7 @@
                     android:fontFamily="@font/dm_sans_bold"
                     android:text="Corte de caja no disponible"
                     android:textAlignment="center"
-                    android:textColor="#6498FA"
+                    android:textColor="@color/ep_set_monto"
                     android:textSize="30px" />
 
             </LinearLayout>

@@ -52,10 +52,10 @@
 
                 <ImageView
                     android:id="@+id/imageView6"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="424px"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/history_empty" />
+                    app:srcCompat="@drawable/corte_caja_empty" />
 
                 <TextView
                     android:id="@+id/txt_cortecaja_empty"
@@ -64,9 +64,9 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/dm_sans_bold"
-                    android:text="Aún no se ha hecho ninguna corte de caja"
+                    android:text="Aún no se ha hecho\nningun corte de caja"
                     android:textAlignment="center"
-                    android:textColor="#6498FA"
+                    android:textColor="@color/ep_set_monto"
                     android:textSize="30px" />
 
             </LinearLayout>
@@ -89,12 +89,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/membership_green"
+            android:backgroundTint="#B9E0AB"
             android:fontFamily="@font/dm_sans_bold"
             android:minHeight="65dip"
             android:text="Hacer corte de caja"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"
+            android:textColor="#4AAC38"
             android:textSize="33px" />
     </LinearLayout>
 </LinearLayout>
