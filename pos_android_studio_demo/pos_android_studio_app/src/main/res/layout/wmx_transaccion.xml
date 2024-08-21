@@ -83,41 +83,26 @@
             android:gravity="center_vertical"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0"
-                app:srcCompat="@drawable/history_empty" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0"
-                android:rotationY="180"
-                app:srcCompat="@drawable/history_empty" />
 
             <ImageView
                 android:id="@+id/imageView7"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="565px"
                 android:layout_gravity="center"
                 android:layout_weight="0"
-                app:srcCompat="@drawable/history_empty" />
+                app:srcCompat="@drawable/history_empty_cohete"
+                />
 
             <TextView
                 android:id="@+id/txt_cancellations_empty2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20px"
+                android:layout_marginTop="60px"
                 android:fontFamily="@font/dm_sans_bold"
                 android:gravity="center_horizontal"
-                android:text="Aún no se ha realizado ninguna transacción"
+                android:text="Aún no se ha realizado\nninguna transacción"
                 android:textAlignment="center"
-                android:textColor="#6498FA"
+                android:textColor="@color/ep_set_monto"
                 android:textSize="30px" />
         </LinearLayout>
 
