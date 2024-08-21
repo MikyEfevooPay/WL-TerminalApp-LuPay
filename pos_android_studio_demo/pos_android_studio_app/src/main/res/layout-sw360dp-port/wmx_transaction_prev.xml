@@ -15,16 +15,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="950px"
+
             android:layout_marginLeft="37px"
             android:layout_marginRight="37px"
-            android:layout_weight="1"
+
             android:background="@drawable/fondo_ticket"
+
             android:orientation="vertical"
             android:paddingLeft="18px"
             android:paddingTop="40px"
             android:paddingRight="18px"
-            android:paddingBottom="20px">
+            android:paddingBottom="20px"
+
+            >
 
             <ImageView
                 android:id="@+id/tp_iv_trans_type"
@@ -339,30 +343,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="30px"
             android:layout_marginRight="30px"
             android:layout_marginBottom="25px"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            >
 
             <LinearLayout
                 android:id="@+id/lyt_historial_details_email"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:paddingTop="10dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"
+                >
 
                 <TextView
                     android:id="@+id/txt_cortecaja_email_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8px"
-                    android:layout_weight="1"
                     android:fontFamily="@font/dm_sans_medium"
                     android:text="@string/wmx_historial_details_email_title"
                     android:textAlignment="center"
@@ -373,7 +381,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+
                     android:src="@drawable/flecha_ticket" />
             </LinearLayout>
 
@@ -381,7 +389,6 @@
                 android:id="@+id/btn_print"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:backgroundTint="@color/ep_btn_continuar_fondo"
                 android:fontFamily="@font/dm_sans_bold"
                 android:paddingTop="15dp"

@@ -15,11 +15,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="950px"
             android:layout_marginLeft="37px"
             android:layout_marginRight="37px"
             android:layout_marginBottom="22px"
-            android:layout_weight="1"
+
 
             android:background="@drawable/fondo_ticket"
             android:orientation="vertical"
@@ -345,8 +345,11 @@
             android:layout_gravity="bottom"
             android:layout_marginTop="20px"
             android:layout_marginBottom="20px"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical"
+            android:layout_weight="1"
+
+            >
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cp_btn_trans_cancelar"

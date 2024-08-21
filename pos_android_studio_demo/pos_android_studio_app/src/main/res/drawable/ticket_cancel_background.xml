@@ -3,7 +3,7 @@
     android:shape="rectangle" >
     <gradient
         android:centerX="-10.0"
-        android:endColor="@color/ep_set_monto"
+        android:endColor="#2196F3"
         android:startColor="@color/eb_col_11"
         android:centerY="0.3"
         android:type="sweep" />

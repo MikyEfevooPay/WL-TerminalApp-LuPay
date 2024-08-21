@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.ContextCompat;
+
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,6 +60,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     Cursor cursor;
     TextView ticket_tv_tip_label;
 
+    LinearLayout mainView_final_ticket_transaction;
+
     private final String TRANSACTION_TICKET_SEND_EMAIL = "transaction_ticket_send_email";
 
     @Override
@@ -74,8 +78,10 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         loader = Utils.getLoaderSpinner(this, "Enviando...");
 
         ticket_tv_tip_label = findViewById(R.id.ticket_tv_tip_label);
+
         btn_ticket_final = (AppCompatButton) findViewById(R.id.btn_ticket_final);
         btn_ticket_final.setOnClickListener(this);
+        mainView_final_ticket_transaction = (LinearLayout) findViewById(R.id.mainView_final_ticket_transaction );
 
         ll_btn_open_modal_email = findViewById(R.id.ll_btn_open_modal_email);
         ll_btn_open_modal_email.setOnClickListener(this);
@@ -211,6 +217,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             textView16.setText("Cancelación aprobada");
             v_subtotal = thisintent.getStringExtra("v_subtotal");
             v_tip = thisintent.getStringExtra("v_tip");
+
+            mainView_final_ticket_transaction.setBackground(ContextCompat.getDrawable(mContext,R.drawable.ticket_cancel_background));
 
             if (Integer.parseInt(v_months) > 0) {
                 v_type_transaction = GNTBackEnd.TRANS_CANMSI_TYPE;

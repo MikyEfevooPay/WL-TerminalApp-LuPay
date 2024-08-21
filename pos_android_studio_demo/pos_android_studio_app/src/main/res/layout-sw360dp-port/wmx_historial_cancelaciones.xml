@@ -51,8 +51,8 @@
                 <ImageView
                     android:id="@+id/imageView6"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="100dp"
+                    android:layout_height="354.09px"
+                    android:layout_marginBottom="50dp"
                     app:srcCompat="@drawable/cancelaciones_empty_icon" />
 
                 <TextView
@@ -61,9 +61,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/dm_sans_bold"
-                    android:text="Aún no se ha hecho ninguna transacción"
+                    android:text="Aún no se ha realizado\nninguna transacción"
                     android:textAlignment="center"
-                    android:textColor="#6498FA"
+                    android:textColor="@color/ep_set_monto"
                     android:textSize="30px" />
             </LinearLayout>
 

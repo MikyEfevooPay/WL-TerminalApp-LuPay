@@ -8,7 +8,9 @@
     android:paddingLeft="38px"
     android:paddingTop="26px"
     android:paddingRight="38px"
-    android:paddingBottom="26px">
+    android:paddingBottom="26px"
+    android:id="@+id/mainView_final_ticket_transaction"
+    >
 
     <include layout="@layout/toolbar_layout" />
 
@@ -40,7 +42,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="1000px"
         android:background="@drawable/fondo_ticket"
         android:orientation="vertical"
         android:padding="42px">
@@ -269,7 +271,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60px"
+            android:layout_marginBottom="100px"
             android:orientation="horizontal">
 
             <TextView
@@ -297,7 +299,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="33px"
-            android:layout_weight="1"
+
             android:gravity="bottom"
             android:orientation="horizontal">
 
