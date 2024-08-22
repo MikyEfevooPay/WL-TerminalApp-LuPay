@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,8 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.TicketLayoutType;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.interfaces.TicketLayoutType;
 
 import java.util.Locale;
 

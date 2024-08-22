@@ -1,9 +1,9 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import static com.efevoopay.demoui.utils.AlgorithmAES.decrypt;
-import static com.efevoopay.demoui.utils.AlgorithmAES.encrypt;
+import static com.cohetepay.demoui.utils.AlgorithmAES.decrypt;
+import static com.cohetepay.demoui.utils.AlgorithmAES.encrypt;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -46,27 +46,27 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.dspread.xpos.TradeSoundType;
-import com.efevoopay.demoui.BuildConfig;
-import com.efevoopay.demoui.config.PenConfig;
-import com.efevoopay.demoui.interfaces.FetchEntity;
-import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.keyboard.KeyboardUtil;
-import com.efevoopay.demoui.keyboard.MyKeyboardView;
-import com.efevoopay.demoui.utils.DBManager;
-import com.efevoopay.demoui.utils.Fetch;
-import com.efevoopay.demoui.utils.FetchUIManager;
-import com.efevoopay.demoui.utils.GNTBackEnd;
-import com.efevoopay.demoui.utils.QPOSStatus;
-import com.efevoopay.demoui.utils.RequestSingleton;
-import com.efevoopay.demoui.utils.ResponseCode;
-import com.efevoopay.demoui.utils.TLV;
-import com.efevoopay.demoui.utils.TLVParser;
-import com.efevoopay.demoui.utils.TRACE;
+import com.cohetepay.demoui.BuildConfig;
+import com.cohetepay.demoui.config.PenConfig;
+import com.cohetepay.demoui.interfaces.FetchEntity;
+import com.cohetepay.demoui.interfaces.FetchOptions;
+import com.cohetepay.demoui.keyboard.KeyboardUtil;
+import com.cohetepay.demoui.keyboard.MyKeyboardView;
+import com.cohetepay.demoui.utils.DBManager;
+import com.cohetepay.demoui.utils.Fetch;
+import com.cohetepay.demoui.utils.FetchUIManager;
+import com.cohetepay.demoui.utils.GNTBackEnd;
+import com.cohetepay.demoui.utils.QPOSStatus;
+import com.cohetepay.demoui.utils.RequestSingleton;
+import com.cohetepay.demoui.utils.ResponseCode;
+import com.cohetepay.demoui.utils.TLV;
+import com.cohetepay.demoui.utils.TLVParser;
+import com.cohetepay.demoui.utils.TRACE;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.TransactionType;
 import com.dspread.xpos.CQPOSService;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,7 +88,7 @@ import java.util.Map;
 import libdukpt.DUKPK2009_CBC;
 
 import com.blumonpay.capx.model.DUKPTData;
-import com.efevoopay.demoui.utils.Utils;
+import com.cohetepay.demoui.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 interface INTERNAL_QPOS_STATUS {

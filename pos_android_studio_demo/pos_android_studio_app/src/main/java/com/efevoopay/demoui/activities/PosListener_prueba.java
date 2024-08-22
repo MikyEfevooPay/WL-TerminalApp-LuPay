@@ -1,4 +1,4 @@
-//package com.efevoopay.demoui.activities;
+//package com.cohetepay.demoui.activities;
 //
 //import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 //
@@ -14,12 +14,12 @@
 //import android.text.TextUtils;
 //import android.widget.Toast;
 //
-//import com.efevoopay.demoui.R;
-//import com.efevoopay.demoui.keyboard.KeyBoardNumInterface;
-//import com.efevoopay.demoui.keyboard.KeyboardUtil;
-//import com.efevoopay.demoui.keyboard.MyKeyboardView;
-//import com.efevoopay.demoui.utils.DUKPK2009_CBC;
-//import com.efevoopay.demoui.utils.TRACE;
+//import com.cohetepay.demoui.R;
+//import com.cohetepay.demoui.keyboard.KeyBoardNumInterface;
+//import com.cohetepay.demoui.keyboard.KeyboardUtil;
+//import com.cohetepay.demoui.keyboard.MyKeyboardView;
+//import com.cohetepay.demoui.utils.DUKPK2009_CBC;
+//import com.cohetepay.demoui.utils.TRACE;
 //import com.dspread.xpos.CQPOSService;
 //import com.dspread.xpos.QPOSService;
 //

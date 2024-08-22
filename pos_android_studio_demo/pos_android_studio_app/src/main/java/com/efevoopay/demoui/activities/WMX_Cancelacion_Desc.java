@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +13,12 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.TicketLayoutType;
-import com.efevoopay.demoui.utils.DBManager;
-import com.efevoopay.demoui.utils.GNTBackEnd;
-import com.efevoopay.demoui.utils.GlobalFunctions;
-import com.efevoopay.demoui.utils.Ticket;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.interfaces.TicketLayoutType;
+import com.cohetepay.demoui.utils.DBManager;
+import com.cohetepay.demoui.utils.GNTBackEnd;
+import com.cohetepay.demoui.utils.GlobalFunctions;
+import com.cohetepay.demoui.utils.Ticket;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.NumberFormat;

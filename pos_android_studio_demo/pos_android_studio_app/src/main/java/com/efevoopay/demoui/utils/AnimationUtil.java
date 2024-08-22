@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;

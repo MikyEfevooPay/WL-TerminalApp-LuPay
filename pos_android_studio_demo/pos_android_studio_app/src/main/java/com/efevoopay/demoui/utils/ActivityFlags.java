@@ -1,15 +1,15 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.efevoopay.demoui.activities.WMX_Card;
-import com.efevoopay.demoui.activities.WMX_Historial_Cancelaciones;
-import com.efevoopay.demoui.activities.WMX_Historial_CorteCaja;
-import com.efevoopay.demoui.activities.WMX_Menu;
-import com.efevoopay.demoui.activities.WMX_Terminal;
-import com.efevoopay.demoui.activities.WMX_Transaccion;
+import com.cohetepay.demoui.activities.WMX_Card;
+import com.cohetepay.demoui.activities.WMX_Historial_Cancelaciones;
+import com.cohetepay.demoui.activities.WMX_Historial_CorteCaja;
+import com.cohetepay.demoui.activities.WMX_Menu;
+import com.cohetepay.demoui.activities.WMX_Terminal;
+import com.cohetepay.demoui.activities.WMX_Transaccion;
 
 import java.util.HashMap;
 import java.util.Objects;

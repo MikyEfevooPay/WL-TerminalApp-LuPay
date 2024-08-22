@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 
 import android.annotation.SuppressLint;
@@ -8,8 +8,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
-import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.interfaces.IFetching;
+import com.cohetepay.demoui.interfaces.FetchOptions;
+import com.cohetepay.demoui.interfaces.IFetching;
 
 import org.json.JSONException;
 import org.json.JSONObject;

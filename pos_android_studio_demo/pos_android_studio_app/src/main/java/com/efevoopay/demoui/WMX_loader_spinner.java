@@ -1,4 +1,4 @@
-package com.efevoopay.demoui;
+package com.cohetepay.demoui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

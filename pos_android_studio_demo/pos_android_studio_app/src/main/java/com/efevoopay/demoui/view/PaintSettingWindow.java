@@ -1,10 +1,10 @@
-package com.efevoopay.demoui.view;
+package com.cohetepay.demoui.view;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.config.PenConfig;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.config.PenConfig;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;

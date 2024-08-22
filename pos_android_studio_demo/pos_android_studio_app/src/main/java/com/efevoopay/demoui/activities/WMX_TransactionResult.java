@@ -1,10 +1,10 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 
 public class WMX_TransactionResult extends BaseActivity implements View.OnClickListener{
     private String result = "";

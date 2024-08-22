@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.widget;
+package com.cohetepay.demoui.widget;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.Transaction;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.utils.Transaction;
 
 import java.util.ArrayList;
 

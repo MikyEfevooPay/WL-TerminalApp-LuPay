@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 public class CorteCaja {
     String _idCorte,_Identificador,_total,_FechaHora, _subtotal, _propina;

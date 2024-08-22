@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.view;
+package com.cohetepay.demoui.view;
 
 
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.config.PenConfig;
-import com.efevoopay.demoui.utils.DisplayUtil;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.config.PenConfig;
+import com.cohetepay.demoui.utils.DisplayUtil;
 import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;

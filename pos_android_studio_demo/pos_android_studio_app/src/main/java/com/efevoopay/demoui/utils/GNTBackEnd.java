@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -7,9 +7,9 @@ import android.os.Build;
 import com.blumonpay.capx.functions.CypherFunctions;
 import com.blumonpay.capx.model.DUKPTData;
 import com.blumonpay.capx.model.TransactionData;
-import com.efevoopay.demoui.BuildConfig;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.activities.WMX_Ajustes;
+import com.cohetepay.demoui.BuildConfig;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.activities.WMX_Ajustes;
 
 import org.json.JSONException;
 import org.json.JSONObject;

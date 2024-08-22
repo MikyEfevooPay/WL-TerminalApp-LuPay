@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.widget;
+package com.cohetepay.demoui.widget;
 
 
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.binioter.guideview.Component;
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 
 /**
  * Created by Qianmeng on 2020/3/10

@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

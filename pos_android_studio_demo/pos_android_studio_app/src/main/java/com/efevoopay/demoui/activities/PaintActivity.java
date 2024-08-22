@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -19,17 +19,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
-import com.efevoopay.demoui.config.PenConfig;
-import com.efevoopay.demoui.utils.BitmapUtil;
-import com.efevoopay.demoui.utils.DisplayUtil;
-import com.efevoopay.demoui.utils.RequestSingleton;
-import com.efevoopay.demoui.utils.StatusBarCompat;
-import com.efevoopay.demoui.utils.SystemUtil;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Utils;
-import com.efevoopay.demoui.view.CircleView;
-import com.efevoopay.demoui.view.PaintSettingWindow;
-import com.efevoopay.demoui.view.PaintView;
+import com.cohetepay.demoui.config.PenConfig;
+import com.cohetepay.demoui.utils.BitmapUtil;
+import com.cohetepay.demoui.utils.DisplayUtil;
+import com.cohetepay.demoui.utils.RequestSingleton;
+import com.cohetepay.demoui.utils.StatusBarCompat;
+import com.cohetepay.demoui.utils.SystemUtil;
+import com.cohetepay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.Utils;
+import com.cohetepay.demoui.view.CircleView;
+import com.cohetepay.demoui.view.PaintSettingWindow;
+import com.cohetepay.demoui.view.PaintView;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +41,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

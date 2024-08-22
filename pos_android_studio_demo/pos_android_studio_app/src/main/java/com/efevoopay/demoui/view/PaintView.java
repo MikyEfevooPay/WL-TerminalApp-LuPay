@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.view;
+package com.cohetepay.demoui.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,14 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.config.PenConfig;
-import com.efevoopay.demoui.pen.BasePen;
-import com.efevoopay.demoui.pen.Eraser;
-import com.efevoopay.demoui.pen.SteelPen;
-import com.efevoopay.demoui.utils.BitmapUtil;
-import com.efevoopay.demoui.utils.DisplayUtil;
-import com.efevoopay.demoui.utils.StepOperator;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.config.PenConfig;
+import com.cohetepay.demoui.pen.BasePen;
+import com.cohetepay.demoui.pen.Eraser;
+import com.cohetepay.demoui.pen.SteelPen;
+import com.cohetepay.demoui.utils.BitmapUtil;
+import com.cohetepay.demoui.utils.DisplayUtil;
+import com.cohetepay.demoui.utils.StepOperator;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;

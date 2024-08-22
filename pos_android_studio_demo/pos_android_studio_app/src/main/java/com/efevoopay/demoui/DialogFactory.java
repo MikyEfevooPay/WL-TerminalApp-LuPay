@@ -1,8 +1,8 @@
-package com.efevoopay.demoui;
+package com.cohetepay.demoui;
 
 import android.content.Context;
 
-import com.efevoopay.demoui.activities.LoadingDialog;
+import com.cohetepay.demoui.activities.LoadingDialog;
 
 public class DialogFactory {
 

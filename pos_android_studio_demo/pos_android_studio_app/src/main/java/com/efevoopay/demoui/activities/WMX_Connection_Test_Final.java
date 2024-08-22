@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DateFormat;

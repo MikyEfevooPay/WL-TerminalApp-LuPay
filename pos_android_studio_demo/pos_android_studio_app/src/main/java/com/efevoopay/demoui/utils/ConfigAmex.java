@@ -1,7 +1,7 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
-import static com.efevoopay.demoui.utils.AlgorithmAES.generateIv;
-import static com.efevoopay.demoui.utils.AlgorithmAES.generateKey;
+import static com.cohetepay.demoui.utils.AlgorithmAES.generateIv;
+import static com.cohetepay.demoui.utils.AlgorithmAES.generateKey;
 
 import android.content.Context;
 import android.os.Build;

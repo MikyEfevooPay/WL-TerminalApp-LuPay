@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.interfaces;
+package com.cohetepay.demoui.interfaces;
 
 public interface TransactionsViewInterface {
     void onItemClick(int position);

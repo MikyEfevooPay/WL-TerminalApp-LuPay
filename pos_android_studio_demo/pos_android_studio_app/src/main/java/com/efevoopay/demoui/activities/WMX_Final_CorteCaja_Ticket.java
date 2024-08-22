@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,18 +18,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 
-import com.efevoopay.demoui.interfaces.FetchEntity;
-import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.interfaces.TicketLayoutType;
-import com.efevoopay.demoui.utils.DBManager;
-import com.efevoopay.demoui.utils.Fetch;
-import com.efevoopay.demoui.utils.FetchUIManager;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Ticket;
-import com.efevoopay.demoui.utils.Utils;
+import com.cohetepay.demoui.interfaces.FetchEntity;
+import com.cohetepay.demoui.interfaces.FetchOptions;
+import com.cohetepay.demoui.interfaces.TicketLayoutType;
+import com.cohetepay.demoui.utils.DBManager;
+import com.cohetepay.demoui.utils.Fetch;
+import com.cohetepay.demoui.utils.FetchUIManager;
+import com.cohetepay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.Ticket;
+import com.cohetepay.demoui.utils.Utils;
 
 import com.android.volley.Request;
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONException;

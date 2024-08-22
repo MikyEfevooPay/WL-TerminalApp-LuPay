@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 
 import java.text.NumberFormat;
 

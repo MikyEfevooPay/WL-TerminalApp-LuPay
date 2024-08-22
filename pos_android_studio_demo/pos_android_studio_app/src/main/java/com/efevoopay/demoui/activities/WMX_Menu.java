@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -11,14 +11,14 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.ConfigAmex;
-import com.efevoopay.demoui.utils.ConfigTpv;
-import com.efevoopay.demoui.utils.DBManager;
-import com.efevoopay.demoui.utils.GNTBackEnd;
-import com.efevoopay.demoui.utils.ResponseCode;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Utils;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.utils.ConfigAmex;
+import com.cohetepay.demoui.utils.ConfigTpv;
+import com.cohetepay.demoui.utils.DBManager;
+import com.cohetepay.demoui.utils.GNTBackEnd;
+import com.cohetepay.demoui.utils.ResponseCode;
+import com.cohetepay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.Utils;
 
 public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     // private Button other, ajustes, meses;

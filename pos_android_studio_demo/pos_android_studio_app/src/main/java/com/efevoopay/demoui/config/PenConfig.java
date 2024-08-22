@@ -1,9 +1,9 @@
-package com.efevoopay.demoui.config;
+package com.cohetepay.demoui.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import com.efevoopay.demoui.view.PaintSettingWindow;
+import com.cohetepay.demoui.view.PaintSettingWindow;
 
 /**
  * 画笔配置

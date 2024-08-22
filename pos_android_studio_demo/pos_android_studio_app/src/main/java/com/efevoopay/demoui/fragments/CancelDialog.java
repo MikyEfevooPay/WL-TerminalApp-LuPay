@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.fragments;
+package com.cohetepay.demoui.fragments;
 
 import android.app.Dialog;
 import android.content.res.Resources;
@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

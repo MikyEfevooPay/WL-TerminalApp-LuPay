@@ -1,4 +1,4 @@
-package com.efevoopay.demoui;
+package com.cohetepay.demoui;
 
 import android.app.Application;
 import android.content.Context;

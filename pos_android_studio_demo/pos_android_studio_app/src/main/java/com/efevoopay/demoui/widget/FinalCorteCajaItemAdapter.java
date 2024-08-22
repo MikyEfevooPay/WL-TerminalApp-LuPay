@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.widget;
+package com.cohetepay.demoui.widget;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.HistorialCorteCajaViewInterface;
-import com.efevoopay.demoui.utils.CorteCaja;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.interfaces.HistorialCorteCajaViewInterface;
+import com.cohetepay.demoui.utils.CorteCaja;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
-import com.efevoopay.demoui.config.ControllerPoint;
+import com.cohetepay.demoui.config.ControllerPoint;
 
 /**
  * 贝塞尔操作工具类，对点的位置和宽度控制的bezier曲线，主要是两个点，都包含了宽度和点的坐标

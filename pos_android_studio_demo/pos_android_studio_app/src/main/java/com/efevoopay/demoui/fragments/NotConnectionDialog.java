@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.fragments;
+package com.cohetepay.demoui.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,9 +18,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.activities.WMX_Connection_Test;
-import com.efevoopay.demoui.activities.WMX_KSN;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.activities.WMX_Connection_Test;
+import com.cohetepay.demoui.activities.WMX_KSN;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

@@ -125,7 +125,7 @@
             android:layout_marginBottom="37px"
             android:orientation="vertical">
 
-            <com.efevoopay.demoui.keyboard.MyKeyboardView
+            <com.cohetepay.demoui.keyboard.MyKeyboardView
                 android:id="@+id/keyboard_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

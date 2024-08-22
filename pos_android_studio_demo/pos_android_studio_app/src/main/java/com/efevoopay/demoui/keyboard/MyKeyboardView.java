@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.keyboard;
+package com.cohetepay.demoui.keyboard;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.QPOSUtil;
-import com.efevoopay.demoui.utils.TRACE;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.utils.QPOSUtil;
+import com.cohetepay.demoui.utils.TRACE;
 
 import java.util.ArrayList;
 import java.util.Arrays;

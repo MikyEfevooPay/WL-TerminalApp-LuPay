@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.config;
+package com.cohetepay.demoui.config;
 
 /***
  * Touch point information.

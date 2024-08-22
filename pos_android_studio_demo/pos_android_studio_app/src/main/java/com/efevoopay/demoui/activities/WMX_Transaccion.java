@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,16 +18,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.FetchEntity;
-import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
-import com.efevoopay.demoui.utils.Fetch;
-import com.efevoopay.demoui.utils.FetchUIManager;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Transaction;
-import com.efevoopay.demoui.utils.Utils;
-import com.efevoopay.demoui.widget.TransactionItemAdapter2;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.interfaces.FetchEntity;
+import com.cohetepay.demoui.interfaces.FetchOptions;
+import com.cohetepay.demoui.interfaces.TransactionsViewInterface;
+import com.cohetepay.demoui.utils.Fetch;
+import com.cohetepay.demoui.utils.FetchUIManager;
+import com.cohetepay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.Transaction;
+import com.cohetepay.demoui.utils.Utils;
+import com.cohetepay.demoui.widget.TransactionItemAdapter2;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import org.json.JSONException;

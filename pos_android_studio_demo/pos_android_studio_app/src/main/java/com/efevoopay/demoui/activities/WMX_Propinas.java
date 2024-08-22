@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.DBManager;
-import com.efevoopay.demoui.utils.GlobalFunctions;
-import com.efevoopay.demoui.utils.InputFilterMinMax;
-import com.efevoopay.demoui.utils.TRACE;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.utils.DBManager;
+import com.cohetepay.demoui.utils.GlobalFunctions;
+import com.cohetepay.demoui.utils.InputFilterMinMax;
+import com.cohetepay.demoui.utils.TRACE;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class WMX_Propinas extends BaseActivity implements View.OnClickListener{

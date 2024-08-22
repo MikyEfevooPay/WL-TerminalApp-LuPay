@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +9,12 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import com.android.volley.Request;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.FetchEntity;
-import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.utils.FetchUIManager;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Utils;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.interfaces.FetchEntity;
+import com.cohetepay.demoui.interfaces.FetchOptions;
+import com.cohetepay.demoui.utils.FetchUIManager;
+import com.cohetepay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

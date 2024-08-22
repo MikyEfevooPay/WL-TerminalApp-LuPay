@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 import com.dspread.helper.printer.Device;
 
 import java.util.ArrayList;

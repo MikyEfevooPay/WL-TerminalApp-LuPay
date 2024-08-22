@@ -1,6 +1,6 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
-import static com.efevoopay.demoui.utils.Utils.bytes2Hex;
+import static com.cohetepay.demoui.utils.Utils.bytes2Hex;
 
 import android.os.Build;
 

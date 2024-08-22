@@ -1,5 +1,5 @@
 
-package com.efevoopay.demoui.widget;
+package com.cohetepay.demoui.widget;
 
 import android.content.Context;
 
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.TransactionsViewInterface;
-import com.efevoopay.demoui.utils.Transaction;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.interfaces.TransactionsViewInterface;
+import com.cohetepay.demoui.utils.Transaction;
 
 import java.util.ArrayList;
 import java.util.Locale;

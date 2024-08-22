@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.keyboard;
+package com.cohetepay.demoui.keyboard;
 
 import android.app.Activity;
 import android.view.Gravity;
@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.TRACE;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.utils.TRACE;
 
 import java.lang.reflect.Method;
 import java.util.List;

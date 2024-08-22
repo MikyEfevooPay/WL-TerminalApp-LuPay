@@ -1,12 +1,12 @@
-package com.efevoopay.demoui.interfaces;
+package com.cohetepay.demoui.interfaces;
 
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.LayoutRes;
 
-import com.efevoopay.demoui.utils.PRINT_TYPE;
-import com.efevoopay.demoui.utils.Ticket;
+import com.cohetepay.demoui.utils.PRINT_TYPE;
+import com.cohetepay.demoui.utils.Ticket;
 
 public interface ITicket {
     void onPrintFinished(boolean isSuccess, PRINT_TYPE print_type, TicketLayoutType layoutType);

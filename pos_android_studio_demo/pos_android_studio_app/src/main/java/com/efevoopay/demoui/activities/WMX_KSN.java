@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.os.Looper;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.TradeSoundType;
-import com.efevoopay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.TRACE;
 
 import java.util.Hashtable;
 import java.util.concurrent.CompletableFuture;

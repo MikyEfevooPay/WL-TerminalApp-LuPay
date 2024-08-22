@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 
-import com.efevoopay.demoui.config.PenConfig;
+import com.cohetepay.demoui.config.PenConfig;
 
 import android.util.Base64;
 import android.util.Log;

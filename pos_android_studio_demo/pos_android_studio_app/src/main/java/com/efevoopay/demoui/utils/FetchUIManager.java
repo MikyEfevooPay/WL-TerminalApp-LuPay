@@ -1,13 +1,13 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
 
-import com.efevoopay.demoui.interfaces.FetchEntity;
-import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.interfaces.IFetchs;
+import com.cohetepay.demoui.interfaces.FetchEntity;
+import com.cohetepay.demoui.interfaces.FetchOptions;
+import com.cohetepay.demoui.interfaces.IFetchs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;

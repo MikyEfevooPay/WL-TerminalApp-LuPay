@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -15,16 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.interfaces.FetchEntity;
-import com.efevoopay.demoui.interfaces.FetchOptions;
-import com.efevoopay.demoui.interfaces.HistorialCorteCajaViewInterface;
-import com.efevoopay.demoui.utils.CorteCaja;
-import com.efevoopay.demoui.utils.Fetch;
-import com.efevoopay.demoui.utils.FetchUIManager;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Utils;
-import com.efevoopay.demoui.widget.CorteCajaItemAdapter;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.interfaces.FetchEntity;
+import com.cohetepay.demoui.interfaces.FetchOptions;
+import com.cohetepay.demoui.interfaces.HistorialCorteCajaViewInterface;
+import com.cohetepay.demoui.utils.CorteCaja;
+import com.cohetepay.demoui.utils.Fetch;
+import com.cohetepay.demoui.utils.FetchUIManager;
+import com.cohetepay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.Utils;
+import com.cohetepay.demoui.widget.CorteCajaItemAdapter;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import org.json.JSONException;

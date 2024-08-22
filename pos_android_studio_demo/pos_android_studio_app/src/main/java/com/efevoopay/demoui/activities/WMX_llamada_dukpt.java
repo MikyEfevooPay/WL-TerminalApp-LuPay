@@ -1,9 +1,9 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
-import com.efevoopay.demoui.utils.CorteCaja;
-import com.efevoopay.demoui.utils.TRACE;
-import com.efevoopay.demoui.utils.Transaction;
-import com.efevoopay.demoui.utils.Utils;
+import com.cohetepay.demoui.utils.CorteCaja;
+import com.cohetepay.demoui.utils.TRACE;
+import com.cohetepay.demoui.utils.Transaction;
+import com.cohetepay.demoui.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

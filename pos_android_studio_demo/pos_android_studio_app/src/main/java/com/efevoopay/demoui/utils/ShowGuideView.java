@@ -1,11 +1,11 @@
-package com.efevoopay.demoui.utils;
+package com.cohetepay.demoui.utils;
 
 import android.app.Activity;
 import android.widget.Button;
 
 import com.binioter.guideview.Guide;
 import com.binioter.guideview.GuideBuilder;
-import com.efevoopay.demoui.widget.SimpleComponent;
+import com.cohetepay.demoui.widget.SimpleComponent;
 
 /**
  * Created by Qianmeng on 2020/3/10

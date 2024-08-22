@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.beans;
+package com.cohetepay.demoui.beans;
 
 import com.dspread.xpos.QPOSService;
 

@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,9 +13,9 @@ import androidx.annotation.RequiresApi;
 
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.QPOSStatus;
-import com.efevoopay.demoui.utils.TRACE;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.utils.QPOSStatus;
+import com.cohetepay.demoui.utils.TRACE;
 
 import java.util.Map;
 

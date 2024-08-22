@@ -1,8 +1,8 @@
-package com.efevoopay.demoui.interfaces;
+package com.cohetepay.demoui.interfaces;
 
 import androidx.annotation.Nullable;
 
-import com.efevoopay.demoui.utils.FetchUIManager;
+import com.cohetepay.demoui.utils.FetchUIManager;
 
 import java.util.List;
 

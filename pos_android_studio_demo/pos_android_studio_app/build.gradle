@@ -18,7 +18,7 @@ android {
     compileSdk 33
     buildToolsVersion '30.0.3'
     defaultConfig {
-        applicationId "com.efevoopay.demoui"
+        applicationId "com.cohetepay.demoui"
         minSdkVersion 17
         targetSdk 31
         versionCode 291

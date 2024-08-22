@@ -1,4 +1,4 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.content.Context;
 import android.os.Build;
@@ -6,9 +6,9 @@ import android.view.Gravity;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
-import com.efevoopay.demoui.DialogFactory;
-import com.efevoopay.demoui.R;
-import com.efevoopay.demoui.utils.AnimationUtil;
+import com.cohetepay.demoui.DialogFactory;
+import com.cohetepay.demoui.R;
+import com.cohetepay.demoui.utils.AnimationUtil;
 
 import java.util.Objects;
 

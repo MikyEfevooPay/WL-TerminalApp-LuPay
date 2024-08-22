@@ -1,5 +1,5 @@
 
-package com.efevoopay.demoui.view;
+package com.cohetepay.demoui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -39,7 +39,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 
 import java.util.List;
 

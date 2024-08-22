@@ -1,11 +1,11 @@
-package com.efevoopay.demoui.activities;
+package com.cohetepay.demoui.activities;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.efevoopay.demoui.R;
+import com.cohetepay.demoui.R;
 
 public abstract class BaseDialog extends Dialog implements DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
 
