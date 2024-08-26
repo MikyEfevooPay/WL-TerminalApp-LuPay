@@ -10,7 +10,7 @@
         android:id="@+id/img_ticket_logo"
         android:layout_width="match_parent"
         android:layout_height="150px"
-        app:srcCompat="@drawable/logo_ticket" />
+        app:srcCompat="@drawable/logo_cohetepay_bmp_try3" />
 
     <LinearLayout
         android:id="@+id/lyt_ticket_address"

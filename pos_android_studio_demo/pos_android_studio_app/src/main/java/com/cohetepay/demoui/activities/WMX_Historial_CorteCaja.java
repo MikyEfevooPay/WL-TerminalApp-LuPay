@@ -3,6 +3,7 @@ package com.cohetepay.demoui.activities;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -88,6 +89,13 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
         date2 = new Date();
         searchByDates = false;
         DatePickerListener();
+
+        Locale locale = new Locale("es", "ES");
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
     }
 
     private void DatePickerListener() {
