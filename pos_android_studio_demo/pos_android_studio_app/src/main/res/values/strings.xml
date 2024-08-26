@@ -424,12 +424,12 @@
     <string name="wmx_transaction_ticket_electronic_sign">Autorizado vía firma electrónica</string>
     <string name="wmx_not_network_connection_title">Tu terminal no esta conectado a internet</string>
     <string name="wmx_not_network_connection_subtitle">Para solucionarlo:</string>
-    <string name="wmx_not_network_connection_footer_1">¿Aún no puedes conectarte?</string>
+    <string name="wmx_not_network_connection_footer_1">¿Aún no puedes conectarte?\n</string>
     <string name="wmx_not_network_connection_footer_2">Remueve la tarjeta SIM y vuelve a insertarla</string>
-    <string name="wmx_not_network_connection_option_1">Revisa que los datos móviles de tu terminal se encuentren activos.</string>
-    <string name="wmx_not_network_connection_option_2">Intenta conectarte a alguna red wifi</string>
-    <string name="wmx_not_network_connection_option_3">Activa modo avión y espera un minuto para despues desactivarlo.</string>
-    <string name="wmx_not_network_connection_option_4">Apaga tu dispositivo y aguarda un par de minutos antes de encenderlo de nuevo.</string>
+    <string name="wmx_not_network_connection_option_1">Revisa que los datos móviles de tu terminal se encuentren activados</string>
+    <string name="wmx_not_network_connection_option_2">Intenta conectarte a alguna red Wi Fi</string>
+    <string name="wmx_not_network_connection_option_3">Prueba activando el modo avión y espera un minuto para desactivarlo</string>
+    <string name="wmx_not_network_connection_option_4">Apaga tu dispositivo y espera unos minutos antes de volver a encenderlo</string>
     <string name="wmx_not_network_connection_test">Realizar prueba de conexión</string>
     <string name="mandar_ticket_por_correo">Mandar ticket por correo</string>
 </resources>

@@ -22,6 +22,7 @@ public class TicketLayoutManager {
     private LinearLayout lyt_ticket_sign, lyt_ticket_separator_tiny_commerce;
     private TableRow tbl_ticket_tip;
 
+
     public View getLayout() {
         return this.layout;
     }
