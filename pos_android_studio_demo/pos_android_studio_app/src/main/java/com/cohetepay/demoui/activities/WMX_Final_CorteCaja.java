@@ -91,12 +91,14 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
         body.put("snTerminal", ksn_posId);
         body.put("operacion", "D");
         body.put("idCorte", "0");
+        body.put("bd", "wl_cohetepay");
     }
 
     private void setConfirmBody(JSONObject body) throws JSONException {
         body.put("snTerminal", ksn_posId);
         body.put("operacion", "C");
         body.put("idCorte", "0");
+        body.put("bd", "wl_cohetepay");
     }
 
     @Override

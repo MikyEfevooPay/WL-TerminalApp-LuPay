@@ -136,12 +136,14 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
             body.put("fechaInicio", obj.format(date1) + " 00:00:00");
             body.put("fechaFin", obj.format(date2) + " 23:59:59");
         }
+        body.put("bd", "wl_cohetepay");
     }
 
     private void detailsBody(JSONObject body) throws JSONException {
         body.put("snTerminal", ksn_posId);
         body.put("idCorte", currIdCorte);
         body.put("operacion", "HD");
+        body.put("bd", "wl_cohetepay");
     }
 
     @Override

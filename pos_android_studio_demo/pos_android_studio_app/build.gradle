@@ -21,8 +21,8 @@ android {
         applicationId "com.cohetepay.demoui"
         minSdkVersion 17
         targetSdk 31
-        versionCode 291
-        versionName '1.5.9.6'
+        versionCode 292
+        versionName '1.5.9.7'
 
         ndk {
             moduleName "serial_port"
