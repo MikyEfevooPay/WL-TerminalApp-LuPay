@@ -461,9 +461,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
         Date date = new Date();
         if (_nip==0){
-            if (!isPermissionOk) {
-                return;
-            }
             intent = new Intent(this, PaintActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("crop", false);   //Set the final image to capture the text area
             intent.putExtra("format", PenConfig.FORMAT_PNG); //image format
