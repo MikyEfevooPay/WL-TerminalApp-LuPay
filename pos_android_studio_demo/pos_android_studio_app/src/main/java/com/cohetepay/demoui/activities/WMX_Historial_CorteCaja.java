@@ -120,9 +120,9 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch history = manager.addFetch(CORTE_CAJA_HISTORIAL, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/corte/crud", Request.Method.POST));
+        Fetch history = manager.addFetch(CORTE_CAJA_HISTORIAL, new FetchOptions(Utils.TPVCONFIG + "/api/apiv0/agrs/corte/crud", Request.Method.POST));
         history.setSetBodyListenner(this::historyBody);
-        Fetch details = manager.addFetch(CORTE_CAJA_HISTORIAL_DETAILS, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/corte/crud", Request.Method.POST));
+        Fetch details = manager.addFetch(CORTE_CAJA_HISTORIAL_DETAILS, new FetchOptions(Utils.TPVCONFIG + "/api/apiv0/agrs/corte/crud", Request.Method.POST));
         details.setSetBodyListenner(this::detailsBody);
     }
 

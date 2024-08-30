@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 public class Utils {
 
 	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
-	public static final String TERMINAL_BIN = "https://testagrswl.efevoo.app/apiv0/agrs/terminales/tpv/bines";
-	public static final String TPVCONFIG = "https://testagrswl.efevoo.app";
+	public static final String TERMINAL_BIN = "https://alphawlapitest.efevoopaylbda.com/api/apiv0/agrs/terminales/tpv/bines";
+	public static final String TPVCONFIG = "https://alphawlapitest.efevoopaylbda.com";
 	public static final String TERMINAL_AMEX = "https://efevoopayamex-ecommerce.com";
 	public static final String TERMINAL_BATCH = "https://efevoopaybatch-ecommerce.com";
 //	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";

@@ -81,9 +81,9 @@ public class WMX_Final_CorteCaja extends BaseActivity implements View.OnClickLis
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch corte = manager.addFetch(CORTE_CAJA, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/corte/crud", Request.Method.POST));
+        Fetch corte = manager.addFetch(CORTE_CAJA, new FetchOptions(Utils.TPVCONFIG + "/api/apiv0/agrs/corte/crud", Request.Method.POST));
         corte.setSetBodyListenner(this::setCorteBody);
-        Fetch confirm = manager.addFetch(CONFIRM_CORTE_CAJA, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/corte/crud", Request.Method.POST));
+        Fetch confirm = manager.addFetch(CONFIRM_CORTE_CAJA, new FetchOptions(Utils.TPVCONFIG + "/api/apiv0/agrs/corte/crud", Request.Method.POST));
         confirm.setSetBodyListenner(this::setConfirmBody);
     }
 
