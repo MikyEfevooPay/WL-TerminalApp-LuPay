@@ -134,6 +134,8 @@ public class TicketLayoutManager {
         String[] address = ticket.getCursor().getString(8).split(", ");
         String company = Utils.isNull(ticket.getCursor().getString(9), "");
         printLineStyle = new PrintLineStyle();
+        mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 11));
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getLayout().getResources(), R.drawable.logo_cohetepay_bmp_try3);
         switch (this.type) {
             case TRANSACTION:
                 String nip = ticket.getCard_nip();
@@ -145,8 +147,6 @@ public class TicketLayoutManager {
 //                    printLineStyle.setFontSize(10);
 //                    printLineStyle.setAlign(PrintLine.CENTER);
 //                    mPrinter.addPrintLintStyle(printLineStyle);
-                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 11));
-                    Bitmap bitmap = BitmapFactory.decodeResource(this.getLayout().getResources(), R.drawable.logo_cohetepay_bmp_try3);
                     mPrinter.addBitmap(Bitmap.createScaledBitmap(bitmap, 375, 100, false));
                     mPrinter.setPrintStyle(printLineStyle);
                     mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 11));
@@ -202,26 +202,58 @@ public class TicketLayoutManager {
                 if(ticket.getTrans_type().equals(GNTBackEnd.getTitle(GNTBackEnd.TRANS_MSI_TYPE).toUpperCase(Locale.ROOT))) tbl_ticket_tip.setVisibility(View.GONE);*/
                 break;
             case CORTE:
-                txt_company = layout.findViewById(R.id.txt_company);
-                txt_address_1 = layout.findViewById(R.id.txt_address_1);
-                txt_address_2 = layout.findViewById(R.id.txt_address_2);
-                txt_address_3 = layout.findViewById(R.id.txt_address_3);
-                txt_transaction_type = layout.findViewById(R.id.txt_transaction_type);
-                txt_ticket_date = layout.findViewById(R.id.txt_ticket_date);
-                txt_ticket_consumo_value = layout.findViewById(R.id.txt_ticket_consumo_value);
-                txt_ticket_tip_value = layout.findViewById(R.id.txt_ticket_tip_value);
-                txt_ticket_total_value = layout.findViewById(R.id.txt_ticket_total_value);
-                txt_ticket_kposId = layout.findViewById(R.id.txt_ticket_kposId);
-                txt_company.setText(company);
-                txt_address_1.setText(Utils.isVacio(address,0)+" "+Utils.isVacio(address,1)+" "+Utils.isVacio(address,2) + " " + Utils.isVacio(address,3));
-                txt_address_2.setText(Utils.isVacio(address,4) + ", " +Utils.isVacio(address,5));
-                txt_address_3.setText(Utils.isVacio(address,6));
-                txt_transaction_type.setText(ticket.getTrans_type());
-                txt_ticket_date.setText(ticket.getDate_time());
-                txt_ticket_consumo_value.setText(ticket.getAmount());
-                txt_ticket_tip_value.setText(ticket.getTip());
-                txt_ticket_total_value.setText(ticket.getTotal());
-                txt_ticket_kposId.setText("Núm. SERIE " + ticket.getKsn_posId());
+                try {
+                    mPrinter.addBitmap(Bitmap.createScaledBitmap(bitmap, 375, 100, false));
+                    mPrinter.setPrintStyle(printLineStyle);
+                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 11));
+                    mPrinter.addText(company);
+                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 10));
+                    mPrinter.addText(Utils.isVacio(address,0)+" "+Utils.isVacio(address,1)+" "+Utils.isVacio(address,2) + " " + Utils.isVacio(address,3));
+                    mPrinter.addText(Utils.isVacio(address,4) + ", " +Utils.isVacio(address,5));
+                    mPrinter.addText(Utils.isVacio(address,6));
+                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 8));
+                    mPrinter.addText("________");
+                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 10));
+                    mPrinter.addText(ticket.getTrans_type());
+                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 9));
+                    mPrinter.addText(ticket.getDate_time());
+                    mPrinter.addText("__________________________________________");
+                    mPrinter.addTexts(new String[]{"Subtotal", ticket.getAmount()}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.ALIGN_OPPOSITE});
+                    mPrinter.addTexts(new String[]{"Propina", ticket.getTip()}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.ALIGN_OPPOSITE});
+                    mPrinter.addTexts(new String[]{"Total:", ticket.getTotal()}, new int[]{5, 10}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.ALIGN_OPPOSITE,PrintStyle.FontStyle.BOLD});
+                    mPrinter.addText("__________________________________________");
+                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 10));
+                    mPrinter.addText("FIN DEL RESUMEM");
+                    mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 8));
+                    mPrinter.addText("________");
+                    mPrinter.addText("Núm. SERIE " + ticket.getKsn_posId());
+                    mPrinter.addText("");
+                    mPrinter.addText("");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+
+//                txt_company = layout.findViewById(R.id.txt_company);
+//                txt_address_1 = layout.findViewById(R.id.txt_address_1);
+//                txt_address_2 = layout.findViewById(R.id.txt_address_2);
+//                txt_address_3 = layout.findViewById(R.id.txt_address_3);
+//                txt_transaction_type = layout.findViewById(R.id.txt_transaction_type);
+//                txt_ticket_date = layout.findViewById(R.id.txt_ticket_date);
+//                txt_ticket_consumo_value = layout.findViewById(R.id.txt_ticket_consumo_value);
+//                txt_ticket_tip_value = layout.findViewById(R.id.txt_ticket_tip_value);
+//                txt_ticket_total_value = layout.findViewById(R.id.txt_ticket_total_value);
+//                txt_ticket_kposId = layout.findViewById(R.id.txt_ticket_kposId);
+//                txt_company.setText(company);
+//                txt_address_1.setText(Utils.isVacio(address,0)+" "+Utils.isVacio(address,1)+" "+Utils.isVacio(address,2) + " " + Utils.isVacio(address,3));
+//                txt_address_2.setText(Utils.isVacio(address,4) + ", " +Utils.isVacio(address,5));
+//                txt_address_3.setText(Utils.isVacio(address,6));
+//                txt_transaction_type.setText(ticket.getTrans_type());
+//                txt_ticket_date.setText(ticket.getDate_time());
+//                txt_ticket_consumo_value.setText(ticket.getAmount());
+//                txt_ticket_tip_value.setText(ticket.getTip());
+//                txt_ticket_total_value.setText(ticket.getTotal());
+//                txt_ticket_kposId.setText("Núm. SERIE " + ticket.getKsn_posId());
                 break;
         }
         return mPrinter;
