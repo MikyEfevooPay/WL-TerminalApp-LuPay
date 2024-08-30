@@ -210,8 +210,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
                 setTicketData(ticket);
                 TicketLayoutManager ticketLayoutManager = new TicketLayoutManager(getLayoutInflater(), ticketLayoutType,
                         this.entity_print);
-                ticketLayoutManager.setTicketDataByLayout(ticket);
-
+                //ticketLayoutManager.setTicketDataByLayout(ticket);
+                ticket.mPrinter=ticketLayoutManager.setTicketLayout(ticket,ticket.mPrinter);
                 // Se agrega un posdelay en caso de que haya un error que la libreria no este
                 // catcheando para ocultar el spinner
                 ticketHandler.postDelayed(() -> {

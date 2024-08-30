@@ -15,6 +15,7 @@ import com.action.printerservice.ActionPrinter;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
 import com.dspread.print.device.PrinterManager;
+import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.xpos.Util;
 
 import java.util.Locale;
@@ -43,14 +44,14 @@ public class Ticket {
             card_singtype; //Leyenda firma
     private boolean printeravailable;
     private android.content.Context ctx;
-    private PrinterDevice mPrinter;
-
+    public PrinterDevice mPrinter;
     public Ticket(android.content.Context ctx) {
         this.ctx = ctx;
         try {
             PrinterManager instance = PrinterManager.getInstance();
             mPrinter = instance.getPrinter();
             mPrinter.initPrinter(ctx);
+            //printLineStyle = new PrintLineStyle();
             printeravailable = mPrinter != null;
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -235,8 +236,9 @@ public class Ticket {
         try {
             if (Layout == null)
                 throw new RemoteException("No hay layout disponible");
-            mPrinter.setPrinterGrey(110);
-            mPrinter.printBitmap(this.ctx, Utils.viewToBitmap(Layout));
+            //mPrinter.setPrinterGrey(110);
+            //mPrinter.printBitmap(this.ctx, Utils.viewToBitmap(Layout));
+            mPrinter.print(ctx);
             return true;
         } catch (Exception e) {
             TRACE.d("PRINT ERROR:" + e.getMessage());
