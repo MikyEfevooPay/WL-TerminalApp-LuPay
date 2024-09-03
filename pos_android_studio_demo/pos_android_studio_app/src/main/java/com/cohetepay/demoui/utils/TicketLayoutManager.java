@@ -18,7 +18,7 @@ public class TicketLayoutManager {
     private TextView txt_company, txt_address_1, txt_address_2, txt_address_3, txt_transaction_type,
             txt_ticket_date, txt_ticket_card, txt_ticket_card_type,txt_ticket_consumo_title, txt_ticket_consumo_value,
             txt_ticket_tip_value, txt_ticket_total_value, txt_ticket_status,txt_ticket_entity_type,
-            txt_ticket_kposId, txt_ticket_aid, txt_ticket_arqc, txt_ticket_commerce_value, txt_ticket_sign_message;
+            txt_ticket_kposId, txt_ticket_aid, txt_ticket_arqc, txt_ticket_commerce_value, txt_ticket_sign_message,txt_ticket_tip_title,txt_ticket_total_title,txt_ticket_card_title,txt_ticket_footer;
     private LinearLayout lyt_ticket_sign, lyt_ticket_separator_tiny_commerce;
     private TableRow tbl_ticket_tip;
 
@@ -47,30 +47,60 @@ public class TicketLayoutManager {
                 String entrada = ticket.getCard_entrada();
                 boolean showClientSign = Utils.tryIntParse(nip)==0 && entrada.equals("ICC");
                 txt_company = layout.findViewById(R.id.txt_company);
+                txt_company.getPaint().setAntiAlias(false);
                 txt_address_1 = layout.findViewById(R.id.txt_address_1);
+                txt_address_1.getPaint().setAntiAlias(false);
                 txt_address_2 = layout.findViewById(R.id.txt_address_2);
+                txt_address_2.getPaint().setAntiAlias(false);
                 txt_address_3 = layout.findViewById(R.id.txt_address_3);
+                txt_address_3.getPaint().setAntiAlias(false);
                 txt_transaction_type = layout.findViewById(R.id.txt_transaction_type);
+                txt_transaction_type.getPaint().setAntiAlias(false);
                 txt_ticket_date = layout.findViewById(R.id.txt_ticket_date);
+                txt_ticket_date.getPaint().setAntiAlias(false);
                 txt_ticket_card = layout.findViewById(R.id.txt_ticket_card);
+                txt_ticket_card.getPaint().setAntiAlias(false);
                 txt_ticket_card_type = layout.findViewById(R.id.txt_ticket_card_type);
+                txt_ticket_card_type.getPaint().setAntiAlias(false);
                 txt_ticket_sign_message = layout.findViewById(R.id.txt_ticket_sign_message);
+                txt_ticket_sign_message.getPaint().setAntiAlias(false);
                 lyt_ticket_sign = layout.findViewById(R.id.lyt_ticket_sign);
+                //lyt_ticket_sign.getPaint().setAntiAlias(false);
                 lyt_ticket_separator_tiny_commerce = layout.findViewById(R.id.lyt_ticket_separator_tiny_commerce);
+                //lyt_ticket_separator_tiny_commerce.getPaint().setAntiAlias(false);
+                txt_ticket_consumo_title = layout.findViewById(R.id.txt_ticket_consumo_title);
+                txt_ticket_consumo_title.getPaint().setAntiAlias(false);
+                txt_ticket_tip_title = layout.findViewById(R.id.txt_ticket_tip_title);
+                txt_ticket_tip_title.getPaint().setAntiAlias(false);
+                txt_ticket_total_title = layout.findViewById(R.id.txt_ticket_total_title);
+                txt_ticket_total_title.getPaint().setAntiAlias(false);
+                txt_ticket_card_title = layout.findViewById(R.id.txt_ticket_card_title);
+                txt_ticket_card_title.getPaint().setAntiAlias(false);
+                txt_ticket_footer = layout.findViewById(R.id.txt_ticket_footer);
+                txt_ticket_footer.getPaint().setAntiAlias(false);
                 if (Integer.parseInt(ticket.getMsi())>0){
-                    txt_ticket_consumo_title = layout.findViewById(R.id.txt_ticket_consumo_title);
                     txt_ticket_consumo_title.setText(ticket.getMsi()+" MSI");
                 }
                 txt_ticket_consumo_value = layout.findViewById(R.id.txt_ticket_consumo_value);
+                txt_ticket_consumo_value.getPaint().setAntiAlias(false);
                 txt_ticket_tip_value = layout.findViewById(R.id.txt_ticket_tip_value);
+                txt_ticket_tip_value.getPaint().setAntiAlias(false);
                 txt_ticket_total_value = layout.findViewById(R.id.txt_ticket_total_value);
+                txt_ticket_total_value.getPaint().setAntiAlias(false);
                 txt_ticket_status = layout.findViewById(R.id.txt_ticket_status);
+                txt_ticket_status.getPaint().setAntiAlias(false);
                 txt_ticket_entity_type = layout.findViewById(R.id.txt_ticket_entity_type);
+                txt_ticket_entity_type.getPaint().setAntiAlias(false);
                 txt_ticket_kposId = layout.findViewById(R.id.txt_ticket_kposId);
+                txt_ticket_kposId.getPaint().setAntiAlias(false);
                 txt_ticket_aid = layout.findViewById(R.id.txt_ticket_aid);
+                txt_ticket_aid.getPaint().setAntiAlias(false);
                 txt_ticket_arqc = layout.findViewById(R.id.txt_ticket_arqc);
+                txt_ticket_arqc.getPaint().setAntiAlias(false);
                 txt_ticket_commerce_value = layout.findViewById(R.id.txt_ticket_commerce_value);
+                txt_ticket_commerce_value.getPaint().setAntiAlias(false);
                 tbl_ticket_tip = layout.findViewById(R.id.tbl_ticket_tip);
+                //tbl_ticket_tip.getPaint().setAntiAlias(false);
                 if(showClientSign) {
                     lyt_ticket_sign.setVisibility(View.VISIBLE);
                     lyt_ticket_separator_tiny_commerce.setVisibility(View.GONE);
@@ -100,15 +130,25 @@ public class TicketLayoutManager {
                 break;
             case CORTE:
                 txt_company = layout.findViewById(R.id.txt_company);
+                txt_company.getPaint().setAntiAlias(false);
                 txt_address_1 = layout.findViewById(R.id.txt_address_1);
+                txt_address_1.getPaint().setAntiAlias(false);
                 txt_address_2 = layout.findViewById(R.id.txt_address_2);
+                txt_address_2.getPaint().setAntiAlias(false);
                 txt_address_3 = layout.findViewById(R.id.txt_address_3);
+                txt_address_3.getPaint().setAntiAlias(false);
                 txt_transaction_type = layout.findViewById(R.id.txt_transaction_type);
+                txt_transaction_type.getPaint().setAntiAlias(false);
                 txt_ticket_date = layout.findViewById(R.id.txt_ticket_date);
+                txt_ticket_date.getPaint().setAntiAlias(false);
                 txt_ticket_consumo_value = layout.findViewById(R.id.txt_ticket_consumo_value);
+                txt_ticket_consumo_value.getPaint().setAntiAlias(false);
                 txt_ticket_tip_value = layout.findViewById(R.id.txt_ticket_tip_value);
+                txt_ticket_tip_value.getPaint().setAntiAlias(false);
                 txt_ticket_total_value = layout.findViewById(R.id.txt_ticket_total_value);
+                txt_ticket_total_value.getPaint().setAntiAlias(false);
                 txt_ticket_kposId = layout.findViewById(R.id.txt_ticket_kposId);
+                txt_ticket_kposId.getPaint().setAntiAlias(false);
                 txt_company.setText(company);
                 txt_address_1.setText(Utils.isVacio(address,0)+" "+Utils.isVacio(address,1)+" "+Utils.isVacio(address,2) + " " + Utils.isVacio(address,3));
                 txt_address_2.setText(Utils.isVacio(address,4) + ", " +Utils.isVacio(address,5));
@@ -119,6 +159,12 @@ public class TicketLayoutManager {
                 txt_ticket_tip_value.setText(ticket.getTip());
                 txt_ticket_total_value.setText(ticket.getTotal());
                 txt_ticket_kposId.setText("Núm. SERIE " + ticket.getKsn_posId());
+                txt_ticket_consumo_title = layout.findViewById(R.id.txt_ticket_consumo_title);
+                txt_ticket_consumo_title.getPaint().setAntiAlias(false);
+                txt_ticket_tip_title = layout.findViewById(R.id.txt_ticket_tip_title);
+                txt_ticket_tip_title.getPaint().setAntiAlias(false);
+                txt_ticket_total_title = layout.findViewById(R.id.txt_ticket_total_title);
+                txt_ticket_total_title.getPaint().setAntiAlias(false);
                 break;
         }
     }

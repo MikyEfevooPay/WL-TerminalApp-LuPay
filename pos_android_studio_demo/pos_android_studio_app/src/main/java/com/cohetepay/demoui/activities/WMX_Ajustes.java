@@ -63,7 +63,7 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch config = manager.addFetch(TPV_CONFIG, new FetchOptions(Utils.TPVCONFIG + "/apiv0/agrs/terminales/tpv", Request.Method.POST));
+        Fetch config = manager.addFetch(TPV_CONFIG, new FetchOptions(Utils.TPVCONFIG + "/api/apiv0/agrs/terminales/tpv", Request.Method.POST));
         config.setSetBodyListenner(this::getConfigBody);
         Fetch initialize = manager.addFetch(INITIALIZE_TPV, new FetchOptions( Utils.TERMINAL_API + "/efevoo/tpv/initllave", Request.Method.POST));
         initialize.setSetBodyListenner(this::getInitializeBody);

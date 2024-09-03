@@ -44,7 +44,7 @@ public class ConfigTpv {
     public void tpvConfig(String ksn_posId,Integer valor) {
         try {
             nuevainit = false;
-            String URL = Utils.TPVCONFIG + "/apiv0/agrs/terminales/tpv";
+            String URL = Utils.TPVCONFIG + "/api/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", ksn_posId);
             jsonBody.put("bd", "wl_cohetepay");
