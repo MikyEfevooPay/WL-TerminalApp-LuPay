@@ -134,6 +134,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         body.put("montototal", Utils.isNull(totalamount, "N/A"));
         body.put("fechacorte", Utils.isNull(date, "N/A"));
         body.put("tablerows",Utils.isNull(TableRowsString, "[]"));
+        body.put("bd", Utils.TERMINAL_WL_Name);
     }
 
     @Override

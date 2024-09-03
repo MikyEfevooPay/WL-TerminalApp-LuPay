@@ -136,6 +136,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         body.put("arqc", Utils.isNull(Utils.maskText(v_ARQC, 4), "N/A"));
         body.put("aid", Utils.isNull(Utils.maskText(v_AID, 4), "N/A"));
         body.put("singtype", Utils.isNull(tipofirma(card_nip, card_entrada), ""));
+        body.put("bd", Utils.TERMINAL_WL_Name);
     }
 
     @Override

@@ -122,7 +122,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         body.put("arqc", Utils.isNull(Utils.maskText(tp_tv_ARQC.getText().toString(), 4), "N/A"));
         body.put("aid", Utils.isNull(Utils.maskText(tp_tv_AID.getText().toString(), 4), "N/A"));
         body.put("singtype", Utils.isNull(tipofirma(nip, entrada), ""));
-
+        body.put("bd", Utils.TERMINAL_WL_Name);
     }
 
     @Override
