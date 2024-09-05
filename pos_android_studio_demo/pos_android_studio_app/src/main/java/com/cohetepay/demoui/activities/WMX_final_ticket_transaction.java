@@ -101,7 +101,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
         Fetch history = manager.addFetch(TRANSACTION_TICKET_SEND_EMAIL,
-                new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
+                new FetchOptions(Utils.TERMINAL_BATCH + "/api/correo/ticket", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
     }
 
@@ -136,7 +136,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         body.put("arqc", Utils.isNull(Utils.maskText(v_ARQC, 4), "N/A"));
         body.put("aid", Utils.isNull(Utils.maskText(v_AID, 4), "N/A"));
         body.put("singtype", Utils.isNull(tipofirma(card_nip, card_entrada), ""));
-        body.put("bd", Utils.TERMINAL_WL_Name);
+        body.put("wl_name", Utils.TERMINAL_WL_Bucket);
     }
 
     @Override
