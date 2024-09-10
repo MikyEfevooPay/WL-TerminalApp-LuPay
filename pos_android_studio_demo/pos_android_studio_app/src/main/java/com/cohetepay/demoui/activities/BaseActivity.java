@@ -436,7 +436,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     }
 
     public void setWhiteLogo() {
-        logo_image.setImageResource(R.drawable.logo_efevoopay_blanco);
+        logo_image.setImageResource(R.drawable.white_logo);
     }
 
     public void setMarginLogo() {
