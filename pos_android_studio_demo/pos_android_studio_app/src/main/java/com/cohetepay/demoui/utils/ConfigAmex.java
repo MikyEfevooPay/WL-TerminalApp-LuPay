@@ -41,7 +41,7 @@ public class ConfigAmex {
             String URL = Utils.TPVCONFIG + "/api/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", ksn_posId);
-            jsonBody.put("bd", "wl_cohetepay");
+            jsonBody.put("bd", Utils.TERMINAL_WL_Name);
 
             final String requestBody = jsonBody.toString();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

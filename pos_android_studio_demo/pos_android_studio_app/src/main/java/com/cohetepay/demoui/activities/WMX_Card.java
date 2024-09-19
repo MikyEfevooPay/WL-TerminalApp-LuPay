@@ -2023,7 +2023,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         try {
             JSONObject jsonParams = new JSONObject();
             jsonParams.put("binT", _bin);
-            jsonParams.put("bd", "wl_cohetepay");
+            jsonParams.put("bd", Utils.TERMINAL_WL_Name);
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Utils.TERMINAL_BIN, jsonParams,
                     new Response.Listener<JSONObject>() {
                         @Override

@@ -47,7 +47,7 @@ public class ConfigTpv {
             String URL = Utils.TPVCONFIG + "/api/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", ksn_posId);
-            jsonBody.put("bd", "wl_cohetepay");
+            jsonBody.put("bd", Utils.TERMINAL_WL_Name);
 
             final String requestBody = jsonBody.toString();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -146,7 +146,7 @@ public class ConfigTpv {
             String datafield43=objtpv.getString("datafield43").toString();
             String datafield60=objtpv.getString("datafield60").toString();
             String statusseller=objtpv.getString("statusseller").toString();
-            _statusseller=Integer.parseInt(statusseller);
+            _statusseller=Integer.parseInt("0");
 
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("device_id", ksn_posId);

@@ -42,7 +42,7 @@
         android:roundIcon="@mipmap/favicon_64x64"
         android:label="@string/app_name"
         android:theme="@style/AppThemeDown"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
         android:largeHeap="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme,android:icon">

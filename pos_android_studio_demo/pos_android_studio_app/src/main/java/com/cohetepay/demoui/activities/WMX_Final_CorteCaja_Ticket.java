@@ -118,7 +118,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch history = manager.addFetch(SEND_EMAIL, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correocortecaja", Request.Method.POST));
+        Fetch history = manager.addFetch(SEND_EMAIL, new FetchOptions(Utils.TERMINAL_BATCH + "/api/correo/cortecaja", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
     }
 
@@ -134,6 +134,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
         body.put("montototal", Utils.isNull(totalamount, "N/A"));
         body.put("fechacorte", Utils.isNull(date, "N/A"));
         body.put("tablerows",Utils.isNull(TableRowsString, "[]"));
+        body.put("wl_name", Utils.TERMINAL_WL_Bucket);
     }
 
     @Override

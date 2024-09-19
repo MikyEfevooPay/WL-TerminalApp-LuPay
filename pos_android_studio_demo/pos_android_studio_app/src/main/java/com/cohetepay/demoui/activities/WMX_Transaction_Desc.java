@@ -86,7 +86,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
         Fetch history = manager.addFetch(TRANSACTION_SEND_EMAIL,
-                new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/correoticket", Request.Method.POST));
+                new FetchOptions(Utils.TERMINAL_BATCH + "/api/correo/ticket", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
     }
 
@@ -122,7 +122,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         body.put("arqc", Utils.isNull(Utils.maskText(tp_tv_ARQC.getText().toString(), 4), "N/A"));
         body.put("aid", Utils.isNull(Utils.maskText(tp_tv_AID.getText().toString(), 4), "N/A"));
         body.put("singtype", Utils.isNull(tipofirma(nip, entrada), ""));
-
+        body.put("wl_name", Utils.TERMINAL_WL_Bucket);
     }
 
     @Override
