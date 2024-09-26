@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.cohetepay.demoui.R;
 import com.cohetepay.demoui.utils.ConfigAmex;
 import com.cohetepay.demoui.utils.ConfigTpv;

@@ -334,13 +334,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="92px"
                 android:background="@drawable/rounded_corner"
-                android:backgroundTint="#B9E0AB"
+                android:backgroundTint="#343434"
                 android:fontFamily="@font/dm_sans_bold"
                 android:minHeight="50dip"
                 android:stateListAnimator="@null"
                 android:text="Finalizar"
                 android:textAllCaps="false"
-                android:textColor="#4AAC38"
+                android:textColor="#fff"
                 android:textSize="22px" />
         </LinearLayout>
 

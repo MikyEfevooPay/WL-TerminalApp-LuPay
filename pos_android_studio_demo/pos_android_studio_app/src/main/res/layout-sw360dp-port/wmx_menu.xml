@@ -27,7 +27,7 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="328px"
+                android:layout_width="312px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/logo_cohetepay" />
@@ -64,7 +64,8 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingTop="10dp"
-                        android:paddingBottom="10dp">
+                        android:paddingBottom="10dp"
+                        >
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -72,7 +73,7 @@
                             android:layout_weight="1">
 
                             <ImageView
-                                android:id="@+id/imageView2"
+                                android:id="@+id/m_iv_1"
                                 android:layout_width="match_parent"
                                 android:layout_height="105.07px"
                                 android:layout_gravity="center"
@@ -81,7 +82,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView19"
+                            android:id="@+id/m_txt_1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/dm_sans_bold"
@@ -112,7 +113,7 @@
                             android:layout_weight="1">
 
                             <ImageView
-                                android:id="@+id/imageView2"
+                                android:id="@+id/m_iv_2"
                                 android:layout_width="match_parent"
                                 android:layout_height="94.4px"
                                 android:layout_gravity="center"
@@ -121,7 +122,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView19"
+                            android:id="@+id/m_txt_2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/dm_sans_bold"
@@ -154,7 +155,7 @@
                             android:layout_weight="1">
 
                             <ImageView
-                                android:id="@+id/imageView2"
+                                android:id="@+id/m_iv_3"
                                 android:layout_width="match_parent"
                                 android:layout_height="86.77px"
                                 android:layout_gravity="center"
@@ -163,7 +164,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView19"
+                            android:id="@+id/m_txt_3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/dm_sans_bold"
@@ -194,7 +195,7 @@
                             android:layout_weight="1">
 
                             <ImageView
-                                android:id="@+id/imageView2"
+                                android:id="@+id/m_iv_4"
                                 android:layout_width="match_parent"
                                 android:layout_height="103.73px"
                                 android:layout_gravity="center"
@@ -203,7 +204,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView19"
+                            android:id="@+id/m_txt_4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/dm_sans_bold"
@@ -278,7 +279,7 @@
                             android:layout_weight="1">
 
                             <ImageView
-                                android:id="@+id/imageView2"
+                                android:id="@+id/m_iv_5"
                                 android:layout_width="match_parent"
                                 android:layout_height="105.45px"
                                 android:layout_gravity="center"
@@ -287,7 +288,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView19"
+                            android:id="@+id/m_txt_5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/dm_sans_bold"
@@ -318,7 +319,7 @@
                             android:layout_weight="1">
 
                             <ImageView
-                                android:id="@+id/imageView2"
+                                android:id="@+id/m_iv_6"
                                 android:layout_width="match_parent"
                                 android:layout_height="86.92px"
                                 android:layout_gravity="center"
@@ -327,7 +328,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView19"
+                            android:id="@+id/m_txt_6"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/dm_sans_bold"

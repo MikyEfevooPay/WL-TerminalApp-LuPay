@@ -66,14 +66,6 @@
             tools:visibility="visible" />
 
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/terminal_animation"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:lottie_rawRes="@raw/terminal"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/points_animation"

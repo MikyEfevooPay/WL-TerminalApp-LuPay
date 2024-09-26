@@ -21,13 +21,13 @@ import java.util.regex.Pattern;
 
 public class Utils {
 	//BASE DE DATOS
-	public static final String TERMINAL_WL_Name = "wl_cohetepay";
+	public static final String TERMINAL_WL_Name = "wl_lupay";
 	//BUCKET CORREO
-	public static final String TERMINAL_WL_Bucket = "cohetepay";
+	public static final String TERMINAL_WL_Bucket = "lupay";
 	//PRODUCCION
 	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
-	public static final String TERMINAL_BIN = "https://alphawlapi.efevoopaylbda.com/api/apiv0/agrs/terminales/tpv/bines";
-	public static final String TPVCONFIG = "https://alphawlapi.efevoopaylbda.com";
+	public static final String TERMINAL_BIN = "https://alphawlapitest.efevoopaylbda.com/api/apiv0/agrs/terminales/tpv/bines";
+	public static final String TPVCONFIG = "https://alphawlapitest.efevoopaylbda.com";
 	public static final String TERMINAL_AMEX = "https://efevoopayamex-ecommerce.com";
 	public static final String TERMINAL_BATCH = "https://efevoopaybatch-ecommerce.com";
 	// TEST

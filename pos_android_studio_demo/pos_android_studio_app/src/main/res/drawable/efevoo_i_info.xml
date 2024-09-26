@@ -13,12 +13,12 @@
   <path
       android:pathData="M26.5,0.5A26,26 0,1 1,0.5 26.5,26 26,0 0,1 26.5,0.5Z"
       android:strokeWidth="1"
-      android:fillColor="#268A67"
-      android:strokeColor="#292B2B"/>
+      android:fillColor="#DFE7FA"
+      android:strokeColor="#2E2BAD"/>
   <path
       android:pathData="M26.376,39.562A2.586,2.586 0,0 1,23.788 36.975L23.788,26.625a2.588,2.588 0,0 1,5.175 0v10.35a2.586,2.586 0,0 1,-2.588 2.588ZM26.376,18.862a2.586,2.586 0,0 1,-0.983 -0.207,2.968 2.968,0 0,1 -0.854,-0.543A2.56,2.56 0,0 1,23.788 16.274a2.152,2.152 0,0 1,0.207 -0.983,2.968 2.968,0 0,1 0.543,-0.854 2.662,2.662 0,0 1,0.854 -0.543,2.572 2.572,0 0,1 1.966,0 2.69,2.69 0,0 1,0.854 0.543,2.723 2.723,0 0,1 0.751,1.837 2.563,2.563 0,0 1,-2.588 2.588Z"
       android:strokeWidth="1"
-      android:fillColor="#FFFFFF"
-      android:strokeColor="#292B2B"/>
+      android:fillColor="#557BFF"
+      android:strokeColor="#2E2BAD"/>
   </group>
 </vector>

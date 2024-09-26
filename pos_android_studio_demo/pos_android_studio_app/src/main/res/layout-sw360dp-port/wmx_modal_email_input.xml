@@ -68,11 +68,11 @@
         android:layout_width="match_parent"
         android:layout_height="60px"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="#B9E0AB"
+        android:backgroundTint="@color/ep_btn_continuar_fondo"
         android:fontFamily="@font/dm_sans_bold"
         android:minHeight="50dip"
         android:textAllCaps="false"
-        android:textColor="#4AAC38"
+        android:textColor="#fff"
         android:textSize="22px" />
 
 </LinearLayout>

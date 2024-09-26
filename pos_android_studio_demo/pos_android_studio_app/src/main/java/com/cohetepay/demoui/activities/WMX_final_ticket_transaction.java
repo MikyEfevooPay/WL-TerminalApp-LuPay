@@ -322,7 +322,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
         MaterialAlertDialogBuilder confirm = new MaterialAlertDialogBuilder(this,
                 R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("¿Imprimir copia del ticket al cliente?")
-                .setIcon(R.drawable.printer)
+                .setIcon(R.drawable.copia_ticket)
                 .setPositiveButton("Sí", (dialog, lis) -> {
                     PrintTicket(PRINT_TYPE.CLIENT);
                 })

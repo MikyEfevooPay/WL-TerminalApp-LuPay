@@ -50,12 +50,12 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/rounded_corner"
-            android:backgroundTint="#B9E0AB"
+            android:backgroundTint="@color/ep_btn_continuar_fondo"
             android:fontFamily="@font/dm_sans_bold"
             android:stateListAnimator="@null"
             android:text="@string/wmx_go_to_history"
             android:textAllCaps="false"
-            android:textColor="#4AAC38"
+            android:textColor="#fff"
             android:textSize="22px" />
 
     </LinearLayout>
