@@ -18,11 +18,11 @@ android {
     compileSdk 33
     buildToolsVersion '30.0.3'
     defaultConfig {
-        applicationId "com.cohetepay.demoui"
+        applicationId 'com.lupay.demoui'
         minSdkVersion 17
         targetSdk 31
-        versionCode 293
-        versionName '1.5.9.8'
+        versionCode 294
+        versionName '1.5.9.9'
 
         ndk {
             moduleName "serial_port"

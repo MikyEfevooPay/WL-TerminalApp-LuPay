@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.cohetepay.demoui",
+  "applicationId": "com.lupay.demoui",
   "variantName": "debug",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 293,
-      "versionName": "1.5.9.8",
+      "versionCode": 294,
+      "versionName": "1.5.9.9",
       "outputFile": "pos_android_studio_app-debug.apk"
     }
   ],
