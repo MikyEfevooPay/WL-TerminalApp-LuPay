@@ -55,7 +55,6 @@ public class ConfigTpv {
                     try {
                         JSONObject object = new JSONObject(response);
                         if(!object.has("mensaje")){
-                            //bnd[0] =Boolean.TRUE;
                             bnd[0] =initactiva(response.toString(),ksn_posId,valor);
                             TRACE.d("tpvConfig: " +  TRACE.NEW_LINE + response.toString() );
                         }else{
@@ -172,7 +171,7 @@ public class ConfigTpv {
                 @Override
                 public void onResponse(String response) {
                     TRACE.d("initllave" +  TRACE.NEW_LINE + response.toString() );
-                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,statusseller,datafield43,datafield60);
+                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,"0","","");
                     //if(spinner.isShowing()) spinner.dismiss();
                 }
             }, new Response.ErrorListener() {

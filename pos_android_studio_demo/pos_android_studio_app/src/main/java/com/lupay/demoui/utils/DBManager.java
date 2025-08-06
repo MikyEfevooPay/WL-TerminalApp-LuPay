@@ -79,12 +79,14 @@ public class DBManager {
         }
         return cursor;
     }
-    public int update(String name,String statusseller,String tkamex,String keyamex,Integer countamex) {
+    public int update(String name,String statusseller,String tkamex,String keyamex,Integer countamex,String datafield43,String datafield60) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper._statusseller, statusseller);
         contentValues.put(DatabaseHelper._tkamex, tkamex);
         contentValues.put(DatabaseHelper._keyamex, keyamex);
         contentValues.put(DatabaseHelper._countamex,countamex);
+        contentValues.put(DatabaseHelper._datafield43,datafield43);
+        contentValues.put(DatabaseHelper._datafield60,datafield60);
         int i = database.update(DatabaseHelper.TABLE_NAME, contentValues, " name = ?", new String[] { String.valueOf (name ) });
         return i;
     }

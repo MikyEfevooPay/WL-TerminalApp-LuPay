@@ -218,7 +218,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
         final Runnable runnable = new Runnable() {
             public void run() {
                 configTpv.count = count[0];
-                if (count[0]++ < 7) {
+                if (count[0]++ < 5) {
                     if (!configTpv.bnd[0]) {
                         TRACE.d("configTpv entra");
                         if (!configTpv.nuevainit) {
@@ -226,9 +226,9 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                         } else {
                             configTpv.tpvConfig(posId, 0);
                         }
-                        handler.postDelayed(this, 5000);
+                        handler.postDelayed(this, 4000);
                     } else {
-                        if(configTpv.bnd[0] && (configTpv._statusseller==1 && !configAmex.bndamex[0])){
+                        if(configTpv.bnd[0] && !configAmex.bndamex[0]){
                             TRACE.d("configAmex entra"+configTpv.bnd[0]);
                             handler.removeCallbacks(this);
                             //configAmex = new ConfigAmex(configTpv.context);
@@ -264,9 +264,9 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 if (count[0]++ < 5) {
                     if (!configAmex.bndamex[0]) {
                         if (!configAmex.nuevainit) {
-                            configAmex.InitActivaAmex(json,posId, 1);
+                            configAmex.tpvConfigAmex(posId, 1);
                         } else {
-                            configAmex.InitActivaAmex(json,posId, 0);
+                            configAmex.tpvConfigAmex(posId, 0);
                         }
                         handler.postDelayed(this, 3000);
                     } else {
