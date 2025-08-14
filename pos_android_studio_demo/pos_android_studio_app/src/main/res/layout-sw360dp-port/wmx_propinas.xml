@@ -275,7 +275,7 @@
                             app:helperTextEnabled="false"
                             app:hintAnimationEnabled="false"
                             app:hintEnabled="false"
-                            app:suffixText="%"
+                            app:suffixText="MXN"
 
                             >
 

@@ -3,8 +3,8 @@ package com.lupay.demoui.utils;
 public class Transaction {
     String _pan,_amount,_tips;
     int _id;
-    String _auth, _date, _subtotal,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi,_aid,_arqc, _approve,_emisor,_nip,_entrada,_datehour;
-    public Transaction(int id,String auth, String date, String time, String subtotal ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi,String aid,String arqc, String approve,String emisor,String nip,String entrada, String datehour){
+    String _auth, _date, _subtotal,_time, _card, _redtarj,_tipotarj, _tipotxn,_propina,_total,_msi,_aid,_arqc, _approve,_emisor,_nip,_entrada,_datehour,_tarjeta;
+    public Transaction(int id,String auth, String date, String time, String subtotal ,String card,String redtarj,String tipotarj,String tipotxn,String propina,String total,String msi,String aid,String arqc, String approve,String emisor,String nip,String entrada, String datehour,String tarjeta){
         _id = id;
         _auth=auth;
         _date=date;
@@ -24,6 +24,7 @@ public class Transaction {
         _nip=nip;
         _entrada=entrada;
         _datehour=datehour;
+        _tarjeta=tarjeta;
     }
 
     public String get_amount() {
@@ -85,7 +86,10 @@ public class Transaction {
     public String get_aid(){return _aid;}
 
     public String get_arqc(){return _arqc;}
+
     public String get_emisor(){return _emisor;}
+
+    public String get_tarjeta(){return _tarjeta;}
 
     public String get_nip(){return _nip;}
 

@@ -5,10 +5,10 @@
     android:id="@+id/lyt_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/efevoo_gradient_color"
+    android:background="@drawable/gradient"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar_layout" />
+    <include layout="@layout/toolbar_layout" android:visibility="gone"/>
 <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="5px"-->
@@ -20,7 +20,14 @@
 <!--            android:layout_height="5px"-->
 <!--            android:background="#8591FF" />-->
 <!--    </LinearLayout>-->
-
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="342.72px"
+        android:layout_height="62px"
+        app:srcCompat="@drawable/white_logo"
+        android:layout_gravity="center"
+        android:layout_marginTop="20px"
+        />
     <LinearLayout
         android:id="@+id/lin3"
         android:layout_width="match_parent"
@@ -51,7 +58,7 @@
             android:text="TOTAL"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="20px" />
+            android:textSize="23px" />
 
         <TextView
             android:id="@+id/wmx_text_total_Amount"
@@ -66,6 +73,14 @@
             tools:visibility="visible" />
 
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/terminal_animation"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:lottie_fileName="terminal_cohete.json"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/points_animation"
@@ -134,6 +149,13 @@
                 android:layout_width="73px"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/visa_white" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                app:srcCompat="@drawable/amex_icon" />
+
         </LinearLayout>
 
         <ScrollView
@@ -191,7 +213,7 @@
                 android:text="Cancelar"
                 android:textAllCaps="false"
                 android:textColor="#FF6E6E"
-                android:textSize="22px"
+                android:textSize="23px"
 
                 />
         </LinearLayout>

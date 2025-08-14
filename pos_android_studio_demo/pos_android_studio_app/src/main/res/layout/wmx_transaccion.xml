@@ -87,7 +87,7 @@
             <ImageView
                 android:id="@+id/imageView7"
                 android:layout_width="match_parent"
-                android:layout_height="565px"
+                android:layout_height="465px"
                 android:layout_gravity="center"
                 android:layout_weight="0"
                 app:srcCompat="@drawable/history_empty_cohete"

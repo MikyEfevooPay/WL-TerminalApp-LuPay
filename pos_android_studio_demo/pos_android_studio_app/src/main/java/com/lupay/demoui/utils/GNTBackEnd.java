@@ -28,6 +28,8 @@ public class GNTBackEnd {
     public String nip="";
     public String entrada="";
     public String pan="";
+    public String tpvamount="";
+    public String tpvtime_txn="";
     private static HashMap TRANS_TYPE_TITLES;
     public static final String TRANS_CAN_TYPE = "CAN";
     public static final String TRANS_DEV_TYPE = "DEV";
@@ -147,6 +149,8 @@ public class GNTBackEnd {
             nip=jsonBody.getString("nip").toString();
             entrada=jsonBody.getString("entrada").toString();
             pan=jsonBody.getString("pan").toString();
+            tpvamount=jsonBody.getString("amount").toString();
+            tpvtime_txn=jsonBody.getString("time_txn").toString();
             //TRACE.d(TRACE.NEW_LINE +  jsonBody.toString()+TRACE.NEW_LINE+TRACE.NEW_LINE);
             return jsonBody.toString();
         } catch (JSONException e) {
@@ -564,6 +568,20 @@ public class GNTBackEnd {
             return Utils.TERMINAL_API + "/efevoo/tpv/transaccion";
         }else{
             return "";
+        }
+    }
+    public boolean getValidaTarjeta(String type_transaction,String tarjetainicio,String tarjetafinal)
+    {
+        if(type_transaction.equals("Cancelacion"))
+        {
+            if(tarjetainicio.equals(tarjetafinal))
+            {
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return  true;
         }
     }
 }

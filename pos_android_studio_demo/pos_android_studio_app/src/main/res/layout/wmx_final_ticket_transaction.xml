@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ep_fondo_ticket"
+    android:background="@drawable/ticket_background"
     android:orientation="vertical"
     android:paddingLeft="18px"
     android:paddingTop="26px"
     android:paddingRight="18px"
-    android:paddingBottom="26px">
+    android:paddingBottom="26px"
+    android:id="@+id/mainView_final_ticket_transaction"
+    >
 
     <include layout="@layout/toolbar_layout" />
 
@@ -53,9 +55,9 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="78px"
-                android:layout_height="43px"
-                app:srcCompat="@drawable/logo_efevoopay_coloresai" />
+                android:layout_width="315px"
+                android:layout_height="56.98px"
+                app:srcCompat="@drawable/logo_cohetepay" />
 
         </LinearLayout>
 
@@ -63,7 +65,7 @@
             android:id="@+id/ticket_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12px"
+            android:layout_marginBottom="10px"
             android:fontFamily="@font/dm_sans_medium"
             android:text="Resumen de pago"
             android:textColor="#0F0F0F"
@@ -73,7 +75,7 @@
             android:id="@+id/ticket_ll_subtotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="9px"
             android:orientation="horizontal">
 
             <TextView
@@ -101,7 +103,7 @@
             android:id="@+id/ticket_ll_propina"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="9px"
             android:orientation="horizontal">
 
             <TextView
@@ -127,7 +129,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="9px"
             android:orientation="horizontal">
 
             <TextView
@@ -155,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16px"
             android:layout_marginRight="16px"
-            android:layout_marginBottom="23px"
+            android:layout_marginBottom="18px"
             android:backgroundTint="#A3A6FC"
             android:contentDescription="underline"
             android:layerType="software"
@@ -164,7 +166,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="9px"
             android:orientation="horizontal">
 
             <TextView
@@ -190,7 +192,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="9px"
             android:orientation="horizontal">
 
             <TextView
@@ -216,7 +218,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="9px"
             android:orientation="horizontal">
 
             <TextView
@@ -266,7 +268,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="9px"
             android:orientation="horizontal">
 
             <TextView
@@ -317,7 +319,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30px"
+            android:layout_marginBottom="25px"
             android:gravity="bottom|center_horizontal"
 
             android:orientation="vertical">
@@ -327,13 +329,13 @@
                 android:layout_width="390px"
                 android:layout_height="60px"
                 android:background="@drawable/rounded_corner"
-                android:backgroundTint="#B9E0AB"
+                android:backgroundTint="#343434"
                 android:fontFamily="@font/dm_sans_bold"
                 android:minHeight="50dip"
                 android:stateListAnimator="@null"
                 android:text="Finalizar"
                 android:textAllCaps="false"
-                android:textColor="#4AAC38"
+                android:textColor="#fff"
                 android:textSize="22px" />
         </LinearLayout>
 

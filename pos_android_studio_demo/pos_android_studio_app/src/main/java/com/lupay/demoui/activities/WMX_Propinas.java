@@ -166,26 +166,33 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
             switch (id){
                 case R.id.rBZero:
                     tv_propina_percent.setText(" (0%)");
+                    et.setText("");
                     break;
                 case R.id.rBTen:
                     percetn = 0.10F;
                     tv_propina_percent.setText(" (10%)");
+                    et.setText("");
                     break;
                 case R.id.rBFifteen:
                     percetn = 0.15F;
                     tv_propina_percent.setText(" (15%)");
+                    et.setText("");
                     break;
                 case R.id.rBTwenty:
                     percetn = 0.20F;
                     tv_propina_percent.setText(" (20%)");
+                    et.setText("");
                     break;
                 case R.id.rBOther:
 
-                    if(et.getText().toString().equals(""))
-                        tv_propina_percent.setText(" (0%)");
+                    if(et.getText().toString().equals("")) {
+                        tv_propina_percent.setText(" ($0)");
+                        tv_propina_final.setText("$0.00 MXN");
+                        tv_total.setText(Total_Amount.getText());
+                    }
                     else{
                         calculateCustomTip();
-                        tv_propina_percent.setText(" ("+et.getText().toString()+"%)");
+                        tv_propina_percent.setText(" ($"+et.getText().toString()+")");
                     }
                     break;
             }
@@ -246,15 +253,17 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         if(!str_customPer.isEmpty()){
             Float f_customPer = Float.parseFloat(str_customPer);
             Float _amount = Float.parseFloat(Amount.replace(",",""));
-            Float _total = _amount + (_amount * (f_customPer*.01F));
+            Float _total = _amount + f_customPer;
             tv_total.setText(gf.formatMoney(String.valueOf(_total),true) + " MXN");
-            tv_propina_final.setText(gf.formatMoney(String.valueOf(_amount * (f_customPer*.01F)),true) + " MXN");
-            tv_propina_percent.setText(" ("+str_customPer+"%)");
+            tv_propina_final.setText(gf.formatMoney(String.valueOf(f_customPer),true) + " MXN");
+            tv_propina_percent.setText(" ($"+str_customPer+")");
         }else{
             Float _amount = Float.parseFloat(Amount.replace(",",""));
             tv_total.setText(gf.formatMoney(String.valueOf(_amount),true) + " MXN");
             tv_propina_final.setText(gf.formatMoney(String.valueOf(0.0),true) + " MXN");
-            tv_propina_percent.setText(" (0%)");
+            if(other.isChecked()){
+                tv_propina_percent.setText(" (0%)");
+            }
         }
     }
 

@@ -29,9 +29,9 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
     private String _rsa = "";
     private String _tk = "";
     private String _pk = "";
-    private TextView txt_ksn,txt_version,txtmodelo,txtoperatividad;
+    private TextView txt_ksn,txt_version,txtmodelo,txtoperatividad,txtcorreo,txttelefono;
     private Intent intent;
-    private String ksn_posId,interfaz;
+    private String ksn_posId,interfaz,emailaddress,phonenumber;
     public String name="";
     private DBManager dbManager;
     private String p43, p48, p120, address, comercio, msi, msi3, msi6, msi9, msi12, msi18, minimo3, minimo6, minimo9, minimo12, minimo18,tasa,codigopostal,giro,redlogica,afiliacion;
@@ -48,6 +48,8 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
         txt_version=(TextView)findViewById(R.id.txtversion);
         txtmodelo=(TextView)findViewById(R.id.txtmodelo);
         txtoperatividad=(TextView)findViewById(R.id.txtoperatividad);
+        txtcorreo=(TextView)findViewById(R.id.txtcorreo);
+        txttelefono=(TextView)findViewById(R.id.txttelefono);
 //        initialize = (Button) findViewById(R.id.WMX_btn_initialize_keys);
 //        initialize.setOnClickListener(this);
         txt_version.setText(BuildConfig.VERSION_NAME);
@@ -55,8 +57,12 @@ public class WMX_Ajustes extends BaseActivity implements View.OnClickListener{
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
         interfaz = intent.getStringExtra("interfaz");
+        emailaddress = intent.getStringExtra("emailaddress");
+        phonenumber = intent.getStringExtra("phonenumber");
         txt_ksn.setText(ksn_posId);
         if (interfaz!=null)txtoperatividad.setText(interfaz);
+        if (emailaddress!=null)txtcorreo.setText(emailaddress);
+        if (phonenumber!=null)txttelefono.setText(phonenumber);
         dbManager = new DBManager(this);
         dbManager.open();
         getFetchManager().setForceFetchDone(true);

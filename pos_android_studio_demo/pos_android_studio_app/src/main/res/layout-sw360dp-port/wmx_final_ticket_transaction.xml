@@ -23,8 +23,8 @@
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/giv_card_status"
-            android:layout_width="94px"
-            android:layout_height="94px"
+            android:layout_width="254px"
+            android:layout_height="124px"
             android:src="@drawable/efevoo_i_check_resumen_de_pago" />
 
         <TextView
@@ -55,8 +55,8 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="253px"
-                android:layout_height="59px"
+                android:layout_width="315px"
+                android:layout_height="56.98px"
                 android:layout_marginBottom="16px"
                 app:srcCompat="@drawable/logo_cohetepay" />
 

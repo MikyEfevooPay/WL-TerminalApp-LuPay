@@ -14,15 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginLeft="30px"
-        android:layout_marginRight="30px"
-        android:layout_marginBottom="30px"
+        android:layout_marginLeft="20px"
+        android:layout_marginRight="20px"
+        android:layout_marginBottom="20px"
         android:background="@drawable/rounded_corner"
         android:backgroundTint="#fff"
         android:paddingLeft="20px"
-        android:paddingTop="20px"
+        android:paddingTop="10px"
         android:paddingRight="20px"
-        android:paddingBottom="20px"
+        android:paddingBottom="10px"
         android:orientation="vertical">
 
         <LinearLayout
@@ -38,11 +38,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
                 android:gravity="center"
-                android:paddingTop="10dip"
+                android:paddingTop="5dip"
                 android:text="Subtotal"
                 android:textAlignment="center"
                 android:textColor="#5A5A5A"
-                android:textSize="20px"
+                android:textSize="23px"
 
                 />
 
@@ -270,7 +270,7 @@
                         app:helperTextEnabled="false"
                         app:hintAnimationEnabled="false"
                         app:hintEnabled="false"
-                        app:suffixText="%"
+                        app:suffixText="MXN"
 
                         >
 
@@ -359,7 +359,7 @@
                         android:gravity="center"
                         android:text="Total"
                         android:textAlignment="center"
-                        android:textColor="@color/ep_color_blue"
+                        android:textColor="@color/ep_set_monto"
                         android:textSize="27px" />
 
                     <TextView
@@ -370,7 +370,7 @@
                         android:fontFamily="@font/dm_sans_bold"
                         android:gravity="center|right"
                         android:text="$0.00 MXN"
-                        android:textColor="@color/ep_color_blue"
+                        android:textColor="@color/ep_set_monto"
                         android:textSize="27px" />
 
                 </LinearLayout>
@@ -402,7 +402,7 @@
             android:text="@string/wmx_propinas_continue"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="22px" />
+            android:textSize="23px" />
     </LinearLayout>
 
 

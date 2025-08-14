@@ -55,6 +55,7 @@ public class ConfigTpv {
                     try {
                         JSONObject object = new JSONObject(response);
                         if(!object.has("mensaje")){
+                            //bnd[0] =Boolean.TRUE;
                             bnd[0] =initactiva(response.toString(),ksn_posId,valor);
                             TRACE.d("tpvConfig: " +  TRACE.NEW_LINE + response.toString() );
                         }else{
@@ -107,7 +108,7 @@ public class ConfigTpv {
                 }
             };
 
-           RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
+            RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
             bnd[0] =Boolean.FALSE;
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
@@ -144,6 +145,9 @@ public class ConfigTpv {
             String datafield43=objtpv.getString("datafield43").toString();
             String datafield60=objtpv.getString("datafield60").toString();
             String statusseller=objtpv.getString("statusseller").toString();
+            String emailaddress=objtpv.getString("emailaddress").toString();
+            String phonenumber=objtpv.getString("phonenumber").toString();
+
             _statusseller=Integer.parseInt("0");
 
             JSONObject jsonBody = new JSONObject();
@@ -171,7 +175,7 @@ public class ConfigTpv {
                 @Override
                 public void onResponse(String response) {
                     TRACE.d("initllave" +  TRACE.NEW_LINE + response.toString() );
-                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,"0","","");
+                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,"0","","",emailaddress,phonenumber);
                     //if(spinner.isShowing()) spinner.dismiss();
                 }
             }, new Response.ErrorListener() {
@@ -224,13 +228,13 @@ public class ConfigTpv {
         }
         return bnd[0];
     }
-    private boolean DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43, String datafield60){
+    private boolean DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43, String datafield60, String emailaddress, String phonenumber){
         try {
             JSONObject object = new JSONObject(_json);
             if(object.has("id")){
                 if(object.getString("codigo").equals("00") && (Integer.parseInt(object.getString("count"))>0 && Integer.parseInt(object.getString("count"))<1000000)){
                     dbManager.onUpgrade();
-                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,statusseller,datafield43,datafield60,"","",Integer.parseInt("0"));
+                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,statusseller,datafield43,datafield60,"","",Integer.parseInt("0"),emailaddress,phonenumber);
                     nuevainit=false;
                     bnd[0] =Boolean.TRUE;
                     TRACE.d("Activa" +  TRACE.NEW_LINE );

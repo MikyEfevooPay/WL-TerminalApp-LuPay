@@ -61,7 +61,7 @@ public class ResponseCode {
         CodeTable.put("91", new CodeDetails("Issuer or switch is inoperative"));
         CodeTable.put("92", new CodeDetails("Financial institution or intermediate network facility cannot be found for routing"));
         CodeTable.put("94", new CodeDetails("Duplicate transmission"));
-        CodeTable.put("96", new CodeDetails("System malfunction"));
+        CodeTable.put("96", new CodeDetails("Transaction not permitted, please contact the administrator."));
         CodeTable.put("N0", new CodeDetails("Reserved for private use or Unable to authorize"));
         CodeTable.put("N1", new CodeDetails("Reserved for private use or Invalid PAN length"));
         CodeTable.put("N2", new CodeDetails("Reserved for private use or Preauthorization full"));

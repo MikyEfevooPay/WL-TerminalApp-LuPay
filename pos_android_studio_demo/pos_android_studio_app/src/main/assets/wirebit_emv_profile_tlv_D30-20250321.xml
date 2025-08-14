@@ -16,7 +16,7 @@
 	<9F53>52</9F53><!--Mastercard Merchant category code-->
 	<9F8117>01</9F8117><!--Contact Boolean indicating whether the PSE-->
 	<9F8118>00</9F8118><!--Contact reselect pse-->
-	<9F8143>00</9F8143><!--Contact floor limit checking-->
+	<9F8143>01</9F8143><!--Contact floor limit checking-->
 	<9F8145>01</9F8145><!--Contact Velocity Checking-->
 	<9F8147>00</9F8147><!--Contact Transaction force online-->
 	<9F8303>01</9F8303><!--Support AID Choosing-->
@@ -29,7 +29,7 @@
 	<9F09>008C</9F09> <!--Terminal Application Version Number-->
 	<9F1B>00000000</9F1B> <!--Terminal Floor Limit-->
 	<9F1E>3833323031494343</9F1E><!--Interface Device (IFD) Serial Number-->
-	<9F66>B6004000</9F66> <!--Contactless Terminal Transaction Qualifiers-->
+	<9F66>3BE04000</9F66> <!--Contactless Terminal Transaction Qualifiers-->
 	<9F8125>9F3704</9F8125> <!--Contact Default Dynamic Data Authentication Data Object List (DDOL)-->
 	<9F8127>00</9F8127> <!--Contact Maximum Target Percentage to be Used for Biased Random Selection-->
 	<9F8128>00</9F8128> <!--Contact Target Percentage to Be Used for Random Selection-->
@@ -51,7 +51,7 @@
 	<9F09>008C</9F09> <!--Terminal Application Version Number-->
 	<9F1B>00000000</9F1B> <!--Terminal Floor Limit-->
 	<9F1E>3833323031494343</9F1E><!--Interface Device (IFD) Serial Number-->
-	<9F66>B6004000</9F66> <!--Contactless Terminal Transaction Qualifiers-->
+	<9F66>B7004000</9F66> <!--Contactless Terminal Transaction Qualifiers-->
 	<9F8125>9F3704</9F8125> <!--Contact Default Dynamic Data Authentication Data Object List (DDOL)-->
 	<9F8127>00</9F8127> <!--Contact Maximum Target Percentage to be Used for Biased Random Selection-->
 	<9F8128>00</9F8128> <!--Contact Target Percentage to Be Used for Random Selection-->
@@ -73,7 +73,7 @@
 	<9F09>008C</9F09> <!--Terminal Application Version Number-->
 	<9F1B>00000000</9F1B> <!--Terminal Floor Limit-->
 	<9F1E>3833323031494343</9F1E><!--Interface Device (IFD) Serial Number-->
-	<9F66>B6004000</9F66> <!--Contactless Terminal Transaction Qualifiers-->
+	<9F66>B7004000</9F66> <!--Contactless Terminal Transaction Qualifiers-->
 	<9F8125>9F3704</9F8125> <!--Contact Default Dynamic Data Authentication Data Object List (DDOL)-->
 	<9F8127>00</9F8127> <!--Contact Maximum Target Percentage to be Used for Biased Random Selection-->
 	<9F8128>00</9F8128> <!--Contact Target Percentage to Be Used for Random Selection-->
@@ -96,10 +96,10 @@
 	<9F09>0002</9F09> <!--Terminal Application Version Number-->
 	<9F1A>0484</9F1A><!--Terminal Country Code-->
 	<9F1B>00000000</9F1B> <!--Terminal Floor Limit-->
-	<9F1D>6C00000000000000</9F1D> <!--Terminal Risk Management Parameters-->
+	<9F1D>6400800000000000</9F1D> <!--Terminal Risk Management Parameters-->
 	<9F1E>3833323031494343</9F1E><!--Interface Device (IFD) Serial Number-->
 	<9F35>22</9F35><!--Terminal Type-->
-    <9F5C>7A45123EE59C7F40</9F5C>
+    <9F5C>0000000000000000</9F5C>
 	<9F6D>0001</9F6D> <!--Contactless Mag-stripe Application Version Number (Reader)-->
 	<9F7E></9F7E> <!--Mobile Support Indicator-->
 	<9F8125>9F3704</9F8125> <!--Contact Default Dynamic Data Authentication Data Object List (DDOL)-->
@@ -121,13 +121,13 @@
 	<DF8118>60</DF8118> <!--Contactless CVM Capability – CVM Required-->
 	<DF8119>08</DF8119> <!--Contactless CVM Capability – No CVM Required-->
 	<DF811A>9F6A04</DF811A> <!--Contactless Default UDOL-->
-	<DF811B>A0</DF811B> <!--Contactless Kernel Configuration-->
+	<DF811B>B0</DF811B> <!--Contactless Kernel Configuration-->
 	<DF811C>00</DF811C> <!--Contactless Max Lifetime of Torn Transaction Log Record-->
 	<DF811D>00</DF811D> <!--Contactless Max Number of Torn Transaction Log Records-->
 	<DF811E>10</DF811E> <!--Contactless Mag-stripe CVM Capability – CVM Required-->
 	<DF811F>08</DF811F> <!--Contactless Security Capability-->
 	<DF8120>F45084800C</DF8120> <!--Contactless Terminal Action Code – Default-->
-	<DF8121>0000800000</DF8121> <!--Contactless Terminal Action Code – Denial-->
+	<DF8121>0000000000</DF8121> <!--Contactless Terminal Action Code – Denial-->
 	<DF8122>F45084800C</DF8122> <!--Contactless Terminal Action Code – Online-->
 	<DF8123>000000000000</DF8123> <!--Contactless Reader Contactless Floor Limit-->
 	<DF8124>999999999999</DF8124> <!--Contactless Reader Contactless Transaction Limit (No On-device CVM)-->
@@ -136,52 +136,6 @@
 	<DF812C>00</DF812C> <!--Contactless Mag-stripe CVM Capability – No CVM Required-->
 </app>
 
-<app><!--6:A0000000043060-->
-	<9F06>A0000000043060</9F06> <!--Application Identifier(AID)–terminal-->
-	<5F2A>0484</5F2A><!--Transaction Currency Code-->
-	<DF01>00</DF01> <!--Application Selection Indicator-->
-	<9F09>0002</9F09> <!--Terminal Application Version Number-->
-	<9F1A>0484</9F1A><!--Terminal Country Code-->
-	<9F1B>00000000</9F1B> <!--Terminal Floor Limit-->
-	<9F1D>4C00800000000000</9F1D> <!--Terminal Risk Management Parameters-->
-	<9F1E>3833323031494343</9F1E><!--Interface Device (IFD) Serial Number-->
-	<9F35>22</9F35><!--Terminal Type-->
-    <9F5C>7A45123EE59C7F40</9F5C>
-	<9F6D>0001</9F6D> <!--Contactless Mag-stripe Application Version Number (Reader)-->
-	<9F7E></9F7E> <!--Mobile Support Indicator-->
-	<9F8125>9F3704</9F8125> <!--Contact Default Dynamic Data Authentication Data Object List (DDOL)-->
-	<9F8127>00</9F8127> <!--Contact Maximum Target Percentage to be Used for Biased Random Selection-->
-	<9F8128>00</9F8128> <!--Contact Target Percentage to Be Used for Random Selection-->
-	<9F8129>00000000</9F8129> <!--Contact Threshold Value for Biased random Selection-->
-	<9F812A>FE50BCA000</9F812A> <!--Contact Terminal Action Code Default-->
-	<9F812B>0000800000</9F812B> <!--Contact Terminal Action Code Denial-->
-	<9F812C>FE50BCF800</9F812C> <!--Contact Terminal Action Code Online-->
-	<DF60></DF60> <!--Contactless DS Input (Card)-->
-	<DF62></DF62> <!--Contactless DS ODS Info-->
-	<DF63></DF63> <!--Contactless DS ODS Term-->
-	<DF8108></DF8108> <!--Contactless DS AC Type-->
-	<DF8109></DF8109> <!--Contactless DS Input (Term)-->
-	<DF810A></DF810A> <!--Contactless DS ODS Info For Reader-->
-	<DF810C>02</DF810C> <!--Contactless Kernel ID-->
-	<DF810D>02</DF810D> <!--Contactless DSVN Term-->
-	<DF8117>20</DF8117> <!--Contactless Card Data Input Capability-->
-	<DF8118>60</DF8118> <!--Contactless CVM Capability – CVM Required-->
-	<DF8119>08</DF8119> <!--Contactless CVM Capability – No CVM Required-->
-	<DF811A>9F6A04</DF811A> <!--Contactless Default UDOL-->
-	<DF811B>A0</DF811B> <!--Contactless Kernel Configuration-->
-	<DF811C>00</DF811C> <!--Contactless Max Lifetime of Torn Transaction Log Record-->
-	<DF811D>00</DF811D> <!--Contactless Max Number of Torn Transaction Log Records-->
-	<DF811E>10</DF811E> <!--Contactless Mag-stripe CVM Capability – CVM Required-->
-	<DF811F>08</DF811F> <!--Contactless Security Capability-->
-	<DF8120>F45004800C</DF8120> <!--Contactless Terminal Action Code – Default-->
-	<DF8121>0000800000</DF8121> <!--Contactless Terminal Action Code – Denial-->
-	<DF8122>F45004800C</DF8122> <!--Contactless Terminal Action Code – Online-->
-	<DF8123>000080000000</DF8123> <!--Contactless Reader Contactless Floor Limit-->
-	<DF8124>999999999999</DF8124> <!--Contactless Reader Contactless Transaction Limit (No On-device CVM)-->
-	<DF8125>999999999999</DF8125> <!--Contactless Reader Contactless Transaction Limit (On-device CVM)-->
-	<DF8126>000000200000</DF8126> <!--Contactless Reader CVM Required Limit-->
-	<DF812C>00</DF812C> <!--Contactless Mag-stripe CVM Capability – No CVM Required-->
-</app>
 
 <app><!--7:A00000002501-->
 	<9F06>A00000002501</9F06> <!--Application Identifier(AID)–terminal-->
@@ -339,29 +293,6 @@
 <app><!--31-->
 </app>
 
-
-<capk><!--1:A000000003 07-->
-    <9F06>A000000003</9F06> <!--RID-->
-    <9F22>07</9F22> <!--Public Key Index-->
-    <DF02>A89F25A56FA6DA258C8CA8B40427D927B4A1EB4D7EA326BBB12F97DED70AE5E4480FC9C5E8A972177110A1CC318D06D2F8F5C4844AC5FA79A4DC470BB11ED635699C17081B90F1B984F12E92C1C529276D8AF8EC7F28492097D8CD5BECEA16FE4088F6CFAB4A1B42328A1B996F9278B0B7E3311CA5EF856C2F888474B83612A82E4E00D0CD4069A6783140433D50725F</DF02> <!--Public Key Moudle-->
-    <DF03>B4BC56CC4E88324932CBC643D6898F6FE593B172</DF03> <!--Public Key Check Value-->
-    <DF04>000003</DF04> <!--Public Key Exponent-->
-    <DF05>20311217</DF05> <!--Public Key Expired Date-->
-    <DF06>01</DF06> <!--Public Key Hash Algorithm-->
-    <DF07>01</DF07> <!--Public Key Algorithm-->
-</capk>
-
-<capk><!--2:A000000003 08-->
-    <9F06>A000000003</9F06> <!--RID-->
-    <9F22>08</9F22> <!--Public Key Index-->
-    <DF02>D9FD6ED75D51D0E30664BD157023EAA1FFA871E4DA65672B863D255E81E137A51DE4F72BCC9E44ACE12127F87E263D3AF9DD9CF35CA4A7B01E907000BA85D24954C2FCA3074825DDD4C0C8F186CB020F683E02F2DEAD3969133F06F7845166ACEB57CA0FC2603445469811D293BFEFBAFAB57631B3DD91E796BF850A25012F1AE38F05AA5C4D6D03B1DC2E568612785938BBC9B3CD3A910C1DA55A5A9218ACE0F7A21287752682F15832A678D6E1ED0B</DF02> <!--Public Key Moudle-->
-    <DF03>20D213126955DE205ADC2FD2822BD22DE21CF9A8</DF03> <!--Public Key Check Value-->
-    <DF04>000003</DF04> <!--Public Key Exponent-->
-    <DF05>20311223</DF05> <!--Public Key Expired Date-->
-    <DF06>01</DF06> <!--Public Key Hash Algorithm-->
-    <DF07>01</DF07> <!--Public Key Algorithm-->
-</capk>
-
 <capk><!--3:A000000003 09-->
     <9F06>A000000003</9F06> <!--RID-->
     <9F22>09</9F22> <!--Public Key Index-->
@@ -372,6 +303,7 @@
     <DF06>01</DF06> <!--Public Key Hash Algorithm-->
     <DF07>01</DF07> <!--Public Key Algorithm-->
 </capk>
+
 
 <capk><!--4:A000000004 04-->
     <9F06>A000000004</9F06> <!--RID-->
@@ -604,16 +536,6 @@
     <DF07>01</DF07> <!--Public Key Algorithm-->
 </capk>
 
-<capk><!--24:A000000003 EF-->
-<9F06>A000000003</9F06> <!--RID-->
-    <9F22>92</9F22> <!--Public Key Index-->
-    <DF02>996AF56F569187D09293C14810450ED8EE3357397B18A2458EFAA92DA3B6DF6514EC060195318FD43BE9B8F0CC669E3F844057CBDDF8BDA191BB64473BC8DC9A730DB8F6B4EDE3924186FFD9B8C7735789C23A36BA0B8AF65372EB57EA5D89E7D14E9C7B6B557460F10885DA16AC923F15AF3758F0F03EBD3C5C2C949CBA306DB44E6A2C076C5F67E281D7EF56785DC4D75945E491F01918800A9E2DC66F60080566CE0DAF8D17EAD46AD8E30A247C9F</DF02> <!--Public Key Moudle-->
-    <DF03>429C954A3859CEF91295F663C963E582ED6EB253</DF03> <!--Public Key Check Value-->
-    <DF04>000003</DF04> <!--Public Key Exponent-->
-    <DF05>20311222</DF05> <!--Public Key Expired Date-->
-    <DF06>01</DF06> <!--Public Key Hash Algorithm-->
-    <DF07>01</DF07> <!--Public Key Algorithm-->
-</capk>
 
 
 <capk><!--25:A000000524 03-->

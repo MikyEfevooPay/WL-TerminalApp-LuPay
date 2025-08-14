@@ -29,7 +29,7 @@
             android:gravity="left"
             android:text="Detalle de historial"
             android:textColor="#A19E9E"
-            android:textSize="16px" />
+            android:textSize="20px" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/historial_cortecaja_List"
@@ -56,10 +56,10 @@
 
                 <ImageView
                     android:id="@+id/imageView6"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="324px"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/history_empty" />
+                    app:srcCompat="@drawable/corte_caja_empty" />
 
                 <TextView
                     android:id="@+id/txt_cortecaja_empty"
@@ -68,9 +68,9 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/dm_sans_bold"
-                    android:text="Aún no se ha hecho ningun corte de caja"
+                    android:text="Aún no se ha hecho\nningun corte de caja"
                     android:textAlignment="center"
-                    android:textColor="#6498FA"
+                    android:textColor="@color/ep_set_monto"
                     android:textSize="22px" />
             </LinearLayout>
 
@@ -92,13 +92,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/membership_green"
+            android:backgroundTint="@color/ep_btn_continuar_fondo"
             android:fontFamily="@font/dm_sans_bold"
             android:minHeight="50dip"
             android:text="Hacer corte de caja"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="22px" />
+            android:textSize="23px" />
     </LinearLayout>
 
 

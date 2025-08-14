@@ -1,6 +1,7 @@
 package com.lupay.demoui.activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.DatePicker;
@@ -61,6 +63,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
     private final String TRANSACTION_HISTORY = "getTransactionHistory";
     private final String HISTORY_KEY_AMEX = "getCancelacionHistoryAmex";
+    public static ProgressDialog spinner;
 
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,8 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         super.switch_title_logo("Historial");
         super.show_calendar();
+
+        spinner = Utils.getLoaderSpinner(this);
 
         btn_date = findViewById(R.id.btn_fecha);
         txt_date = findViewById(R.id.btn_date_txt);
@@ -268,6 +273,9 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             dpDate.dismiss();
             getFetchManager().CallById(TRANSACTION_HISTORY);
             getFetchManager().CallById(HISTORY_KEY_AMEX);
+            if(transactions.size() > 0) transactions.clear();
+            spinner.show();
+            RefreshBuscador();
         });
     }
 
@@ -319,5 +327,17 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         intent.putExtra("ksn_posId",ksn_posId);
 
         startActivity(intent);
+    }
+    public void RefreshBuscador() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                if (spinner.isShowing())
+                    spinner.dismiss();
+                handler.removeCallbacks(this);
+            }
+        }, 3000);
+
     }
 }

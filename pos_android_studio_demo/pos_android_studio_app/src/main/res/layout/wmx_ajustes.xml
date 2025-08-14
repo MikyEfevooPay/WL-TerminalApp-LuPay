@@ -22,9 +22,9 @@
         android:layout_height="match_parent"
         android:background="@color/ep_fondo"
         android:orientation="vertical"
-        android:paddingLeft="70px"
-        android:paddingTop="70px"
-        android:paddingRight="70px">
+        android:paddingLeft="20px"
+        android:paddingTop="30px"
+        android:paddingRight="20px">
 
         <TextView
             android:id="@+id/textView4"
@@ -67,8 +67,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_marginBottom="30px"
+            android:layout_marginTop="25px"
+            android:layout_marginBottom="25px"
             android:contentDescription="underline"
             android:layerType="software"
             android:src="@drawable/dotted_line" />
@@ -104,8 +104,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_marginBottom="30px"
+            android:layout_marginTop="25px"
+            android:layout_marginBottom="25px"
             android:contentDescription="underline"
             android:layerType="software"
             android:src="@drawable/dotted_line" />
@@ -137,16 +137,24 @@
                 android:textSize="20px" />
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25px"
+            android:contentDescription="underline"
+            android:layerType="software"
+            android:src="@drawable/straight_line" />
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30px"
-            android:layout_marginTop="40px"
+            android:layout_marginTop="30px"
 
             android:fontFamily="@font/dm_sans_medium"
             android:gravity="center_horizontal"
-            android:text="Información General"
+            android:text="Información de Contacto"
             android:textColor="#0F0F0F"
             android:textSize="24px" />
 
@@ -182,8 +190,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="30px"
-            android:layout_marginBottom="30px"
+            android:layout_marginTop="25px"
+            android:layout_marginBottom="25px"
             android:contentDescription="underline"
 
             android:layerType="software"
@@ -205,7 +213,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/txtksn"
+                android:id="@+id/txtcorreo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -220,8 +228,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="30px"
-            android:layout_marginBottom="30px"
+            android:layout_marginTop="25px"
+            android:layout_marginBottom="25px"
+            android:contentDescription="underline"
+
+            android:layerType="software"
+            android:src="@drawable/dotted_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:text="Operatividad:"
+                android:textColor="@color/ep_color_black"
+                android:textSize="20px" />
+
+            <TextView
+                android:id="@+id/txtoperatividad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/dm_sans"
+                android:gravity="end"
+                android:text="ninguna"
+                android:textColor="#5A5A5A"
+                android:textSize="20px" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="25px"
+            android:layout_marginBottom="25px"
             android:contentDescription="underline"
 
             android:layerType="software"
@@ -243,7 +289,7 @@
                 android:textSize="20px" />
 
             <TextView
-                android:id="@+id/txtksn"
+                android:id="@+id/txttelefono"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

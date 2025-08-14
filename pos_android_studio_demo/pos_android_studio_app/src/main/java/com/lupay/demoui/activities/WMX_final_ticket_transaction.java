@@ -234,9 +234,9 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             ticket_tv_subtotal_value.setText(v_subtotal);
         }
 
-        if (v_redtarjeta.equals("MC")) {
+        if (v_redtarjeta.toUpperCase(Locale.ROOT).equals("MC")) {
             card_provider = "MASTERCARD";
-        } else if (v_redtarjeta.equals("Visa")) {
+        } else if (v_redtarjeta.toUpperCase(Locale.ROOT).equals("VISA")) {
             card_provider = "VISA";
         }else if (v_redtarjeta.toUpperCase(Locale.ROOT).equals("AMEX")) {
             card_provider = "AMEX";
@@ -324,6 +324,7 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
                 .setTitle("¿Imprimir copia del ticket al cliente?")
                 .setIcon(R.drawable.copia_ticket)
                 .setPositiveButton("Sí", (dialog, lis) -> {
+                    dialog.dismiss();
                     PrintTicket(PRINT_TYPE.CLIENT);
                 })
                 .setNeutralButton("No", (dialog, lis) -> {

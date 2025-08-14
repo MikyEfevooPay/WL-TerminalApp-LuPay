@@ -145,7 +145,11 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
             case R.id.btn_Ajustes:
                 intent = new Intent(this, WMX_Ajustes.class);
                 intent.putExtra("ksn_posId", posId);
-                if (TPVInitializated())intent.putExtra("interfaz", cursor.getString(22));
+                if (TPVInitializated()){
+                    intent.putExtra("interfaz", cursor.getString(22));
+                    intent.putExtra("emailaddress", cursor.getString(33));
+                    intent.putExtra("phonenumber", cursor.getString(34));
+                }
                 startActivityMiddleware(intent);
                 break;
             case R.id.btn_meses:
@@ -178,6 +182,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 intent = new Intent(this, WMX_Connection_Test.class);
                 intent.putExtra("ksn_posId", posId);
                 intent.putExtra("type", 1);
+                intent.putExtra("init", String.valueOf(cursor.getCount()));
                 startActivityMiddleware(intent);
                 break;
         }

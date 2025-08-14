@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ep_fondo_ticket"
+    android:background="@drawable/ticket_background"
     android:orientation="vertical"
     android:paddingLeft="18px"
     android:paddingTop="26px"
@@ -47,9 +47,9 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="78px"
-                android:layout_height="43px"
-                app:srcCompat="@drawable/logo_efevoopay_coloresai" />
+                android:layout_width="190px"
+                android:layout_height="53px"
+                app:srcCompat="@drawable/logo_cohetepay" />
 
         </LinearLayout>
 

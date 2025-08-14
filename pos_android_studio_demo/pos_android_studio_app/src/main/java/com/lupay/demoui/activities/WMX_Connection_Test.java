@@ -19,6 +19,7 @@ import org.json.JSONObject;
 public class WMX_Connection_Test extends BaseActivity implements View.OnClickListener {
     Intent intent;
     private String ksn_posId;
+    private String init;
 
     private final String TEST_CONNECTION_ECO = "test_connection_eco";
     private final String TEST_CONNECTION_LOGON = "test_connection_logon";
@@ -33,6 +34,7 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
         super.setMarginLogo();
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
+        init = intent.getStringExtra("init");
     }
 
     @Override
@@ -56,10 +58,18 @@ public class WMX_Connection_Test extends BaseActivity implements View.OnClickLis
         if(entity.result == null) return;
         switch (entity.key) {
             case TEST_CONNECTION_ECO:
-                processConnectionEco(entity.result.toString());
+                if (Integer.parseInt(init)==1){
+                    processConnectionEco(entity.result.toString());
+                }else{
+                    onResultActivity(1);
+                }
                 break;
             case TEST_CONNECTION_LOGON:
-                processConnectionLogon(entity.result.toString());
+                if (Integer.parseInt(init)==1){
+                    processConnectionLogon(entity.result.toString());
+                }else{
+                    onResultActivity(1);
+                }
                 break;
             default:
                 break;

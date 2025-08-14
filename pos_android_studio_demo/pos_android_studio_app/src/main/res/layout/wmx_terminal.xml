@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
                 android:text="$"
-                android:textColor="#121212"
+                android:textColor="@color/ep_set_monto"
                 android:textSize="45px" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans"
                 android:text="0.00"
-                android:textColor="#121212"
+                android:textColor="@color/ep_set_monto"
                 android:textSize="45px" />
         </LinearLayout>
 
@@ -278,16 +278,16 @@
             android:layout_columnWeight="1"
             android:layout_gravity="center_horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/btn_delete"
+                android:background="@drawable/round_button_delete"
+                android:shadowColor="#fff0"
+                android:stateListAnimator="@null"
+                android:textColor="@color/ep_btn_padTerminal_texto"
+
                 android:layout_width="95px"
                 android:layout_height="95px"
-                android:background="@drawable/round_button"
-                android:fontFamily="@font/dm_sans"
-                android:stateListAnimator="@null"
-                android:text="@string/wmx_terminal_del"
-                android:textColor="@color/ep_btn_padTerminal_texto"
-                android:textSize="35px" />
+                />
 
         </LinearLayout>
 

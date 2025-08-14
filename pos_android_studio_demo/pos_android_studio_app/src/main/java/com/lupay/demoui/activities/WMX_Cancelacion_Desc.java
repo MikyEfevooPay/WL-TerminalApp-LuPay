@@ -29,7 +29,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
     LinearLayout cp_ll_content_card,ll_msi;
     AppCompatButton cp_btn_trans_cancelar, cp_btn_trans_final;
     Context mContext;
-    private String card_provider, tipotarjeta;
+    private String card_provider, tipotarjeta,tarjeta;
     private int transaction_type, trans_id;
     private Intent intent;
     private String ksn_posId;
@@ -102,6 +102,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         msi=intent.getStringExtra("msi");
         aid=intent.getStringExtra("aid");
         arqc=intent.getStringExtra("arqc");
+        tarjeta=intent.getStringExtra("tarjeta");
 
         approve = intent.getStringExtra("approve");
         ksn_posId=intent.getStringExtra("ksn_posId");
@@ -147,10 +148,10 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
              transaction_type = 0;
         }
 
-        if (redtarj.equals("MC")){
+        if (redtarj.toUpperCase(Locale.ROOT).equals("MC")){
             card_provider = "MASTERCARD";
             cp_iv_process.setImageResource(R.drawable.masterdcard);
-        }else if(redtarj.equals("Visa")){
+        }else if(redtarj.toUpperCase(Locale.ROOT).equals("VISA")){
             cp_iv_process.setImageResource(R.drawable.visa);
         }else if(redtarj.toUpperCase(Locale.ROOT).equals("AMEX")){
             cp_iv_process.setImageResource(R.drawable.amex);
@@ -232,7 +233,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
         intent.putExtra("approve",cp_tv_approve.getText().toString());
         intent.putExtra("tips",formatMoney(cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ","")));
         intent.putExtra("propina",cp_tv_tip.getText().toString().replace("$","").replace(",","").replace(" ",""));
-
+        intent.putExtra("tarjeta",tarjeta);
         startActivityMiddleware(intent);
     }
     public String formatMoney(String amount){

@@ -27,8 +27,8 @@
         <!--    </LinearLayout>-->
         <ImageView
             android:id="@+id/imageView16"
-            android:layout_width="328px"
-            android:layout_height="77px"
+            android:layout_width="342.72px"
+            android:layout_height="62px"
             app:srcCompat="@drawable/white_logo"
             android:layout_gravity="center"
             android:layout_marginTop="20px"

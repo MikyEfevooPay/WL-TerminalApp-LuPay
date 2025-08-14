@@ -39,7 +39,7 @@ public class ConfigAmex {
     public void tpvConfigAmex(String ksn_posId,Integer valor) {
         try {
             nuevainit = false;
-            String URL = Utils.TPVCONFIGAMEX + "/api/apiv0/agrs/terminales/tpv";
+            String URL = Utils.TPVCONFIGAMEX + "/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", ksn_posId);
 
@@ -50,6 +50,7 @@ public class ConfigAmex {
                     try {
                         JSONObject object = new JSONObject(response);
                         if(!object.has("mensaje")){
+                            //bndamex[0] =Boolean.TRUE;
                             InitActivaAmex(response.toString(),ksn_posId,valor);
                             TRACE.d("tpvConfig: " +  TRACE.NEW_LINE + response.toString() );
                         }else{
@@ -105,6 +106,7 @@ public class ConfigAmex {
 
             RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
+            bndamex[0] =Boolean.FALSE;
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
         }
     }

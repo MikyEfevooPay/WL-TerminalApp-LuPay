@@ -23,7 +23,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
+            android:layout_width="342.72px"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/logo_cohetepay" />
     </LinearLayout>
@@ -72,7 +73,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62px"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/efevoo_i_grupo_41702" />
+                            app:srcCompat="@drawable/m_transacciones" />
 
                     </LinearLayout>
 
@@ -84,7 +85,7 @@
                         android:text="@string/wmx_menu_transfer"
                         android:textAllCaps="false"
                         android:textColor="@color/ep_btn_menu_texto"
-                        android:textSize="18px" />
+                        android:textSize="20px" />
 
                 </LinearLayout>
 
@@ -111,7 +112,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62px"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/efevoo_i_msi" />
+                            app:srcCompat="@drawable/m_meses_sin_intereses" />
 
                     </LinearLayout>
 
@@ -153,7 +154,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62px"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/efevoo_i_trazado_43" />
+                            app:srcCompat="@drawable/m_cancelaciones" />
 
                     </LinearLayout>
 
@@ -165,7 +166,7 @@
                         android:text="@string/wmx_menu_cancel"
                         android:textAllCaps="false"
                         android:textColor="@color/ep_btn_menu_texto"
-                        android:textSize="18px" />
+                        android:textSize="20px" />
 
                 </LinearLayout>
 
@@ -192,7 +193,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="65px"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/efevoo_i_historial" />
+                            app:srcCompat="@drawable/m_historial" />
 
                     </LinearLayout>
 
@@ -204,7 +205,7 @@
                         android:text="@string/wmx_menu_Other"
                         android:textAllCaps="false"
                         android:textColor="@color/ep_btn_menu_texto"
-                        android:textSize="18px" />
+                        android:textSize="20px" />
 
                 </LinearLayout>
 
@@ -232,7 +233,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62px"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/comunicacion" />
+                            app:srcCompat="@drawable/m_prueba_de_comunicaci_n" />
 
                     </LinearLayout>
 
@@ -246,7 +247,7 @@
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/ep_btn_menu_texto"
-                        android:textSize="18px" />
+                        android:textSize="20px" />
 
                 </LinearLayout>
 
@@ -275,7 +276,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62px"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/efevoo_i_grupo_cc_d30" />
+                            app:srcCompat="@drawable/m_corte_de_caja" />
 
                     </LinearLayout>
 
@@ -287,7 +288,7 @@
                         android:text="Corte de Caja"
                         android:textAllCaps="false"
                         android:textColor="@color/ep_btn_menu_texto"
-                        android:textSize="18px" />
+                        android:textSize="20px" />
 
                 </LinearLayout>
 
@@ -314,7 +315,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62px"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/efevoo_i_info" />
+                            app:srcCompat="@drawable/m_informaci_n" />
 
                     </LinearLayout>
 
@@ -326,7 +327,7 @@
                         android:text="@string/wmx_menu_Ajustes"
                         android:textAllCaps="false"
                         android:textColor="@color/ep_btn_menu_texto"
-                        android:textSize="18px" />
+                        android:textSize="20px" />
 
                 </LinearLayout>
 

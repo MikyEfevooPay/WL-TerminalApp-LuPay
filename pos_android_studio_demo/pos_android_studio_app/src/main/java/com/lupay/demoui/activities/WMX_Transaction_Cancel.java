@@ -17,7 +17,7 @@ import com.lupay.demoui.utils.QPOSStatus;
 import com.lupay.demoui.utils.TRACE;
 
 public class WMX_Transaction_Cancel extends BaseActivity {
-    private String  Amount, AmountToShow, type_transaction, ksn_posId, _Propina,_noAuth, total, months_total, subtotal, tips, msi, approve;
+    private String  Amount, AmountToShow, type_transaction, ksn_posId, _Propina,_noAuth, total, months_total, subtotal, tips, msi, approve,tarjeta;
     private Button btn_retry, btn_cancel;
     private Intent intent;
 
@@ -79,6 +79,7 @@ public class WMX_Transaction_Cancel extends BaseActivity {
         intent.putExtra("subtotal", subtotal);
         intent.putExtra("tips", tips);
         intent.putExtra("approve", approve);
+        intent.putExtra("tarjeta", tarjeta);
         startActivity(intent);
         finish();
     }
@@ -105,6 +106,7 @@ public class WMX_Transaction_Cancel extends BaseActivity {
         subtotal = intent.getStringExtra("subtotal");
         tips =  intent.getStringExtra("tips");
         approve =  intent.getStringExtra("approve");
+        tarjeta=intent.getStringExtra("tarjeta");
     }
 
     @Override

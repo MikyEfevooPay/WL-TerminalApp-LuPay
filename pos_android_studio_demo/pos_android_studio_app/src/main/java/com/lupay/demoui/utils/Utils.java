@@ -37,6 +37,7 @@ public class Utils {
 //	public static final String TPVCONFIG = "https://alphawlapitest.efevoopaylbda.com";
 //	public static final String TERMINAL_AMEX="https://test-efevoopayamex-ecommerce.com";
 //	public static final String TERMINAL_BATCH = "https://test-efevoopaybatch-ecommerce.com";
+//	public static final String TPVCONFIGAMEX = "https://test-agrs.efevoo.app";
 
 	public static HashMap<String,String> errorMessagesDictionary;
 	public static HashMap<QPOSService.Error, String> errorPosDictionary;

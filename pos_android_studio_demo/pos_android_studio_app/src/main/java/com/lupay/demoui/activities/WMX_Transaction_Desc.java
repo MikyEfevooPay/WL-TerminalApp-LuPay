@@ -350,10 +350,10 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             lyt_transaction_tip.setVisibility(View.GONE);
         }
 
-        if (redtarj.equals("MC")) {
+        if (redtarj.toUpperCase(Locale.ROOT).equals("MC")) {
             card_provider = "MASTERCARD";
             tp_iv_process.setImageResource(R.drawable.masterdcard);
-        } else if (redtarj.equals("Visa")) {
+        } else if (redtarj.toUpperCase(Locale.ROOT).equals("VISA")) {
             card_provider = "VISA";
             tp_iv_process.setImageResource(R.drawable.visa);
         }else if (redtarj.toUpperCase(Locale.ROOT).equals("AMEX")) {
