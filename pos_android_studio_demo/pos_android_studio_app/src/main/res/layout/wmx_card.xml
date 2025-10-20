@@ -23,7 +23,7 @@
     <ImageView
         android:id="@+id/imageView16"
         android:layout_width="342.72px"
-        android:layout_height="62px"
+        android:layout_height="100px"
         app:srcCompat="@drawable/white_logo"
         android:layout_gravity="center"
         android:layout_marginTop="20px"
@@ -58,7 +58,7 @@
             android:text="TOTAL"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="23px" />
+            android:textSize="25px" />
 
         <TextView
             android:id="@+id/wmx_text_total_Amount"
@@ -68,15 +68,15 @@
             android:gravity="center"
             android:paddingTop="10dp"
             android:textColor="#fff"
-            android:textSize="45px"
+            android:textSize="35px"
             tools:text="Amount"
             tools:visibility="visible" />
 
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/terminal_animation"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             app:lottie_fileName="terminal_cohete.json"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
@@ -133,7 +133,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="43px"
+            android:layout_marginTop="23px"
             android:gravity="center"
             android:orientation="horizontal">
 

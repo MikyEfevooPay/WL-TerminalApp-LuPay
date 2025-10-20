@@ -261,10 +261,13 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
             modalEmailCreate.dismiss();
         });
 
-        btn_modal_sendEmail.setOnClickListener(view -> {
-            currEmail = txt_email.getText().toString();
-            getFetchManager().CallById(TRANSACTION_SEND_EMAIL);
-            modalEmailCreate.dismiss();
+        btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currEmail = txt_email.getText().toString();
+                modalEmailCreate.dismiss();
+                getFetchManager().CallById(TRANSACTION_SEND_EMAIL);
+            }
         });
     }
 

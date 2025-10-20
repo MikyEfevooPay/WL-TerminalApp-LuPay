@@ -12,10 +12,10 @@
 
         android:background="@drawable/rounded_corner"
         android:backgroundTint="#FFFFFF"
-        android:paddingLeft="15dp"
-        android:paddingTop="12dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="12dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout

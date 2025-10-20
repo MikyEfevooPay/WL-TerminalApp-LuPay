@@ -63,7 +63,7 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch cancelacionHistory = manager.addFetch(CANCELATION_HISTORY_KEY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
+        Fetch cancelacionHistory = manager.addFetch(CANCELATION_HISTORY_KEY, new FetchOptions(Utils.TERMINAL_BATCH + "/api/consulta/dukptdeviceid", Request.Method.POST));
         cancelacionHistory.setSetBodyListenner(this::setBody);
 
         Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_AMEX + "/amex/tpv/txndevice", Request.Method.POST));

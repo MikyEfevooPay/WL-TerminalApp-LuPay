@@ -56,7 +56,7 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="315px"
-                android:layout_height="56.98px"
+                android:layout_height="86.98px"
                 android:layout_marginBottom="16px"
                 app:srcCompat="@drawable/logo_cohetepay" />
 

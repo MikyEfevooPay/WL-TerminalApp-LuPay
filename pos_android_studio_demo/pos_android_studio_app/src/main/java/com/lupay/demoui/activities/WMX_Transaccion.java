@@ -115,7 +115,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
     @Override
     public void addFetchs(FetchUIManager manager) throws Exception {
-        Fetch history = manager.addFetch(TRANSACTION_HISTORY, new FetchOptions(Utils.TERMINAL_API + "/matriz/certificacion/Dukptnumtxn", Request.Method.POST));
+        Fetch history = manager.addFetch(TRANSACTION_HISTORY, new FetchOptions(Utils.TERMINAL_BATCH + "/api/consulta/dukptdeviceid", Request.Method.POST));
         history.setSetBodyListenner(this::getBody);
 
         Fetch HistoryAmex = manager.addFetch(HISTORY_KEY_AMEX, new FetchOptions(Utils.TERMINAL_AMEX + "/amex/tpv/txndevice", Request.Method.POST));

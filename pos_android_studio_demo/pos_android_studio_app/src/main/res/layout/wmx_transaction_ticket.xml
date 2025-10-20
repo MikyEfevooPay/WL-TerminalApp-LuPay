@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/img_ticket_logo"
         android:layout_width="match_parent"
-        android:layout_height="42px"
+        android:layout_height="72px"
         app:srcCompat="@drawable/logo_cohetepay_bmp_try3" />
 
     <LinearLayout

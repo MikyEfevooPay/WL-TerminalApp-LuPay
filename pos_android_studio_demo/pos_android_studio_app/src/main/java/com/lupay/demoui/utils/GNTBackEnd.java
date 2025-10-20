@@ -423,7 +423,7 @@ public class GNTBackEnd {
     }
     public String MascaraTrack2(String track2,String interfaz){
         TRACE.d("track2 original : " + track2.toString());
-        if(interfaz.equals("Agregador"))
+        if(interfaz.equals("Agregador")||interfaz.equals("Adquiriente"))
         {
             track2= String.format("%"+-48+"s",track2.toUpperCase(Locale.ROOT)).replace(" ","F");
         }else{
@@ -565,7 +565,7 @@ public class GNTBackEnd {
             return Utils.TERMINAL_AMEX + "/amex/tpv/transaccion";
         }else if (tipo.equals("Prosa")){
             TRACE.d("getcallvalidaprosa: ");
-            return Utils.TERMINAL_API + "/efevoo/tpv/transaccion";
+            return Utils.TERMINAL_BATCH + "/api/tpv/transaccion";
         }else{
             return "";
         }

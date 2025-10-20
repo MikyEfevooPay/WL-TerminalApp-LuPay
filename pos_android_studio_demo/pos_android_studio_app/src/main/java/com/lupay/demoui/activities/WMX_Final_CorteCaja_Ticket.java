@@ -73,7 +73,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     Cursor cursor;
     private CORTE_CAJA_TYPE type;
 
-    private final String SEND_EMAIL = "sendEmail";
+    private final String SEND_EMAIL = "send_Email";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,11 +123,11 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
     }
 
     private void getBody(JSONObject body) throws JSONException {
-        DateFormat formatemail = new SimpleDateFormat("ddMMyyHHmmss");
+        DateFormat formatemail = new SimpleDateFormat("ddMMyyHHmm");
         Date datemail = new Date();
         body.put("correo", currEmail);
         body.put("subject", "Corte de caja");
-        body.put("idemail", "Corte"+formatemail.format(datemail).toString());
+        body.put("idemail", "Corte"+formatemail.format(datemail).toString()+ksn_posId.substring(ksn_posId.length()-8).toString());
         body.put("comercio", Utils.isNull(cursor.getString(9), "N/A"));
         body.put("subtotal", Utils.isNull(corte, "N/A"));
         body.put("propina", Utils.isNull( tip, "N/A"));
@@ -139,15 +139,11 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
 
     @Override
     public void onFetchCurrentResult(FetchEntity entity, @Nullable FetchEntity error) {
-        if(error != null) {
-            TRACE.d("** ResponseResult ERROR " + TRACE.NEW_LINE + error.result);
-            showAlert("error", "ERROR", "¡Correo no enviado!");
+        super.onFetchCurrentResult(entity, error);
+        if (entity.result == null)
             return;
-        }
-        if(entity.result == null) return;
         switch (entity.key) {
             case SEND_EMAIL:
-                TRACE.d("** ResponseResult " + TRACE.NEW_LINE + entity.result.toString());
                 showAlert("success", "¡Corte caja enviado con éxito!");
                 break;
             default:
@@ -255,6 +251,7 @@ public class WMX_Final_CorteCaja_Ticket extends BaseActivity implements View.OnC
             @Override
             public void onClick(View view) {
                 currEmail = txt_email.getText().toString();
+                modalEmailCreate.dismiss();
                 getFetchManager().CallById(SEND_EMAIL);
             }
         });

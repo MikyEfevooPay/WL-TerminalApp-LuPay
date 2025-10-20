@@ -388,7 +388,7 @@
     <string name="wmx_connection_test_error_1">Se sugiere realizar las siguientes acciones y reintentar esta prueba</string>
     <string name="wmx_connection_test_error_2">Reiniciar la red Wi Fi</string>
     <string name="wmx_connection_test_error_3">Reiniciar la terminal</string>
-    <string name="wmx_connection_test_error_4">Si persisten los problemas, favor de comunicarse con el centro de atención Efevoo Pay</string>
+    <string name="wmx_connection_test_error_4">Si persisten los problemas, favor de comunicarse con el centro de atención LuPay</string>
     <string name="wmx_ticket_card_number">Número de tarjeta</string>
     <string name="wmx_ticket_consumo">Consumo</string>
     <string name="wmx_ticket_subtotal">Subtotal</string>

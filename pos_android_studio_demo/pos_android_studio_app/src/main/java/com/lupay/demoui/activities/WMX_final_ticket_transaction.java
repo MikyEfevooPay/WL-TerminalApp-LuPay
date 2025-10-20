@@ -401,8 +401,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
 
         btn_modal_sendEmail.setOnClickListener(view -> {
             currEmail = txt_email.getText().toString();
-            getFetchManager().CallById(TRANSACTION_TICKET_SEND_EMAIL);
             modalEmailCreate.dismiss();
+            getFetchManager().CallById(TRANSACTION_TICKET_SEND_EMAIL);
         });
     }
 

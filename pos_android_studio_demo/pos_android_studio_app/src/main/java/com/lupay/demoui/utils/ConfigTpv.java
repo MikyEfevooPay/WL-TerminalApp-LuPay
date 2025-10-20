@@ -155,10 +155,10 @@ public class ConfigTpv {
             jsonBody.put("interfaz", interfaz);
 
             if(valor==1){
-                URL = Utils.TERMINAL_API + "/efevoo/tpv/initactiva";
+                URL = Utils.tipoUrl(interfaz) + "/efevoo/tpv/initactiva";
             }else{
                 generakey(interfaz);
-                URL =  Utils.TERMINAL_API + "/efevoo/tpv/initllave";
+                URL =  Utils.tipoUrl(interfaz) + "/efevoo/tpv/initllave";
                 jsonBody.put("tpv", Build.MODEL+"Android smart POS");
                 jsonBody.put("device_tk", _tk);
                 jsonBody.put("device_rsa", _rsa);
@@ -278,7 +278,7 @@ public class ConfigTpv {
     }
     private void generakey(String interfaz)
     {
-        if(interfaz.equals("Agregador"))
+        if(interfaz.equals("Agregador")||interfaz.equals("Adquiriente"))
         {
             rsa();
         }

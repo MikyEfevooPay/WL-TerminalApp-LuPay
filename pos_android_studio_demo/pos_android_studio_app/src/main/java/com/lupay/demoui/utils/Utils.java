@@ -25,7 +25,7 @@ public class Utils {
 	//BUCKET CORREO
 	public static final String TERMINAL_WL_Bucket = "lupay";
 	//PRODUCCION
-	public static final String TERMINAL_API = "https://efevoopayloadbalancer-ecommerce.com";
+	public static String TERMINAL_API = "";
 	public static final String TERMINAL_BIN = "https://alphawlapi.efevoopaylbda.com/api/apiv0/agrs/terminales/tpv/bines";
 	public static final String TPVCONFIG = "https://alphawlapi.efevoopaylbda.com";
 	public static final String TERMINAL_AMEX = "https://efevoopayamex-ecommerce.com";
@@ -42,6 +42,15 @@ public class Utils {
 	public static HashMap<String,String> errorMessagesDictionary;
 	public static HashMap<QPOSService.Error, String> errorPosDictionary;
 	private static char MASK_CHAR = '*';
+
+	public static String tipoUrl(String _interfaz){
+		if(_interfaz.equals("Adquiriente")){
+			TERMINAL_API="https://adq.efevoopayloadbalancer-ecommerce.com";
+		}else{
+			TERMINAL_API="https://efevoopayloadbalancer-ecommerce.com";
+		}
+		return TERMINAL_API;
+	}
 
 	public static void setErrorMessages() {
 		errorMessagesDictionary = new HashMap();
