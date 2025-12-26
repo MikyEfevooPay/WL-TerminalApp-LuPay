@@ -147,6 +147,12 @@
             android:hardwareAccelerated="true"
             android:theme="@style/HandWriteTheme"
             />
+        <activity
+            android:name="com.lupay.demoui.activities.WMX_Final_Historial_Ticket"
+            android:configChanges="screenSize|orientation|keyboard|keyboardHidden"
+            android:hardwareAccelerated="true"
+            android:theme="@style/HandWriteTheme"
+            />
 
         <meta-data
             android:name="preloaded_fonts"

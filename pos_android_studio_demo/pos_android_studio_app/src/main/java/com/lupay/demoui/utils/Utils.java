@@ -30,14 +30,14 @@ public class Utils {
 	public static final String TPVCONFIG = "https://alphawlapi.efevoopaylbda.com";
 	public static final String TERMINAL_AMEX = "https://efevoopayamex-ecommerce.com";
 	public static final String TERMINAL_BATCH = "https://efevoopaybatch-ecommerce.com";
-	public static final String TPVCONFIGAMEX = "https://testagrswl.efevoo.app";
+	public static final String TPVCONFIGAMEX = "https://api-ca.efevoopaylbda.com";
 	// TEST
 //	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
 //	public static final String TERMINAL_BIN = "https://alphawlapitest.efevoopaylbda.com/api/apiv0/agrs/terminales/tpv/bines";
 //	public static final String TPVCONFIG = "https://alphawlapitest.efevoopaylbda.com";
 //	public static final String TERMINAL_AMEX="https://test-efevoopayamex-ecommerce.com";
 //	public static final String TERMINAL_BATCH = "https://test-efevoopaybatch-ecommerce.com";
-//	public static final String TPVCONFIGAMEX = "https://test-agrs.efevoo.app";
+//	public static final String TPVCONFIGAMEX = "https://test-api-ca.efevoopaylbda.com";
 
 	public static HashMap<String,String> errorMessagesDictionary;
 	public static HashMap<QPOSService.Error, String> errorPosDictionary;
@@ -512,5 +512,10 @@ public class Utils {
 		int offsetFromUTC = timeZoneUTC.getOffset(new Date().getTime()) * -1;
 		return new Date(timestamp + offsetFromUTC);
 	}
-
+	public static String isnulo(String value) {
+		if (value== "null" || value.isEmpty()) {
+			return value="NA";
+		}
+		return value;
+	}
 }

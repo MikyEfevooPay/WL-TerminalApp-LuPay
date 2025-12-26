@@ -17,6 +17,7 @@ import com.lupay.demoui.utils.GNTBackEnd;
 import com.lupay.demoui.utils.ResponseCode;
 import com.lupay.demoui.utils.TRACE;
 import com.lupay.demoui.utils.Utils;
+import com.lupay.demoui.utils.VolleyStringCallBack;
 
 public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     // private Button other, ajustes, meses;
@@ -26,7 +27,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     public static ConfigTpv configTpv;
     public static ConfigAmex configAmex;
     public static ProgressDialog spinner;
-
+    int[] count = { 0 };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +134,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                 intent = new Intent(this, WMX_Terminal.class);
                 intent.putExtra("type_transaction", "venta");
                 intent.putExtra("ksn_posId", posId);
+                intent.putExtra("propina", cursor.getString(35));
                 startActivityMiddleware(intent);
                 break;
             case R.id.btn_Other:
@@ -159,6 +161,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                     intent = new Intent(this, WMX_Terminal.class);
                     intent.putExtra("type_transaction", "MSI");
                     intent.putExtra("ksn_posId", posId);
+                    intent.putExtra("propina", cursor.getString(35));
                     startActivityMiddleware(intent);
                 } else {
                     WMX_Menu.super.showAlert("informative", "OPCIÓN NO HABILITADA");
@@ -217,79 +220,70 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     }
 
     public void DbSurce(String posId) {
-        final Handler handler = new Handler();
-        int[] count = { 0 };
-
-        final Runnable runnable = new Runnable() {
-            public void run() {
-                configTpv.count = count[0];
-                if (count[0]++ < 5) {
-                    if (!configTpv.bnd[0]) {
-                        TRACE.d("configTpv entra");
-                        if (!configTpv.nuevainit) {
-                            configTpv.tpvConfig(posId, 1);
-                        } else {
-                            configTpv.tpvConfig(posId, 0);
-                        }
-                        handler.postDelayed(this, 4000);
-                    } else {
-                        if(configTpv.bnd[0] && !configAmex.bndamex[0]){
-                            TRACE.d("configAmex entra"+configTpv.bnd[0]);
-                            handler.removeCallbacks(this);
-                            //configAmex = new ConfigAmex(configTpv.context);
-                            //configAmex.dbManager.onCreate();
-                            Dbamex(configTpv._jsonca,posId);
-                        }else{
-                            if (spinner.isShowing())
-                                spinner.dismiss();
-                            handler.removeCallbacks(this);
-                        }
-
-                    }
-                } else {
-                    WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: INTENTE NUEVAMENTE ");
-                    if (spinner.isShowing())
-                        spinner.dismiss();
-                    handler.removeCallbacks(this);
-                    configTpv.dbManager.onDelete();
-                    configTpv.dbManager.onCreate();
+        configTpv.count = count[0];
+        if (!configTpv.bnd[0]) {
+            TRACE.d("configTpv entra");
+            Integer valor = !configTpv.nuevainit ? 1 : 0;
+            configTpv.tpvConfig(posId, valor, new VolleyStringCallBack() {
+                @Override
+                public void onSuccess() {
+                    count[0] = 0;
+                    TRACE.d("configAmex entra"+configTpv.bnd[0]);
+                    Dbamex(configTpv._jsonca,posId);
                 }
-
-            }
-        };
-        handler.post(runnable);
-    }
-    public void Dbamex(String json,String posId) {
-        final Handler handler = new Handler();
-        int[] count = { 0 };
-
-        final Runnable runnable = new Runnable() {
-            public void run() {
-                configAmex.countamex = count[0];
-                if (count[0]++ < 5) {
-                    if (!configAmex.bndamex[0]) {
-                        if (!configAmex.nuevainit) {
-                            configAmex.tpvConfigAmex(posId, 1);
-                        } else {
-                            configAmex.tpvConfigAmex(posId, 0);
-                        }
-                        handler.postDelayed(this, 3000);
+                @Override
+                public void onError(String error) {
+                    if (count[0]++ < 4) {
+                        DbSurce(posId);
                     } else {
+                        WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
                         if (spinner.isShowing())
                             spinner.dismiss();
-                        handler.removeCallbacks(this);
+                        count[0] = 0;
+                        configTpv.dbManager.onDelete();
+                        configTpv.dbManager.onCreate();
                     }
-                } else {
-                    WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: INTENTE NUEVAMENTE ");
+                }
+            });
+        } else {
+            if(configTpv.bnd[0] && !configAmex.bndamex[0]){
+                TRACE.d("configAmex entra"+configTpv.bnd[0]);
+                Dbamex(configTpv._jsonca,posId);
+            }else{
+                if (spinner.isShowing())
+                    spinner.dismiss();
+            }
+
+        }
+    }
+    public void Dbamex(String json,String posId) {
+        configAmex.countamex = count[0];
+        if (!configAmex.bndamex[0]) {
+            Integer valor = !configAmex.nuevainit ? 1 : 0;
+            configAmex.tpvConfigAmex(posId, valor, new VolleyStringCallBack() {
+                @Override
+                public void onSuccess() {
+                    count[0] = 0;
                     if (spinner.isShowing())
                         spinner.dismiss();
-                    handler.removeCallbacks(this);
-                    configAmex.dbManager.onDelete();
-                    configAmex.dbManager.onCreate();
                 }
-
-            }
-        };
-        handler.post(runnable);
+                @Override
+                public void onError(String error) {
+                    if (count[0]++ < 4) {
+                        Dbamex(json, posId);
+                    } else {
+                        WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
+                        if (spinner.isShowing())
+                            spinner.dismiss();
+                        count[0] = 0;
+                        configAmex.dbManager.onDelete();
+                        configAmex.dbManager.onCreate();
+                    }
+                }
+            });
+        } else {
+            if (spinner.isShowing())
+                spinner.dismiss();
+        }
     }
 }

@@ -21,6 +21,8 @@ import com.lupay.demoui.utils.InputFilterMinMax;
 import com.lupay.demoui.utils.TRACE;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Locale;
+
 public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     private Context mContext;
     private String Amount, type_transaction, v_msi="3", v_total_msi,ksn_posId;
@@ -82,7 +84,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
         Total_Amount.setText("$"+Amount+" MXN");
         tv_total.setText("$"+Amount+" MXN");
         et = (TextInputEditText) findViewById(R.id.otherPercentet);
-        et.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "1000"), new InputFilter.LengthFilter(4)});
+        et.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(9) });
         changeTextListener();
         setTipsTexts();
         initViewType();
@@ -236,8 +238,51 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
 
     private void changeTextListener(){
         et.addTextChangedListener(new TextWatcher() {
-
+            private String current = "";
             public void afterTextChanged(Editable s) {
+                if(!s.toString().equals(current)){
+                    et.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replace(",","");
+                    if(!cleanString.isEmpty()){
+                        try {
+                            Float cleanfloat = Float.parseFloat(cleanString.equals(".") ? "0" : cleanString);
+                            Float _amount = Float.parseFloat(Amount.replace(",",""));
+                            if (cleanfloat > _amount){
+                                cleanString = Amount.replace(",","");
+                            }
+                            if(cleanString.endsWith(".")) {
+                                current = cleanString;
+                            } else if(!cleanString.contains(".")) {
+                                Long parsed = Long.parseLong(cleanString);
+                                String formatted = String.format(new Locale("es","MX"),"%,d",parsed);
+                                current = formatted;
+                                et.setText(formatted);
+                                et.setSelection(formatted.length());
+                            } else {
+                                int index = cleanString.indexOf(".");
+                                int decimales = cleanString.length() - index - 1;
+                                if(decimales == 1){
+                                    Float parsed = Float.parseFloat(cleanString);
+                                    String formatted = String.format(new Locale("es","MX"),"%,.1f",parsed);
+                                    current = formatted;
+                                    et.setText(formatted);
+                                    et.setSelection(formatted.length());
+                                } else if (decimales == 2){
+                                    Float parsed = Float.parseFloat(cleanString);
+                                    String formatted = String.format(new Locale("es","MX"),"%,.2f",parsed);
+                                    current = formatted;
+                                    et.setText(formatted);
+                                    et.setSelection(formatted.length());
+                                } else {
+                                    et.setText(current);
+                                    et.setSelection(current.length());
+                                }
+                            }
+                        } catch (NumberFormatException e){}
+                    }
+                    et.addTextChangedListener(this);
+                }
                 calculateCustomTip();
             }
 
@@ -249,9 +294,9 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
     }
 
     private void calculateCustomTip(){
-        String str_customPer = et.getText().toString();
+        String str_customPer = et.getText().toString().replace(",","");
         if(!str_customPer.isEmpty()){
-            Float f_customPer = Float.parseFloat(str_customPer);
+            Float f_customPer = Float.parseFloat(str_customPer.equals(".") ? "0" : str_customPer);
             Float _amount = Float.parseFloat(Amount.replace(",",""));
             Float _total = _amount + f_customPer;
             tv_total.setText(gf.formatMoney(String.valueOf(_total),true) + " MXN");

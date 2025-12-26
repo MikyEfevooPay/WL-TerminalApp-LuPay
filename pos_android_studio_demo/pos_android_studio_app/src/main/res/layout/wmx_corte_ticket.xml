@@ -9,8 +9,8 @@
     <ImageView
         android:id="@+id/img_ticket_logo"
         android:layout_width="match_parent"
-        android:layout_height="150px"
-        app:srcCompat="@drawable/logo_cohetepay_bmp_try3" />
+        android:layout_height="62px"
+        app:srcCompat="@drawable/logo_ticket" />
 
     <LinearLayout
         android:id="@+id/lyt_ticket_address"
@@ -24,41 +24,41 @@
             android:id="@+id/txt_company"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans_bold"
+            android:fontFamily="@font/dejavu_sans_mono_bold"
             android:gravity="center"
             android:text="Company"
             android:textColor="#000000"
-            android:textSize="14dp" />
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/txt_address_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans"
+            android:fontFamily="@font/dm_sans_medium"
             android:gravity="center"
             android:text="adress 1"
             android:textColor="#000000"
-            android:textSize="12dp" />
+            android:textSize="9dp" />
 
         <TextView
             android:id="@+id/txt_address_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans"
+            android:fontFamily="@font/dm_sans_medium"
             android:gravity="center"
             android:text="adress 2"
             android:textColor="#000000"
-            android:textSize="12dp" />
+            android:textSize="9dp" />
 
         <TextView
             android:id="@+id/txt_address_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans"
+            android:fontFamily="@font/dm_sans_medium"
             android:gravity="center"
             android:text="adress 3"
             android:textColor="#000000"
-            android:textSize="12dp" />
+            android:textSize="9dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,11 +84,11 @@
             android:id="@+id/txt_transaction_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans_bold"
+            android:fontFamily="@font/dejavu_sans_mono_bold"
             android:gravity="center"
             android:text="CORTE DE CAJA"
             android:textColor="#000000"
-            android:textSize="12dp" />
+            android:textSize="11dp" />
 
         <TextView
             android:id="@+id/txt_ticket_date"
@@ -132,22 +132,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/dm_sans"
+                    android:fontFamily="@font/dejavu_sans_mono_bold"
                     android:gravity="left"
                     android:text="@string/wmx_ticket_subtotal"
                     android:textColor="#000000"
-                    android:textSize="11dp" />
+                    android:textSize="10dp" />
 
                 <TextView
                     android:id="@+id/txt_ticket_consumo_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/dm_sans"
+                    android:fontFamily="@font/dejavu_sans_mono"
                     android:gravity="right"
                     android:text="value"
                     android:textColor="#000000"
-                    android:textSize="11dp" />
+                    android:textSize="10dp" />
             </TableRow>
 
             <TableRow
@@ -159,22 +159,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/dm_sans"
+                    android:fontFamily="@font/dejavu_sans_mono_bold"
                     android:gravity="left"
                     android:text="@string/wmx_ticket_tip"
                     android:textColor="#000000"
-                    android:textSize="11dp" />
+                    android:textSize="10dp" />
 
                 <TextView
                     android:id="@+id/txt_ticket_tip_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/dm_sans"
+                    android:fontFamily="@font/dejavu_sans_mono_bold"
                     android:gravity="right"
                     android:text="value"
                     android:textColor="#000000"
-                    android:textSize="11dp" />
+                    android:textSize="10dp" />
             </TableRow>
 
             <TableRow
@@ -186,22 +186,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/dm_sans_bold"
+                    android:fontFamily="@font/dejavu_sans_mono_bold"
                     android:gravity="left"
                     android:text="@string/wmx_ticket_total"
                     android:textColor="#000000"
-                    android:textSize="11dp" />
+                    android:textSize="10dp" />
 
                 <TextView
                     android:id="@+id/txt_ticket_total_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/dm_sans_bold"
+                    android:fontFamily="@font/dejavu_sans_mono_bold"
                     android:gravity="right"
                     android:text="value"
                     android:textColor="#000000"
-                    android:textSize="22dp" />
+                    android:textSize="12dp" />
             </TableRow>
 
         </TableLayout>
@@ -227,11 +227,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/dm_sans_bold"
+            android:fontFamily="@font/dejavu_sans_mono_bold"
             android:gravity="center"
             android:text="@string/wmx_ticket_resume_end"
             android:textColor="#000000"
-            android:textSize="11dp" />
+            android:textSize="10dp" />
 
     </LinearLayout>
 
@@ -259,11 +259,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/dm_sans"
+            android:fontFamily="@font/dm_sans_medium"
             android:gravity="center"
             android:text="kposId"
             android:textColor="#000000"
-            android:textSize="11dp" />
+            android:textSize="9dp" />
         <TextView
             android:id="@+id/txt_corte_footer"
             android:layout_width="match_parent"
@@ -273,7 +273,7 @@
             android:gravity="center"
             android:text=""
             android:textColor="#000000"
-            android:textSize="15.5dp" />
+            android:textSize="20dp" />
     </LinearLayout>
 
 </LinearLayout>

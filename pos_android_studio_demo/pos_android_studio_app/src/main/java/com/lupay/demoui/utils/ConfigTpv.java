@@ -5,12 +5,18 @@ import static com.lupay.demoui.utils.AlgorithmAES.generateKey;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -22,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.util.Locale;
 
 public class ConfigTpv {
     public DBManager dbManager;
@@ -33,6 +41,7 @@ public class ConfigTpv {
     public int count=0;
     public String _jsonca="";
     public Integer _statusseller=0;
+    private VolleyStringCallBack CallBack;
 
     public ConfigTpv(Context mContext){
         dbManager = new DBManager(mContext);
@@ -40,9 +49,10 @@ public class ConfigTpv {
         context=mContext;
     }
 
-    public void tpvConfig(String ksn_posId,Integer valor) {
+    public void tpvConfig(String ksn_posId,Integer valor, VolleyStringCallBack callBack) {
         try {
             nuevainit = false;
+            CallBack = callBack;
             String URL = Utils.TPVCONFIG + "/api/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", ksn_posId);
@@ -56,24 +66,42 @@ public class ConfigTpv {
                         JSONObject object = new JSONObject(response);
                         if(!object.has("mensaje")){
                             //bnd[0] =Boolean.TRUE;
-                            bnd[0] =initactiva(response.toString(),ksn_posId,valor);
                             TRACE.d("tpvConfig: " +  TRACE.NEW_LINE + response.toString() );
+                            initactiva(response.toString(),ksn_posId,valor);
                         }else{
                             bnd[0] =Boolean.FALSE;
+                            callBack.onError(object.getString("mensaje").toUpperCase(Locale.ROOT) + ", ");
                         }
                     } catch (JSONException e) {
                         bnd[0] =Boolean.FALSE;
                         e.printStackTrace();
+                        callBack.onError("");
                     }
-
-
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    String message;
                     error.printStackTrace();
+                    if (error instanceof TimeoutError) {
+                        if(!hasRealInternet()){
+                            message = "LA CONEXION A INTERNET ESTA DEBIL O SIN CONEXION, ";
+                        } else {
+                            message = "EL SERVICIO SUPERO EL TIEMPO DE ESPERA, ";
+                        }
+                    } else if (error instanceof NoConnectionError){
+                        message = "NO HAY CONEXION A INTERNET, ";
+                    } else if (error instanceof NetworkError){
+                        message = "OCURRIO UN PROBLEMA CON LA RED, ";
+                    } else if (error instanceof ServerError){
+                        message = "EL SERVICIO NO PUDO PROCESAR LA SOLICITUD, ";
+                    } else {
+                        message = "OCURRIO UN ERROR INESPERADO, ";
+                    }
                     TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
+                    TRACE.d(message);
                     bnd[0] =Boolean.FALSE;
+                    callBack.onError(message);
                 }
             }) {
                 @Override
@@ -112,9 +140,10 @@ public class ConfigTpv {
         } catch (JSONException e) {
             bnd[0] =Boolean.FALSE;
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
+            callBack.onError("");
         }
     }
-    private boolean initactiva(String _tpv,String ksn_posId,Integer valor) {
+    private void initactiva(String _tpv,String ksn_posId,Integer valor) {
         String URL="";
         try {
 
@@ -147,6 +176,7 @@ public class ConfigTpv {
             String statusseller=objtpv.getString("statusseller").toString();
             String emailaddress=objtpv.getString("emailaddress").toString();
             String phonenumber=objtpv.getString("phonenumber").toString();
+            String propina=objtpv.optString("propina","1");
 
             _statusseller=Integer.parseInt("0");
 
@@ -175,18 +205,35 @@ public class ConfigTpv {
                 @Override
                 public void onResponse(String response) {
                     TRACE.d("initllave" +  TRACE.NEW_LINE + response.toString() );
-                    bnd[0] =DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,"0","","",emailaddress,phonenumber);
+                    DatosInicializacion(ksn_posId,response.toString(),p43,p48,p120,address,comercio,msi,msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,"0","","",emailaddress,phonenumber,propina);
                     //if(spinner.isShowing()) spinner.dismiss();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    String message;
                     error.printStackTrace();
-
+                    if (error instanceof TimeoutError) {
+                        if(!hasRealInternet()){
+                            message = "LA CONEXION A INTERNET ESTA DEBIL O SIN CONEXION, ";
+                        } else {
+                            message = "EL SERVICIO SUPERO EL TIEMPO DE ESPERA, ";
+                        }
+                    } else if (error instanceof NoConnectionError){
+                        message = "NO HAY CONEXION A INTERNET, ";
+                    } else if (error instanceof NetworkError){
+                        message = "OCURRIO UN PROBLEMA CON LA RED, ";
+                    } else if (error instanceof ServerError){
+                        message = "EL SERVICIO NO PUDO PROCESAR LA SOLICITUD, ";
+                    } else {
+                        message = "OCURRIO UN ERROR INESPERADO, ";
+                    }
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.getMessage() );
+                    TRACE.d(message);
                     bnd[0] =Boolean.FALSE;
                     if(spinner.isShowing()) spinner.dismiss();
                     //WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
+                    CallBack.onError(message);
                 }
             }) {
                 @Override
@@ -225,23 +272,25 @@ public class ConfigTpv {
         } catch (JSONException e) {
             bnd[0] =Boolean.FALSE;
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+            CallBack.onError("");
         }
-        return bnd[0];
     }
-    private boolean DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43, String datafield60, String emailaddress, String phonenumber){
+    private void DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43, String datafield60, String emailaddress, String phonenumber, String propina){
         try {
             JSONObject object = new JSONObject(_json);
             if(object.has("id")){
                 if(object.getString("codigo").equals("00") && (Integer.parseInt(object.getString("count"))>0 && Integer.parseInt(object.getString("count"))<1000000)){
                     dbManager.onUpgrade();
-                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,statusseller,datafield43,datafield60,"","",Integer.parseInt("0"),emailaddress,phonenumber);
+                    dbManager.insert(ksn_posId,object.getString("ksn").toString(),object.getString("tk").toString(),object.getString("ipek").toString(),_p43,_p48,_p120,_address,_comercio,_msi,Integer.parseInt(object.getString("count")),msi3,msi6,msi9,msi12,msi18,minimo3,minimo6,minimo9,minimo12,minimo18,interfaz,codigopostal,giro,redlogica,afiliacion,statusseller,datafield43,datafield60,"","",Integer.parseInt("0"),emailaddress,phonenumber,propina);
                     nuevainit=false;
                     bnd[0] =Boolean.TRUE;
                     TRACE.d("Activa" +  TRACE.NEW_LINE );
+                    CallBack.onSuccess();
                 }else{
                     nuevainit=true;
                     bnd[0] =Boolean.FALSE;
                     TRACE.d("Nueva" +  TRACE.NEW_LINE );
+                    CallBack.onError("");
                 }
             }else if(object.has("codigo")){
                 if(object.getString("codigo").equals("72")||object.getString("codigo").equals("11")){
@@ -250,13 +299,14 @@ public class ConfigTpv {
                     //tpvConfig(ksn_posId,0);
                     TRACE.d("codigo:" + object.getString("codigo"));
                     TRACE.d("Nueva" +  TRACE.NEW_LINE );
+                    CallBack.onError("CODIGO:" + object.getString("codigo") + (object.has("name") ? ", " + object.getString("name").toUpperCase(Locale.ROOT) + ", " : ", "));
                 }
             }
 
         } catch (JSONException e) {
-            bnd[0] =Boolean.FALSE;;
+            bnd[0] =Boolean.FALSE;
+            CallBack.onError("");
         }
-        return bnd[0];
     }
     private boolean rsa()
     {
@@ -292,6 +342,21 @@ public class ConfigTpv {
             _rsa=rsaD.getRsa();
             _key=generateKey(128);
             _tk=generateIv();
+        }
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(activeNetwork == null) return false;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+    private boolean hasRealInternet(){
+        if(!isNetworkAvailable()) return false;
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com");
+            return !ipAddr.equals("");
+        } catch (Exception e) {
+            return false;
         }
     }
 }

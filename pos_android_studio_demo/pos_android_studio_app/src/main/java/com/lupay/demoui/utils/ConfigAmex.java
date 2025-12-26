@@ -4,12 +4,18 @@ import static com.lupay.demoui.utils.AlgorithmAES.generateIv;
 import static com.lupay.demoui.utils.AlgorithmAES.generateKey;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -21,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.util.Locale;
 
 public class ConfigAmex {
     public DBManager dbManager;
@@ -30,16 +38,18 @@ public class ConfigAmex {
     public boolean nuevainit = false;
     public int countamex=0;
     public Integer _statusseller=0;
+    private VolleyStringCallBack CallBack;
 
     public ConfigAmex(Context mContext){
         dbManager = new DBManager(mContext);
         dbManager.open();
         context=mContext;
     }
-    public void tpvConfigAmex(String ksn_posId,Integer valor) {
+    public void tpvConfigAmex(String ksn_posId,Integer valor, VolleyStringCallBack callBack) {
         try {
             nuevainit = false;
-            String URL = Utils.TPVCONFIGAMEX + "/apiv0/agrs/terminales/tpv";
+            CallBack = callBack;
+            String URL = Utils.TPVCONFIGAMEX + "/api/apiv0/agrs/terminales/tpv";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("snTerminal", ksn_posId);
 
@@ -51,15 +61,17 @@ public class ConfigAmex {
                         JSONObject object = new JSONObject(response);
                         if(!object.has("mensaje")){
                             //bndamex[0] =Boolean.TRUE;
-                            InitActivaAmex(response.toString(),ksn_posId,valor);
                             TRACE.d("tpvConfig: " +  TRACE.NEW_LINE + response.toString() );
+                            InitActivaAmex(response.toString(),ksn_posId,valor);
                         }else{
                             dbManager.update(ksn_posId, "0","","",Integer.parseInt("0"),"","");
                             bndamex[0] =Boolean.TRUE;
+                            callBack.onSuccess();
                         }
                     } catch (JSONException e) {
                         bndamex[0] =Boolean.FALSE;
                         e.printStackTrace();
+                        callBack.onError("");
                     }
 
 
@@ -67,9 +79,27 @@ public class ConfigAmex {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    String message;
                     error.printStackTrace();
+                    if (error instanceof TimeoutError) {
+                        if(!hasRealInternet()){
+                            message = "LA CONEXION A INTERNET ESTA DEBIL O SIN CONEXION, ";
+                        } else {
+                            message = "EL SERVICIO SUPERO EL TIEMPO DE ESPERA, ";
+                        }
+                    } else if (error instanceof NoConnectionError){
+                        message = "NO HAY CONEXION A INTERNET, ";
+                    } else if (error instanceof NetworkError){
+                        message = "OCURRIO UN PROBLEMA CON LA RED, ";
+                    } else if (error instanceof ServerError){
+                        message = "EL SERVICIO NO PUDO PROCESAR LA SOLICITUD, ";
+                    } else {
+                        message = "OCURRIO UN ERROR INESPERADO, ";
+                    }
                     TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
+                    TRACE.d(message);
                     bndamex[0] =Boolean.FALSE;
+                    callBack.onError(message);
                 }
             }) {
                 @Override
@@ -108,6 +138,7 @@ public class ConfigAmex {
         } catch (JSONException e) {
             bndamex[0] =Boolean.FALSE;
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
+            callBack.onError("");
         }
     }
     public void InitActivaAmex(String _tpv,String ksn_posId,Integer valor) {
@@ -141,15 +172,32 @@ public class ConfigAmex {
                     @Override
                     public void onResponse(String response) {
                         TRACE.d("initllaveamex" +  TRACE.NEW_LINE + response.toString() );
-                        bndamex[0] =DatosInicializacion(ksn_posId,response.toString(),datafield43,datafield60);
+                        DatosInicializacion(ksn_posId,response.toString(),datafield43,datafield60);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        String message;
                         error.printStackTrace();
-
+                        if (error instanceof TimeoutError) {
+                            if(!hasRealInternet()){
+                                message = "LA CONEXION A INTERNET ESTA DEBIL O SIN CONEXION, ";
+                            } else {
+                                message = "EL SERVICIO SUPERO EL TIEMPO DE ESPERA, ";
+                            }
+                        } else if (error instanceof NoConnectionError){
+                            message = "NO HAY CONEXION A INTERNET, ";
+                        } else if (error instanceof NetworkError){
+                            message = "OCURRIO UN PROBLEMA CON LA RED, ";
+                        } else if (error instanceof ServerError){
+                            message = "EL SERVICIO NO PUDO PROCESAR LA SOLICITUD, ";
+                        } else {
+                            message = "OCURRIO UN ERROR INESPERADO, ";
+                        }
                         TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.getMessage() );
+                        TRACE.d(message);
                         bndamex[0] =Boolean.FALSE;
+                        CallBack.onError(message);
                     }
                 }) {
                     @Override
@@ -188,14 +236,16 @@ public class ConfigAmex {
             }else{
                 dbManager.update(ksn_posId, "0","","",Integer.parseInt("0"),"","");
                 bndamex[0] =Boolean.TRUE;
+                CallBack.onSuccess();
             }
 
         } catch (JSONException e) {
             bndamex[0] =Boolean.FALSE;;
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
+            CallBack.onError("");
         }
     }
-    private boolean DatosInicializacion(String ksn_posId,String _json,String datafield43, String datafield60){
+    private void DatosInicializacion(String ksn_posId,String _json,String datafield43, String datafield60){
         try {
             JSONObject object = new JSONObject(_json);
             if(object.has("id")){
@@ -205,10 +255,12 @@ public class ConfigAmex {
                     nuevainit=false;
                     bndamex[0] =Boolean.TRUE;
                     TRACE.d("Activaamex" +  TRACE.NEW_LINE );
+                    CallBack.onSuccess();
                 }else{
                     nuevainit=true;
                     bndamex[0] =Boolean.FALSE;
                     TRACE.d("Nuevaamex" +  TRACE.NEW_LINE );
+                    CallBack.onError("");
                 }
             }else if(object.has("codigo")){
                 if(object.getString("codigo").equals("72")||object.getString("codigo").equals("11")){
@@ -217,13 +269,14 @@ public class ConfigAmex {
                     //tpvConfig(ksn_posId,0);
                     TRACE.d("codigoamex:" + object.getString("codigo"));
                     TRACE.d("Nuevaamex" +  TRACE.NEW_LINE );
+                    CallBack.onError("CODIGOAMEX:" + object.getString("codigo") + (object.has("name") ? ", " + object.getString("name").toUpperCase(Locale.ROOT) + ", " : ", "));
                 }
             }
 
         } catch (JSONException e) {
-            bndamex[0] =Boolean.FALSE;;
+            bndamex[0] =Boolean.FALSE;
+            CallBack.onError("");
         }
-        return bndamex[0];
     }
     public void initactivaamex(String ksn_posId) {
         String URL=Utils.TERMINAL_AMEX + "/amex/tpv/initactiva";
@@ -369,5 +422,21 @@ public class ConfigAmex {
         _rsaamex=rsaD.getRsa();
         _keyamex=generateKey(128);
         _tkamex=generateIv();
+    }
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(activeNetwork == null) return false;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+    private boolean hasRealInternet(){
+        if(!isNetworkAvailable()) return false;
+
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com");
+            return !ipAddr.equals("");
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

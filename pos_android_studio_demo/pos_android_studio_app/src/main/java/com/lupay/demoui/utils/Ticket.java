@@ -38,7 +38,18 @@ public class Ticket {
             card_emisor, //Emisor de banco
             card_nip, //NIP tarjeta
             card_entrada, //Entrda tarjeta
-            card_singtype; //Leyenda firma
+            card_singtype, //Leyenda firma
+            total_movimientos,
+            total_transacciones,
+            total_cancelaciones,
+            total_mc,
+            total_visa,
+            total_amex,
+            total_otro,
+            total_credito,
+            total_debito,
+            date_time2,
+            table_rows;
     private boolean printeravailable;
     private android.content.Context ctx;
     public PrinterDevice mPrinter;
@@ -128,6 +139,19 @@ public class Ticket {
     public String getCard_entrada() {return Utils.isNull(this.card_entrada, ""); }
 
     public String getCard_singtype() {return Utils.isNull(this.card_singtype, ""); }
+    public String getTotal_Movimientos() {return Utils.isNull(this.total_movimientos, ""); }
+    public String getTotal_Transacciones() {return Utils.isNull(this.total_transacciones, ""); }
+    public String getTotal_Cancelaciones() {return Utils.isNull(this.total_cancelaciones, ""); }
+    public String getTotal_MC() {return Utils.isNull(this.total_mc, ""); }
+    public String getTotal_Visa() {return Utils.isNull(this.total_visa, ""); }
+    public String getTotal_AMEX() {return Utils.isNull(this.total_amex, ""); }
+    public String getTotal_Otro() {return Utils.isNull(this.total_otro, ""); }
+    public String getTotal_Credito() {return Utils.isNull(this.total_credito, ""); }
+    public String getTotal_Debito() {return Utils.isNull(this.total_debito, ""); }
+    public String getDate_time2() {
+        return Utils.isNull(this.date_time2, "");
+    }
+    public String getTable_Rows() {return Utils.isNull(this.table_rows, ""); }
 
     // Setters
     public Ticket setTransId(int trans_id) {
@@ -224,11 +248,53 @@ public class Ticket {
         this.card_singtype = card_singtype;
         return this;
     }
-
+    public Ticket setTotalMovimientos(String total_movimientos) {
+        this.total_movimientos = total_movimientos;
+        return this;
+    }
+    public Ticket setTotalTransacciones(String total_transacciones) {
+        this.total_transacciones = total_transacciones;
+        return this;
+    }
+    public Ticket setTotalCancelaciones(String total_cancelaciones) {
+        this.total_cancelaciones = total_cancelaciones;
+        return this;
+    }
+    public Ticket setTotal_MC(String total_mc) {
+        this.total_mc = total_mc;
+        return this;
+    }
+    public Ticket setTotal_Visa(String total_visa) {
+        this.total_visa = total_visa;
+        return this;
+    }
+    public Ticket setTotal_Amex(String total_amex) {
+        this.total_amex = total_amex;
+        return this;
+    }
+    public Ticket setTotal_Otro(String total_otro) {
+        this.total_otro = total_otro;
+        return this;
+    }
+    public Ticket setTotal_Credito(String total_credito) {
+        this.total_credito = total_credito;
+        return this;
+    }
+    public Ticket setTotal_Debito(String total_debito) {
+        this.total_debito = total_debito;
+        return this;
+    }
+    public Ticket setDate_Time2(String date_time2) {
+        this.date_time2 = date_time2;
+        return this;
+    }
+    public Ticket setTable_Rows(String table_rows) {
+        this.table_rows = table_rows;
+        return this;
+    }
     public void setPrintListenner(PrintListener _printListener) {
         mPrinter.setPrintListener(_printListener);
     }
-
     public boolean printLayout(View Layout) {
         try {
             if (Layout == null)

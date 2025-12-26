@@ -57,7 +57,10 @@
     <LinearLayout
         android:id="@+id/history_layout_items"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -67,6 +70,31 @@
             android:paddingLeft="37px"
             android:paddingRight="37px" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/history_layout_boton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="20dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btn_imprimirhistorial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/ep_btn_continuar_fondo"
+            android:fontFamily="@font/dm_sans_bold"
+            android:minHeight="65dip"
+            android:text="Imprimir historial"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:textSize="33px" />
     </LinearLayout>
 
     <LinearLayout

@@ -240,6 +240,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             card_provider = "VISA";
         }else if (v_redtarjeta.toUpperCase(Locale.ROOT).equals("AMEX")) {
             card_provider = "AMEX";
+        }else {
+            card_provider = "NA";
         }
     }
 
@@ -399,10 +401,13 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
             modalEmailCreate.dismiss();
         });
 
-        btn_modal_sendEmail.setOnClickListener(view -> {
-            currEmail = txt_email.getText().toString();
-            modalEmailCreate.dismiss();
-            getFetchManager().CallById(TRANSACTION_TICKET_SEND_EMAIL);
+        btn_modal_sendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currEmail = txt_email.getText().toString();
+                modalEmailCreate.dismiss();
+                getFetchManager().CallById(TRANSACTION_TICKET_SEND_EMAIL);
+            }
         });
     }
 

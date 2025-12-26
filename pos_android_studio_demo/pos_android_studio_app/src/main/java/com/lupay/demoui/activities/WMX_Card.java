@@ -338,9 +338,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void processTransaction(String response) {
-        processTransactionResponse(response);
-    }
+    private void processTransaction(String response) { processTransactionResponse(response); }
 
     private void processValidateTransaction(String response) {
         processTransactionResponse(response);
@@ -454,7 +452,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     }
     private void FirmaToDigital(){
         Intent thisIntent = getIntent();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         Date date = new Date();
         if (_nip==0){
             intent = new Intent(this, PaintActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -503,7 +501,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
         intent = new Intent(this, WMX_final_ticket_transaction.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         Date date = new Date();
 
         intent.putExtra("type_transaction", GNTBackEnd.tipo(type_transaction));
@@ -1170,7 +1168,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 // _entrymode.length()), emvicc, pan, _track2.substring(4, _track2.length()),
                 // F41.toString(), _tag50, _tag9F12, _tag9F21.substring(6, _tag9F21.length()));
 
-                // pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("wirebit_emv_profile_tlv_D30-20250321.xml",WMX_Card.this)));
+                // pos.updateEMVConfigByXml(new
+                // String(FileUtils.readAssetsLine("wirebit_emv_profile_tlv_D30-20250321.xml",WMX_Card.this)));
 
             } else if (transactionResult == QPOSService.TransactionResult.TERMINATED) {
                 onCancelTransaction(getString(R.string.transaction_terminated));
@@ -2026,9 +2025,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                         public void onResponse(JSONObject response) {
                             try {
                                 TRACE.d("UrlBin : " + response.toString());
-                                procesofinal(entrada, entrymode, emv, response.getString("redTarjeta").toString(),
-                                        response.getString("tipoTarjeta").toString(), pan, track2, counter, time_txn,
-                                        response.getString("emisor").toString());
+                                procesofinal(entrada, entrymode, emv, Utils.isnulo(response.getString("redTarjeta").toString()),
+                                        Utils.isnulo(response.getString("tipoTarjeta").toString()), pan, track2, counter, time_txn,
+                                        Utils.isnulo(response.getString("emisor").toString()));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -2058,7 +2057,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TransExit=GeneraAmex(entrada,emv,track2,gntBackEnd.panTrack2Amex(pan),gntBackEnd.redtarjetaamex(redtarjeta),gntBackEnd.tipotarjetaamex(tipotarjeta));
         }else{
             CALL_SERVICIO="Prosa";
-            TransExit=generatxn(entrada, entrymode, emv, gntBackEnd.redtarjetaamex(redtarjeta), gntBackEnd.tipotarjetaamex(tipotarjeta), gntBackEnd.panTrack2Prosa(pan), track2, counter, time_txn, emisor,cursor.getString(22));
+            TransExit=generatxn(entrada, entrymode, emv, redtarjeta, gntBackEnd.tipotarjetaamex(tipotarjeta), gntBackEnd.panTrack2Prosa(pan), track2, counter, time_txn, emisor,cursor.getString(22));
         }
         if (ValidaTarjeta){
             this.startTransaction = true;

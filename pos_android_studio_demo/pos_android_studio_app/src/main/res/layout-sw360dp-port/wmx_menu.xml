@@ -30,7 +30,7 @@
                 android:layout_width="342.72px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/logo_cohetepay" />
+                app:srcCompat="@drawable/logo" />
         </LinearLayout>
 
         <ScrollView

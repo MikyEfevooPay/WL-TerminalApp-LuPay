@@ -35,7 +35,7 @@ public class DBManager {
     public void close() {
         dbHelper.close();
     }
-    public void insert(String name,String ksn,String tk,String key,String p43,String p48, String p120,String address,String comercio,String msi,Integer counter,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43,String datafield60,String tkamex,String keyamex,Integer countamex,String emailaddress, String phonenumber) {
+    public void insert(String name,String ksn,String tk,String key,String p43,String p48, String p120,String address,String comercio,String msi,Integer counter,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43,String datafield60,String tkamex,String keyamex,Integer countamex,String emailaddress, String phonenumber, String propina) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper._NAME, name);
         contentValue.put(DatabaseHelper._KSN, ksn);
@@ -71,10 +71,11 @@ public class DBManager {
         contentValue.put(DatabaseHelper._countamex,countamex);
         contentValue.put(DatabaseHelper._emailaddress,emailaddress);
         contentValue.put(DatabaseHelper._phonenumber,phonenumber);
+        contentValue.put(DatabaseHelper._propina,propina);
         database.insert(DatabaseHelper.TABLE_NAME, null, contentValue);
     }
     public Cursor fetch(String name) {
-        String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper._NAME, DatabaseHelper._KSN,DatabaseHelper._TK,DatabaseHelper._KEY,DatabaseHelper._P43,DatabaseHelper._P48,DatabaseHelper._P120,DatabaseHelper._ADDRESS,DatabaseHelper._COMERCIO,DatabaseHelper._MSI,DatabaseHelper._COUNTER,DatabaseHelper._MSI3,DatabaseHelper._MSI6,DatabaseHelper._MSI9,DatabaseHelper._MSI12,DatabaseHelper._MSI18,DatabaseHelper._minimo3,DatabaseHelper._minimo6,DatabaseHelper._minimo9,DatabaseHelper._minimo12,DatabaseHelper._minimo18,DatabaseHelper._interfaz,DatabaseHelper._codigopostal,DatabaseHelper._giro,DatabaseHelper._redlogica,DatabaseHelper._afiliacion,DatabaseHelper._statusseller,DatabaseHelper._datafield43,DatabaseHelper._datafield60,DatabaseHelper._tkamex,DatabaseHelper._keyamex,DatabaseHelper._countamex,DatabaseHelper._emailaddress,DatabaseHelper._phonenumber };
+        String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper._NAME, DatabaseHelper._KSN,DatabaseHelper._TK,DatabaseHelper._KEY,DatabaseHelper._P43,DatabaseHelper._P48,DatabaseHelper._P120,DatabaseHelper._ADDRESS,DatabaseHelper._COMERCIO,DatabaseHelper._MSI,DatabaseHelper._COUNTER,DatabaseHelper._MSI3,DatabaseHelper._MSI6,DatabaseHelper._MSI9,DatabaseHelper._MSI12,DatabaseHelper._MSI18,DatabaseHelper._minimo3,DatabaseHelper._minimo6,DatabaseHelper._minimo9,DatabaseHelper._minimo12,DatabaseHelper._minimo18,DatabaseHelper._interfaz,DatabaseHelper._codigopostal,DatabaseHelper._giro,DatabaseHelper._redlogica,DatabaseHelper._afiliacion,DatabaseHelper._statusseller,DatabaseHelper._datafield43,DatabaseHelper._datafield60,DatabaseHelper._tkamex,DatabaseHelper._keyamex,DatabaseHelper._countamex,DatabaseHelper._emailaddress,DatabaseHelper._phonenumber,DatabaseHelper._propina };
         Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, " name = ?", new String[] { String.valueOf(name) }, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();

@@ -265,7 +265,7 @@
                         <!--                        android:textSize="20px" />-->
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="136px"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0px"
                             app:boxCollapsedPaddingTop="0px"
@@ -282,7 +282,7 @@
                             <com.google.android.material.textfield.TextInputEditText
 
                                 android:id="@+id/otherPercentet"
-                                android:layout_width="match_parent"
+                                android:layout_width="200px"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="0px"
                                 android:background="@drawable/input_background"
@@ -292,13 +292,10 @@
                                 android:includeFontPadding="false"
                                 android:inputType="numberDecimal"
                                 android:lineSpacingExtra="0px"
-                                android:maxLength="4"
-
+                                android:maxLength="10"
                                 android:paddingTop="0px"
                                 android:textColor="#5A5A5A"
-
                                 android:textSize="29px"
-
                                 tools:text="1093" />
 
                         </com.google.android.material.textfield.TextInputLayout>

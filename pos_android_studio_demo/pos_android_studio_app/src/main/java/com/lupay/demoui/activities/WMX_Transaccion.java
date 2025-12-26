@@ -2,24 +2,30 @@ package com.lupay.demoui.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.lupay.demoui.R;
 import com.lupay.demoui.interfaces.FetchEntity;
 import com.lupay.demoui.interfaces.FetchOptions;
@@ -32,6 +38,7 @@ import com.lupay.demoui.utils.Utils;
 import com.lupay.demoui.widget.TransactionItemAdapter2;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.DateFormat;
@@ -48,15 +55,17 @@ import java.util.concurrent.CompletableFuture;
 public class WMX_Transaccion extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
 
     RecyclerView recyclerView;
-    LinearLayout history_layout_empty, history_layout_items;
+    LinearLayout history_layout_empty, history_layout_items, history_layout_boton;
     ArrayList<Transaction> transactions = new ArrayList<>();
     ImageButton btn_date;
+    Button btn_imprimirhistorial;
     TextView txt_date;
     DatePicker dpFecha;
     MaterialDatePicker dpDate;
     Date date1, date2;
     Intent intent;
-    private String ksn_posId, _ARQC;
+    Context mContext;
+    private String ksn_posId, _ARQC, subtotal, propina, total;
     private WMX_llamada_dukpt jsondukpt=new WMX_llamada_dukpt();
 
     private CompletableFuture<Boolean> hasTransactionFoundPromise;
@@ -64,6 +73,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
     private final String TRANSACTION_HISTORY = "getTransactionHistory";
     private final String HISTORY_KEY_AMEX = "getCancelacionHistoryAmex";
     public static ProgressDialog spinner;
+    JSONArray jsonArray;
 
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +95,15 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
 
         history_layout_empty = findViewById(R.id.history_layout_empty);
         history_layout_items = findViewById(R.id.history_layout_items);
+        history_layout_boton = findViewById(R.id.history_layout_boton);
+
+        btn_imprimirhistorial = findViewById(R.id.btn_imprimirhistorial);
 
         btn_date.setOnClickListener(this);
         txt_date.setOnClickListener(this);
+        btn_imprimirhistorial.setOnClickListener(this);
         txt_date.setText(getFecha());
+        mContext = this;
 
         intent = getIntent();
         ksn_posId = intent.getStringExtra("ksn_posId");
@@ -198,6 +213,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             txt_date.setVisibility(View.VISIBLE);
             history_layout_empty.setVisibility(View.GONE);
             history_layout_items.setVisibility(View.VISIBLE);
+            history_layout_boton.setVisibility(View.VISIBLE);
             recyclerView = findViewById(R.id.transactionList);
             hasTransactionFoundPromise.thenApply((hasFound) -> {
                 if(!TextUtils.isEmpty(_ARQC) && !hasFound) {
@@ -213,6 +229,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             txt_date.setVisibility(View.GONE);
             history_layout_items.setVisibility(View.GONE);
             history_layout_empty.setVisibility(View.VISIBLE);
+            history_layout_boton.setVisibility(View.GONE);
         }
 
     }
@@ -236,6 +253,9 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.btn_date_txt:
                 showCalendar();
+                break;
+            case R.id.btn_imprimirhistorial:
+                openModalAlertPrint();
                 break;
         }
     }
@@ -324,6 +344,7 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         intent.putExtra("emisor", transactions.get(position).get_emisor());
         intent.putExtra("nip", transactions.get(position).get_nip());
         intent.putExtra("entrada", transactions.get(position).get_entrada());
+        intent.putExtra("datetime", transactions.get(position).get_datehour());
         intent.putExtra("ksn_posId",ksn_posId);
 
         startActivity(intent);
@@ -339,5 +360,79 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             }
         }, 3000);
 
+    }
+
+    private void openModalAlertPrint() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogContentView = inflater.inflate(R.layout.wmx_modal_alert_print, null);
+
+        MaterialAlertDialogBuilder modalAlert = new MaterialAlertDialogBuilder(mContext,
+                R.style.ThemeOverlay_App_MaterialAlertDialog);
+        modalAlert.setView(dialogContentView);
+
+        AppCompatButton btn_alert_print_close = dialogContentView.findViewById(R.id.btn_alert_print_close);
+
+        AlertDialog modalAlterPrintCreate = modalAlert.create();
+
+        modalAlterPrintCreate.show();
+        btn_alert_print_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                procesaInformacion();
+                DateFormat obj = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                modalAlterPrintCreate.dismiss();
+                Intent intent = new Intent(WMX_Transaccion.this, WMX_Final_Historial_Ticket.class);
+                intent.putExtra("corte",subtotal);
+                intent.putExtra("tip",propina);
+                intent.putExtra("totalamount",total);
+                intent.putExtra("date1",obj.format(date1));
+                intent.putExtra("date2",obj.format(date2));
+                intent.putExtra("ksn_posId",ksn_posId);
+                intent.putExtra("tablerows", jsonArray.toString());
+
+                startActivity(intent);
+            }
+        });
+    }
+    private void procesaInformacion(){
+        double sumsubtotal = 0;
+        double sumpropina = 0;
+        double sumtotal = 0;
+        jsonArray = new JSONArray();
+        for(int i=0; i<transactions.size(); i++){
+            JSONObject obj = new JSONObject();
+            String substr = transactions.get(i).get_subtotal();
+            String propstr = transactions.get(i).get_propina();
+            String totalstr = transactions.get(i).get_total();
+
+            double sub = Double.parseDouble(substr.replace("$","").replace(",","").trim());
+            double prop = Double.parseDouble(propstr.replace("$","").replace(",","").trim());
+            double tot = Double.parseDouble(totalstr.replace("$","").replace(",","").trim());
+            if(transactions.get(i).get_tipotxn().equals("CAN")){
+                sumsubtotal -= sub;
+                sumpropina -= prop;
+                sumtotal -= tot;
+            } else {
+                sumsubtotal += sub;
+                sumpropina += prop;
+                sumtotal += tot;
+            }
+
+            try{
+                obj.put("id", transactions.get(i).get_id());
+                obj.put("tipotxn", transactions.get(i).get_tipotxn());
+                obj.put("redtarj", transactions.get(i).get_redtarj());
+                obj.put("tipotarj", transactions.get(i).get_tipotarj());
+                obj.put("date", transactions.get(i).get_date());
+                obj.put("hour", transactions.get(i).get_time());
+                obj.put("subtotal", transactions.get(i).get_subtotal());
+                jsonArray.put(obj);
+            }catch(JSONException e) {
+                TRACE.d(e.getMessage());
+            }
+        }
+        subtotal= "$ " + String.format(new Locale("es","MX"),"%,.2f",sumsubtotal);
+        propina= "$ " + String.format(new Locale("es","MX"),"%,.2f",sumpropina);
+        total= "$ " + String.format(new Locale("es","MX"),"%,.2f",sumtotal);
     }
 }

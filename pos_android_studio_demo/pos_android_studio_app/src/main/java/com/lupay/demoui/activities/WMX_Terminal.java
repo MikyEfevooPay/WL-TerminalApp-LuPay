@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lupay.demoui.R;
+import com.lupay.demoui.utils.TRACE;
 
 import java.text.NumberFormat;
 
@@ -17,7 +18,7 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
     private Intent intent;
     private TextView Amount;
     private Animation bounce;
-    private String type_transaction,ksn_posId;
+    private String type_transaction,ksn_posId,propina;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
         intent = getIntent();
         type_transaction = intent.getStringExtra("type_transaction");
         ksn_posId = intent.getStringExtra("ksn_posId");
+        propina = intent.getStringExtra("propina");
 
         nDot=(Button) findViewById(R.id.btn_Dot);
         n0=(Button) findViewById(R.id.btn_0);
@@ -107,11 +109,12 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
                 setAmount("9");
                 break;
             case R.id.WMX_btn_trade:
-                intent = new Intent(this, WMX_Propinas.class);
-                intent.putExtra("Amount", (String) Amount.getText());
+                if(propina.equals("1") || type_transaction.equals("MSI")){
+                    intent = new Intent(this, WMX_Propinas.class);
+                    intent.putExtra("Amount", (String) Amount.getText());
 
-                intent.putExtra("type_transaction",type_transaction);
-                intent.putExtra("ksn_posId",ksn_posId);
+                    intent.putExtra("type_transaction",type_transaction);
+                    intent.putExtra("ksn_posId",ksn_posId);
 //                if(type_transaction.equals("msi")){
 //                    intent.putExtra("type_transaction","msi");
 //
@@ -119,7 +122,20 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
 //                    intent.putExtra("type_transaction","tip");
 //                }
 
-                startActivity(intent);
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(this, WMX_Card.class);
+                    String amountf = Amount.getText().toString().replace(",","");
+                    intent.putExtra("AmountToShow","$"+Amount.getText()+" MXN");
+                    intent.putExtra("type_transaction",type_transaction );
+                    intent.putExtra("ksn_posId",ksn_posId);
+                    intent.putExtra("Amount",amountf);
+                    intent.putExtra("total","$"+Amount.getText()+" MXN");
+                    intent.putExtra("subtotal","$"+Amount.getText()+" MXN");
+                    intent.putExtra("tips","$0.00 MXN");
+                    intent.putExtra("propina","0.00");
+                    startActivityMiddleware(intent);
+                }
                 break;
             case R.id.btn_delete:
                 setAmount("del");

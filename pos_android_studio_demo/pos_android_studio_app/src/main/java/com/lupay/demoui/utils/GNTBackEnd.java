@@ -389,12 +389,15 @@ public class GNTBackEnd {
             }
         }else{
             //TRACE.d("redtarjeta original: "+_red);
-            if(_red.equals("visa")){
+            if(_red.toUpperCase().equals("VISA")){
                 return _red.substring(0, 1).toUpperCase() + _red.substring(1);
-            }else if(_red.equals("mastercard"))  {
+            }else if(_red.toUpperCase().equals("MASTERCARD"))  {
                 return _red.substring(0, 1).toUpperCase() + _red.substring(6,7).toUpperCase();
-            }
-            else{
+            }else if(_red.toUpperCase().equals("AMEX")){
+                return _red;
+            }else if(_red.toUpperCase().equals("NA")){
+                return _red;
+            } else {
                 return _red;
             }
         }

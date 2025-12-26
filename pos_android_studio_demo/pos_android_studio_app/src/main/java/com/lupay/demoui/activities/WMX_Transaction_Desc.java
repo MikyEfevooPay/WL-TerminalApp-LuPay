@@ -56,9 +56,9 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     ImageView tp_iv_trans_type, tp_iv_process;
     LinearLayout tp_ll_content_card, lyt_transaction_tip, lyt_historial_details_email;
     private int transaction_type, trans_id;
-    private String card_provider, type_transaction, v_months, tipotarjeta, currEmail, card_emisor, nip, entrada;
+    private String card_provider, type_transaction, v_months, tipotarjeta, currEmail, card_emisor, nip, entrada,comercio_fiid;
     Context mContext;
-    private String ksn_posId;
+    private String ksn_posId, datetime;
     ProgressDialog loader;
     private DBManager dbManager;
     Cursor cursor;
@@ -161,7 +161,7 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
                 .setCard_provider(card_provider)
                 .setStatus("APROBADA")
                 .setApprove(tp_tv_approve.getText().toString())
-                .setDate_Time(tp_tv_date_time.getText().toString())
+                .setDate_Time(datetime)
                 .setAmount(tp_tv_amount.getText().toString())
                 .setTip(tp_tv_tip.getText().toString())
                 .setTotal(tp_tv_total.getText().toString())
@@ -272,14 +272,21 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
     }
 
     private void initData(Intent intent) {
-        String auth, date, time, subtotal, card, redtarj, status, propina, total, msi, aid, arqc, approve;
+        String auth, date, time, subtotal, card, redtarj, status, propina, total, msi, aid, arqc, approve, fecha, segundos;
         auth = intent.getStringExtra("auth");
         date = intent.getStringExtra("date");
         time = intent.getStringExtra("time");
+        fecha = intent.getStringExtra("datetime");
+        segundos = !fecha.equals("") ? fecha.substring(fecha.length() - 3) : fecha;
+        datetime = date + " " + time + segundos;
         subtotal = intent.getStringExtra("subtotal");
         card = intent.getStringExtra("card");
         redtarj = intent.getStringExtra("redtarj");
         tipotarjeta = intent.getStringExtra("tipotarj");
+        if(tipotarjeta.equals("null"))
+        {
+            tipotarjeta="Crédito";
+        }
         status = intent.getStringExtra("status");
         propina = intent.getStringExtra("propina");
         total = intent.getStringExtra("total");
@@ -287,6 +294,10 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         aid = intent.getStringExtra("aid");
         arqc = intent.getStringExtra("arqc");
         card_emisor = intent.getStringExtra("emisor");
+        if(card_emisor.equals("null"))
+        {
+            card_emisor="NA";
+        }
         trans_id = intent.getIntExtra("id", 0);
         nip = intent.getStringExtra("nip");
         entrada = intent.getStringExtra("entrada");
@@ -362,6 +373,9 @@ public class WMX_Transaction_Desc extends BaseActivity implements View.OnClickLi
         }else if (redtarj.toUpperCase(Locale.ROOT).equals("AMEX")) {
             card_provider = "AMEX";
             tp_iv_process.setImageResource(R.drawable.amex);
+        }else {
+            card_provider = "NA";
+            tp_iv_process.setImageResource(R.drawable.internacional);
         }
         tp_tv_AID.setText(aid);
         tp_tv_ARQC.setText(arqc);

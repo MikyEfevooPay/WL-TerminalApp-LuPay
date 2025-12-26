@@ -44,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String _countamex="countamex";
     public static final String _emailaddress="emailaddress";
     public static final String _phonenumber="phonenumber";
-
+    public static final String _propina="propina";
     // Database Information
     static final String DB_NAME = "TPV";
 
@@ -88,6 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT NOT NULL,"+_countamex
             + " TEXT NOT NULL,"+_emailaddress
             + " TEXT NOT NULL,"+_phonenumber
+            + " TEXT NOT NULL,"+_propina
             + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {
