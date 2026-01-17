@@ -21,8 +21,8 @@ android {
         applicationId 'com.lupay.demoui'
         minSdkVersion 17
         targetSdk 31
-        versionCode 302
-        versionName '1.5.9.17'
+        versionCode 303
+        versionName '1.5.9.18'
 
         ndk {
             moduleName "serial_port"

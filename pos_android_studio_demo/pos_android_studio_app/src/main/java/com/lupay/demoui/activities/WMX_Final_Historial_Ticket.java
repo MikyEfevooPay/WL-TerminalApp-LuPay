@@ -256,7 +256,7 @@ public class WMX_Final_Historial_Ticket extends BaseActivity implements View.OnC
             Integer creditocount = 0;
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object1 = array.getJSONObject(i);
-                if(object1.getString("tipotxn").equals("CAN") || object1.getString("tipotxn").equals("CANMSI")){
+                if(object1.getString("tipotxn").equals("CAN") || object1.getString("tipotxn").equals("REV")){
                     cancelacionescount++;
                 } else {
                     count++;

@@ -3,6 +3,7 @@ package com.lupay.demoui.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.RemoteException;
 import android.view.Gravity;
@@ -300,17 +301,31 @@ public class TicketLayoutManager {
                         String venta = object.getString("id");
                         String hora =  object.getString("date") + " " + object.getString("hour");
                         String monto = object.getString("subtotal").replace(" MXN","");
+                        String propina = object.getString("propina").replace(" MXN","");
+                        Boolean tachar = object.getString("tipotxn").equals("CAN") || object.getString("tipotxn").equals("REV") ? true : false;
+                        Boolean ponerpropina = object.getBoolean("ponerpropina");
 
                         TableRow fila = new TableRow(layout.getContext());
                         fila.setLayoutParams(new TableRow.LayoutParams(
                                 TableRow.LayoutParams.MATCH_PARENT,
                                 TableRow.LayoutParams.MATCH_PARENT
                         ));
-                        fila.addView(crearCelda(venta, Gravity.LEFT));
-                        fila.addView(crearCelda(hora,Gravity.CENTER));
-                        fila.addView(crearCelda(monto,Gravity.RIGHT));
+                        fila.addView(crearCelda(venta,Gravity.LEFT,tachar,false));
+                        fila.addView(crearCelda(hora,Gravity.CENTER,tachar,false));
+                        fila.addView(crearCelda(monto,Gravity.RIGHT,tachar,true));
 
                         table_ticket_resumen_venta.addView(fila);
+                        if(ponerpropina) {
+                            TableRow fila2 = new TableRow(layout.getContext());
+                            fila2.setLayoutParams(new TableRow.LayoutParams(
+                                    TableRow.LayoutParams.MATCH_PARENT,
+                                    TableRow.LayoutParams.MATCH_PARENT
+                            ));
+                            fila2.addView(crearCeldaPropina("Propina: ", tachar,false));
+                            fila2.addView(crearCeldaPropina(propina, tachar,true));
+
+                            table_ticket_resumen_venta.addView(fila2);
+                        }
                     }
                 } catch (JSONException e) {
                     TRACE.d(e.getMessage());
@@ -340,9 +355,13 @@ public class TicketLayoutManager {
         return 0;
     }
 
-    private TextView crearCelda(String texto, int gravity){
+    private TextView crearCelda(String texto, int gravity, boolean tachar, boolean monto){
         TextView tv = new TextView(layout.getContext());
-        tv.setText(texto);
+        if(monto && tachar){
+            tv.setText("(" + texto + ")");
+        } else {
+            tv.setText(texto);
+        }
         tv.setTextSize(9);
         tv.setGravity(gravity);
         Typeface t = ResourcesCompat.getFont(layout.getContext(), R.font.dm_sans_medium);
@@ -356,6 +375,40 @@ public class TicketLayoutManager {
             params = new TableRow.LayoutParams(60, ViewGroup.LayoutParams.WRAP_CONTENT);
         } else {
             params = new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        }
+        if(tachar && !monto){
+            tv.setPaintFlags(
+                    tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+            );
+        }
+        tv.setLayoutParams(params);
+        return tv;
+    }
+    private TextView crearCeldaPropina(String texto, boolean tachar, boolean monto){
+        TextView tv = new TextView(layout.getContext());
+        if(monto && tachar){
+            tv.setText("(" + texto + ")");
+        } else {
+            tv.setText(texto);
+        }
+        tv.setTextSize(9);
+        tv.setGravity(Gravity.LEFT);
+        Typeface t = ResourcesCompat.getFont(layout.getContext(), R.font.dm_sans_medium);
+        tv.setTypeface(t);
+        tv.setTextColor(Color.BLACK);
+        tv.setAlpha(1f);
+        tv.setVisibility(View.VISIBLE);
+        tv.getPaint().setAntiAlias(false);
+        TableRow.LayoutParams params;
+        if(monto){
+            params = new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        } else {
+            params = new TableRow.LayoutParams(60, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+        if(tachar && !monto){
+            tv.setPaintFlags(
+                    tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+            );
         }
         tv.setLayoutParams(params);
         return tv;

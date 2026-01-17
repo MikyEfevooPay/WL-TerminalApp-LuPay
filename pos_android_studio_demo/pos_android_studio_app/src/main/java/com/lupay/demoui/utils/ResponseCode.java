@@ -145,7 +145,7 @@ public class ResponseCode {
         CodeTable.put("70", new CodeDetails("Error descifrado Track2"));
         CodeTable.put("72", new CodeDetails("Error en activación manual"));
         CodeTable.put("73", new CodeDetails("Error en CRC"));
-        CodeTable.put("1A", new CodeDetails("*"));
+        CodeTable.put("1A", new CodeDetails("Rebasaste el monto de pago sin contacto"));
 
         CodeTable.put("000", new CodeDetails("Venta", true));
         CodeTable.put("001", new CodeDetails("Aprobar con ID", true));

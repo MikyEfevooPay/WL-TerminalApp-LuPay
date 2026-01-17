@@ -8,12 +8,17 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.lupay.demoui.R;
 import com.lupay.demoui.utils.DBManager;
 import com.lupay.demoui.utils.GlobalFunctions;
@@ -21,6 +26,8 @@ import com.lupay.demoui.utils.InputFilterMinMax;
 import com.lupay.demoui.utils.TRACE;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
@@ -141,7 +148,7 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
 
         int id =view.getId();
         if(id == R.id.Propinas_btn_continue)
-            changeView();
+            openModalAlertCard();
         else
             changeCheck(id);
 
@@ -426,5 +433,26 @@ public class WMX_Propinas extends BaseActivity implements View.OnClickListener{
             fifteen.setChecked(true);
             fifteen.callOnClick();
         }
+    }
+    private void openModalAlertCard() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogContentView = inflater.inflate(R.layout.wmx_modal_alert_card, null);
+
+        MaterialAlertDialogBuilder modalAlert = new MaterialAlertDialogBuilder(mContext,
+                R.style.ThemeOverlay_App_MaterialAlertDialog);
+        modalAlert.setView(dialogContentView);
+
+        AppCompatButton btn_alert_card_close = dialogContentView.findViewById(R.id.btn_alert_print_close);
+
+        AlertDialog modalAlterCardCreate = modalAlert.create();
+
+        modalAlterCardCreate.show();
+        btn_alert_card_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modalAlterCardCreate.dismiss();
+                changeView();
+            }
+        });
     }
 }

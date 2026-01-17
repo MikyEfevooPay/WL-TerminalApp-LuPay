@@ -1,13 +1,19 @@
 package com.lupay.demoui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.lupay.demoui.R;
 import com.lupay.demoui.utils.TRACE;
 
@@ -19,6 +25,7 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
     private TextView Amount;
     private Animation bounce;
     private String type_transaction,ksn_posId,propina;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,8 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
         type_transaction = intent.getStringExtra("type_transaction");
         ksn_posId = intent.getStringExtra("ksn_posId");
         propina = intent.getStringExtra("propina");
+
+        mContext = this;
 
         nDot=(Button) findViewById(R.id.btn_Dot);
         n0=(Button) findViewById(R.id.btn_0);
@@ -124,17 +133,7 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
 
                     startActivity(intent);
                 } else {
-                    intent = new Intent(this, WMX_Card.class);
-                    String amountf = Amount.getText().toString().replace(",","");
-                    intent.putExtra("AmountToShow","$"+Amount.getText()+" MXN");
-                    intent.putExtra("type_transaction",type_transaction );
-                    intent.putExtra("ksn_posId",ksn_posId);
-                    intent.putExtra("Amount",amountf);
-                    intent.putExtra("total","$"+Amount.getText()+" MXN");
-                    intent.putExtra("subtotal","$"+Amount.getText()+" MXN");
-                    intent.putExtra("tips","$0.00 MXN");
-                    intent.putExtra("propina","0.00");
-                    startActivityMiddleware(intent);
+                    openModalAlertCard();
                 }
                 break;
             case R.id.btn_delete:
@@ -275,5 +274,39 @@ public class WMX_Terminal extends BaseActivity implements View.OnClickListener {
         moneyString=moneyString.substring(1);
 
         return moneyString;
+    }
+    private void openModalAlertCard() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogContentView = inflater.inflate(R.layout.wmx_modal_alert_card, null);
+
+        MaterialAlertDialogBuilder modalAlert = new MaterialAlertDialogBuilder(mContext,
+                R.style.ThemeOverlay_App_MaterialAlertDialog);
+        modalAlert.setView(dialogContentView);
+
+        AppCompatButton btn_alert_card_close = dialogContentView.findViewById(R.id.btn_alert_print_close);
+
+        AlertDialog modalAlterCardCreate = modalAlert.create();
+
+        modalAlterCardCreate.show();
+        btn_alert_card_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modalAlterCardCreate.dismiss();
+                ChangeView();
+            }
+        });
+    }
+    private void ChangeView(){
+        intent = new Intent(this, WMX_Card.class);
+        String amountf = Amount.getText().toString().replace(",","");
+        intent.putExtra("AmountToShow","$"+Amount.getText()+" MXN");
+        intent.putExtra("type_transaction",type_transaction );
+        intent.putExtra("ksn_posId",ksn_posId);
+        intent.putExtra("Amount",amountf);
+        intent.putExtra("total","$"+Amount.getText()+" MXN");
+        intent.putExtra("subtotal","$"+Amount.getText()+" MXN");
+        intent.putExtra("tips","$0.00 MXN");
+        intent.putExtra("propina","0.00");
+        startActivityMiddleware(intent);
     }
 }

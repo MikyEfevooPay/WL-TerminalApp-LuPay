@@ -754,13 +754,13 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             if (result == QPOSService.DoTradeResult.NONE) {
                 onCancelTransaction("Tarjeta no detectada");
             } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
-                onCancelTransaction(getString(R.string.try_another_interface));
+                onCancelTransaction("Inserta tarjeta antes de iniciar la venta.");
             } else if (result == QPOSService.DoTradeResult.ICC) {
                 enableTradingCancel(false);
                 TRACE.d("EMV ICC Start");
                 pos.doEmvApp(QPOSService.EmvOption.START);
             } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
-                onCancelTransaction(getString(R.string.transaction_not_icc));
+                onCancelTransaction("Inserte tarjeta con chip");
             } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
 
             } else if (result == QPOSService.DoTradeResult.MCR) {// Magnetic card
@@ -1050,7 +1050,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             } else if (displayMsg == QPOSService.Display.REMOVE_CARD) {
                 msg = getString(R.string.remove_card);
             } else if (displayMsg == QPOSService.Display.TRY_ANOTHER_INTERFACE) {
-                msg = getString(R.string.try_another_interface);
+                msg = "Inserta tarjeta antes de iniciar la venta.";
             } else if (displayMsg == QPOSService.Display.PROCESSING) {
                 msg = getString(R.string.processing);
             } else if (displayMsg == QPOSService.Display.INPUT_PIN_ING) {
@@ -1061,7 +1061,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             } else if (displayMsg == QPOSService.Display.MAG_TO_ICC_TRADE) {
                 msg = "please insert chip card on pos";
             } else if (displayMsg == QPOSService.Display.CARD_REMOVED) {
-                msg = "card removed";
+                msg = "Tarjeta Removida";
             }
         }
 
@@ -1125,7 +1125,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         public void onRequestTransactionResult(QPOSService.TransactionResult transactionResult) {
             TRACE.d("onRequestTransactionResult()" + transactionResult.toString());
             if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
-                onCancelTransaction(getString(R.string.card_removed));
+                onCancelTransaction("Tarjeta Removida");
             }
             if (transactionResult == QPOSService.TransactionResult.APPROVED) {
                 TRACE.d("TransactionResult.APPROVED");
@@ -1172,38 +1172,38 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 // String(FileUtils.readAssetsLine("wirebit_emv_profile_tlv_D30-20250321.xml",WMX_Card.this)));
 
             } else if (transactionResult == QPOSService.TransactionResult.TERMINATED) {
-                onCancelTransaction(getString(R.string.transaction_terminated));
+                onCancelTransaction("Tarjeta removida antes de tiempo");
             } else if (transactionResult == QPOSService.TransactionResult.DECLINED) {
-                onCancelTransaction(getString(R.string.transaction_declined));
+                onCancelTransaction("Tarjeta Declinada");
             } else if (transactionResult == QPOSService.TransactionResult.CANCEL) {
-                onCancelTransaction(getString(R.string.transaction_cancel));
+                onCancelTransaction("Venta cancelada");
             } else if (transactionResult == QPOSService.TransactionResult.CAPK_FAIL) {
-                onCancelTransaction(getString(R.string.transaction_capk_fail));
+                onCancelTransaction("Fallo de lectura de datos, Intenta nuevamente.");
             } else if (transactionResult == QPOSService.TransactionResult.NOT_ICC) {
-                onCancelTransaction(getString(R.string.transaction_not_icc));
+                onCancelTransaction("Inserte tarjeta con chip");
             } else if (transactionResult == QPOSService.TransactionResult.SELECT_APP_FAIL) {
-                onCancelTransaction(getString(R.string.transaction_app_fail));
+                onCancelTransaction("Error de lectura. Intenta nuevamente");
             } else if (transactionResult == QPOSService.TransactionResult.DEVICE_ERROR) {
-                onCancelTransaction(getString(R.string.transaction_device_error));
+                onCancelTransaction("Error en el dispositivo, Reinicie TPV");
             } else if (transactionResult == QPOSService.TransactionResult.TRADE_LOG_FULL) {
-                onCancelTransaction("the trade log has fulled!pls clear the trade log!");
+                onCancelTransaction("Memoria llena. Borrar caché");
             } else if (transactionResult == QPOSService.TransactionResult.CARD_NOT_SUPPORTED) {
-                onCancelTransaction(getString(R.string.card_not_supported));
+                onCancelTransaction("Tarjeta no aceptada");
             } else if (transactionResult == QPOSService.TransactionResult.MISSING_MANDATORY_DATA) {
-                onCancelTransaction(getString(R.string.missing_mandatory_data));
+                onCancelTransaction("Error de conexión, Intente nuevamente");
             } else if (transactionResult == QPOSService.TransactionResult.CARD_BLOCKED_OR_NO_EMV_APPS) {
-                onCancelTransaction(getString(R.string.card_blocked_or_no_evm_apps));
+                onCancelTransaction("Tarjeta bloqueada");
             } else if (transactionResult == QPOSService.TransactionResult.INVALID_ICC_DATA) {
-                onCancelTransaction(getString(R.string.invalid_icc_data));
+                onCancelTransaction("Chip dañado o sucio. Limpie la tarjeta o intente con una distinta.");
             } else if (transactionResult == QPOSService.TransactionResult.FALLBACK) {
-                onCancelTransaction("trans fallback");
+                onCancelTransaction("Error de lectura en el chip. Por favor, limpie la tarjeta o intente con una distinta.");
             } else if (transactionResult == QPOSService.TransactionResult.NFC_TERMINATED) {
-                onCancelTransaction("NFC Terminated");
+                onCancelTransaction("Reintenta insertando tarjeta antes de iniciar la venta");
                 TRACE.d("TransactionResult.NFC_TERMINATED");
             } else if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
-                onCancelTransaction("CARD REMOVED");
+                onCancelTransaction("Tarjeta Removida");
             } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
-                onCancelTransaction("TOKEN INVALID");
+                onCancelTransaction("Falla con el Emisor/Banco");
             }
 
         }

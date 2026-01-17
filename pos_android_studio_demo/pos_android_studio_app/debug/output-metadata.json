@@ -11,8 +11,8 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 302,
-      "versionName": "1.5.9.17",
+      "versionCode": 303,
+      "versionName": "1.5.9.18",
       "outputFile": "pos_android_studio_app-debug.apk"
     }
   ],

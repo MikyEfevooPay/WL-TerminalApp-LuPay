@@ -400,6 +400,9 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
         double sumtotal = 0;
         jsonArray = new JSONArray();
         for(int i=0; i<transactions.size(); i++){
+            if(transactions.get(i).get_tipotxn().equals("DEV")){
+                continue;
+            }
             JSONObject obj = new JSONObject();
             String substr = transactions.get(i).get_subtotal();
             String propstr = transactions.get(i).get_propina();
@@ -408,14 +411,14 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
             double sub = Double.parseDouble(substr.replace("$","").replace(",","").trim());
             double prop = Double.parseDouble(propstr.replace("$","").replace(",","").trim());
             double tot = Double.parseDouble(totalstr.replace("$","").replace(",","").trim());
-            if(transactions.get(i).get_tipotxn().equals("CAN")){
-                sumsubtotal -= sub;
-                sumpropina -= prop;
-                sumtotal -= tot;
-            } else {
+            if(!transactions.get(i).get_tipotxn().equals("CAN") && !transactions.get(i).get_tipotxn().equals("REV") && !transactions.get(i).get_tipotxn().equals("DEV")){
                 sumsubtotal += sub;
                 sumpropina += prop;
                 sumtotal += tot;
+            }
+            Boolean ponerpropina = false;
+            if(prop > 0){
+                ponerpropina = true;
             }
 
             try{
@@ -426,6 +429,8 @@ public class WMX_Transaccion extends BaseActivity implements View.OnClickListene
                 obj.put("date", transactions.get(i).get_date());
                 obj.put("hour", transactions.get(i).get_time());
                 obj.put("subtotal", transactions.get(i).get_subtotal());
+                obj.put("propina", transactions.get(i).get_propina());
+                obj.put("ponerpropina", ponerpropina);
                 jsonArray.put(obj);
             }catch(JSONException e) {
                 TRACE.d(e.getMessage());
