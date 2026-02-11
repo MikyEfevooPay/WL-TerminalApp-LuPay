@@ -8,8 +8,15 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.lupay.demoui.R;
 import com.lupay.demoui.utils.ConfigAmex;
 import com.lupay.demoui.utils.ConfigTpv;
@@ -27,6 +34,7 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     public static ConfigTpv configTpv;
     public static ConfigAmex configAmex;
     public static ProgressDialog spinner;
+    private AlertDialog modalAlterMenuCreate;
     int[] count = { 0 };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +109,12 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
     private boolean TPVInitializated() {
         boolean init = cursor.getCount() > 0;
 
-        if (!init)
-            WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + WMX_KSN.getPosId());
+        if (!init) {
+            if (modalAlterMenuCreate != null) {
+                if(modalAlterMenuCreate.isShowing()) modalAlterMenuCreate.dismiss();
+            }
+            openModalmensaje("TPV NO INICIALIZADA: " + WMX_KSN.getPosId());//WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + WMX_KSN.getPosId());
+        }
 
         return init;
     }
@@ -227,18 +239,25 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
             configTpv.tpvConfig(posId, valor, new VolleyStringCallBack() {
                 @Override
                 public void onSuccess() {
+                    if (modalAlterMenuCreate != null) {
+                        if(modalAlterMenuCreate.isShowing()) modalAlterMenuCreate.dismiss();
+                    }
                     count[0] = 0;
                     TRACE.d("configAmex entra"+configTpv.bnd[0]);
                     Dbamex(configTpv._jsonca,posId);
                 }
                 @Override
-                public void onError(String error) {
-                    if (count[0]++ < 4) {
+                public void onError(String error, Boolean intentar) {
+                    if (count[0]++ < 4 && intentar) {
                         DbSurce(posId);
                     } else {
-                        WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
+                        //WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
                         if (spinner.isShowing())
                             spinner.dismiss();
+                        if (modalAlterMenuCreate != null) {
+                            if(modalAlterMenuCreate.isShowing()) modalAlterMenuCreate.dismiss();
+                        }
+                        openModalmensaje("TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
                         count[0] = 0;
                         configTpv.dbManager.onDelete();
                         configTpv.dbManager.onCreate();
@@ -268,13 +287,17 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
                         spinner.dismiss();
                 }
                 @Override
-                public void onError(String error) {
-                    if (count[0]++ < 4) {
+                public void onError(String error, Boolean intentar) {
+                    if (count[0]++ < 4 && intentar) {
                         Dbamex(json, posId);
                     } else {
-                        WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
+                        //WMX_Menu.super.showAlert("informative", "TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
                         if (spinner.isShowing())
                             spinner.dismiss();
+                        if (modalAlterMenuCreate != null) {
+                            if(modalAlterMenuCreate.isShowing()) modalAlterMenuCreate.dismiss();
+                        }
+                        openModalmensaje("TPV NO INICIALIZADA: " + error + "INTENTE NUEVAMENTE ");
                         count[0] = 0;
                         configAmex.dbManager.onDelete();
                         configAmex.dbManager.onCreate();
@@ -285,5 +308,29 @@ public class WMX_Menu extends BaseActivity implements View.OnClickListener {
             if (spinner.isShowing())
                 spinner.dismiss();
         }
+    }
+    private void openModalmensaje(String msj) {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogContentView = inflater.inflate(R.layout.wmx_modal_alert_menu, null);
+
+        MaterialAlertDialogBuilder modalAlert = new MaterialAlertDialogBuilder(this,
+                R.style.ThemeOverlay_App_MaterialAlertDialog);
+        modalAlert.setView(dialogContentView);
+
+        AppCompatTextView modal_text_mensaje = dialogContentView.findViewById(R.id.modal_text_mensaje);
+        modal_text_mensaje.setText(msj);
+
+        AppCompatButton btn_alert_card_close = dialogContentView.findViewById(R.id.btn_alert_try);
+
+        modalAlterMenuCreate = modalAlert.create();
+
+        modalAlterMenuCreate.show();
+        btn_alert_card_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modalAlterMenuCreate.dismiss();
+                optksn();
+            }
+        });
     }
 }

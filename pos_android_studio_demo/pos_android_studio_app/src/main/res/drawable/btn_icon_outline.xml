@@ -1,0 +1,14 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item >
+        <shape>
+            <solid android:color="@color/transparent"/>
+            <stroke android:color="#0083BE" android:width="3px"/>
+            <corners android:radius="10dp"></corners>
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/refrescar"
+        android:gravity="center"
+        android:height="35dp"
+        android:width="35dp"></item>
+</layer-list>

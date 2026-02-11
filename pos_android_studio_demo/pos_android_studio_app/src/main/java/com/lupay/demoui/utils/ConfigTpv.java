@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
@@ -28,7 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 import java.util.Locale;
 
 public class ConfigTpv {
@@ -70,38 +73,45 @@ public class ConfigTpv {
                             initactiva(response.toString(),ksn_posId,valor);
                         }else{
                             bnd[0] =Boolean.FALSE;
-                            callBack.onError(object.getString("mensaje").toUpperCase(Locale.ROOT) + ", ");
+                            callBack.onError(object.getString("mensaje").toUpperCase(Locale.ROOT) + ", ", true);
                         }
                     } catch (JSONException e) {
                         bnd[0] =Boolean.FALSE;
                         e.printStackTrace();
-                        callBack.onError("");
+                        callBack.onError("", true);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     String message;
+                    Boolean intentar;
                     error.printStackTrace();
                     if (error instanceof TimeoutError) {
                         if(!hasRealInternet()){
                             message = "LA CONEXION A INTERNET ESTA DEBIL O SIN CONEXION, ";
+                            intentar = false;
                         } else {
                             message = "EL SERVICIO SUPERO EL TIEMPO DE ESPERA, ";
+                            intentar = true;
                         }
                     } else if (error instanceof NoConnectionError){
                         message = "NO HAY CONEXION A INTERNET, ";
+                        intentar = false;
                     } else if (error instanceof NetworkError){
                         message = "OCURRIO UN PROBLEMA CON LA RED, ";
+                        intentar = false;
                     } else if (error instanceof ServerError){
                         message = "EL SERVICIO NO PUDO PROCESAR LA SOLICITUD, ";
+                        intentar = true;
                     } else {
                         message = "OCURRIO UN ERROR INESPERADO, ";
+                        intentar = true;
                     }
                     TRACE.d("VolleyError: " +  TRACE.NEW_LINE + error.getMessage() );
                     TRACE.d(message);
                     bnd[0] =Boolean.FALSE;
-                    callBack.onError(message);
+                    callBack.onError(message,intentar);
                 }
             }) {
                 @Override
@@ -135,12 +145,16 @@ public class ConfigTpv {
                     return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                 }
             };
-
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    3000,
+                    0,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
             RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
             bnd[0] =Boolean.FALSE;
             TRACE.d("JSONException: " +  TRACE.NEW_LINE + e.toString() );
-            callBack.onError("");
+            callBack.onError("",true);
         }
     }
     private void initactiva(String _tpv,String ksn_posId,Integer valor) {
@@ -212,28 +226,35 @@ public class ConfigTpv {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     String message;
+                    Boolean intentar;
                     error.printStackTrace();
                     if (error instanceof TimeoutError) {
                         if(!hasRealInternet()){
                             message = "LA CONEXION A INTERNET ESTA DEBIL O SIN CONEXION, ";
+                            intentar = false;
                         } else {
                             message = "EL SERVICIO SUPERO EL TIEMPO DE ESPERA, ";
+                            intentar = true;
                         }
                     } else if (error instanceof NoConnectionError){
                         message = "NO HAY CONEXION A INTERNET, ";
+                        intentar = false;
                     } else if (error instanceof NetworkError){
                         message = "OCURRIO UN PROBLEMA CON LA RED, ";
+                        intentar = false;
                     } else if (error instanceof ServerError){
                         message = "EL SERVICIO NO PUDO PROCESAR LA SOLICITUD, ";
+                        intentar = true;
                     } else {
                         message = "OCURRIO UN ERROR INESPERADO, ";
+                        intentar = true;
                     }
                     TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + error.getMessage() );
                     TRACE.d(message);
                     bnd[0] =Boolean.FALSE;
                     if(spinner.isShowing()) spinner.dismiss();
                     //WMX_Ajustes.super.showAlert("informative", "¡INTENTA DE NUEVO!");
-                    CallBack.onError(message);
+                    CallBack.onError(message,intentar);
                 }
             }) {
                 @Override
@@ -267,12 +288,16 @@ public class ConfigTpv {
                     return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                 }
             };
-
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    3000,
+                    0,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
             RequestSingleton.getInstance(context).getRequestQueue().add(stringRequest);
         } catch (JSONException e) {
             bnd[0] =Boolean.FALSE;
             TRACE.d("** ResponseResult ERROR " +  TRACE.NEW_LINE + e.toString() );
-            CallBack.onError("");
+            CallBack.onError("",true);
         }
     }
     private void DatosInicializacion(String ksn_posId,String _json,String _p43,String _p48,String _p120,String _address,String _comercio,String _msi,String msi3,String msi6,String msi9,String msi12,String msi18,String minimo3,String minimo6,String minimo9,String minimo12,String minimo18,String interfaz,String codigopostal,String giro,String redlogica,String afiliacion,String statusseller,String datafield43, String datafield60, String emailaddress, String phonenumber, String propina){
@@ -290,7 +315,7 @@ public class ConfigTpv {
                     nuevainit=true;
                     bnd[0] =Boolean.FALSE;
                     TRACE.d("Nueva" +  TRACE.NEW_LINE );
-                    CallBack.onError("");
+                    CallBack.onError("",true);
                 }
             }else if(object.has("codigo")){
                 if(object.getString("codigo").equals("72")||object.getString("codigo").equals("11")){
@@ -299,13 +324,13 @@ public class ConfigTpv {
                     //tpvConfig(ksn_posId,0);
                     TRACE.d("codigo:" + object.getString("codigo"));
                     TRACE.d("Nueva" +  TRACE.NEW_LINE );
-                    CallBack.onError("CODIGO:" + object.getString("codigo") + (object.has("name") ? ", " + object.getString("name").toUpperCase(Locale.ROOT) + ", " : ", "));
+                    CallBack.onError("CODIGO:" + object.getString("codigo") + (object.has("name") ? ", " + object.getString("name").toUpperCase(Locale.ROOT) + ", " : ", "),true);
                 }
             }
 
         } catch (JSONException e) {
             bnd[0] =Boolean.FALSE;
-            CallBack.onError("");
+            CallBack.onError("",true);
         }
     }
     private boolean rsa()

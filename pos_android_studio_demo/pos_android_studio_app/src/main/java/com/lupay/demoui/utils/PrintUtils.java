@@ -20,7 +20,7 @@ public class PrintUtils {
             PrintService.isFUll = false;
             ShowMsg("Status"+":"+"Buffer null",context);
         } else if (readBuf[2] == 12) {
-            ShowMsg("Status"+":"+"no paper",context);
+            ShowMsg("Status"+":"+"Papel Termico No Detectado",context);
         } else if (readBuf[2] == 00) {
             ShowMsg("Status"+":"+"has paper",context);
         }  else if (readBuf[0] == 0x04) {

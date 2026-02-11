@@ -24,7 +24,7 @@ public KSN() {
     }
     private void initUart(QPOSService.CommunicationMode mode){
         TRACE.d("open");
-        pos=QPOSService.getInstance(mode);
+        pos=QPOSService.getInstance(eContext, mode);
         if (pos==null){
             return;
         }
@@ -32,7 +32,6 @@ public KSN() {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
         pos.setD20Trade(true);
-        pos.setConext(eContext);
         MyPosListener listener= new MyPosListener();
         Handler handler=new Handler(Looper.myLooper());
         pos.initListener(handler,listener);

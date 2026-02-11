@@ -60,7 +60,6 @@ public class Utils {
 
 		errorPosDictionary = new HashMap();
 		errorPosDictionary.put(QPOSService.Error.UNKNOWN, "Tarjeta no leída, intente de nuevo.");
-		errorPosDictionary.put(QPOSService.Error.CMD_TIMEOUT, "Límite de tiempo excedido");
 		errorPosDictionary.put(QPOSService.Error.TIMEOUT, "Límite de tiempo excedido");
 		errorPosDictionary.put(QPOSService.Error.APP_SELECT_TIMEOUT, "Límite de tiempo excedido");
 	}
@@ -193,7 +192,7 @@ public class Utils {
 		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
 		int w = view.getWidth();
 		int h = view.getHeight();
-		Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
 		Canvas c = new Canvas(bmp);
 		c.drawColor(-1);
 		view.invalidate();

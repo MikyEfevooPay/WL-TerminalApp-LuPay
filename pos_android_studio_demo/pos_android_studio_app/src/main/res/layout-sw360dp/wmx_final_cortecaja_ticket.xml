@@ -40,7 +40,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1000px"
+        android:layout_height="1100px"
         android:background="@drawable/fondo_ticket"
         android:orientation="vertical"
         android:padding="43px">
@@ -260,7 +260,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60px"
+            android:layout_marginBottom="30px"
             android:gravity="bottom|center_horizontal"
 
             android:orientation="vertical">
@@ -277,6 +277,28 @@
                 android:text="Finalizar"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60px"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cortecaja_reprocesar"
+                android:layout_width="match_parent"
+                android:layout_height="92px"
+                android:background="@drawable/btn_outline"
+                android:backgroundTint="@color/ep_color_blue"
+                android:fontFamily="@font/dm_sans_bold"
+                android:minHeight="50dip"
+                android:stateListAnimator="@null"
+                android:text="Reprocesar corte"
+                android:textAllCaps="false"
+                android:textColor="@color/ep_color_blue"
                 android:textSize="30px" />
         </LinearLayout>
 

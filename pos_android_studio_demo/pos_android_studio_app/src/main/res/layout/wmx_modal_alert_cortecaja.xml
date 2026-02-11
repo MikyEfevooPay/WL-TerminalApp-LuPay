@@ -40,29 +40,18 @@
             android:layout_marginBottom="0px"
             android:fontFamily="@font/dm_sans_bold"
             android:gravity="center"
-            android:text="Inserta la tarjeta"
+            android:text="Recuerda"
             android:textAlignment="center"
             android:textColor="#0F0F0F"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/textView33"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24px"
-            android:fontFamily="@font/dm_sans_bold"
-            android:gravity="center"
-            android:text="antes de continuar"
-            android:textAlignment="center"
-            android:textColor="#0F0F0F"
-            android:textSize="40px" />
+            android:textSize="40px"
+            android:paddingBottom="10dp"/>
 
         <TextView
             android:id="@+id/textView30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans"
-            android:text="Para realizar el cobro, la tarjeta debe"
+            android:text="La actualización solo incluye transacciones"
             android:textColor="#5A5A5A"
             android:textSize="30px" />
 
@@ -71,31 +60,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dm_sans"
-            android:text="estar insertada"
+            android:text="visibles en el &quot;Historial&quot;. Si hay movimientos"
+            android:textColor="#5A5A5A"
+            android:textSize="30px"/>
+        <TextView
+            android:id="@+id/textView33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans"
+            android:text="pendientes, espera un aprox de 15 minutos."
             android:textColor="#5A5A5A"
             android:textSize="30px"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/lyt_ticket_separator"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#000000"
-        android:layout_marginBottom="24px"
-        android:orientation="horizontal"/>
-
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_alert_print_close"
-        android:layout_width="339px"
+        android:id="@+id/btn_alert_cortecaja_reprocesar"
+        android:layout_width="match_parent"
         android:layout_height="80px"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="#000000"
+        android:backgroundTint="#0083BE"
         android:fontFamily="@font/dm_sans_bold"
         android:minHeight="50dip"
         android:stateListAnimator="@null"
-        android:text="Continuar"
+        android:text="Reprocesar corte"
         android:textAllCaps="false"
         android:textColor="#ffffff"
-        android:textSize="22px" />
+        android:textSize="30px" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_alert_cortecaja_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="120px"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/transparent"
+        android:fontFamily="@font/dm_sans_bold"
+        android:stateListAnimator="@null"
+        android:text="Cancelar"
+        android:textAllCaps="false"
+        android:textColor="@color/ep_color_black"
+        android:textSize="30px" />
 
 </LinearLayout>

@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,6 +64,8 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     LinearLayout mainView_final_ticket_transaction;
 
     private final String TRANSACTION_TICKET_SEND_EMAIL = "transaction_ticket_send_email";
+    private boolean isDialogShowing = false;
+    private AlertDialog currentDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,19 +324,38 @@ public class WMX_final_ticket_transaction extends BaseActivity implements View.O
     }
 
     private void showConfirmClientTicketDialog() {
+        if (isDialogShowing || currentDialog != null && currentDialog.isShowing()) {
+            TRACE.d("Diálogo ya está abierto, ignorando...");
+            return;
+        }
+
         MaterialAlertDialogBuilder confirm = new MaterialAlertDialogBuilder(this,
                 R.style.ThemeOverlay_App_MaterialAlertDialog_secondary)
                 .setTitle("¿Imprimir copia del ticket al cliente?")
                 .setIcon(R.drawable.copia_ticket)
                 .setPositiveButton("Sí", (dialog, lis) -> {
+                    TRACE.d("SI");
+                    isDialogShowing = false;
+                    currentDialog = null;
                     dialog.dismiss();
                     PrintTicket(PRINT_TYPE.CLIENT);
                 })
                 .setNeutralButton("No", (dialog, lis) -> {
+                    TRACE.d("NO");
+                    isDialogShowing = false;
+                    currentDialog = null;
+                    dialog.dismiss();
                     startActivity(new Intent(mContext, WMX_Menu.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                })
+                .setOnDismissListener(dialog -> {
+                    isDialogShowing = false;
+                    currentDialog = null;
                 });
 
-        runOnUiThread(() -> confirm.show());
+        currentDialog = confirm.create();
+        currentDialog.setCancelable(false);
+        currentDialog.show();
+        isDialogShowing = true;
     }
 
     @Override

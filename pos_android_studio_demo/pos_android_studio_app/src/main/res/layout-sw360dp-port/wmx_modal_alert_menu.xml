@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="100px"
             android:layout_marginBottom="18px"
-            app:srcCompat="@drawable/tarjeta_icono" />
+            app:srcCompat="@drawable/efevoo_i_info" />
     </LinearLayout>
 
     <LinearLayout
@@ -34,46 +34,17 @@
         android:paddingBottom="15dp">
 
         <TextView
-            android:id="@+id/textView31"
+            android:id="@+id/modal_text_mensaje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0px"
             android:fontFamily="@font/dm_sans_bold"
             android:gravity="center"
-            android:text="Inserta la tarjeta"
+            android:text="Mensaje"
             android:textAlignment="center"
             android:textColor="#0F0F0F"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/textView33"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24px"
-            android:fontFamily="@font/dm_sans_bold"
-            android:gravity="center"
-            android:text="antes de continuar"
-            android:textAlignment="center"
-            android:textColor="#0F0F0F"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/textView30"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans"
-            android:text="Para realizar el cobro, la tarjeta debe"
-            android:textColor="#5A5A5A"
             android:textSize="30px" />
 
-        <TextView
-            android:id="@+id/textView32"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/dm_sans"
-            android:text="estar insertada"
-            android:textColor="#5A5A5A"
-            android:textSize="30px"/>
     </LinearLayout>
 
     <LinearLayout
@@ -85,15 +56,15 @@
         android:orientation="horizontal"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_alert_print_close"
-        android:layout_width="339px"
+        android:id="@+id/btn_alert_try"
+        android:layout_width="match_parent"
         android:layout_height="80px"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="#000000"
+        android:backgroundTint="#0083BE"
         android:fontFamily="@font/dm_sans_bold"
         android:minHeight="50dip"
         android:stateListAnimator="@null"
-        android:text="Continuar"
+        android:text="Reintentar"
         android:textAllCaps="false"
         android:textColor="#ffffff"
         android:textSize="22px" />

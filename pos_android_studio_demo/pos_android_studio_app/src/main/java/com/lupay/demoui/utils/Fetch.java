@@ -3,6 +3,8 @@ package com.lupay.demoui.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyLog;
@@ -119,6 +121,11 @@ public class Fetch implements IFetching {
             }
 
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                8000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
         RequestSingleton.getInstance(mContext).getRequestQueue().add(stringRequest);
     }
 }

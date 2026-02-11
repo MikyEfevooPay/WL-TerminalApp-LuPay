@@ -40,6 +40,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import com.lupay.demoui.R;
 
@@ -69,7 +70,8 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
     private ImageView mUndoView;
     private ImageView mRedoView;
     private ImageView mPenView;
-    private ImageView mClearView;
+    private Button mClearView;
+    private Button mOkView;
     private CircleView mSettingView;
 
     private PaintView mPaintView;
@@ -101,7 +103,7 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.wmx_title_welcome));
         View mCancelView = findViewById(R.id.tv_cancel);
-        View mOkView = findViewById(R.id.tv_ok);
+        mOkView = findViewById(R.id.tv_ok);
 
         mPaintView = findViewById(R.id.paint_view);
         mHandView = findViewById(R.id.btn_hand);
@@ -140,11 +142,11 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
         mSettingView.setRadiusLevel(PenConfig.PAINT_SIZE_LEVEL);
 
         setThemeColor(PenConfig.THEME_COLOR);
-        BitmapUtil.setImage(mClearView, R.drawable.sign_ic_clear, PenConfig.THEME_COLOR);
+        //BitmapUtil.setImage(mClearView, R.drawable.sign_ic_clear, PenConfig.THEME_COLOR);
         BitmapUtil.setImage(mPenView, R.drawable.sign_ic_pen, PenConfig.THEME_COLOR);
         BitmapUtil.setImage(mRedoView, R.drawable.sign_ic_redo, mPaintView.canRedo() ? PenConfig.THEME_COLOR : Color.LTGRAY);
         BitmapUtil.setImage(mUndoView, R.drawable.sign_ic_undo, mPaintView.canUndo() ? PenConfig.THEME_COLOR : Color.LTGRAY);
-        BitmapUtil.setImage(mClearView, R.drawable.sign_ic_clear, !mPaintView.isEmpty() ? PenConfig.THEME_COLOR : Color.LTGRAY);
+        //BitmapUtil.setImage(mClearView, R.drawable.sign_ic_clear, !mPaintView.isEmpty() ? PenConfig.THEME_COLOR : Color.LTGRAY);
 //        mSettingView.setOutBorderColor(PenConfig.THEME_COLOR);
         BitmapUtil.setImage(mHandView, R.drawable.sign_ic_hand, PenConfig.THEME_COLOR);
         initData();
@@ -463,7 +465,7 @@ public class PaintActivity extends BaseActivity implements View.OnClickListener,
 
         BitmapUtil.setImage(mRedoView, R.drawable.sign_ic_redo, mPaintView.canRedo() ? PenConfig.THEME_COLOR : Color.LTGRAY);
         BitmapUtil.setImage(mUndoView, R.drawable.sign_ic_undo, mPaintView.canUndo() ? PenConfig.THEME_COLOR : Color.LTGRAY);
-        BitmapUtil.setImage(mClearView, R.drawable.sign_ic_clear, !mPaintView.isEmpty() ? PenConfig.THEME_COLOR : Color.LTGRAY);
+        //BitmapUtil.setImage(mClearView, R.drawable.sign_ic_clear, !mPaintView.isEmpty() ? PenConfig.THEME_COLOR : Color.LTGRAY);
 
     }
 

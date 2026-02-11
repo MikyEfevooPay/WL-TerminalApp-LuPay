@@ -3,6 +3,7 @@ package com.lupay.demoui.utils;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 
+import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QPOSStatus implements QPOSService.QPOSServiceListener {
+public class QPOSStatus extends CQPOSService {
     private static QPOSStatus instance;
     private  HashMap<String, QPOSService.QPOSServiceListener> listeners;
 
@@ -228,13 +229,6 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
-    public void onSearchMifareCardResult(Hashtable<String, String> hashtable) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onSearchMifareCardResult(hashtable);
-        }
-    }
-
-    @Override
     public void onBatchReadMifareCardResult(String s, Hashtable<String, List<String>> hashtable) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onBatchReadMifareCardResult(s, hashtable);
@@ -256,33 +250,11 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
-    public void onFinishMifareCardResult(boolean b) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onFinishMifareCardResult(b);
-        }
-    }
-
-    @Override
-    public void onVerifyMifareCardResult(boolean b) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onVerifyMifareCardResult(b);
-        }
-    }
-
-    @Override
     public void onReadMifareCardResult(Hashtable<String, String> hashtable) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onReadMifareCardResult(hashtable);
         }
     }
-
-    @Override
-    public void onWriteMifareCardResult(boolean b) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onWriteMifareCardResult(b);
-        }
-    }
-
     @Override
     public void onOperateMifareCardResult(Hashtable<String, String> hashtable) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
@@ -445,9 +417,9 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
-    public void onReturnGetPinInputResult(int i) {
+    public void onReturnGetPinInputResult(int num, QPOSService.PinError error, int minLen, int maxLen)  {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onReturnGetPinInputResult(i);
+            entry.getValue().onReturnGetPinInputResult(num, error, minLen, maxLen);
         }
     }
 
@@ -483,27 +455,6 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     public void onReturnApduResult(boolean b, String s, int i) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onReturnApduResult(b, s, i);
-        }
-    }
-
-    @Override
-    public void onReturnPowerOnFelicaResult(QPOSService.FelicaStatusCode felicaStatusCode) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onReturnPowerOnFelicaResult(felicaStatusCode);
-        }
-    }
-
-    @Override
-    public void onReturnPowerOffFelicaResult(QPOSService.FelicaStatusCode felicaStatusCode) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onReturnPowerOffFelicaResult(felicaStatusCode);
-        }
-    }
-
-    @Override
-    public void onReturnSendApduFelicaResult(QPOSService.FelicaStatusCode felicaStatusCode, String s, String s1) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onReturnSendApduFelicaResult(felicaStatusCode, s, s1);
         }
     }
 
@@ -802,13 +753,6 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
-    public void onReturnPowerOnNFCResult(boolean b, String s, String s1, int i) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onReturnPowerOnNFCResult(b, s, s1, i);
-        }
-    }
-
-    @Override
     public void onReturnPowerOffNFCResult(boolean b) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onReturnPowerOffNFCResult(b);
@@ -970,20 +914,6 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
-    public void onGetKeyCheckValue(List<String> list) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onGetKeyCheckValue(list);
-        }
-    }
-
-    @Override
-    public void onGetDevicePubKey(String s) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onGetDevicePubKey(s);
-        }
-    }
-
-    @Override
     public void onSetPosBluConfig(boolean b) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onSetPosBluConfig(b);
@@ -1054,13 +984,6 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
-    public void onReturnupdateKeyByTR_31Result(boolean b, String s) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onReturnupdateKeyByTR_31Result(b, s);
-        }
-    }
-
-    @Override
     public void onRequestGenerateTransportKey(Hashtable hashtable) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onRequestGenerateTransportKey(hashtable);
@@ -1103,13 +1026,6 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
     }
 
     @Override
-    public void onReturnDeviceSigningCertResult(String s, String s1) {
-        for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
-            entry.getValue().onReturnDeviceSigningCertResult(s, s1);
-        }
-    }
-
-    @Override
     public void onReturnServerCertResult(String s, String s1) {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onReturnServerCertResult(s, s1);
@@ -1128,5 +1044,9 @@ public class QPOSStatus implements QPOSService.QPOSServiceListener {
         for (Map.Entry<String, QPOSService.QPOSServiceListener> entry : this.listeners.entrySet()) {
             entry.getValue().onQposGetLEDColorResult(s);
         }
+    }
+    @Override
+    public void onReturnDeviceSigningCertResult(String certificates, String certificatesChain) {
+
     }
 }

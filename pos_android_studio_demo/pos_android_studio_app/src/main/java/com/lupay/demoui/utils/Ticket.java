@@ -5,6 +5,8 @@ import android.database.CharArrayBuffer;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -300,7 +302,9 @@ public class Ticket {
             if (Layout == null)
                 throw new RemoteException("No hay layout disponible");
             mPrinter.setPrinterGrey(110);
-            mPrinter.printBitmap(this.ctx, Utils.viewToBitmap(Layout));
+            Bitmap bmp = Utils.viewToBitmap(Layout);
+            mPrinter.printBitmap(this.ctx, bmp);
+            bmp.recycle();
             return true;
         } catch (Exception e) {
             TRACE.d("PRINT ERROR:" + e.getMessage());
@@ -311,12 +315,12 @@ public class Ticket {
 
     public void close() {
         if (mPrinter == null) return;
-            try {
-                mPrinter.stopPrint();
-                mPrinter.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            mPrinter.stopPrint();
+            mPrinter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isPrinterAvailable() {

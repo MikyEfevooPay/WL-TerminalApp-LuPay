@@ -81,7 +81,8 @@
             android:layout_toLeftOf="@+id/btn_redo"
             android:layout_weight="1"
             android:background="@drawable/sign_bg_btn_clicked"
-            android:src="@drawable/sign_ic_undo" />
+            android:src="@drawable/sign_ic_undo"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/btn_redo"
@@ -91,7 +92,8 @@
             android:layout_toLeftOf="@+id/btn_clear"
             android:layout_weight="1"
             android:background="@drawable/sign_bg_btn_clicked"
-            android:src="@drawable/sign_ic_redo" />
+            android:src="@drawable/sign_ic_redo"
+            android:visibility="gone"/>
 
 
         <ImageView
@@ -102,17 +104,37 @@
             android:layout_toLeftOf="@+id/btn_setting"
             android:layout_weight="1"
             android:background="@drawable/sign_bg_btn_clicked"
-            android:src="@drawable/sign_ic_pen" />
+            android:src="@drawable/sign_ic_pen"
+            android:visibility="gone"/>
 
         <ImageView
-            android:id="@+id/btn_clear"
+            android:id="@+id/btn_clear2"
             android:layout_width="@dimen/sign_tool_icon_size"
             android:layout_height="@dimen/sign_tool_icon_size"
             android:layout_marginRight="@dimen/sign_tool_padding"
             android:layout_toLeftOf="@+id/btn_pen"
             android:layout_weight="1"
             android:background="@drawable/sign_bg_btn_clicked"
-            android:src="@drawable/sign_ic_clear" />
+            android:src="@drawable/sign_ic_clear"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btn_clear"
+            android:layout_width="@dimen/sign_tool_icon_size"
+            android:layout_height="@dimen/sign_tool_icon_size"
+            android:layout_marginRight="@dimen/sign_tool_padding"
+            android:layout_weight="1"
+            android:background="@drawable/btn_icon_outline"/>
+
+        <Button
+            android:id="@+id/tv_ok"
+            android:layout_width="250dp"
+            android:layout_height="@dimen/sign_tool_icon_size"
+            android:background="@drawable/btn_firma"
+            android:fontFamily="@font/dm_sans_bold"
+            android:text="Aceptar"
+            android:textColor="@color/ep_btn_continuar_texto"
+            android:textSize="55px"/>
 
         <com.lupay.demoui.view.CircleView
             android:id="@+id/btn_setting"
@@ -121,7 +143,8 @@
             android:layout_alignParentRight="true"
             android:layout_weight="1"
             app:showOutBorder="false"
-            app:sizeLevel="2" />
+            app:sizeLevel="2"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

@@ -208,7 +208,9 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
                 // Se agrega un posdelay en caso de que haya un error que la libreria no este
                 // catcheando para ocultar el spinner
                 ticketHandler.postDelayed(() -> {
-                    hideTicketSpinner();
+                    if(ticketLayoutManager.getLayout() == null){
+                        hideTicketSpinner();
+                    }
                     ticket.close();
                 }, 10000);
                 success = ticket.printLayout(ticketLayoutManager.getLayout());
@@ -257,7 +259,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
     protected String getFinalErrorMessage(QPOSService.Error status) {
         Map.Entry<QPOSService.Error, String> getMessage = Utils.errorPosDictionary.entrySet().stream()
                 .filter(x -> status == x.getKey()).findAny().orElse(null);
-        return getMessage != null ? getMessage.getValue() : "Ha ocurrido un error desconocido";
+        return getMessage != null ? getMessage.getValue() : "Intenta nuevamente";
     }
 
     @Override
@@ -383,15 +385,15 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                if (count[0]++ < 2) {
+                if (count[0]++ < 1) {
                     View layout = ConfigToastLayout(type, title, desc);
                     Toast toast = new Toast(getApplicationContext());
                     toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);
                     toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);
-                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setDuration(Toast.LENGTH_SHORT);
                     toast.setView(layout);
                     toast.show();
-                    handler.postDelayed(this, 3000);
+                    handler.postDelayed(this, 1000);
                 }
             }
         };

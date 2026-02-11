@@ -221,6 +221,7 @@ public class WMX_Historial_CorteCaja extends BaseActivity implements View.OnClic
         intent.putExtra("fechaCorte", cortecaja.get(position).get_FechaHora());
         intent.putExtra("type", 0);
         intent.putExtra("tablerows", jsondukpt_details.objectcorte.getString("corte"));
+        intent.putExtra("idcorte", cortecaja.get(position).get_idCorte());
         startActivity(intent);
     }
 

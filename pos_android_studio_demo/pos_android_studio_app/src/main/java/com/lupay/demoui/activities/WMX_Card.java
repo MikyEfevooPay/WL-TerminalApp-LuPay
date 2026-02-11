@@ -405,7 +405,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         isPinCanceled = false;
         if (posType == POS_TYPE.UART) {
             pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP_UNALLOWED_LOW_TRADE);
-            pos.doTrade(60);
+            pos.doTrade(15);
         }
     }
 
@@ -751,18 +751,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             _nip = 0;
             TRACE.d("FinalTradeType" + FinalTradeType + TRACE.NEW_LINE);
 
-            if (result == QPOSService.DoTradeResult.NONE) {
-                onCancelTransaction("Tarjeta no detectada");
-            } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
-                onCancelTransaction("Inserta tarjeta antes de iniciar la venta.");
-            } else if (result == QPOSService.DoTradeResult.ICC) {
+            if (result == QPOSService.DoTradeResult.ICC) {
                 enableTradingCancel(false);
                 TRACE.d("EMV ICC Start");
                 pos.doEmvApp(QPOSService.EmvOption.START);
-            } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
-                onCancelTransaction("Inserte tarjeta con chip");
-            } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
-
             } else if (result == QPOSService.DoTradeResult.MCR) {// Magnetic card
                 enableTradingCancel(false);
                 TRACE.d("Magnetic card: " + decodeData.toString());
@@ -881,151 +873,151 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 ValidacionRequest(_track2MN.substring(0, 8), "MCR", "90", "", _track2MN, _track2MN, _9f.toString(),
                         terminalTime);
             } else if (result == QPOSService.DoTradeResult.NFC_ONLINE) {
-                TRACE.d("EMV NFC Start");
-                enableTradingCancel(false);
-                Beep.start();
-                List<TLV> parse = TLVParser.parse(pos.getNFCBatchData().get("tlv"));
-                // C0
-                String onLineksn = TLVParser.searchTLV(parse, "C0").value;
-                // C2
-                String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
+                try {
+                    TRACE.d("EMV NFC Start");
+                    enableTradingCancel(false);
+                    Beep.start();
+                    List<TLV> parse = TLVParser.parse(pos.getNFCBatchData().get("tlv"));
+                    // C0
+                    String onLineksn = TLVParser.searchTLV(parse, "C0").value;
+                    // C2
+                    String onLineblockData = TLVParser.searchTLV(parse, "C2").value;
 
-                String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
-                        DUKPK2009_CBC.Enum_mode.ECB, null);
-                List<TLV> NFCparse = TLVParser.parse(tlvNFC);
-                String _track2 = TLVParser.searchTLV(NFCparse, "57").value.toUpperCase(Locale.ROOT);
-                String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
-                //String _tag50 = TLVParser.searchTLV(NFCparse, "50").value;
-                //String _tag9F12 = TLVParser.searchTLV(NFCparse, "9F12").value;
-                String _tag9F21 = TLVParser.searchTLV(NFCparse, "9F21").value;
+                    String tlvNFC = DUKPK2009_CBC.getDUKPT(onLineksn, onLineblockData, DUKPK2009_CBC.Enum_key.DATA,
+                            DUKPK2009_CBC.Enum_mode.ECB, null);
+                    List<TLV> NFCparse = TLVParser.parse(tlvNFC);
+                    String _track2 = TLVParser.searchTLV(NFCparse, "57").value.toUpperCase(Locale.ROOT);
+                    String _entrymode = TLVParser.searchTLV(NFCparse, "9F39").value;
+                    //String _tag50 = TLVParser.searchTLV(NFCparse, "50").value;
+                    //String _tag9F12 = TLVParser.searchTLV(NFCparse, "9F12").value;
+                    String _tag9F21 = TLVParser.searchTLV(NFCparse, "9F21").value;
 
-                _AID = TLVParser.searchTLV(NFCparse, "4F").value.toUpperCase(Locale.ROOT);
-                _ARQC = TLVParser.searchTLV(NFCparse, "9F26").value.toUpperCase(Locale.ROOT);
-                // _9F41=TLVParser.searchTLV(NFCparse, "9F41").value.toUpperCase(Locale.ROOT);
+                    _AID = TLVParser.searchTLV(NFCparse, "4F").value.toUpperCase(Locale.ROOT);
+                    _ARQC = TLVParser.searchTLV(NFCparse, "9F26").value.toUpperCase(Locale.ROOT);
+                    // _9F41=TLVParser.searchTLV(NFCparse, "9F41").value.toUpperCase(Locale.ROOT);
 
-                content = getString(R.string.tap_card);
-                String formatID = decodeData.get("formatID");
-                if (formatID.equals("31") || formatID.equals("40")
-                        || formatID.equals("37") || formatID.equals("17")
-                        || formatID.equals("11") || formatID.equals("10")) {
-                    String maskedPAN = decodeData.get("maskedPAN");
-                    String expiryDate = decodeData.get("expiryDate");
-                    String cardHolderName = decodeData.get("cardholderName");
-                    String serviceCode = decodeData.get("serviceCode");
-                    String trackblock = decodeData.get("trackblock");
-                    String psamId = decodeData.get("psamId");
-                    String posId = decodeData.get("posId");
-                    String pinblock = decodeData.get("pinblock");
-                    String macblock = decodeData.get("macblock");
-                    String activateCode = decodeData.get("activateCode");
-                    String trackRandomNumber = decodeData
-                            .get("trackRandomNumber");
+                    content = getString(R.string.tap_card);
+                    String formatID = decodeData.get("formatID");
+                    if (formatID.equals("31") || formatID.equals("40")
+                            || formatID.equals("37") || formatID.equals("17")
+                            || formatID.equals("11") || formatID.equals("10")) {
+                        String maskedPAN = decodeData.get("maskedPAN");
+                        String expiryDate = decodeData.get("expiryDate");
+                        String cardHolderName = decodeData.get("cardholderName");
+                        String serviceCode = decodeData.get("serviceCode");
+                        String trackblock = decodeData.get("trackblock");
+                        String psamId = decodeData.get("psamId");
+                        String posId = decodeData.get("posId");
+                        String pinblock = decodeData.get("pinblock");
+                        String macblock = decodeData.get("macblock");
+                        String activateCode = decodeData.get("activateCode");
+                        String trackRandomNumber = decodeData
+                                .get("trackRandomNumber");
 
-                    content += getString(R.string.format_id) + " " + formatID
-                            + "\n";
-                    content += getString(R.string.masked_pan) + " " + maskedPAN
-                            + "\n";
-                    content += getString(R.string.expiry_date) + " "
-                            + expiryDate + "\n";
-                    content += getString(R.string.cardholder_name) + " "
-                            + cardHolderName + "\n";
+                        content += getString(R.string.format_id) + " " + formatID
+                                + "\n";
+                        content += getString(R.string.masked_pan) + " " + maskedPAN
+                                + "\n";
+                        content += getString(R.string.expiry_date) + " "
+                                + expiryDate + "\n";
+                        content += getString(R.string.cardholder_name) + " "
+                                + cardHolderName + "\n";
 
-                    content += getString(R.string.service_code) + " "
-                            + serviceCode + "\n";
-                    content += "trackblock: " + trackblock + "\n";
-                    content += "psamId: " + psamId + "\n";
-                    content += "posId: " + posId + "\n";
-                    content += getString(R.string.pinBlock) + " " + pinblock
-                            + "\n";
-                    content += "macblock: " + macblock + "\n";
-                    content += "activateCode: " + activateCode + "\n";
-                    content += "trackRandomNumber: " + trackRandomNumber + "\n";
-                } else {
+                        content += getString(R.string.service_code) + " "
+                                + serviceCode + "\n";
+                        content += "trackblock: " + trackblock + "\n";
+                        content += "psamId: " + psamId + "\n";
+                        content += "posId: " + posId + "\n";
+                        content += getString(R.string.pinBlock) + " " + pinblock
+                                + "\n";
+                        content += "macblock: " + macblock + "\n";
+                        content += "activateCode: " + activateCode + "\n";
+                        content += "trackRandomNumber: " + trackRandomNumber + "\n";
+                    } else {
 
-                    String maskedPAN = decodeData.get("maskedPAN");
-                    String expiryDate = decodeData.get("expiryDate");
-                    String cardHolderName = decodeData.get("cardholderName");
-                    // String ksn = decodeData.get("ksn");
-                    String serviceCode = decodeData.get("serviceCode");
-                    String track1Length = decodeData.get("track1Length");
-                    String track2Length = decodeData.get("track2Length");
-                    String track3Length = decodeData.get("track3Length");
-                    String encTracks = decodeData.get("encTracks");
-                    String encTrack1 = decodeData.get("encTrack1");
-                    String encTrack2 = decodeData.get("encTrack2");
-                    String encTrack3 = decodeData.get("encTrack3");
-                    String partialTrack = decodeData.get("partialTrack");
-                    pinKsn = decodeData.get("trackksn");
-                    String trackksn = decodeData.get("trackksn");
-                    String pinBlock = decodeData.get("pinBlock");
-                    String encPAN = decodeData.get("encPAN");
-                    String trackRandomNumber = decodeData
-                            .get("trackRandomNumber");
-                    String pinRandomNumber = decodeData.get("pinRandomNumber");
+                        String maskedPAN = decodeData.get("maskedPAN");
+                        String expiryDate = decodeData.get("expiryDate");
+                        String cardHolderName = decodeData.get("cardholderName");
+                        // String ksn = decodeData.get("ksn");
+                        String serviceCode = decodeData.get("serviceCode");
+                        String track1Length = decodeData.get("track1Length");
+                        String track2Length = decodeData.get("track2Length");
+                        String track3Length = decodeData.get("track3Length");
+                        String encTracks = decodeData.get("encTracks");
+                        String encTrack1 = decodeData.get("encTrack1");
+                        String encTrack2 = decodeData.get("encTrack2");
+                        String encTrack3 = decodeData.get("encTrack3");
+                        String partialTrack = decodeData.get("partialTrack");
+                        pinKsn = decodeData.get("trackksn");
+                        String trackksn = decodeData.get("trackksn");
+                        String pinBlock = decodeData.get("pinBlock");
+                        String encPAN = decodeData.get("encPAN");
+                        String trackRandomNumber = decodeData
+                                .get("trackRandomNumber");
+                        String pinRandomNumber = decodeData.get("pinRandomNumber");
 
-                    content += getString(R.string.format_id) + " " + formatID
-                            + "\n";
-                    content += getString(R.string.masked_pan) + " " + maskedPAN
-                            + "\n";
-                    content += getString(R.string.expiry_date) + " "
-                            + expiryDate + "\n";
-                    content += getString(R.string.cardholder_name) + " "
-                            + cardHolderName + "\n";
-                    // content += getString(R.string.ksn) + " " + ksn + "\n";
-                    content += getString(R.string.pinKsn) + " " + pinKsn + "\n";
-                    content += getString(R.string.trackksn) + " " + trackksn
-                            + "\n";
-                    content += getString(R.string.service_code) + " "
-                            + serviceCode + "\n";
-                    content += getString(R.string.track_1_length) + " "
-                            + track1Length + "\n";
-                    content += getString(R.string.track_2_length) + " "
-                            + track2Length + "\n";
-                    content += getString(R.string.track_3_length) + " "
-                            + track3Length + "\n";
-                    content += getString(R.string.encrypted_tracks) + " "
-                            + encTracks + "\n";
-                    content += getString(R.string.encrypted_track_1) + " "
-                            + encTrack1 + "\n";
-                    content += getString(R.string.encrypted_track_2) + " "
-                            + encTrack2 + "\n";
-                    content += getString(R.string.encrypted_track_3) + " "
-                            + encTrack3 + "\n";
-                    content += getString(R.string.partial_track) + " "
-                            + partialTrack + "\n";
-                    content += getString(R.string.pinBlock) + " " + pinBlock
-                            + "\n";
-                    content += "encPAN: " + encPAN + "\n";
-                    content += "trackRandomNumber: " + trackRandomNumber + "\n";
-                    content += "pinRandomNumber:" + " " + pinRandomNumber
-                            + "\n";
+                        content += getString(R.string.format_id) + " " + formatID
+                                + "\n";
+                        content += getString(R.string.masked_pan) + " " + maskedPAN
+                                + "\n";
+                        content += getString(R.string.expiry_date) + " "
+                                + expiryDate + "\n";
+                        content += getString(R.string.cardholder_name) + " "
+                                + cardHolderName + "\n";
+                        // content += getString(R.string.ksn) + " " + ksn + "\n";
+                        content += getString(R.string.pinKsn) + " " + pinKsn + "\n";
+                        content += getString(R.string.trackksn) + " " + trackksn
+                                + "\n";
+                        content += getString(R.string.service_code) + " "
+                                + serviceCode + "\n";
+                        content += getString(R.string.track_1_length) + " "
+                                + track1Length + "\n";
+                        content += getString(R.string.track_2_length) + " "
+                                + track2Length + "\n";
+                        content += getString(R.string.track_3_length) + " "
+                                + track3Length + "\n";
+                        content += getString(R.string.encrypted_tracks) + " "
+                                + encTracks + "\n";
+                        content += getString(R.string.encrypted_track_1) + " "
+                                + encTrack1 + "\n";
+                        content += getString(R.string.encrypted_track_2) + " "
+                                + encTrack2 + "\n";
+                        content += getString(R.string.encrypted_track_3) + " "
+                                + encTrack3 + "\n";
+                        content += getString(R.string.partial_track) + " "
+                                + partialTrack + "\n";
+                        content += getString(R.string.pinBlock) + " " + pinBlock
+                                + "\n";
+                        content += "encPAN: " + encPAN + "\n";
+                        content += "trackRandomNumber: " + trackRandomNumber + "\n";
+                        content += "pinRandomNumber:" + " " + pinRandomNumber
+                                + "\n";
+                    }
+                    Integer _9f = Integer.parseInt(onLineksn.substring(15, 20), 16);
+                    //maskedPAN = _track2.substring(0, 8) + "XXXX" + _track2.substring(12, 16);
+                    ValidacionRequest(_track2.substring(0, 8), "NFC", _entrymode, tlvNFC, _track2, _track2,
+                            _9f.toString(), _tag9F21);
+                    // ValidacionDatos(maskedPAN.substring(0, 8), "NFC", _entrymode, tlvNFC,
+                    // maskedPAN, _track2, _9f.toString(), _tag50, _tag9F12, _tag9F21);
+
+                    // TRACE.d(TRACE.NEW_LINE + "content in NNFC request(?)" +content);
+                    // call(content);
+
+                    // sendMsg(8003);
+                }catch (Exception e){
+                    onCancelTransaction("Intente nuevamente");
                 }
-                Integer _9f = Integer.parseInt(onLineksn.substring(15, 20), 16);
-                //maskedPAN = _track2.substring(0, 8) + "XXXX" + _track2.substring(12, 16);
-                ValidacionRequest(_track2.substring(0, 8), "NFC", _entrymode, tlvNFC, _track2, _track2,
-                        _9f.toString(), _tag9F21);
-                // ValidacionDatos(maskedPAN.substring(0, 8), "NFC", _entrymode, tlvNFC,
-                // maskedPAN, _track2, _9f.toString(), _tag50, _tag9F12, _tag9F21);
-
-                // TRACE.d(TRACE.NEW_LINE + "content in NNFC request(?)" +content);
-                // call(content);
-
-                // sendMsg(8003);
             } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
-                TRACE.d(TRACE.NEW_LINE + getString(R.string.transaction_declined));
+                onCancelTransaction("Reintenta insertando tarjeta antes de iniciar la venta");
 
                 // statusEditText.setText(getString(R.string.transaction_declined));
-            } else if (result == QPOSService.DoTradeResult.NO_RESPONSE) {
-                TRACE.d(TRACE.NEW_LINE + getString(R.string.card_no_response));
-
-                // statusEditText.setText(getString(R.string.card_no_response));
             }
 
         }
 
         @Override
         public void onRequestTime() {
-            // TRACE.d("onRequestTime");
+            TRACE.d("onRequestTime");
 
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
@@ -1037,9 +1029,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("onRequestDisplay(Display displayMsg):" + displayMsg.toString());
 
             String msg = "";
-            if (displayMsg == QPOSService.Display.CLEAR_DISPLAY_MSG) {
-                msg = "";
-            } else if (displayMsg == QPOSService.Display.MSR_DATA_READY) {
+            if (displayMsg == QPOSService.Display.MSR_DATA_READY) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle("Audio");
                 builder.setMessage("Success,Contine ready");
@@ -1049,8 +1039,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 msg = getString(R.string.wait);
             } else if (displayMsg == QPOSService.Display.REMOVE_CARD) {
                 msg = getString(R.string.remove_card);
-            } else if (displayMsg == QPOSService.Display.TRY_ANOTHER_INTERFACE) {
-                msg = "Inserta tarjeta antes de iniciar la venta.";
             } else if (displayMsg == QPOSService.Display.PROCESSING) {
                 msg = getString(R.string.processing);
             } else if (displayMsg == QPOSService.Display.INPUT_PIN_ING) {
@@ -1060,8 +1048,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 msg = "please input offline pin on pos";
             } else if (displayMsg == QPOSService.Display.MAG_TO_ICC_TRADE) {
                 msg = "please insert chip card on pos";
-            } else if (displayMsg == QPOSService.Display.CARD_REMOVED) {
-                msg = "Tarjeta Removida";
             }
         }
 
@@ -1091,7 +1077,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             // dialog.setTitle(R.string.request_data_to_server);
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             // TRACE.d("\nanlysEmvIccData(tlv):\n" + decodeData.toString());
-            String decodeData2 = pos.anlysEmvTLVData(tlv);
+
             // TRACE.d("\nanlysEmvTLVData(tlv):\n" + decodeData2);
 
             try {
@@ -1124,9 +1110,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onRequestTransactionResult(QPOSService.TransactionResult transactionResult) {
             TRACE.d("onRequestTransactionResult()" + transactionResult.toString());
-            if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
-                onCancelTransaction("Tarjeta Removida");
-            }
+
             if (transactionResult == QPOSService.TransactionResult.APPROVED) {
                 TRACE.d("TransactionResult.APPROVED");
                 String message = getString(R.string.transaction_approved) + "\n" + getString(R.string.amount) + ": $"
@@ -1168,8 +1152,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 // _entrymode.length()), emvicc, pan, _track2.substring(4, _track2.length()),
                 // F41.toString(), _tag50, _tag9F12, _tag9F21.substring(6, _tag9F21.length()));
 
-                // pos.updateEMVConfigByXml(new
-                // String(FileUtils.readAssetsLine("wirebit_emv_profile_tlv_D30-20250321.xml",WMX_Card.this)));
+                 //pos.updateEMVConfigByXml(new
+                 //String(FileUtils.readAssetsLine("wirebit_emv_profile_tlv_D30-20250321.xml",WMX_Card.this)));
 
             } else if (transactionResult == QPOSService.TransactionResult.TERMINATED) {
                 onCancelTransaction("Tarjeta removida antes de tiempo");
@@ -1177,33 +1161,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
                 onCancelTransaction("Tarjeta Declinada");
             } else if (transactionResult == QPOSService.TransactionResult.CANCEL) {
                 onCancelTransaction("Venta cancelada");
-            } else if (transactionResult == QPOSService.TransactionResult.CAPK_FAIL) {
-                onCancelTransaction("Fallo de lectura de datos, Intenta nuevamente.");
-            } else if (transactionResult == QPOSService.TransactionResult.NOT_ICC) {
-                onCancelTransaction("Inserte tarjeta con chip");
-            } else if (transactionResult == QPOSService.TransactionResult.SELECT_APP_FAIL) {
-                onCancelTransaction("Error de lectura. Intenta nuevamente");
-            } else if (transactionResult == QPOSService.TransactionResult.DEVICE_ERROR) {
-                onCancelTransaction("Error en el dispositivo, Reinicie TPV");
-            } else if (transactionResult == QPOSService.TransactionResult.TRADE_LOG_FULL) {
-                onCancelTransaction("Memoria llena. Borrar caché");
-            } else if (transactionResult == QPOSService.TransactionResult.CARD_NOT_SUPPORTED) {
-                onCancelTransaction("Tarjeta no aceptada");
-            } else if (transactionResult == QPOSService.TransactionResult.MISSING_MANDATORY_DATA) {
-                onCancelTransaction("Error de conexión, Intente nuevamente");
-            } else if (transactionResult == QPOSService.TransactionResult.CARD_BLOCKED_OR_NO_EMV_APPS) {
-                onCancelTransaction("Tarjeta bloqueada");
-            } else if (transactionResult == QPOSService.TransactionResult.INVALID_ICC_DATA) {
-                onCancelTransaction("Chip dañado o sucio. Limpie la tarjeta o intente con una distinta.");
-            } else if (transactionResult == QPOSService.TransactionResult.FALLBACK) {
-                onCancelTransaction("Error de lectura en el chip. Por favor, limpie la tarjeta o intente con una distinta.");
-            } else if (transactionResult == QPOSService.TransactionResult.NFC_TERMINATED) {
-                onCancelTransaction("Reintenta insertando tarjeta antes de iniciar la venta");
-                TRACE.d("TransactionResult.NFC_TERMINATED");
-            } else if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
-                onCancelTransaction("Tarjeta Removida");
-            } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
-                onCancelTransaction("Falla con el Emisor/Banco");
             }
 
         }
@@ -1245,8 +1202,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         @Override
-        public void onReturnGetPinInputResult(int num) {
-            super.onReturnGetPinInputResult(num);
+        public void onReturnGetPinInputResult(int num, QPOSService.PinError error, int minLen, int maxLen) {
             TRACE.d("onReturnGetPinInputResult(int num): " + num);
             String s = "";
             if (num == -1) {
@@ -1536,13 +1492,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         @Override
-        public void onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3) {
-            // TODO Auto-generated method stub
-            TRACE.d("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0
-                    + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
-        }
-
-        @Override
         public void onCbcMacResult(String result) {
             TRACE.d("onCbcMacResult(String result):" + result);
         }
@@ -1571,30 +1520,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         @Override
         public void onQposIsCardExist(boolean cardIsExist) {
             TRACE.d("onQposIsCardExist(boolean cardIsExist):" + cardIsExist);
-        }
-
-        @Override
-        public void onSearchMifareCardResult(Hashtable<String, String> arg0) {
-            if (arg0 != null) {
-                TRACE.d("onSearchMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-                /*
-                 * String statuString = arg0.get("status");
-                 * String cardTypeString = arg0.get("cardType");
-                 * String cardUidLen = arg0.get("cardUidLen");
-                 * String cardUid = arg0.get("cardUid");
-                 * String cardAtsLen = arg0.get("cardAtsLen");
-                 * String cardAts = arg0.get("cardAts");
-                 * String ATQA = arg0.get("ATQA");
-                 * String SAK = arg0.get("SAK");
-                 * statusEditText.setText("statuString:" + statuString + "\n" +
-                 * "cardTypeString:" + cardTypeString + "\ncardUidLen:" + cardUidLen
-                 * + "\ncardUid:" + cardUid + "\ncardAtsLen:" + cardAtsLen + "\ncardAts:" +
-                 * cardAts
-                 * + "\nATQA:" + ATQA + "\nSAK:" + SAK);
-                 */
-            } else {
-                TRACE.d("onSearchMifareCardResult poll card failed");
-            }
         }
 
         @Override
@@ -1760,16 +1685,6 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         @Override
-        public void onGetKeyCheckValue(List<String> checkValue) {
-            TRACE.d("onGetKeyCheckValue()");
-        }
-
-        @Override
-        public void onGetDevicePubKey(String clearKeys) {
-            TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
-        }
-
-        @Override
         public void onTradeCancelled() {
             TRACE.d("onTradeCancelled");
             if (successCancelTrade)
@@ -1806,32 +1721,11 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         }
 
         @Override
-        public void onFinishMifareCardResult(boolean arg0) {
-            // TODO Auto-generated method stub
-            TRACE.d("onFinishMifareCardResult(boolean arg0):" + arg0);
-        }
-
-        @Override
-        public void onVerifyMifareCardResult(boolean arg0) {
-            TRACE.d("onVerifyMifareCardResult(boolean arg0):" + arg0);
-
-            // TODO Auto-generated method stub
-            // String msg = pos.getMifareStatusMsg();
-        }
-
-        @Override
         public void onReadMifareCardResult(Hashtable<String, String> arg0) {
             TRACE.d("onReadMifareCardResult()");
 
             // TODO Auto-generated method stub
             // String msg = pos.getMifareStatusMsg();
-        }
-
-        @Override
-        public void onWriteMifareCardResult(boolean arg0) {
-            // TODO Auto-generated method stub
-            TRACE.d("onWriteMifareCardResult(boolean arg0):" + arg0);
-
         }
 
         @Override

@@ -188,6 +188,7 @@ public class WMX_Cancelacion_Desc extends BaseActivity  {
                         .setTitle("¿Quieres cancelar la Transacción?")
                         .setIcon(R.drawable.efevoo_i_grupo_41699)
                         .setPositiveButton("Confirmar",(dialog, lis) -> {
+                            dialog.dismiss();
                             //sendCancelFinal();
                             changeView();
                         })

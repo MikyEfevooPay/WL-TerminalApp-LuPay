@@ -22,7 +22,7 @@
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/giv_card_status"
             android:layout_width="254px"
-            android:layout_height="80px"
+            android:layout_height="40px"
             android:src="@drawable/efevoo_i_check_resumen_de_pago" />
 
         <TextView
@@ -54,7 +54,7 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="190px"
-                android:layout_height="66.98px"
+                android:layout_height="33.49px"
                 app:srcCompat="@drawable/logo" />
 
         </LinearLayout>
@@ -258,7 +258,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30px"
+            android:layout_marginBottom="20px"
             android:gravity="bottom|center_horizontal"
 
             android:orientation="vertical">
@@ -276,6 +276,28 @@
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textSize="22px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30px"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cortecaja_reprocesar"
+                android:layout_width="match_parent"
+                android:layout_height="60px"
+                android:background="@drawable/btn_outline"
+                android:backgroundTint="@color/ep_color_blue"
+                android:fontFamily="@font/dm_sans_bold"
+                android:minHeight="50dip"
+                android:stateListAnimator="@null"
+                android:text="Reprocesar corte"
+                android:textAllCaps="false"
+                android:textColor="@color/ep_color_blue"
+                android:textSize="30px" />
         </LinearLayout>
 
 
