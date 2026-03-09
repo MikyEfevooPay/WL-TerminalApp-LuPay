@@ -31,6 +31,7 @@ public class Utils {
 	public static final String TERMINAL_AMEX = "https://efevoopayamex-ecommerce.com";
 	public static final String TERMINAL_BATCH = "https://efevoopaybatch-ecommerce.com";
 	public static final String TPVCONFIGAMEX = "https://api-ca.efevoopaylbda.com";
+	public static final String TERMINAL_REGISTROBUCKET="https://efevoopaybatch-ecommerce.com/api/tpv/log";
 	// TEST
 //	public static final String TERMINAL_API = "https://test-efevoopayloadbalancer-ecommerce.com";
 //	public static final String TERMINAL_BIN = "https://alphawlapitest.efevoopaylbda.com/api/apiv0/agrs/terminales/tpv/bines";

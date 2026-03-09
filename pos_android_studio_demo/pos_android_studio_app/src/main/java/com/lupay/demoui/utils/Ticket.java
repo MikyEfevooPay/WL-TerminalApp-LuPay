@@ -7,6 +7,10 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -303,6 +307,7 @@ public class Ticket {
                 throw new RemoteException("No hay layout disponible");
             mPrinter.setPrinterGrey(110);
             Bitmap bmp = Utils.viewToBitmap(Layout);
+            bmp = applyPrinterGrey(bmp);
             mPrinter.printBitmap(this.ctx, bmp);
             bmp.recycle();
             return true;
@@ -312,7 +317,24 @@ public class Ticket {
             return false;
         }
     }
-
+    public Bitmap applyPrinterGrey(Bitmap original) {
+        int w = original.getWidth();
+        int h = original.getHeight();
+        Bitmap result = original.copy(Bitmap.Config.ARGB_8888, true);
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w - 1; x++) {
+                int pixel = original.getPixel(x, y);
+                // Detectar negro (pero no gris claro)
+                if (Color.red(pixel) < 40 &&
+                        Color.green(pixel) < 40 &&
+                        Color.blue(pixel) < 40) {
+                    // Engrosar SOLO 1 pixel a la derecha
+                    result.setPixel(x + 1, y, Color.BLACK);
+                }
+            }
+        }
+        return result;
+    }
     public void close() {
         if (mPrinter == null) return;
         try {

@@ -127,6 +127,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
     private String type_transaction;
     public GNTBackEnd gntBackEnd = new GNTBackEnd();
     private DUKPTData _encryptblumon;
+    private String _texto="";
     private String _Propina = "";
     private String TransExit = "";
     private String content = "";
@@ -168,6 +169,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     private final String CALL_TRANSACTION = "callTransaction";
     private final String VALIDATE_TRANSACTION = "validateTransaction";
+    private String CALL_BUCKET="callBucket";
     private final int MAX_CALL_ITERATE = 8;
     private String CALL_SERVICIO="";
 
@@ -254,6 +256,8 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 //        Fetch validate = manager.addFetch(VALIDATE_TRANSACTION,
 //                new FetchOptions(gntBackEnd.getcallvalida(CALL_SERVICIO), Request.Method.POST));
 //        validate.setSetBodyListenner(this::getValidateBody);
+        Fetch registrobucket = getFetchManager().addFetch(CALL_BUCKET, new FetchOptions(Utils.TERMINAL_REGISTROBUCKET , Request.Method.POST));
+        registrobucket.setSetBodyListenner(this::setBodybucket);
     }
     public void agregaurl() throws Exception {
         Fetch call =getFetchManager().addFetch(CALL_TRANSACTION,
@@ -568,6 +572,9 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
         modalCreate.setCanceledOnTouchOutside(false);
         modalCreate.setCancelable(false);
         modalCreate.show();
+
+        _texto="Transacción no encontrada";
+        getFetchManager().CallById(CALL_BUCKET);
 
         btn_connection_success.setOnClickListener((view) -> {
             modalCreate.dismiss();
@@ -1977,7 +1984,7 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
 
     public void esperarYCerrar() {
         Handler handler = new Handler();
-        handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 2000);
+        handler.postDelayed(() -> getFetchManager().CallById(VALIDATE_TRANSACTION), 3000);
     }
 
     public String approvedDukpt(String _json)
@@ -2071,5 +2078,10 @@ public class WMX_Card extends BaseActivity implements View.OnClickListener {
             TRACE.d("TRANSACCION AMEX:"+decrypt);
             return gntBackEnd.TxnAmex(encrypt(gntBackEnd.MascaraTrack2(track2),cursor.getString(31),cursor.getString(30)),cursor.getString(32), Amount,emv,redtarjeta, tipotarjeta,_nip,entrada,pan,msi,ksn_posId,type_transaction,_Propina,_AID,_ARQC,encrypt(gntBackEnd.tarjetaTrack2(track2),cursor.getString(31),cursor.getString(30)),gntBackEnd.fechaTrack2(track2),gntBackEnd.pinpanTrack2(track2),cursor);
         }
+    }
+    private void setBodybucket(JSONObject body) throws JSONException {
+        body.put("device_id", ksn_posId);
+        body.put("texto", _texto);
+        body.put("json", TransExit);
     }
 }
