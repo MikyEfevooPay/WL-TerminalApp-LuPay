@@ -2,13 +2,18 @@ package com.lupay.demoui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.lupay.demoui.R;
 import com.lupay.demoui.interfaces.FetchEntity;
 import com.lupay.demoui.interfaces.FetchOptions;
@@ -23,10 +28,14 @@ import com.lupay.demoui.widget.CancelacionesItemAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class WMX_Historial_Cancelaciones extends BaseActivity implements View.OnClickListener, TransactionsViewInterface {
     RecyclerView recyclerView;
@@ -100,30 +109,34 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(WMX_Historial_Cancelaciones.this, WMX_Cancelacion_Desc.class);
-        intent.putExtra("id", transactions.get(position).get_id());
-        intent.putExtra("auth", transactions.get(position).get_auth());
-        intent.putExtra("date", transactions.get(position).get_date());
-        intent.putExtra("time", transactions.get(position).get_time());
-        intent.putExtra("subtotal", transactions.get(position).get_subtotal());
-        intent.putExtra("card", transactions.get(position).get_card());
-        intent.putExtra("redtarj", transactions.get(position).get_redtarj());
-        intent.putExtra("tipotarj", transactions.get(position).get_tipotarj());
-        intent.putExtra("status", transactions.get(position).get_tipotxn());
-        intent.putExtra("propina", transactions.get(position).get_propina());
-        intent.putExtra("total", transactions.get(position).get_total());
-        intent.putExtra("msi", transactions.get(position).get_msi());
-        intent.putExtra("aid", transactions.get(position).get_aid());
-        intent.putExtra("arqc", transactions.get(position).get_arqc());
-        intent.putExtra("approve", transactions.get(position).get_approve());
-        intent.putExtra("tarjeta", transactions.get(position).get_tarjeta());
-        intent.putExtra("datetime", transactions.get(position).get_datehour());
-        intent.putExtra("emisor", transactions.get(position).get_emisor());
-        intent.putExtra("nip", transactions.get(position).get_nip());
-        intent.putExtra("entrada", transactions.get(position).get_entrada());
-        intent.putExtra("ksn_posId",ksn_posId);
+        if (puedeCancelar(transactions.get(position).get_datehour())) {
+            Intent intent = new Intent(WMX_Historial_Cancelaciones.this, WMX_Cancelacion_Desc.class);
+            intent.putExtra("id", transactions.get(position).get_id());
+            intent.putExtra("auth", transactions.get(position).get_auth());
+            intent.putExtra("date", transactions.get(position).get_date());
+            intent.putExtra("time", transactions.get(position).get_time());
+            intent.putExtra("subtotal", transactions.get(position).get_subtotal());
+            intent.putExtra("card", transactions.get(position).get_card());
+            intent.putExtra("redtarj", transactions.get(position).get_redtarj());
+            intent.putExtra("tipotarj", transactions.get(position).get_tipotarj());
+            intent.putExtra("status", transactions.get(position).get_tipotxn());
+            intent.putExtra("propina", transactions.get(position).get_propina());
+            intent.putExtra("total", transactions.get(position).get_total());
+            intent.putExtra("msi", transactions.get(position).get_msi());
+            intent.putExtra("aid", transactions.get(position).get_aid());
+            intent.putExtra("arqc", transactions.get(position).get_arqc());
+            intent.putExtra("approve", transactions.get(position).get_approve());
+            intent.putExtra("tarjeta", transactions.get(position).get_tarjeta());
+            intent.putExtra("datetime", transactions.get(position).get_datehour());
+            intent.putExtra("emisor", transactions.get(position).get_emisor());
+            intent.putExtra("nip", transactions.get(position).get_nip());
+            intent.putExtra("entrada", transactions.get(position).get_entrada());
+            intent.putExtra("ksn_posId",ksn_posId);
 
-        startActivity(intent);
+            startActivity(intent);
+        } else {
+            openModalmensaje();
+        }
     }
 
     @Override
@@ -170,5 +183,47 @@ public class WMX_Historial_Cancelaciones extends BaseActivity implements View.On
             recyclerView.setVisibility(View.GONE);
         }
     }
+    public boolean puedeCancelar(String fechaRegistro) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date fechaSeleccionada = sdf.parse(fechaRegistro);
+            Calendar ahora = Calendar.getInstance();
+            Calendar seleccion = Calendar.getInstance();
+            seleccion.setTime(fechaSeleccionada);
+            // validar mismo día
+            boolean mismoDia =
+                    ahora.get(Calendar.YEAR) == seleccion.get(Calendar.YEAR) &&
+                            ahora.get(Calendar.DAY_OF_YEAR) == seleccion.get(Calendar.DAY_OF_YEAR);
+            // límite 22:59
+            Calendar limite = Calendar.getInstance();
+            limite.set(Calendar.HOUR_OF_DAY, 22);
+            limite.set(Calendar.MINUTE, 59);
+            limite.set(Calendar.SECOND, 0);
+            boolean antesDeLimite = ahora.before(limite);
+            return mismoDia && antesDeLimite;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    private void openModalmensaje() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogContentView = inflater.inflate(R.layout.wmx_modal_alert_cancelaciones, null);
 
+        MaterialAlertDialogBuilder modalAlert = new MaterialAlertDialogBuilder(this,
+                R.style.ThemeOverlay_App_MaterialAlertDialog);
+        modalAlert.setView(dialogContentView);
+
+        AppCompatButton btn_alert_card_close = dialogContentView.findViewById(R.id.btn_alert_try);
+
+        AlertDialog modalAlterMenuCreate = modalAlert.create();
+
+        modalAlterMenuCreate.show();
+        btn_alert_card_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modalAlterMenuCreate.dismiss();
+            }
+        });
+    }
 }

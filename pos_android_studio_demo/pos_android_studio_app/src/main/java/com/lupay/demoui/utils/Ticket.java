@@ -14,6 +14,8 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.view.View;
 
@@ -21,7 +23,10 @@ import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
 import com.dspread.print.device.PrinterManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 
 public class Ticket {
 
@@ -308,8 +313,20 @@ public class Ticket {
             mPrinter.setPrinterGrey(110);
             Bitmap bmp = Utils.viewToBitmap(Layout);
             bmp = applyPrinterGrey(bmp);
-            mPrinter.printBitmap(this.ctx, bmp);
-            bmp.recycle();
+            Bitmap finalBmp = bmp;
+            Handler uiHandler = new Handler(Looper.getMainLooper());
+            CountDownLatch latch = new CountDownLatch(1);
+            uiHandler.post(() -> {
+                try {
+                    mPrinter.printBitmap(this.ctx, finalBmp);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    latch.countDown();
+                }
+            });
+            latch.await();
+            Thread.sleep(1000);
             return true;
         } catch (Exception e) {
             TRACE.d("PRINT ERROR:" + e.getMessage());

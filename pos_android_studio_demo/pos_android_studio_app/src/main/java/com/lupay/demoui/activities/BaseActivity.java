@@ -65,6 +65,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * BaseActivity used for to build all activity
@@ -194,7 +195,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
 
     public void PrintTicket() {
         runOnUiThread(() -> {
-            boolean success = false;
             if (!ticket.isPrinterAvailable())
                 return;
             if(!ticket_progress.isShowing()) ticket_progress.show();
@@ -207,20 +207,25 @@ public abstract class BaseActivity extends AppCompatActivity implements ITicket,
 
                 // Se agrega un posdelay en caso de que haya un error que la libreria no este
                 // catcheando para ocultar el spinner
-                ticketHandler.postDelayed(() -> {
-                    if(ticketLayoutManager.getLayout() == null){
+                //ticketHandler.postDelayed(() -> {
+                //    if(ticketLayoutManager.getLayout() == null){
+                //        showAlert("informative","entra en el postdelayed");
+                //        hideTicketSpinner();
+                //    }
+                //    ticket.close();
+                //}, 20000);
+                new Thread(() -> {
+                    boolean success;
+                    success = ticket.printLayout(ticketLayoutManager.getLayout());
+                    if (!success) {
                         hideTicketSpinner();
+                        ticket.close();
+                        //ticketHandler.removeCallbacksAndMessages(null);
                     }
-                    ticket.close();
-                }, 10000);
-                success = ticket.printLayout(ticketLayoutManager.getLayout());
+                }).start();
             } catch (Exception e) {
                 TRACE.d("TICKET EXCEPTION: " + e.getMessage());
                 e.printStackTrace();
-            }
-            if (!success) {
-                hideTicketSpinner();
-                ticketHandler.removeCallbacksAndMessages(null);
             }
         });
     }
